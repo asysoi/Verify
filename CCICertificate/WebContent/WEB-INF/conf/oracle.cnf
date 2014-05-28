@@ -23,8 +23,7 @@ CREATE INDEX auction_titlex ON XML_Cert(kontrp)
 ;
 ---------------------------------------------
 SELECT rw, o.*
-FROM (SELECT o.*
-           , ROW_NUMBER() OVER (ORDER BY o.NOMERCERT) rw
+FROM (SELECT o.*, ROW_NUMBER() OVER (ORDER BY o.NOMERCERT) rw
       FROM XML_CERT o
      ) o
 WHERE o.rw > 40
