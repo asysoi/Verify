@@ -95,6 +95,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		return certs;
 	}
 
+	
 	public List<Certificate> findNextPage(int pageindex, int pagesize) {
 		//String sql = "select * from XML_CERT where ROWNUM < " + pageindex
 		//		* pagesize + " AND ROWNUM > " + (pageindex - 1) * pagesize;

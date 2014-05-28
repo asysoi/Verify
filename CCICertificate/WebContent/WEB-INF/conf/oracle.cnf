@@ -21,6 +21,8 @@ CREATE INDEX auction_titlex ON XML_Cert(kontrp)
   INDEXTYPE IS CTXSYS.CTXCAT 
   PARAMETERS ('cert_text')
 ;
+
+
 ---------------------------------------------
 SELECT rw, o.*
 FROM (SELECT o.*, ROW_NUMBER() OVER (ORDER BY o.NOMERCERT) rw
