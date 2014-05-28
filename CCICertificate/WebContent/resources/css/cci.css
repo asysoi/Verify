@@ -1,0 +1,54 @@
+cci.container {
+    padding-top: 10px;
+    margin-left: 50px;
+    width: 700px;
+}
+
+cci.form-horizontal {
+    width: 100%;
+}
+
+input[type="text"] {
+    height: 25px;
+}
+
+cci.navbar cci.nav > li > a {
+    color: #000000;
+}
+
+cci.form-horizontal cci.control-label {
+    text-align: left;
+}
+
+
+cci.error {
+	color: #ff0000;
+}
+ 
+cci.errorblock {
+	color: #000;
+	background-color: #ffEEEE;
+	border: 3px solid #ff0000;
+	padding: 8px;
+	margin: 16px;
+}
+
+cci.ui-menu { width: 150px; }
+
+
+cci.loginbox {
+    background-color: grey;
+    margin:auto;
+    width: 280px;
+    height: 96px;
+    border: 1px solid;
+}
+
+
+.body {
+  min-height: 2000px;
+}
+
+.navbar-static-top {
+  margin-bottom: 19px;
+}

@@ -1,0 +1,42 @@
+CREATE INDEX text_idx_adresspol ON xml_cert(adresspol) INDEXTYPE IS CTXSYS.CONTEXT;
+
+EXEC DBMS_STATS.GATHER_TABLE_STATS(USER, 'XML_CERT', cascade=>TRUE);
+
+SELECT adresspol
+FROM   xml_cert
+WHERE  CONTAINS(adresspol, 'проезд', 1) > 0;
+
+
+http://www.oracle-base.com/articles/9i/full-text-indexing-using-oracle-text-9i.php
+
+http://ru.wikibooks.org/wiki/Spring_Framework
+
+---------------------------------------------
+begin
+ctx_ddl.create_index_set('cert_text');
+ctx_ddl.add_index('cert_text','adress, adresspol, poluchat'); /* sub-index B */
+end;
+
+CREATE INDEX auction_titlex ON XML_Cert(kontrp) 
+  INDEXTYPE IS CTXSYS.CTXCAT 
+  PARAMETERS ('cert_text')
+;
+---------------------------------------------
+SELECT rw, o.*
+FROM (SELECT o.*
+           , ROW_NUMBER() OVER (ORDER BY o.NOMERCERT) rw
+      FROM XML_CERT o
+     ) o
+WHERE o.rw > 40
+  AND o.rw <= 50
+  
+---------------------------------------------
+SELECT o.*
+FROM (SELECT rownum rw
+           , o.*
+      FROM (SELECT o.* FROM XML_CERT o ORDER BY UNN DESC) o
+      WHERE rownum < 3600
+     ) o
+WHERE o.rw >= 3590
+
+http://stackoverflow.com/questions/470542/how-do-i-limit-the-number-of-rows-returned-by-an-oracle-query-after-ordering
