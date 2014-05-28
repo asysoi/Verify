@@ -100,6 +100,7 @@ public class CertController {
         System.out.println(certs.size());
     	model.addAttribute("certs", certs);
     	model.addAttribute("next_page", "certs.do?page=" + (page_index + 1));
+    	model.addAttribute("prev_page", "certs.do?page=" + (page_index - 1));
         return "listcertificates";
     }
     

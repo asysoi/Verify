@@ -31,9 +31,9 @@
           </tr>  
           -->
 	 <c:forEach items="${certs}" var="cert">
-	        ${cert.cert_id}  <br>
+	        <div>${cert.cert_id}</div>|<div>${cert.nomercert}</div><br>
      </c:forEach>
-
-     <a href="${next_page}">Следующая страница</a>
+     <div><a href="${prev_page}">Предыдущая страница</a></div>
+     <div><a href="${next_page}">Следующая страница</a></div>
      
 </div>
