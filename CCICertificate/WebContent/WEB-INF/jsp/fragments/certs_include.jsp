@@ -30,9 +30,13 @@
           
           </tr>  
           -->
+     <table>     
 	 <c:forEach items="${certs}" var="cert">
-	        <div>${cert.cert_id}</div>|<div>${cert.nomercert}</div><br>
+	        <tr>
+	        <td>${cert.cert_id}</td><td> </td><td>${cert.nomercert}</td>
+	        </tr>
      </c:forEach>
+     </table>
      <div><a href="${prev_page}">Предыдущая страница</a></div>
      <div><a href="${next_page}">Следующая страница</a></div>
      
