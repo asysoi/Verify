@@ -8,36 +8,30 @@
 
 
 <div class="col-md-10 col-md-offset-2 main">
-     <!-- 
-     table> 
-     <tr>
-      <th>ID</th>
-      <th>Форма</th>
-      <th>УНП</th>`
-      <th>Номер</th>
-      <th>Дата</th>
-      <th>Номер бланка</th>`
-      
-     </tr>
-     -->
-     <!--  <tr> 
-	      <td> <c:out value="${cert.cert_id}" /> </td>
-	      <td> ${cert.forms} </td>
-	      <td> ${cert.unn} </td>
-	      <td> ${cert.numbercert}</td>
-	      <td> ${cert.datecert} </td>
-	      <td> ${cert.nblanka} </td>
-          
-          </tr>  
-          -->
-     <table>     
+     <table style="width:100%">     
+      <tr>
+      <th style="width:10%">Код сертификата</th>
+      <th style="width:20%">Номер сертификата</th>
+      <th style="width:30%">Форма Сертификата</th>
+      <th style="width:15%">УНП</th>
+      <th style="width:15%">Номер бланка</th>
+      <th style="width:10%">Дата Сертификата</th>
+      </tr>  
 	 <c:forEach items="${certs}" var="cert">
 	        <tr>
-	        <td>${cert.cert_id}</td><td> </td><td>${cert.nomercert}</td>
+	        <td style="width:10%">${cert.cert_id}</td>
+	        <td style="width:20%">${cert.nomercert}</td>
+	        <td style="width:30%">${cert.forms}</td>
+	        <td style="width:15%">${cert.unn}</td>
+	        <td style="width:15%">${cert.nblanka}</td>
+	        <td style="width:10%">${cert.datacert}</td>
 	        </tr>
      </c:forEach>
-     </table>
-     <div><a href="${prev_page}">Предыдущая страница</a></div>
-     <div><a href="${next_page}">Следующая страница</a></div>
+     <tr>
+     <td><a href="${prev_page}">Предыдущая страница</a></td>
+     <td> </td><td></td><td> </td><td> </td>
+     <td><a href="${next_page}">Следующая страница</a></td>
+     </tr>
+     </table>     
      
 </div>
