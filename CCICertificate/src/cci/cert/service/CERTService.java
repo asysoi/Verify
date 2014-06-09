@@ -24,7 +24,7 @@ public class CERTService  {
 	@Autowired
 	XMLService xmlService;
 	
-	public List<Certificate> readCertificatePage(int page, int pagesize) {
+	public List<Certificate> readCertificatesPage(int page, int pagesize) {
 		Locale.setDefault(new Locale("en", "us"));
 
 		List<Certificate> certs = null;
@@ -39,7 +39,7 @@ public class CERTService  {
 	}
 	
 
-	public void readAllCertificate(ApplicationContext context) {
+	public void readAllCertificates() {
 		
 		
 		Locale.setDefault(new Locale("en", "us"));
@@ -49,24 +49,23 @@ public class CERTService  {
 		}
 	}
 
-	public void readCertificate(ApplicationContext context, long cert_id) {
+	public Certificate readCertificate(long cert_id) {
 		
+		Certificate cert = null;
 		Locale.setDefault(new Locale("en", "us"));
 
 		try {
-		   Certificate cert = certificateDAO.findByID(cert_id);
+		   cert= certificateDAO.findByID(cert_id);
 		   System.out.println("FindByID: " + cert.getCert_id() + " Продуктов: "+
 		   cert.getProducts().size());
 		} catch (Exception ex) {
 		   ex.printStackTrace();
 		}
-
-		for (Certificate cert : certificateDAO.findAll()) {
-		   System.out.println("FindAll: " + cert.getCert_id());
-		}
+		
+		return cert;
 	}
 	
-	public void uploadCertificate(ApplicationContext context) {
+	public void uploadCertificate() {
 		Locale.setDefault(new Locale("en", "us"));
 
 
@@ -98,6 +97,5 @@ public class CERTService  {
 	public void printCertificate(Certificate cert) {
 		System.out.println(cert.getCert_id() + ": " + cert.getDatacert() + " | " + cert.getNomercert() + "  |  " + cert.getNblanka() );
 	}
-	
 	
 }

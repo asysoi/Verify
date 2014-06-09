@@ -96,13 +96,23 @@ public class CertController {
     @RequestMapping(value="/certs.do")
     public String listcerts(@RequestParam(value="page", required=false) Integer page, ModelMap model) {
     	int page_index = page == null ? 1 : page;
-        List<Certificate> certs = certService.readCertificatePage(page_index, 20);
+        List<Certificate> certs = certService.readCertificatesPage(page_index, 20);
         System.out.println(certs.size());
     	model.addAttribute("certs", certs);
     	model.addAttribute("next_page", "certs.do?page=" + (page_index + 1));
     	model.addAttribute("prev_page", "certs.do?page=" + (page_index - 1));
         return "listcertificates";
     }
+    
+    
+    @RequestMapping(value="/gocert.do")
+    public String gocert(@RequestParam(value="certid", required=true) Integer certid, ModelMap model) {
+    	Certificate cert = certService.readCertificate(certid);
+    	model.addAttribute("cert", cert);
+    	certService.printCertificate(cert);
+        return "certificate";
+    }
+    
     
     
   //readAllCertificate(context);
