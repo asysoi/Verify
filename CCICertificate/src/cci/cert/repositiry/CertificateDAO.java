@@ -12,8 +12,10 @@ public interface CertificateDAO {
 	
 	public List<Certificate> findByNumberCert(String number);
 	
-	public List<Certificate> findAll();
+	public Certificate check(String num, String blank, String date); 
 	
+	public List<Certificate> findAll();
+		
 	public List<Certificate> findByCertificate(Certificate cert);
 	
 	public List<Certificate> findNextPage(int pageindex, int pagesize);

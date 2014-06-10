@@ -8,7 +8,7 @@
 
 <body>
    <div class="container">
-     <jsp:include page="fragments/menu.jsp"/>
+     <jsp:include page="fragments/menu_invers.jsp"/>
      
      <p>Страница не найдена</p>
      

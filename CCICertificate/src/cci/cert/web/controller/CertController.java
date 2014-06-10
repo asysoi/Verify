@@ -29,7 +29,7 @@ import cci.cert.service.CERTService;
 
 @Controller
 public class CertController {
-	
+		
 	@Autowired
 	private CertificateDAO certificateDAO;
 	
@@ -39,18 +39,20 @@ public class CertController {
 	
 	@RequestMapping(value = "/main.do", method = RequestMethod.GET)
 	public String mainpage(ModelMap model) {
+		
 	    return "welcome";
 	 }
 
 	@RequestMapping(value = "/window.do", method = RequestMethod.GET)
 	public String dasboard(ModelMap model) {
+		
 	    return "window";
 	 }
 
 	
 	@RequestMapping(value = "/help.do", method = RequestMethod.GET)
 	public String help(ModelMap model) {
-		
+	   	
 	   model.addAttribute("jspName", "help.jsp"); 	
 	   return "window";
 	}
@@ -79,6 +81,7 @@ public class CertController {
     @RequestMapping(value = "/print.do")
     @ResponseBody
     public String print(@RequestParam(value="name", required=false) String name, Model model) {
+    	
         return "<html>Hello <p> Name: " + name + "</p></html>";
     }
     
@@ -86,6 +89,7 @@ public class CertController {
     @RequestMapping(value="/cert.do")
     @ResponseBody 
     public Certificate printcert() {
+    	
        Certificate certificate;
    	   certificate = new Certificate();
        return certificate;
@@ -98,6 +102,7 @@ public class CertController {
     	int page_index = page == null ? 1 : page;
         List<Certificate> certs = certService.readCertificatesPage(page_index, 20);
         System.out.println(certs.size());
+        
     	model.addAttribute("certs", certs);
     	model.addAttribute("next_page", "certs.do?page=" + (page_index + 1));
     	model.addAttribute("prev_page", "certs.do?page=" + (page_index - 1));
@@ -112,6 +117,29 @@ public class CertController {
     	certService.printCertificate(cert);
         return "certificate";
     }
+    
+    @RequestMapping(value="/check.do")
+    public String check(@RequestParam(value="certnum", required=false) String certnum, 
+    					@RequestParam(value="certblank", required=false) String certblank,
+    					@RequestParam(value="certdate", required=false) String certdate,    					
+    					ModelMap model) {
+    	String retpage = "check";
+    	if (certnum!= null && certblank!=null && certdate!=null) {
+    	    Certificate cert = certService.checkCertificate(certnum, certblank, certdate);
+    	    if (cert != null) {
+    	       model.addAttribute("cert", cert);
+    	       retpage = "certificate";
+    	    } else {
+    	       model.addAttribute("certnum",certnum);
+    	       model.addAttribute("certblank", certblank);
+    	       model.addAttribute("certdate", certdate);
+    	       model.addAttribute("msg", "Сертификат с заданными параметрами не найден");	
+    	    }
+    	}
+        return retpage;
+    }
+	
+    
     
     
     

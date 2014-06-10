@@ -25,7 +25,7 @@ public class CERTService  {
 	XMLService xmlService;
 	
 	public List<Certificate> readCertificatesPage(int page, int pagesize) {
-		Locale.setDefault(new Locale("en", "us"));
+		//Locale.setDefault(new Locale("ru", "ru"));
 
 		List<Certificate> certs = null;
 		
@@ -40,9 +40,7 @@ public class CERTService  {
 	
 
 	public void readAllCertificates() {
-		
-		
-		Locale.setDefault(new Locale("en", "us"));
+
 
 		for (Certificate cert : certificateDAO.findAll()) {
 		   System.out.println("FindAll: " + cert.getCert_id());
@@ -52,8 +50,6 @@ public class CERTService  {
 	public Certificate readCertificate(long cert_id) {
 		
 		Certificate cert = null;
-		Locale.setDefault(new Locale("en", "us"));
-
 		try {
 		   cert= certificateDAO.findByID(cert_id);
 		   System.out.println("FindByID: " + cert.getCert_id() + " Продуктов: "+
@@ -66,8 +62,6 @@ public class CERTService  {
 	}
 	
 	public void uploadCertificate() {
-		Locale.setDefault(new Locale("en", "us"));
-
 
 		try {
 			Certificate cert;
@@ -96,6 +90,19 @@ public class CERTService  {
 	
 	public void printCertificate(Certificate cert) {
 		System.out.println(cert.getCert_id() + ": " + cert.getDatacert() + " | " + cert.getNomercert() + "  |  " + cert.getNblanka() );
+	}
+
+
+	public Certificate checkCertificate(String certnum, String certblank,
+			String certdate) {
+		
+        Certificate cert = null;
+		try {
+			   cert= certificateDAO.check(certnum, certblank, certdate);
+			} catch (Exception ex) {
+			   ex.printStackTrace();
+			}
+		return cert;
 	}
 	
 }

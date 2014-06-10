@@ -50,6 +50,29 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		return cert;
 	}
 
+	
+	// поиск сертификата по id
+	public Certificate check(String num, String blank, String date) {
+		Certificate cert = null;
+
+		try {
+			String sql = "select * from XML_CERT WHERE NOMERCERT = ? NBLANKA = ? AND AND DATACERT =?";
+			cert = template.getJdbcOperations().queryForObject(sql,
+					new Object[] { num, blank, date},
+					new BeanPropertyRowMapper<Certificate>(Certificate.class));
+
+			sql = "select * from XML_PRODUCTS WHERE cert_id = ? ";
+			cert.setProducts(template.getJdbcOperations().query(sql,
+					new Object[] { cert.getCert_id() },
+					new BeanPropertyRowMapper<Product>(Product.class)));
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return cert;
+	}
+
+
+
 	// поиск скртификата по номеру бланка
 	// возможно несколько сертификатов
 	public List<Certificate> findByNBlanka(String number) {
