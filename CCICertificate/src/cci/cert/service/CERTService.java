@@ -98,11 +98,22 @@ public class CERTService  {
 		
         Certificate cert = null;
 		try {
-			   cert= certificateDAO.check(certnum, certblank, certdate);
+			   cert= certificateDAO.check(cert);
 			} catch (Exception ex) {
 			   ex.printStackTrace();
 			}
 		return cert;
+	}
+
+
+	public Certificate checkCertificate(Certificate cert) {
+        Certificate rcert = null;
+		try {
+			   rcert= certificateDAO.check(cert);
+			} catch (Exception ex) {
+			   ex.printStackTrace();
+			}
+		return rcert;
 	}
 	
 }

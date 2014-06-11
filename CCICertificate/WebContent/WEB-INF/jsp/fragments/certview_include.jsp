@@ -33,7 +33,7 @@
 								<div style="text-align: left;">
 									&nbsp; Выдан <span style="text-decoration: underline;">в&nbsp;
 										Республика Беларусь</span><br> &nbsp; Для представления в
-									_______________
+									<u>${cert.stranapr} </u>
 								</div>
 							</div>
 						</td>
@@ -41,13 +41,15 @@
 					<tr>
 						<td colspan="3" rowspan="1"
 							style="vertical-align: top; height: 28px; width: 69px;">. 2.
-							Грузополучатель/импортер(наименование и адрес)</td>
+							Грузополучатель/импортер(наименование и адрес)<BR>
+							${cert.poluchat}<br>${cert.adresspol}
+							</td>
 					</tr>
 					<tr>
 						<td colspan="3" rowspan="1"
 							style="vertical-align: top; height: 50px; width: 69px;">&nbsp;
 							3. Средства транспорта и маршрут следования <br> (насколько
-							это известно)<br> <br> <br>
+							это известно)<br>${cert.marshrut}<br> 
 						</td>
 						<td colspan="3" rowspan="1"
 							style="vertical-align: top; width: 85px;">5. Для служебных
@@ -76,17 +78,44 @@
 						</td>
 					</tr>
 					<tr>
-						<td colspan="1" rowspan="1"
-							style="vertical-align: top; height: 181px; width: 45px;"><br>
+					 
+						<td colspan="1" rowspan="1" style="vertical-align: top; height: 181px; width: 45px;">
+					         <c:forEach items="${cert.products}" var="product">	
+                                ${product.numerator}<br> 						   
+						     </c:forEach>
 						</td>
-						<td colspan="1" rowspan="1"
-							style="vertical-align: top; height: 181px; width: 69px;"><br>
+					 	
+						<td colspan="1" rowspan="1"	style="vertical-align: top; height: 181px; width: 69px;">
+						     <c:forEach items="${cert.products}" var="product">	
+                                ${product.vidup}<br> 						   
+						     </c:forEach>
 						</td>
-						<td style="vertical-align: top; width: 435px;"><br></td>
-						<td style="vertical-align: top; width: 128px;"><br></td>
-						<td style="vertical-align: top; width: 137px;"><br></td>
-						<td style="vertical-align: top; width: 85px;"><br></td>
+						
+						<td style="vertical-align: top; width: 435px;">
+						     <c:forEach items="${cert.products}" var="product">	
+                                ${product.tovar}<br> 						   
+						     </c:forEach>
+						</td>
+						
+						<td style="vertical-align: top; width: 128px;">
+						     <c:forEach items="${cert.products}" var="product">	
+                                ${product.kriter}<br> 						   
+						     </c:forEach>
+						</td>
+						
+						<td style="vertical-align: top; width: 137px;">
+						     <c:forEach items="${cert.products}" var="product">	
+                                ${product.ves}<br> 						   
+						     </c:forEach>
+						</td>
+						
+						<td style="vertical-align: top; width: 85px;">
+						     <c:forEach items="${cert.products}" var="product">	
+                                ${product.schet}<br> 						   
+						     </c:forEach>
+						</td>
 					</tr>
+					
 					<tr>
 						<td colspan="3" rowspan="1"
 							style="vertical-align: top; height: 0px; width: 69px;">12.

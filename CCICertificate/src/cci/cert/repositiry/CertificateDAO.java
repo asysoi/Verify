@@ -12,7 +12,7 @@ public interface CertificateDAO {
 	
 	public List<Certificate> findByNumberCert(String number);
 	
-	public Certificate check(String num, String blank, String date); 
+	public Certificate check(Certificate cert); 
 	
 	public List<Certificate> findAll();
 		

@@ -95,7 +95,6 @@ public class CertController {
        return certificate;
     }
     
-      
     
     @RequestMapping(value="/certs.do")
     public String listcerts(@RequestParam(value="page", required=false) Integer page, ModelMap model) {
@@ -118,32 +117,38 @@ public class CertController {
         return "certificate";
     }
     
-    @RequestMapping(value="/check.do")
-    public String check(@RequestParam(value="certnum", required=false) String certnum, 
-    					@RequestParam(value="certblank", required=false) String certblank,
-    					@RequestParam(value="certdate", required=false) String certdate,    					
-    					ModelMap model) {
+    @RequestMapping(value="/check.do", method = RequestMethod.GET)
+    public String check(ModelMap model) {
     	String retpage = "check";
-    	if (certnum!= null && certblank!=null && certdate!=null) {
-    	    Certificate cert = certService.checkCertificate(certnum, certblank, certdate);
-    	    if (cert != null) {
-    	       model.addAttribute("cert", cert);
-    	       retpage = "certificate";
-    	    } else {
-    	       model.addAttribute("certnum",certnum);
-    	       model.addAttribute("certblank", certblank);
-    	       model.addAttribute("certdate", certdate);
-    	       model.addAttribute("msg", "Сертификат с заданными параметрами не найден");	
-    	    }
-    	}
+    	Certificate cert = new Certificate(); 
+ 	    model.addAttribute("cert", cert);	
         return retpage;
     }
 	
     
+    @RequestMapping(value="/check.do", method = RequestMethod.POST)
+    public String check(@ModelAttribute("cert") Certificate cert, BindingResult result, SessionStatus status, ModelMap model) {
+    	String retpage = "check";
+    	
+    	if (cert.getNomercert()!=null && cert.getNblanka()!=null && cert.getDatacert()!=null) {
+    	    Certificate rcert = certService.checkCertificate(cert);
+    	    
+    	    if (rcert != null) {
+    	       model.addAttribute("cert", rcert);
+    	       retpage = "certificate";
+    	    } else {
+    	       model.addAttribute("cert", cert);	
+    	       model.addAttribute("msg", "Сертификат " + cert.getNomercert() + " не выдавался");
+    	       retpage = "check";
+    	    }
+    	}
+        return retpage;
+    }
     
+
+
     
-    
-  //readAllCertificate(context);
+        //readAllCertificate(context);
   		//service.uploadCertificate(context);
   		//Locale.setDefault(new Locale("en", "us"));
   		//Certificate cert = dao.findByID(13459L);
