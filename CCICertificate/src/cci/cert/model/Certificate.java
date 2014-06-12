@@ -42,10 +42,15 @@ public class Certificate {
 	private String sez;
 	private String flsezrez;
 	private String stranap;
-		
+	private String otd_name;
+	private String otd_address_index;
+	private String otd_address_city;
+	private String otd_address_line;
+	private String otd_address_home;
+	
 	// список продукции
 	private List<Product> products;
-	private Party otdelenie;
+	//private Party otdelenie;
 
 	
 	public Long getCert_id() {
@@ -279,5 +284,45 @@ public class Certificate {
 	}
 	public void setProducts(List<Product> products) {
 		this.products = products;
+	}
+	
+	public String getOtd_address_index() {
+		return otd_address_index;
+	}
+	public void setOtd_address_index(String otd_address_index) {
+		this.otd_address_index = otd_address_index;
+	}
+	public String getOtd_address_city() {
+		return otd_address_city;
+	}
+	public void setOtd_address_city(String otd_address_city) {
+		this.otd_address_city = otd_address_city;
+	}
+	public String getOtd_address_line() {
+		return otd_address_line;
+	}
+	public void setOtd_address_line(String otd_address_line) {
+		this.otd_address_line = otd_address_line;
+	}
+	public String getOtd_address_home() {
+		return otd_address_home;
+	}
+	public void setOtd_address_home(String otd_address_home) {
+		this.otd_address_home = otd_address_home;
+	}
+	public String getOtd_name() {
+		return otd_name;
+	}
+	public void setOtd_name(String otd_name) {
+		this.otd_name = otd_name;
+	}
+	
+	public String getShort_kontrp() {
+		
+		return kontrp.length() > 100 ?  kontrp.substring(1, 100) + " ..." :  kontrp;
+	}
+	
+	public String toString() {
+		return "Сертификат :" + nomercert + " Бланк: " + nblanka + " Дата: " + datacert;
 	}
 }

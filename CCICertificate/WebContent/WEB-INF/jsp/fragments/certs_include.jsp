@@ -11,20 +11,20 @@
      <table style="width:100%">     
       <tr>
       <th style="width:10%">Номер сертификата</th>
-      <th style="width:20%">Эксперт</th>
-      <th style="width:30%">Получатель</th>
-      <th style="width:15%">УНП</th>
-      <th style="width:15%">Номер бланка</th>
-      <th style="width:10%">Дата Сертификата</th>
+      <th style="width:9%">Эксперт</th>
+      <th style="width:60%">Получатель</th>
+      <th style="width:7%">УНП</th>
+      <th style="width:7%">Номер бланка</th>
+      <th style="width:7%">Дата Сертификата</th>
       </tr>  
 	 <c:forEach items="${certs}" var="cert">
 	        <tr>
 	        <td style="width:10%"><a href="gocert.do?certid=${cert.cert_id}">${cert.nomercert}</a></td>
-	        <td style="width:20%">${cert.expert}</td>
-	        <td style="width:30%">${cert.kontrp}</td>
-	        <td style="width:15%">${cert.unn}</td>
-	        <td style="width:15%">${cert.nblanka}</td>
-	        <td style="width:10%">${cert.datacert}</td>
+	        <td style="width:9%">${cert.expert}</td>
+	        <td style="width:60%">${cert.short_kontrp}</td>
+	        <td style="width:7%">${cert.unn}</td>
+	        <td style="width:7%">${cert.nblanka}</td>
+	        <td style="width:7%">${cert.datacert}</td>
 	        </tr>
      </c:forEach>
      <tr>

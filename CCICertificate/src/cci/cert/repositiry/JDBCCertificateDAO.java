@@ -35,12 +35,12 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		Certificate cert = null;
 
 		try {
-			String sql = "select * from XML_CERT WHERE cert_id = ?";
+			String sql = "select * from CERT_VIEW WHERE cert_id = ?";
 			cert = template.getJdbcOperations().queryForObject(sql,
 					new Object[] { id },
 					new BeanPropertyRowMapper<Certificate>(Certificate.class));
 
-			sql = "select * from XML_PRODUCTS WHERE cert_id = ? ";
+			sql = "select * from XML_PRODUCTS WHERE cert_id = ? ORDER BY product_id";
 			cert.setProducts(template.getJdbcOperations().query(sql,
 					new Object[] { cert.getCert_id() },
 					new BeanPropertyRowMapper<Product>(Product.class)));
@@ -56,12 +56,12 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		Certificate rcert = null;
 
 		try {
-			String sql = "select * from XML_CERT WHERE NOMERCERT = ? AND NBLANKA = ? AND DATACERT=? ";
+			String sql = "select * from CERT_VIEW WHERE NOMERCERT = ? AND NBLANKA = ? AND DATACERT=? ";
 			rcert = template.getJdbcOperations().queryForObject(sql,
 					new Object[] { cert.getNomercert(), cert.getNblanka(), cert.getDatacert()},
 					new BeanPropertyRowMapper<Certificate>(Certificate.class));
             if (rcert != null) {  
-			   sql = "select * from XML_PRODUCTS WHERE cert_id = ? ";
+			   sql = "select * from XML_PRODUCTS WHERE cert_id = ?  ORDER BY product_id";
 			   rcert.setProducts(template.getJdbcOperations().query(sql,
 					new Object[] { rcert.getCert_id() },
 					new BeanPropertyRowMapper<Product>(Product.class)));
@@ -80,13 +80,13 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		List<Certificate> certs = null;
 
 		try {
-			String sql = "select * from XML_CERT WHERE nblanka = ?";
+			String sql = "select * from CERT_VIEW WHERE nblanka = ?";
 			certs = template.getJdbcOperations().query(sql,
 					new Object[] { number },
 					new BeanPropertyRowMapper<Certificate>(Certificate.class));
 
 			for (Certificate cert : certs) {
-				sql = "select * from XML_PRODUCTS WHERE cert_id = ? ";
+				sql = "select * from XML_PRODUCTS WHERE cert_id = ?  ORDER BY product_id";
 				cert.setProducts(template.getJdbcOperations().query(sql,
 						new Object[] { cert.getCert_id() },
 						new BeanPropertyRowMapper<Product>(Product.class)));
@@ -102,13 +102,13 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		List<Certificate> certs = null;
 
 		try {
-			String sql = "select * from XML_CERT WHERE nomercert = ?";
+			String sql = "select * from CERT_VIEW WHERE nomercert = ?";
 			certs = template.getJdbcOperations().query(sql,
 					new Object[] { number },
 					new BeanPropertyRowMapper<Certificate>(Certificate.class));
 
 			for (Certificate cert : certs) {
-				sql = "select * from XML_PRODUCTS WHERE cert_id = ? ";
+				sql = "select * from XML_PRODUCTS WHERE cert_id = ?  ORDER BY product_id";
 				cert.setProducts(template.getJdbcOperations().query(sql,
 						new Object[] { cert.getCert_id() },
 						new BeanPropertyRowMapper<Product>(Product.class)));
@@ -230,7 +230,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 			certs = template.query(sql_cert, parameters, new BeanPropertyRowMapper<Certificate>());
 			
 			for (Certificate cert : certs) {
-				String sql = "select * from XML_PRODUCTS WHERE cert_id = ? ";
+				String sql = "select * from XML_PRODUCTS WHERE cert_id = ?  ORDER BY product_id";
 				cert.setProducts(template.getJdbcOperations().query(sql,
 						new Object[] { cert.getCert_id() },
 						new BeanPropertyRowMapper<Product>()));

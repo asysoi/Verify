@@ -49,7 +49,7 @@
 						<td colspan="3" rowspan="1"
 							style="vertical-align: top; height: 50px; width: 69px;">&nbsp;
 							3. Средства транспорта и маршрут следования <br> (насколько
-							это известно)<br>${cert.marshrut}<br> 
+							это известно)<br>${cert.transport}, ${cert.marshrut}<br> 
 						</td>
 						<td colspan="3" rowspan="1"
 							style="vertical-align: top; width: 85px;">5. Для служебных
@@ -119,11 +119,30 @@
 					<tr>
 						<td colspan="3" rowspan="1"
 							style="vertical-align: top; height: 0px; width: 69px;">12.
-							Удостоверение<br> <br> <br> <br> <br>
+							Удостоверение<br>
+							Настоящим удостоверяется, что декларация<br>
+							заявителя соответствует действительности<br>
+							<br><br>
+							Унитарное предприятие по оказанию услуг<br>
+							${cert.otd_name},<br>
+							${cert.otd_address_index}, ${cert.otd_address_city}, ${cert.otd_address_line}, ${cert.otd_address_home}<br>
+							<br><br>
+							Эксперт:  ${cert.expert}<br>  
+							Дата:     ${cert.datacert}<br>         
+							
 						</td>
 						<td colspan="3" rowspan="1"
 							style="vertical-align: top; height: 0px; width: 85px;">13.
 							Декларация заявителя<br>
+							Нижеподписавшийся заявляет, что вышепреведенные сведения соответствуют действительности: 
+							что все товары полностьб произведены или подвергнуты достаточной переработке <br>
+							<div><u>Республике Беларусь</u></div> <br>
+							и что они отвечают требованиям происхождения, установленными в отношении таких товаров
+							<br>
+							<br>
+							Подписал: ${cert.rukovod}<br>
+							Дата: ${cert.datacert}
+							
 						</td>
 					</tr>
 				</tbody>

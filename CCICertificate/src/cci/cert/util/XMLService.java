@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.FileReader;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 import javax.xml.bind.JAXBContext;
@@ -22,6 +23,15 @@ public class XMLService {
 				.unmarshal(new FileReader(file_path));
 		return cert;
 	}
+	
+	public Certificate loadCertificate(InputStream input) throws Exception {
+		JAXBContext context = JAXBContext.newInstance(Certificate.class);
+		Unmarshaller um = context.createUnmarshaller();
+		Certificate cert = (Certificate) um
+				.unmarshal(input);
+		return cert;
+	}
+	
 
 	public void uploadCertificateToFile(Certificate cert, String file_path)
 			throws Exception {
