@@ -20,10 +20,7 @@ import cci.cert.service.FTPReader;
 
 @Controller
 public class CertController {
-
-	@Autowired
-	private FTPReader ftpReader;
-
+	
 	@Autowired
 	private CERTService certService;
 
@@ -139,6 +136,13 @@ public class CertController {
 			}
 		}
 		return retpage;
+	}
+	
+	
+	@RequestMapping(value = "/upload.do", method = RequestMethod.GET)
+	public String uploadFromFTP(ModelMap model) {
+		certService.uploadCertificateFromFTP();          
+		return "window";
 	}
 
 }

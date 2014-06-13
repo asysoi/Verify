@@ -24,8 +24,11 @@ public class CERTService  {
 	@Autowired
 	XMLService xmlService;
 	
+	@Autowired
+	FTPReader ftpReader;
+	
 	public List<Certificate> readCertificatesPage(int page, int pagesize) {
-		//Locale.setDefault(new Locale("ru", "ru"));
+		Locale.setDefault(new Locale("en", "en"));
 
 		List<Certificate> certs = null;
 		
@@ -40,14 +43,15 @@ public class CERTService  {
 	
 
 	public void readAllCertificates() {
-
-
+		Locale.setDefault(new Locale("en", "en"));   
+    
 		for (Certificate cert : certificateDAO.findAll()) {
 		   System.out.println("FindAll: " + cert.getCert_id());
 		}
 	}
 
 	public Certificate readCertificate(long cert_id) {
+		Locale.setDefault(new Locale("en", "en"));
 		
 		Certificate cert = null;
 		try {
@@ -62,7 +66,8 @@ public class CERTService  {
 	}
 	
 	public void uploadCertificate() {
-
+		Locale.setDefault(new Locale("en", "en"));
+		
 		try {
 			Certificate cert;
 			Long start = System.currentTimeMillis();
@@ -88,6 +93,21 @@ public class CERTService  {
 
 	}
 	
+	public void uploadCertificateFromFTP() {
+		Locale.setDefault(new Locale("en", "en"));
+		
+		try {
+			Long start = System.currentTimeMillis();
+			ftpReader.load(certificateDAO);
+			System.out.println("Duration: "
+					+ (System.currentTimeMillis() - start));
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+	}
+	
+	
 	public void printCertificate(Certificate cert) {
 		System.out.println(cert.getCert_id() + ": " + cert.getDatacert() + " | " + cert.getNomercert() + "  |  " + cert.getNblanka() );
 	}
@@ -95,6 +115,7 @@ public class CERTService  {
 
 	public Certificate checkCertificate(String certnum, String certblank,
 			String certdate) {
+		Locale.setDefault(new Locale("en", "en"));
 		
         Certificate cert = null;
 		try {
@@ -107,6 +128,8 @@ public class CERTService  {
 
 
 	public Certificate checkCertificate(Certificate cert) {
+		Locale.setDefault(new Locale("en", "en"));
+		
         Certificate rcert = null;
 		try {
 			   rcert= certificateDAO.check(cert);

@@ -141,22 +141,23 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));
 	}
 
-	public void save(Certificate cert) {
+	public int save(Certificate cert) {
 		String sql_cert = "insert into xml_cert values "
 				+ "(beltpp_cert_test.cert_id_seq.nextval, "
 				+ ":forms, :unn, :kontrp, :kontrs, :adress, :poluchat, :adresspol, :datacert,"
 				+ ":nomercert, :expert, :nblanka, :rukovod, :transport, :marshrut, :otmetka,"
 				+ ":stranav, :stranapr, :status, :koldoplist, :flexp, :unnexp, :expp, "
 				+ ":exps, :expadress, :flimp, :importer, :adressimp, :flsez, :sez,"
-				+ ":flsezrez, :stranap )";
+				+ ":flsezrez, :stranap, :otd_id )";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);
 		GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+		int cert_id = 0;
 
 		try {
 			int row = template.update(sql_cert, parameters, keyHolder,
 					new String[] { "CERT_ID" });
-			int cert_id = keyHolder.getKey().intValue();
+			cert_id = keyHolder.getKey().intValue();
 
 			String sql_product = "insert into XML_PRODUCTS values ("
 					+ " beltpp_cert_test.product_id_seq.nextval, " + cert_id
@@ -169,15 +170,11 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				int[] updateCounts = template.batchUpdate(sql_product, batch);
 			}
 
-			// for (Product product : cert.getProducts()) {
-			// parameters =
-			// new BeanPropertySqlParameterSource(product);
-			// template.update(sql_product, parameters);
-			// }
-
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+		
+		return cert_id;
 	}
 
 	public void update(Certificate cert) {

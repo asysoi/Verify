@@ -20,7 +20,7 @@ public interface CertificateDAO {
 	
 	public List<Certificate> findNextPage(int pageindex, int pagesize);
 
-	public void save(Certificate cert);
+	public int save(Certificate cert);
 
 	public void update(Certificate cert);
 	

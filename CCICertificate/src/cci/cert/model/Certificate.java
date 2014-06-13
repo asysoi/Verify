@@ -42,6 +42,7 @@ public class Certificate {
 	private String sez;
 	private String flsezrez;
 	private String stranap;
+	private int otd_id;
 	private String otd_name;
 	private String otd_address_index;
 	private String otd_address_city;
@@ -324,5 +325,11 @@ public class Certificate {
 	
 	public String toString() {
 		return "Сертификат :" + nomercert + " Бланк: " + nblanka + " Дата: " + datacert;
+	}
+	public int getOtd_id() {
+		return otd_id;
+	}
+	public void setOtd_id(int otd_id) {
+		this.otd_id = otd_id;
 	}
 }
