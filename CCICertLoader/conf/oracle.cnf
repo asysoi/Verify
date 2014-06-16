@@ -1,0 +1,10 @@
+CREATE INDEX text_idx_adresspol ON xml_cert(adresspol) INDEXTYPE IS CTXSYS.CONTEXT;
+
+EXEC DBMS_STATS.GATHER_TABLE_STATS(USER, 'XML_CERT', cascade=>TRUE);
+
+SELECT adresspol
+FROM   xml_cert
+WHERE  CONTAINS(adresspol, 'проезд', 1) > 0;
+
+
+http://www.oracle-base.com/articles/9i/full-text-indexing-using-oracle-text-9i.php
