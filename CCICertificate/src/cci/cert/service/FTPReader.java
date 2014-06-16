@@ -48,15 +48,16 @@ public class FTPReader {
 
 					try {
    						input = f.retrieveFileStream(directory + file.getName());
-						
+   						
 						if (input != null) {
+	
 							try {
 								cert = xmlreader.loadCertificate(input);
 							} catch (Exception ex) {
 								System.out.println("Сертификат не загружен из-за ошибки: " + ex.toString());
 							}
 							input.close();
-
+								
 							if (!f.completePendingCommand()) {
 								f.logout();
 								f.disconnect();
@@ -88,7 +89,7 @@ public class FTPReader {
 					break;
 				}
 			}
-
+  
 			f.logout();
 			f.disconnect();
 

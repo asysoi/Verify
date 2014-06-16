@@ -41,3 +41,9 @@ FROM (SELECT rownum rw
 WHERE o.rw >= 3590
 
 http://stackoverflow.com/questions/470542/how-do-i-limit-the-number-of-rows-returned-by-an-oracle-query-after-ordering
+
+---------------------------------------------
+CREATE SEQUENCE user_id_seq
+  START WITH 1
+  INCREMENT BY 1
+  CACHE 20;

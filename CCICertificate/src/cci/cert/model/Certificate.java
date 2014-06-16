@@ -324,8 +324,29 @@ public class Certificate {
 	}
 	
 	public String toString() {
-		return "Сертификат :" + nomercert + " Бланк: " + nblanka + " Дата: " + datacert;
+		//return "Сертификат :" + nomercert + " Бланк: " + nblanka + " Дата: " + datacert + " Отделение: " + otd_id;
+		return "Certificate [cert_id=" + cert_id + ", forms=" + forms
+				+ ", unn=" + unn + ", kontrp=" + kontrp + ", kontrs=" + kontrs
+				+ ", adress=" + adress + ", poluchat=" + poluchat
+				+ ", adresspol=" + adresspol + ", datacert=" + datacert
+				+ ", nomercert=" + nomercert + ", expert=" + expert
+				+ ", nblanka=" + nblanka + ", rukovod=" + rukovod
+				+ ", transport=" + transport + ", marshrut=" + marshrut
+				+ ", otmetka=" + otmetka + ", stranav=" + stranav
+				+ ", stranapr=" + stranapr + ", status=" + status
+				+ ", koldoplist=" + koldoplist + ", flexp=" + flexp
+				+ ", unnexp=" + unnexp + ", expp=" + expp + ", exps=" + exps
+				+ ", expadress=" + expadress + ", flimp=" + flimp
+				+ ", importer=" + importer + ", adressimp=" + adressimp
+				+ ", flsez=" + flsez + ", sez=" + sez + ", flsezrez="
+				+ flsezrez + ", stranap=" + stranap + ", otd_id=" + otd_id
+				+ ", otd_name=" + otd_name + ", otd_address_index="
+				+ otd_address_index + ", otd_address_city=" + otd_address_city
+				+ ", otd_address_line=" + otd_address_line
+				+ ", otd_address_home=" + otd_address_home + "]";	
 	}
+	
+	
 	public int getOtd_id() {
 		return otd_id;
 	}
