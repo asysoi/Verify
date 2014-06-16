@@ -8,3 +8,62 @@ WHERE  CONTAINS(adresspol, 'проезд', 1) > 0;
 
 
 http://www.oracle-base.com/articles/9i/full-text-indexing-using-oracle-text-9i.php
+
+-----------------------------------------------
+ALTER TABLE C_OTD
+ DROP PRIMARY KEY CASCADE;
+
+DROP TABLE C_OTD CASCADE CONSTRAINTS;
+
+CREATE TABLE C_OTD
+(
+  OTD_ID             NUMBER,
+  OTD_NAME           VARCHAR2(255 BYTE),
+  OTD_NAME_SYN       VARCHAR2(100 BYTE),
+  OTD_ADDRESS_INDEX  VARCHAR2(15 BYTE),
+  OTD_ADDRESS_CITY   VARCHAR2(15 BYTE),
+  OTD_ADDRESS_LINE   VARCHAR2(50 BYTE),
+  OTD_ADDRESS_HOME   VARCHAR2(10 BYTE),
+  OTD_ADDRESS_EXP    DATE
+)
+TABLESPACE CERT
+PCTUSED    0
+PCTFREE    10
+INITRANS   1
+MAXTRANS   255
+STORAGE    (
+            INITIAL          64K
+            NEXT             1M
+            MINEXTENTS       1
+            MAXEXTENTS       UNLIMITED
+            PCTINCREASE      0
+            BUFFER_POOL      DEFAULT
+           )
+LOGGING 
+NOCOMPRESS 
+NOCACHE
+NOPARALLEL
+MONITORING;
+
+
+ALTER TABLE C_OTD ADD (
+  PRIMARY KEY
+ (OTD_ID)
+    USING INDEX 
+    TABLESPACE SYSTEM
+    PCTFREE    10
+    INITRANS   2
+    MAXTRANS   255
+    STORAGE    (
+                INITIAL          64K
+                NEXT             1M
+                MINEXTENTS       1
+                MAXEXTENTS       UNLIMITED
+                PCTINCREASE      0
+                FREELISTS        1
+                FREELIST GROUPS  1
+               ));
+               
+               
+----------------------------------------------
+               
