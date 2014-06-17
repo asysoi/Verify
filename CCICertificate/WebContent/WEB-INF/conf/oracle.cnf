@@ -47,3 +47,7 @@ CREATE SEQUENCE user_id_seq
   START WITH 1
   INCREMENT BY 1
   CACHE 20;
+  
+  --------------------------------------------------------
+  
+  http://samolisov.blogspot.com/2008/10/spring-based-log4j.html

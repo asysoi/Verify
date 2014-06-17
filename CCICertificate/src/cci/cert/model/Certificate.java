@@ -320,7 +320,7 @@ public class Certificate {
 	
 	public String getShort_kontrp() {
 		
-		return kontrp.length() > 100 ?  kontrp.substring(1, 100) + " ..." :  kontrp;
+		return (kontrp!= null && kontrp.length() > 100) ?  kontrp.substring(1, 100) + " ..." :  kontrp;
 	}
 	
 	public String toString() {
