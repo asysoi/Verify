@@ -8,7 +8,9 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -19,12 +21,13 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
+import cci.cert.certificate.CCICertLoader;
 import cci.cert.model.Certificate;
 import cci.cert.model.Product;
 
 @Repository
 public class JDBCCertificateDAO implements CertificateDAO {
-
+	private static final Logger LOG = Logger.getLogger(JDBCCertificateDAO.class);
 	private NamedParameterJdbcTemplate template;
 
 	@Autowired
@@ -47,34 +50,39 @@ public class JDBCCertificateDAO implements CertificateDAO {
 					new Object[] { cert.getCert_id() },
 					new BeanPropertyRowMapper<Product>(Product.class)));
 		} catch (Exception ex) {
+			LOG.error("Ошибка поиска сертификата по ID " + id);
 			ex.printStackTrace();
 		}
 		return cert;
 	}
 
-	
 	// поиск сертификата по id
 	public Certificate check(Certificate cert) {
 		Certificate rcert = null;
 
 		try {
 			String sql = "select * from CERT_VIEW WHERE NOMERCERT = ? AND NBLANKA = ? AND DATACERT=? ";
-			rcert = template.getJdbcOperations().queryForObject(sql,
-					new Object[] { cert.getNomercert(), cert.getNblanka(), cert.getDatacert()},
+			rcert = template.getJdbcOperations().queryForObject(
+					sql,
+					new Object[] { cert.getNomercert(), cert.getNblanka(),
+							cert.getDatacert() },
 					new BeanPropertyRowMapper<Certificate>(Certificate.class));
-            if (rcert != null) {  
-			   sql = "select * from XML_PRODUCTS WHERE cert_id = ?  ORDER BY product_id";
-			   rcert.setProducts(template.getJdbcOperations().query(sql,
-					new Object[] { rcert.getCert_id() },
-					new BeanPropertyRowMapper<Product>(Product.class)));
-            }
+			if (rcert != null) {
+				sql = "select * from XML_PRODUCTS WHERE cert_id = ?  ORDER BY product_id";
+				rcert.setProducts(template.getJdbcOperations().query(sql,
+						new Object[] { rcert.getCert_id() },
+						new BeanPropertyRowMapper<Product>(Product.class)));
+			}
+		} catch (EmptyResultDataAccessException emt) {
+			LOG.error("Сертификат с номером  "
+					+ cert.getNomercert() + " не найден. Возращено пустое значение.");
 		} catch (Exception ex) {
+			LOG.error("Проверка наличия в базе сертификата "
+					+ cert.getNomercert() + " Ошибка: " + ex.getMessage());
 			ex.printStackTrace();
 		}
 		return rcert;
 	}
-
-
 
 	// поиск скртификата по номеру бланка
 	// возможно несколько сертификатов
@@ -94,6 +102,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 						new BeanPropertyRowMapper<Product>(Product.class)));
 			}
 		} catch (Exception ex) {
+			LOG.error("Ошибка поиска сертификата по номеру бланка " + number);
 			ex.printStackTrace();
 		}
 		return certs;
@@ -116,22 +125,21 @@ public class JDBCCertificateDAO implements CertificateDAO {
 						new BeanPropertyRowMapper<Product>(Product.class)));
 			}
 		} catch (Exception ex) {
+			LOG.error("Ошибка поиска сертификата по номеру сертификата "
+					+ number);
 			ex.printStackTrace();
 		}
 		return certs;
 	}
 
-	
 	public List<Certificate> findNextPage(int pageindex, int pagesize) {
-		//String sql = "select * from XML_CERT where ROWNUM < " + pageindex
-		//		* pagesize + " AND ROWNUM > " + (pageindex - 1) * pagesize;
-		
-		String sql = " SELECT cert.* " + 
-				     " FROM (SELECT t.*, ROW_NUMBER() OVER (ORDER BY t.NOMERCERT) rw FROM XML_CERT t) cert " + 
-				     " WHERE cert.rw > "  + ((pageindex - 1) *  pagesize) +
-		             " AND cert.rw <= " + (pageindex *  pagesize);
-		
-		System.out.println("SQL get next page : " + sql);
+
+		String sql = " SELECT cert.* "
+				+ " FROM (SELECT t.*, ROW_NUMBER() OVER (ORDER BY t.NOMERCERT) rw FROM XML_CERT t) cert "
+				+ " WHERE cert.rw > " + ((pageindex - 1) * pagesize)
+				+ " AND cert.rw <= " + (pageindex * pagesize);
+
+		LOG.debug("SQL get next page : " + sql);
 		return this.template.getJdbcOperations().query(sql,
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));
 	}
@@ -173,9 +181,9 @@ public class JDBCCertificateDAO implements CertificateDAO {
 			}
 
 		} catch (Exception ex) {
+			LOG.error("Ошибка добавления сертификата " + cert.getNomercert());
 			ex.printStackTrace();
 		}
-		
 		return cert_id;
 	}
 
@@ -186,7 +194,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				+ "nomercert = :nomercert, expert = :expert, nblanka = :nblanka, rukovod = :rukovod, transport = :transport, marshrut = :marshrut, otmetka = :otmetka,"
 				+ "stranav = :stranav, stranapr = :stranapr, status = :status, koldoplist = :koldoplist, flexp = :flexp, unnexp = :unnexp, expp = :expp, "
 				+ "exps = :exps, expadress = :expadress, flimp = :flimp, importer = :importer, adressimp = :adressimp, flsez = :flsez, sez = :sez,"
-				+ "flsezrez = :flsezrez, stranap = :stranap "
+				+ "flsezrez = :flsezrez, stranap = :stranap, otd_id = :otd_id "
 				+ "WHERE cert_id = :cert_id";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);
@@ -211,23 +219,26 @@ public class JDBCCertificateDAO implements CertificateDAO {
 			}
 
 		} catch (Exception ex) {
+			LOG.error("Ошибка сохранения сертификата " + cert.getNomercert());
 			ex.printStackTrace();
 		}
 
 	}
 
 	public List<Certificate> findByCertificate(Certificate qcert) {
-        List<Certificate> certs = null;
+		List<Certificate> certs = null;
 
-		String sql_cert = "SELECT * from xml_cert WHERE " 
+		String sql_cert = "SELECT * from xml_cert WHERE "
 				+ "datacert = :datacert AND nomercert = :nomercert AND nblanka = :nblanka";
 
-		SqlParameterSource parameters = new BeanPropertySqlParameterSource(qcert);
+		SqlParameterSource parameters = new BeanPropertySqlParameterSource(
+				qcert);
 
 		try {
 
-			certs = template.query(sql_cert, parameters, new BeanPropertyRowMapper<Certificate>());
-			
+			certs = template.query(sql_cert, parameters,
+					new BeanPropertyRowMapper<Certificate>());
+
 			for (Certificate cert : certs) {
 				String sql = "select * from XML_PRODUCTS WHERE cert_id = ?  ORDER BY product_id";
 				cert.setProducts(template.getJdbcOperations().query(sql,
@@ -236,27 +247,29 @@ public class JDBCCertificateDAO implements CertificateDAO {
 			}
 
 		} catch (Exception ex) {
+			LOG.error("Ошибка поиска сертификатов по шаблону сертификата: "
+					+ qcert);
 			ex.printStackTrace();
 		}
-		
+
 		return certs;
 	}
 
-
 	public long getOtdIdBySynonimName(String directory) {
 		long id = 0;
-		
+
 		try {
 			String sql = "select otd_id from C_OTD WHERE OTD_NAME_SYN = ?";
 			id = template.getJdbcOperations().queryForObject(sql,
 					new Object[] { directory }, Long.class);
 		} catch (Exception ex) {
+			LOG.error("Ошибка поиска ID отделения по его синониму: "
+					+ directory);
 			ex.printStackTrace();
 		}
-				
+
 		return id;
 	}
-
 
 	public int saveFile(long cert_id, String lfile) {
 		String sql = "insert into XML_files_in(file_in_id, file_in_name, cert_id, date_load) values "
@@ -269,6 +282,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		try {
 			row = template.update(sql, parameters);
 		} catch (Exception ex) {
+			LOG.error("Ошибка сохранения записи о файле " +lfile  + " сертификата " + cert_id + " в таблицу file_in");
 			ex.printStackTrace();
 		}
 		return row;

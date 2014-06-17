@@ -1,59 +1,64 @@
 package cci.cert.service;
 
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.SocketException;
 
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import cci.cert.certificate.CCICertLoader;
 import cci.cert.certificate.Config;
 import cci.cert.model.Certificate;
 import cci.cert.repositiry.CertificateDAO;
 import cci.cert.util.XMLService;
 
+
+
 @Component
 public class FTPReader {
-	// private String[] ftpdirs = { "minsk", "vitebsk", "grodno", "gomel",
-	// "brest", "mogilev" };
-	private String[] ftpdirs = { "minsk"};
-	private String ftpseparator = "/";
+	static final Logger LOG = Logger.getLogger(FTPReader.class);
+	
+	private boolean isdelete = true;
+	private String[] ftpdirs = {"brest"}; //"minsk", "vitebsk", "grodno", "gomel", "brest", "mogilev"
+	private String server = "212.98.164.233";
+	private String username = "cci_ca";
+	private String password = "MoonLight_2014";
+	private int limit = 200;
+	private int delay = 1000;
 
 	@Autowired
 	XMLService xmlreader;
 
 	public void load(CertificateDAO dao) {
-		// String server = "212.98.164.233";
-		// String username = "cci.by";
-		// String password = "knKI$w_J3na";
-		// String directory = "tmp/minsk/";
-
-		String server = "212.98.164.233";
-		String username = "cci_ca";
-		String password = "MoonLight_2014";
-		int limit = 20;
-		FTPClient f = new FTPClient();
+		FTPClient ftp = new FTPClient();
 
 		while (true) {
-			
+
 			for (String directory : ftpdirs) {
 				try {
-					f.connect(server);
-					f.login(username, password);
+					ftp.connect(server);
+					ftp.login(username, password);
 
-					FTPFile[] files = f.listFiles(directory);
+					FTPFile[] files = ftp.listFiles(directory);
 					InputStream input;
-					Certificate cert = null;
+					Certificate cert = null, checkcert = null;
+					String xmltext;
 					long start;
 					long cert_id;
 					int counter = 1;
+
 					long otd_id = dao.getOtdIdBySynonimName(directory);
-					System.out.println(" :otd_id=" + otd_id);
+					LOG.info("ID Отделения: " + otd_id);
 
 					// если есть такой отделение
 					if (otd_id > 0) {
@@ -62,108 +67,177 @@ public class FTPReader {
 							if (file.getType() == FTPFile.FILE_TYPE) {
 
 								start = System.currentTimeMillis();
-								System.out.print(file.getName());
-
+								
 								try {
-									System.out.print(":rem_file=" + directory
-											+ ftpseparator + file.getName());
-									input = f.retrieveFileStream(directory
-											+ ftpseparator + file.getName());
+									LOG.info("Найден FTP файл: " + directory
+											+ Config.ftpseparator
+											+ file.getName());
+									input = ftp.retrieveFileStream(directory
+											+ Config.ftpseparator
+											+ file.getName());
 
 									if (input != null) {
+										xmltext = getStringFromInputStream(input);
 
 										try {
 											cert = xmlreader
-													.loadCertificate(input);
+													.loadCertificate(new ByteArrayInputStream(
+															xmltext.getBytes()));
 										} catch (Exception ex) {
-											System.out
-													.println("Сертификат не загружен из-за ошибки: "
+											LOG.error("Ошибка загрузки сертификата: "
 															+ ex.toString());
+											ex.printStackTrace();
 										}
 										input.close();
 
-										if (!f.completePendingCommand()) {
-											f.logout();
-											f.disconnect();
-											System.err
-													.println("File transfer failed.");
-											// System.exit(1);
+										if (!ftp.completePendingCommand()) {
+											ftp.logout();
+											ftp.disconnect();
+											LOG.error("File transfer failed.");
 										}
 
 										if (cert != null) {
 											try {
 												cert.setOtd_id((int) otd_id);
-												cert_id = dao.save(cert);
+												checkcert = dao.check(cert); // проверить
+																				// наличие
+												boolean saved;
 
-												if (cert_id > 0) {
-													input = f
-															.retrieveFileStream(directory
-																	+ ftpseparator
-																	+ file.getName());
-													String lfile = Config.REPPATH
-															+ directory
-															+ File.separator
-															+ file.getName();
+												String lfile = Config.REPPATH
+														+ directory
+														+ File.separator
+														+ file.getName();
 
-													boolean saved = saveFileIntoLоcalDirectory(
-															lfile, input);
-													input.close();
+												if (checkcert == null) {
+													cert_id = dao.save(cert);
+													LOG.info("Сертификат с номером " + cert_id + " добавлен в базу данных");
 
-													if (!f.completePendingCommand()) {
-														f.logout();
-														f.disconnect();
-														System.err
-																.println("File transfer failed.");
+													if (cert_id > 0) {
+														saved = saveFileIntoLоcalDirectory(
+																lfile, xmltext);
+
+														if (saved) {
+															LOG.info("Файл сертификата с номером " + cert_id + " сохранен в локальном хранилище");
+															dao.saveFile(
+																	cert_id,
+																	lfile);
+															
+	
+															if (isdelete) {
+																ftp.deleteFile(directory
+																		+ Config.ftpseparator
+																		+ file.getName());
+																LOG.info("Файл " + directory
+																		+ Config.ftpseparator
+																		+ file.getName() + " удален с FTP");
+															}
+														}
 													}
-													if (saved) {
-														dao.saveFile(cert_id,
-																lfile);
+												} else {
+													if (!checkcert.equals(cert)) {
+														LOG.info("Сертификатc номером " + cert.getNomercert() + " изменился. Выполняется обновление... ");
+														cert_id = checkcert
+																.getCert_id();
+														cert.setCert_id(cert_id);
+														dao.update(cert);
 
-														//f.deleteFile(directory
-														//		+ ftpseparator
-														//		+ file.getName());
+														saved = saveFileIntoLоcalDirectory(
+																lfile, xmltext);
+
+														if (saved) {
+															dao.saveFile(
+																	cert_id,
+																	lfile);
+														}
+													} else {
+														LOG.info("Сертификат c номером " + cert.getNomercert() + " уже зарегистрирован. Пропуск... ");
 													}
 
+													if (isdelete) {
+														ftp.deleteFile(directory
+																+ Config.ftpseparator
+																+ file.getName());
+													}
 												}
+												
 											} catch (Exception ex) {
-												System.out
-														.println("Сертификат не сохранен из-за ошибки: "
+												LOG.error("Ошибка сохранения сертификата: "
 																+ ex.toString());
+												ex.printStackTrace();
 											}
 										}
 									} else {
-										System.out
-												.println(" Input isn't opened");
+										LOG.info("FTP Input не был открыт");
 									}
 								} catch (Exception ex) {
-									System.out
-											.println("Сертификат не загружен из-за ошибки: "
+									LOG.error("Сертификат не загружен из-за ошибки: "
 													+ ex.toString());
+									ex.printStackTrace();
 								}
-								System.out.println(System.currentTimeMillis()
-										- start);
+								LOG.info("Время загрузки сертификата из файла " + directory
+										+ Config.ftpseparator
+										+ file.getName() + " составила: " + (System.currentTimeMillis()
+										- start));
 							}
 							if (++counter > limit) {
 								break;
 							}
 						}
 					}
-					f.logout();
-					f.disconnect();
+					ftp.logout();
+					ftp.disconnect();
 
 				} catch (SocketException e) {
+					LOG.error("Ошибка на уровне работы сокета");
 					e.printStackTrace();
 				} catch (IOException e) {
+					LOG.error("Ошибка ввода-вывода");
 					e.printStackTrace();
 				}
 			}
-			
+
 			try {
-				Thread.sleep(1000);
+				LOG.info("Пауза в чтении FTP сервера");
+				Thread.sleep(delay);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-		} // while (true)
+		} 
+	}
+
+	private boolean saveFileIntoLоcalDirectory(String lfile, String xmltext) {
+		OutputStream fop = null;
+		boolean ret = false;
+
+		try {
+			File file = new File(lfile);
+			fop = new FileOutputStream(file);
+
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+
+			byte[] contentInBytes = xmltext.getBytes();
+
+			fop.write(contentInBytes);
+			fop.flush();
+			fop.close();
+			ret = true;
+		} catch (IOException e) {
+			LOG.error("Ошибка ввода вывода при сохранении файла " + lfile);
+			e.printStackTrace();
+		} finally {
+			try {
+				if (fop != null) {
+					fop.close();
+				}
+			} catch (IOException e) {
+				LOG.error("Ошибка ввода вывода при сохранении файла " + lfile);
+				e.printStackTrace();
+			}
+		}
+
+		return ret;
 	}
 
 	private boolean saveFileIntoLоcalDirectory(String lfile, InputStream input) {
@@ -178,11 +252,42 @@ public class FTPReader {
 			while ((bytesRead = input.read(buffer)) != -1) {
 				output.write(buffer, 0, bytesRead);
 			}
+			output.flush();
 			output.close();
 			ret = true;
 		} catch (Exception ex) {
+			LOG.error("Ошибка ввода вывода при сохранении файла " + lfile);
 			ex.printStackTrace();
 		}
 		return ret;
+	}
+
+	private static String getStringFromInputStream(InputStream is) {
+
+		BufferedReader br = null;
+		StringBuilder sb = new StringBuilder();
+
+		String line;
+		try {
+
+			br = new BufferedReader(new InputStreamReader(is));
+			while ((line = br.readLine()) != null) {
+				sb.append(line);
+			}
+
+		} catch (IOException e) {
+			LOG.error("Ошибка загрузки строки из входного потока");
+			e.printStackTrace();
+		} finally {
+			if (br != null) {
+				try {
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		return sb.toString();
 	}
 }
