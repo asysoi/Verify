@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7"/>
+	<classpathentry kind="lib" path="D:/Java/spring/libs/spring-aop-4.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Java/spring/libs/spring-aspects-4.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Java/spring/libs/spring-beans-4.0.3.RELEASE.jar" sourcepath="C:/Users/asysoi/.m2/repository/org/springframework/spring-beans/4.0.3.RELEASE/spring-beans-4.0.3.RELEASE-sources.jar"/>
+	<classpathentry kind="lib" path="D:/Java/spring/libs/spring-build-src-4.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Java/spring/libs/spring-context-4.0.3.RELEASE.jar" sourcepath="C:/Users/asysoi/.m2/repository/org/springframework/spring-context/4.0.3.RELEASE/spring-context-4.0.3.RELEASE-sources.jar"/>
+	<classpathentry kind="lib" path="D:/Java/spring/libs/spring-context-support-4.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Java/spring/libs/spring-core-4.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Java/spring/libs/spring-expression-4.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Java/spring/libs/spring-framework-bom-4.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Java/spring/libs/spring-instrument-4.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Java/spring/libs/spring-instrument-tomcat-4.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Java/spring/libs/spring-jdbc-4.0.3.RELEASE.jar" sourcepath="C:/Users/asysoi/.m2/repository/org/springframework/spring-jdbc/4.0.3.RELEASE/spring-jdbc-4.0.3.RELEASE-sources.jar"/>
+	<classpathentry kind="lib" path="D:/Java/spring/libs/spring-jms-4.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Java/spring/libs/spring-messaging-4.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Java/spring/libs/spring-orm-4.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Java/spring/libs/spring-oxm-4.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Java/spring/libs/spring-test-4.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Java/spring/libs/spring-tx-4.0.3.RELEASE.jar" sourcepath="C:/Users/asysoi/.m2/repository/org/springframework/spring-tx/4.0.3.RELEASE/spring-tx-4.0.3.RELEASE-sources.jar"/>
+	<classpathentry kind="lib" path="D:/Java/spring/libs/spring-web-4.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Java/spring/libs/spring-webmvc-4.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Java/spring/libs/spring-webmvc-portlet-4.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Java/spring/libs/spring-websocket-4.0.3.RELEASE.jar"/>
+	<classpathentry kind="lib" path="D:/Java/libs/commons-dbcp-1.4.jar"/>
+	<classpathentry kind="lib" path="D:/Java/libs/commons-logging.jar"/>
+	<classpathentry kind="lib" path="D:/Java/libs/commons-pool-1.6.jar"/>
+	<classpathentry kind="lib" path="D:/Java/libs/commons-net-3.3/commons-net-3.3.jar"/>
+	<classpathentry kind="lib" path="D:/Java/apache-log4j-1.2.17/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="C:/oraclexe/app/oracle/product/11.2.0/server/jdbc/lib/ojdbc6.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

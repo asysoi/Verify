@@ -14,7 +14,7 @@ public class CCICertLoader {
 		new CCICertLoader().start();
 	}
 
-	public void start() {
+	public void start() {  
 
 		LOG.info("Certificate Loader started");  
 		
