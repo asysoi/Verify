@@ -40,7 +40,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 					new Object[] { id },
 					new BeanPropertyRowMapper<Certificate>(Certificate.class));
 
-			sql = "select * from XML_PRODUCTS WHERE cert_id = ? ORDER BY product_id";
+			sql = "select * from C_PRODUCT WHERE cert_id = ? ORDER BY product_id";
 			cert.setProducts(template.getJdbcOperations().query(sql,
 					new Object[] { cert.getCert_id() },
 					new BeanPropertyRowMapper<Product>(Product.class)));
@@ -61,7 +61,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 					new Object[] { cert.getNomercert(), cert.getNblanka(), cert.getDatacert()},
 					new BeanPropertyRowMapper<Certificate>(Certificate.class));
             if (rcert != null) {  
-			   sql = "select * from XML_PRODUCTS WHERE cert_id = ?  ORDER BY product_id";
+			   sql = "select * from C_PRODUCT WHERE cert_id = ?  ORDER BY product_id";
 			   rcert.setProducts(template.getJdbcOperations().query(sql,
 					new Object[] { rcert.getCert_id() },
 					new BeanPropertyRowMapper<Product>(Product.class)));
@@ -86,7 +86,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 					new BeanPropertyRowMapper<Certificate>(Certificate.class));
 
 			for (Certificate cert : certs) {
-				sql = "select * from XML_PRODUCTS WHERE cert_id = ?  ORDER BY product_id";
+				sql = "select * from C_PRODUCT WHERE cert_id = ?  ORDER BY product_id";
 				cert.setProducts(template.getJdbcOperations().query(sql,
 						new Object[] { cert.getCert_id() },
 						new BeanPropertyRowMapper<Product>(Product.class)));
@@ -108,7 +108,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 					new BeanPropertyRowMapper<Certificate>(Certificate.class));
 
 			for (Certificate cert : certs) {
-				sql = "select * from XML_PRODUCTS WHERE cert_id = ?  ORDER BY product_id";
+				sql = "select * from C_PRODUCT WHERE cert_id = ?  ORDER BY product_id";
 				cert.setProducts(template.getJdbcOperations().query(sql,
 						new Object[] { cert.getCert_id() },
 						new BeanPropertyRowMapper<Product>(Product.class)));
@@ -121,11 +121,11 @@ public class JDBCCertificateDAO implements CertificateDAO {
 
 	
 	public List<Certificate> findNextPage(int pageindex, int pagesize) {
-		//String sql = "select * from XML_CERT where ROWNUM < " + pageindex
+		//String sql = "select * from c_CERT where ROWNUM < " + pageindex
 		//		* pagesize + " AND ROWNUM > " + (pageindex - 1) * pagesize;
 		
 		String sql = " SELECT cert.* " + 
-				     " FROM (SELECT t.*, ROW_NUMBER() OVER (ORDER BY t.NOMERCERT) rw FROM XML_CERT t) cert " + 
+				     " FROM (SELECT t.*, ROW_NUMBER() OVER (ORDER BY t.NOMERCERT) rw FROM c_CERT t) cert " + 
 				     " WHERE cert.rw > "  + ((pageindex - 1) *  pagesize) +
 		             " AND cert.rw <= " + (pageindex *  pagesize);
 		
@@ -135,14 +135,14 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	}
 
 	public List<Certificate> findAll() {
-		String sql = "select * from XML_CERT ORDER BY cert_id";
+		String sql = "select * from c_CERT ORDER BY cert_id";
 
 		return this.template.getJdbcOperations().query(sql,
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));
 	}
 
 	public int save(Certificate cert) {
-		String sql_cert = "insert into xml_cert values "
+		String sql_cert = "insert into c_cert values "
 				+ "(beltpp_cert_test.cert_id_seq.nextval, "
 				+ ":forms, :unn, :kontrp, :kontrs, :adress, :poluchat, :adresspol, :datacert,"
 				+ ":nomercert, :expert, :nblanka, :rukovod, :transport, :marshrut, :otmetka,"
@@ -159,7 +159,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 					new String[] { "CERT_ID" });
 			cert_id = keyHolder.getKey().intValue();
 
-			String sql_product = "insert into XML_PRODUCTS values ("
+			String sql_product = "insert into C_PRODUCT values ("
 					+ " beltpp_cert_test.product_id_seq.nextval, " + cert_id
 					+ ", "
 					+ " :numerator, :tovar, :vidup, :kriter, :ves, :schet)";
@@ -179,7 +179,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 
 	public void update(Certificate cert) {
 
-		String sql_cert = "update xml_cert SET "
+		String sql_cert = "update c_cert SET "
 				+ "forms = :forms, unn = :unn, kontrp = :kontrp, kontrs = :kontrs, adress = :adress, poluchat = :poluchat, adresspol = :adresspol, datacert = :datacert,"
 				+ "nomercert = :nomercert, expert = :expert, nblanka = :nblanka, rukovod = :rukovod, transport = :transport, marshrut = :marshrut, otmetka = :otmetka,"
 				+ "stranav = :stranav, stranapr = :stranapr, status = :status, koldoplist = :koldoplist, flexp = :flexp, unnexp = :unnexp, expp = :expp, "
@@ -194,10 +194,10 @@ public class JDBCCertificateDAO implements CertificateDAO {
 			int row = template.update(sql_cert, parameters);
 
 			template.getJdbcOperations().update(
-					"delete from XML_products where cert_id = ?",
+					"delete from C_PRODUCT where cert_id = ?",
 					Long.valueOf(cert.getCert_id()));
 
-			String sql_product = "insert into XML_PRODUCTS values ("
+			String sql_product = "insert into C_PRODUCT values ("
 					+ " beltpp_cert_test.product_id_seq.nextval, "
 					+ cert.getCert_id() + ", "
 					+ " :numerator, :tovar, :vidup, :kriter, :ves, :schet)";
@@ -217,7 +217,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	public List<Certificate> findByCertificate(Certificate qcert) {
         List<Certificate> certs = null;
 
-		String sql_cert = "SELECT * from xml_cert WHERE " 
+		String sql_cert = "SELECT * from c_cert WHERE " 
 				+ "datacert = :datacert AND nomercert = :nomercert AND nblanka = :nblanka";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(qcert);
@@ -227,7 +227,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 			certs = template.query(sql_cert, parameters, new BeanPropertyRowMapper<Certificate>());
 			
 			for (Certificate cert : certs) {
-				String sql = "select * from XML_PRODUCTS WHERE cert_id = ?  ORDER BY product_id";
+				String sql = "select * from C_PRODUCT WHERE cert_id = ?  ORDER BY product_id";
 				cert.setProducts(template.getJdbcOperations().query(sql,
 						new Object[] { cert.getCert_id() },
 						new BeanPropertyRowMapper<Product>()));
