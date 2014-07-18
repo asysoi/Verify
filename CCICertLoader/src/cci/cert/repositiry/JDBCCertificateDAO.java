@@ -153,7 +153,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 
 	public long save(Certificate cert) {
 		String sql_cert = "insert into c_cert values "
-				+ "(beltpp_cert_test.cert_id_seq.nextval, "
+				+ "(beltpp.cert_id_seq.nextval, "
 				+ ":forms, :unn, :kontrp, :kontrs, :adress, :poluchat, :adresspol, :datacert,"
 				+ ":nomercert, :expert, :nblanka, :rukovod, :transport, :marshrut, :otmetka,"
 				+ ":stranav, :stranapr, :status, :koldoplist, :flexp, :unnexp, :expp, "
@@ -170,7 +170,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 			cert_id = keyHolder.getKey().longValue();
 
 			String sql_product = "insert into c_PRODUCT values ("
-					+ " beltpp_cert_test.product_id_seq.nextval, " + cert_id
+					+ " beltpp.product_id_seq.nextval, " + cert_id
 					+ ", "
 					+ " :numerator, :tovar, :vidup, :kriter, :ves, :schet)";
 
@@ -208,7 +208,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 					Long.valueOf(cert.getCert_id()));
 
 			String sql_product = "insert into c_PRODUCT values ("
-					+ " beltpp_cert_test.product_id_seq.nextval, "
+					+ " beltpp.product_id_seq.nextval, "
 					+ cert.getCert_id() + ", "
 					+ " :numerator, :tovar, :vidup, :kriter, :ves, :schet)";
 
@@ -273,7 +273,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 
 	public int saveFile(long cert_id, String lfile) {
 		String sql = "insert into c_files_in(file_in_id, file_in_name, cert_id, date_load) values "
-				+ "(beltpp_cert_test.file_id_seq.nextval, :file_in_name, :cert_id, SYSDATE)";
+				+ "(beltpp.file_id_seq.nextval, :file_in_name, :cert_id, SYSDATE)";
 		int row = 0;
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("file_in_name", lfile);

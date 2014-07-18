@@ -352,13 +352,13 @@ CREATE VIEW CERT_VIEW AS
   from C_CERT a left join C_OTD b  on  A.OTD_ID = B.OTD_ID;
 
  
-  
-INSERT INTO "BELTPP"."C_OTD" (OTD_ID, OTD_NAME) VALUES ('1', 'Минское отделение БелТПП');
-INSERT INTO "BELTPP"."C_OTD" (OTD_ID, OTD_NAME) VALUES ('2', 'Бресткое отделение БелТПП');
-INSERT INTO "BELTPP"."C_OTD" (OTD_ID, OTD_NAME) VALUES ('3', 'Витебское отделение БелТПП');
-INSERT INTO "BELTPP"."C_OTD" (OTD_ID, OTD_NAME) VALUES ('4', 'Гомельское отделение БелТПП');
-INSERT INTO "BELTPP"."C_OTD" (OTD_ID, OTD_NAME) VALUES ('5', 'Гродненское отделение БелТПП');
-INSERT INTO "BELTPP"."C_OTD" (OTD_ID, OTD_NAME) VALUES ('6', 'Могилевское отделение БелТПП');
+delete from beltpp.c_otd; 
+INSERT INTO "BELTPP"."C_OTD" (OTD_ID, OTD_NAME, OTD_NAME_SYN) VALUES ('1', 'Минское отделение БелТПП', 'minsk');
+INSERT INTO "BELTPP"."C_OTD" (OTD_ID, OTD_NAME, OTD_NAME_SYN) VALUES ('2', 'Бресткое отделение БелТПП', 'brest');
+INSERT INTO "BELTPP"."C_OTD" (OTD_ID, OTD_NAME, OTD_NAME_SYN) VALUES ('3', 'Витебское отделение БелТПП', 'vitebsk');
+INSERT INTO "BELTPP"."C_OTD" (OTD_ID, OTD_NAME, OTD_NAME_SYN) VALUES ('4', 'Гомельское отделение БелТПП', 'gomel');
+INSERT INTO "BELTPP"."C_OTD" (OTD_ID, OTD_NAME, OTD_NAME_SYN) VALUES ('5', 'Гродненское отделение БелТПП', 'grodno');
+INSERT INTO "BELTPP"."C_OTD" (OTD_ID, OTD_NAME, OTD_NAME_SYN) VALUES ('6', 'Могилевское отделение БелТПП', 'mogilev');
 
 
   

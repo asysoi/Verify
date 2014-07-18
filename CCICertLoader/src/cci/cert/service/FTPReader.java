@@ -29,7 +29,7 @@ public class FTPReader {
 	static final Logger LOG = Logger.getLogger(FTPReader.class);
 	
 	private boolean isdelete = true;
-	private String[] ftpdirs = {"minsk"}; //"minsk", "vitebsk", "grodno", "gomel", "brest", "mogilev"
+	private String[] ftpdirs = {"minsk", "vitebsk", "grodno", "gomel", "brest", "mogilev"};
 	private String server = "212.98.164.233";
 	private String username = "cci_ca";
 	private String password = "MoonLight_2014";
