@@ -224,6 +224,12 @@ ALTER TABLE C_CERT
     (otd_id)
     REFERENCES C_OTD (otd_id);
 
+
+ALTER TABLE C_CERT ADD ( 
+   parentnumber varchar2(50 byte),
+   parentstatus varchar2(80 byte)
+   );
+   
                
                
 DROP TABLE BELTPP.C_FILES_IN CASCADE CONSTRAINTS;
@@ -295,7 +301,7 @@ CREATE TABLE BELTPP.C_PRODUCT
   PRODUCT_ID  NUMBER,
   CERT_ID     NUMBER,
   NUMERATOR   VARCHAR2(1000 BYTE),
-  TOVAR       VARCHAR2(1000 BYTE),
+  TOVAR       VARCHAR2(2500 BYTE),
   VIDUP       VARCHAR2(1000 BYTE),
   KRITER      VARCHAR2(1000 BYTE),
   VES         VARCHAR2(1000 BYTE),
@@ -345,11 +351,17 @@ ALTER TABLE BELTPP.C_PRODUCT
     REFERENCES C_CERT(CERT_ID);
     
 
+DROP VIEW CERT_CHILD_VIEW;
+
+CREATE view cert_child_view as
+  select tt.*, bb.nomercert chldnumber, bb.CERT_ID child_id from c_cert tt left join c_cert bb on tt.nomercert = bb.parentnumber;
+    
+    
 DROP VIEW  CERT_VIEW;   
     
 CREATE VIEW CERT_VIEW AS 
   select a.*, B.OTD_NAME, B.OTD_ADDRESS_INDEX, B.OTD_ADDRESS_CITY, B.OTD_ADDRESS_LINE, B.OTD_ADDRESS_HOME 
-  from C_CERT a left join C_OTD b  on  A.OTD_ID = B.OTD_ID;
+  from CERT_CHILD_VIEW a left join C_OTD b on A.OTD_ID = B.OTD_ID;
 
  
 delete from beltpp.c_otd; 
@@ -357,10 +369,14 @@ INSERT INTO "BELTPP"."C_OTD" (OTD_ID, OTD_NAME, OTD_NAME_SYN) VALUES ('1', 'Минс
 INSERT INTO "BELTPP"."C_OTD" (OTD_ID, OTD_NAME, OTD_NAME_SYN) VALUES ('2', 'Бресткое отделение БелТПП', 'brest');
 INSERT INTO "BELTPP"."C_OTD" (OTD_ID, OTD_NAME, OTD_NAME_SYN) VALUES ('3', 'Витебское отделение БелТПП', 'vitebsk');
 INSERT INTO "BELTPP"."C_OTD" (OTD_ID, OTD_NAME, OTD_NAME_SYN) VALUES ('4', 'Гомельское отделение БелТПП', 'gomel');
-INSERT INTO "BELTPP"."C_OTD" (OTD_ID, OTD_NAME, OTD_NAME_SYN) VALUES ('5', 'Гродненское отделение БелТПП', 'grodno');
 INSERT INTO "BELTPP"."C_OTD" (OTD_ID, OTD_NAME, OTD_NAME_SYN) VALUES ('6', 'Могилевское отделение БелТПП', 'mogilev');
 
 
-  
+DROP INDEX CERT_PARENTNUMBER_IDX;
+  CREATE INDEX CERT_PARENTNUMBER_IDX ON C_CERT (PARENTNUMBER ASC);
+
+DROP INDEX CERT_NUMBER_IDX;
+  CREATE UNIQUE INDEX CERT_NUMBER_IDX ON C_CERT (NOMERCERT ASC);
+
   
   

@@ -48,7 +48,37 @@ public class Certificate {
 	private String otd_address_city;
 	private String otd_address_line;
 	private String otd_address_home;
+	private String parentnumber = "";
+	private String parentstatus = "";
 	
+	private String childnumber = "";
+	private int child_id = 0;
+	
+	public String getChildnumber() {
+		return childnumber;
+	}
+	public void setChildnumber(String childnumber) {
+		this.childnumber = childnumber;
+	}
+	public int getChild_id() {
+		return child_id;
+	}
+	public void setChild_id(int child_id) {
+		this.child_id = child_id;
+	}
+	public String getParentnumber() {
+		return parentnumber;
+	}
+	public void setParentnumber(String parentnumber) {
+		this.parentnumber = parentnumber;
+	}
+	public String getParentstatus() {
+		return parentstatus;
+	}
+	public void setParentstatus(String parentstatus) {
+		this.parentstatus = parentstatus;
+	}
+
 	// список продукции
 	private List<Product> products;
 	//private Party otdelenie;
@@ -320,7 +350,8 @@ public class Certificate {
 	
 	public String getShort_kontrp() {
 		
-		return kontrp.length() > 100 ?  kontrp.substring(1, 100) + " ..." :  kontrp;
+		// return kontrp.length() > 100 ?  kontrp.substring(1, 100) + " ..." :  kontrp;
+		return (kontrp!= null && kontrp.length() > 100) ?  kontrp.substring(1, 100) + " ..." :  kontrp;
 	}
 	
 	public String toString() {

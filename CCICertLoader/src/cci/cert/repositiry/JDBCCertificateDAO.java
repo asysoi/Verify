@@ -1,7 +1,5 @@
 package cci.cert.repositiry;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,8 +10,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -21,7 +17,6 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
-import cci.cert.certificate.CCICertLoader;
 import cci.cert.model.Certificate;
 import cci.cert.model.Product;
 
@@ -35,7 +30,9 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		this.template = new NamedParameterJdbcTemplate(dataSource);
 	}
 
+	// ---------------------------------------------------------------
 	// поиск сертификата по id
+	// ---------------------------------------------------------------
 	public Certificate findByID(Long id) {
 		Certificate cert = null;
 
@@ -56,7 +53,9 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		return cert;
 	}
 
-	// поиск сертификата по id
+	// ---------------------------------------------------------------
+	// поиск сертификата по id, nomercert & datacert
+	// ---------------------------------------------------------------	
 	public Certificate check(Certificate cert) {
 		Certificate rcert = null;
 
@@ -84,8 +83,11 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		return rcert;
 	}
 
+	
+	// ---------------------------------------------------------------	
 	// поиск скртификата по номеру бланка
 	// возможно несколько сертификатов
+	// ---------------------------------------------------------------	
 	public List<Certificate> findByNBlanka(String number) {
 		List<Certificate> certs = null;
 
@@ -108,7 +110,9 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		return certs;
 	}
 
+	// ---------------------------------------------------------------
 	// поиск сертификата по номеру сертификата
+	// ---------------------------------------------------------------
 	public List<Certificate> findByNumberCert(String number) {
 		List<Certificate> certs = null;
 
@@ -132,10 +136,14 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		return certs;
 	}
 
+	
+	// ---------------------------------------------------------------
+	// вернуть следующую страницу сертификатов
+	// ---------------------------------------------------------------
 	public List<Certificate> findNextPage(int pageindex, int pagesize) {
 
 		String sql = " SELECT cert.* "
-				+ " FROM (SELECT t.*, ROW_NUMBER() OVER (ORDER BY t.NOMERCERT) rw FROM c_CERT t) cert "
+				+ " FROM (SELECT t.*, ROW_NUMBER() OVER (ORDER BY t.NOMERCERT) rw FROM CERT_VIEW t) cert "
 				+ " WHERE cert.rw > " + ((pageindex - 1) * pagesize)
 				+ " AND cert.rw <= " + (pageindex * pagesize);
 
@@ -144,6 +152,9 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));
 	}
 
+	// ---------------------------------------------------------------
+	// найти все сертификаты
+	// ---------------------------------------------------------------
 	public List<Certificate> findAll() {
 		String sql = "select * from c_CERT ORDER BY cert_id";
 
@@ -151,6 +162,10 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));
 	}
 
+	
+	// ---------------------------------------------------------------
+	// сохранить сертификат
+	// ---------------------------------------------------------------
 	public long save(Certificate cert) {
 		String sql_cert = "insert into c_cert values "
 				+ "(beltpp.cert_id_seq.nextval, "
@@ -158,7 +173,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				+ ":nomercert, :expert, :nblanka, :rukovod, :transport, :marshrut, :otmetka,"
 				+ ":stranav, :stranapr, :status, :koldoplist, :flexp, :unnexp, :expp, "
 				+ ":exps, :expadress, :flimp, :importer, :adressimp, :flsez, :sez,"
-				+ ":flsezrez, :stranap, :otd_id )";
+				+ ":flsezrez, :stranap, :otd_id, :parentnumber, :parentstatus)";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);
 		GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
@@ -187,6 +202,10 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		return cert_id;
 	}
 
+	
+	// ---------------------------------------------------------------
+	// изменить сертификат
+	// ---------------------------------------------------------------
 	public void update(Certificate cert) {
 
 		String sql_cert = "update c_cert SET "
@@ -194,7 +213,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				+ "nomercert = :nomercert, expert = :expert, nblanka = :nblanka, rukovod = :rukovod, transport = :transport, marshrut = :marshrut, otmetka = :otmetka,"
 				+ "stranav = :stranav, stranapr = :stranapr, status = :status, koldoplist = :koldoplist, flexp = :flexp, unnexp = :unnexp, expp = :expp, "
 				+ "exps = :exps, expadress = :expadress, flimp = :flimp, importer = :importer, adressimp = :adressimp, flsez = :flsez, sez = :sez,"
-				+ "flsezrez = :flsezrez, stranap = :stranap, otd_id = :otd_id "
+				+ "flsezrez = :flsezrez, stranap = :stranap, otd_id = :otd_id; parentnumber = :parentnumber, parentstatus = :parentstatus "
 				+ "WHERE cert_id = :cert_id";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);
@@ -225,10 +244,14 @@ public class JDBCCertificateDAO implements CertificateDAO {
 
 	}
 
+	
+	// ---------------------------------------------------------------
+	// найти список сертификатов по шаблону
+	// ---------------------------------------------------------------
 	public List<Certificate> findByCertificate(Certificate qcert) {
 		List<Certificate> certs = null;
 
-		String sql_cert = "SELECT * from c_cert WHERE "
+		String sql_cert = "SELECT * from CERT_VIEW WHERE "
 				+ "datacert = :datacert AND nomercert = :nomercert AND nblanka = :nblanka";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(
@@ -255,6 +278,9 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		return certs;
 	}
 
+	// ---------------------------------------------------------------
+	// получить ID отделения по его короткому имени (minsk, vitebsk ...)
+	// ---------------------------------------------------------------
 	public long getOtdIdBySynonimName(String directory) {
 		long id = 0;
 
@@ -271,9 +297,13 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		return id;
 	}
 
+	
+	// ---------------------------------------------------------------
+	// сохранить имя файла с сертификатом в базе данных
+	// ---------------------------------------------------------------
 	public int saveFile(long cert_id, String lfile) {
 		String sql = "insert into c_files_in(file_in_id, file_in_name, cert_id, date_load) values "
-				+ "(beltpp.file_id_seq.nextval, :file_in_name, :cert_id, SYSDATE)";
+				     + "(beltpp.file_id_seq.nextval, :file_in_name, :cert_id, SYSDATE)";
 		int row = 0;
 		Map<String, Object> parameters = new HashMap<String, Object>();
 		parameters.put("file_in_name", lfile);

@@ -34,7 +34,7 @@ public class FTPReader {
 	private String username = "cci_ca";
 	private String password = "MoonLight_2014";
 	private int limit = 1000;
-	private int delay = 900000;
+	private int delay = 200000;
 
 	@Autowired
 	XMLService xmlreader;
