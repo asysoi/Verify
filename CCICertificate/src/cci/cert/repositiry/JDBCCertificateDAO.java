@@ -30,7 +30,9 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		this.template = new NamedParameterJdbcTemplate(dataSource);
 	}
 
+	// ---------------------------------------------------------------
 	// поиск сертификата по id
+	// ---------------------------------------------------------------
 	public Certificate findByID(Long id) {
 		Certificate cert = null;
 
@@ -51,7 +53,9 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	}
 
 	
+	// ---------------------------------------------------------------
 	// поиск сертификата по id
+	// ---------------------------------------------------------------
 	public Certificate check(Certificate cert) {
 		Certificate rcert = null;
 
@@ -74,8 +78,10 @@ public class JDBCCertificateDAO implements CertificateDAO {
 
 
 
+	// ---------------------------------------------------------------
 	// поиск скртификата по номеру бланка
 	// возможно несколько сертификатов
+	// ---------------------------------------------------------------
 	public List<Certificate> findByNBlanka(String number) {
 		List<Certificate> certs = null;
 
@@ -97,7 +103,10 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		return certs;
 	}
 
+	
+	// ---------------------------------------------------------------
 	// поиск сертификата по номеру сертификата
+	// ---------------------------------------------------------------	
 	public List<Certificate> findByNumberCert(String number) {
 		List<Certificate> certs = null;
 
@@ -120,12 +129,15 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	}
 
 	
+	// ---------------------------------------------------------------
+	// вернуть очередную страницу списка сертификатов
+	// ---------------------------------------------------------------
 	public List<Certificate> findNextPage(int pageindex, int pagesize) {
 		//String sql = "select * from c_CERT where ROWNUM < " + pageindex
 		//		* pagesize + " AND ROWNUM > " + (pageindex - 1) * pagesize;
 		
 		String sql = " SELECT cert.* " + 
-				     " FROM (SELECT t.*, ROW_NUMBER() OVER (ORDER BY t.NOMERCERT) rw FROM c_CERT t) cert " + 
+				     " FROM (SELECT t.*, ROW_NUMBER() OVER (ORDER BY t.NOMERCERT) rw FROM CERT_VIEW t) cert " + 
 				     " WHERE cert.rw > "  + ((pageindex - 1) *  pagesize) +
 		             " AND cert.rw <= " + (pageindex *  pagesize);
 		
@@ -134,13 +146,21 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));
 	}
 
+	
+	// ---------------------------------------------------------------
+	//  вернуть все сертификаты
+	// ---------------------------------------------------------------
 	public List<Certificate> findAll() {
-		String sql = "select * from c_CERT ORDER BY cert_id";
+		String sql = "select * from CERT_VIEW ORDER BY cert_id";
 
 		return this.template.getJdbcOperations().query(sql,
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));
 	}
 
+	
+	// ---------------------------------------------------------------
+	// save certificate 
+	// ---------------------------------------------------------------
 	public int save(Certificate cert) {
 		String sql_cert = "insert into c_cert values "
 				+ "(beltpp.cert_id_seq.nextval, "
@@ -148,7 +168,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				+ ":nomercert, :expert, :nblanka, :rukovod, :transport, :marshrut, :otmetka,"
 				+ ":stranav, :stranapr, :status, :koldoplist, :flexp, :unnexp, :expp, "
 				+ ":exps, :expadress, :flimp, :importer, :adressimp, :flsez, :sez,"
-				+ ":flsezrez, :stranap, :otd_id )";
+				+ ":flsezrez, :stranap, :otd_id, :parentnumber, :parentstatus )";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);
 		GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
@@ -177,6 +197,10 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		return cert_id;
 	}
 
+	
+	// ---------------------------------------------------------------
+	// update certificate
+	// ---------------------------------------------------------------
 	public void update(Certificate cert) {
 
 		String sql_cert = "update c_cert SET "
@@ -184,7 +208,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				+ "nomercert = :nomercert, expert = :expert, nblanka = :nblanka, rukovod = :rukovod, transport = :transport, marshrut = :marshrut, otmetka = :otmetka,"
 				+ "stranav = :stranav, stranapr = :stranapr, status = :status, koldoplist = :koldoplist, flexp = :flexp, unnexp = :unnexp, expp = :expp, "
 				+ "exps = :exps, expadress = :expadress, flimp = :flimp, importer = :importer, adressimp = :adressimp, flsez = :flsez, sez = :sez,"
-				+ "flsezrez = :flsezrez, stranap = :stranap "
+				+ "flsezrez = :flsezrez, stranap = :stranap, parentnumber = :parentnumber, parentstatus = : parentstatus "
 				+ "WHERE cert_id = :cert_id";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);
@@ -214,10 +238,13 @@ public class JDBCCertificateDAO implements CertificateDAO {
 
 	}
 
+	// ---------------------------------------------------------------
+	// find certificate by query template
+	// ---------------------------------------------------------------
 	public List<Certificate> findByCertificate(Certificate qcert) {
         List<Certificate> certs = null;
 
-		String sql_cert = "SELECT * from c_cert WHERE " 
+		String sql_cert = "SELECT * from cert_view WHERE " 
 				+ "datacert = :datacert AND nomercert = :nomercert AND nblanka = :nblanka";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(qcert);

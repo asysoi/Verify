@@ -21,10 +21,24 @@
 	        <tr>
 	        <td style="width:10%"><a href="gocert.do?certid=${cert.cert_id}">${cert.nomercert}</a></td>
 	        <td style="width:9%">${cert.expert}</td>
-	        <td style="width:60%">${cert.short_kontrp}</td>
+	        <td style="width:50%">${cert.short_kontrp}</td>
 	        <td style="width:7%">${cert.unn}</td>
 	        <td style="width:7%">${cert.nblanka}</td>
 	        <td style="width:7%">${cert.datacert}</td>
+	        
+	        <td style="width:5%">
+	        <c:if test="${cert.child_id != null}">
+	            <a href="gocert.do?certid=${cert.child_id}">child</a>
+	        </c:if>    
+	        </td>
+	        
+	        <td style="width:5%">
+	        <c:if test="${cert.parentnumber != null}">
+	        <a href="gocert.do?certid=${cert.parentnumber}">parent</a>
+	        </c:if>
+	        </td>
+	        
+	          
 	        </tr>
      </c:forEach>
      <tr>
