@@ -12,6 +12,8 @@ import org.eclipse.wb.swt.SWTResourceManager;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import cci.cert.certificate.CCIProperty;
+
 
 public class PropertiesForm extends Dialog {
 
@@ -168,12 +170,12 @@ public class PropertiesForm extends Dialog {
 	private void saveProps() {
 		
 		CCIProperty props = CCIProperty.getInstance();
-				
-		props.setProperty(OTRS.PR_LOGIN_SAVE, button_0.getSelection() ? "true" : "false");
-		props.setProperty(OTRS.PR_AUTOLOGIN, button_1.getSelection() ? "true" : "false");;
-		props.setProperty(OTRS.PR_REMINDER, button_2.getSelection() ? "true" : "false");;
-		props.setProperty(OTRS.PR_SOUND, button_4.getSelection()  ? "true" : "false");;
-		props.setProperty(OTRS.PR_CONFIRMATION, button_5.getSelection()  ? "true" : "false");;
+/*				
+//		props.setProperty(OTRS.PR_LOGIN_SAVE, button_0.getSelection() ? "true" : "false");
+//		props.setProperty(OTRS.PR_AUTOLOGIN, button_1.getSelection() ? "true" : "false");;
+//		props.setProperty(OTRS.PR_REMINDER, button_2.getSelection() ? "true" : "false");;
+//		props.setProperty(OTRS.PR_SOUND, button_4.getSelection()  ? "true" : "false");;
+//		props.setProperty(OTRS.PR_CONFIRMATION, button_5.getSelection()  ? "true" : "false");;
 		props.setProperty(OTRS.PR_CHECK_TIME, txtTime.getText());
 		props.setProperty(OTRS.PR_OTRS_URL, txtUrl.getText());
 		props.setProperty(OTRS.PR_PATH, txtPath.getText());
@@ -197,19 +199,20 @@ public class PropertiesForm extends Dialog {
 		} catch (Exception ex) {
 			OTRSApplicationAWT.LOG.error("Config saving. " + ex.getMessage());;
 		}
+		*/
 	}
 	
 	private void loadProps() {
 		CCIProperty props = CCIProperty.getInstance();
-		txtTime.setText((String) props.getProperty(OTRS.PR_CHECK_TIME)!= null ? props.getProperty(OTRS.PR_CHECK_TIME) : "5"); 
-		button_0.setSelection(props.getProperty(OTRS.PR_LOGIN_SAVE)!= null ? Boolean.parseBoolean(props.getProperty(OTRS.PR_LOGIN_SAVE)) : true );
-		button_1.setSelection(props.getProperty(OTRS.PR_AUTOLOGIN)!= null ? Boolean.parseBoolean(props.getProperty(OTRS.PR_AUTOLOGIN)) : true );
-		button_2.setSelection(props.getProperty(OTRS.PR_REMINDER)!= null ? Boolean.parseBoolean(props.getProperty(OTRS.PR_REMINDER)) : true);
-		button_4.setSelection(props.getProperty(OTRS.PR_SOUND)!= null ? Boolean.parseBoolean(props.getProperty(OTRS.PR_SOUND)) : false);
-		button_5.setSelection(props.getProperty(OTRS.PR_CONFIRMATION)!= null ? Boolean.parseBoolean(props.getProperty(OTRS.PR_CONFIRMATION)) : true);
-		txtUrl.setText(props.getProperty(OTRS.PR_OTRS_URL) != null ? props.getProperty(OTRS.PR_OTRS_URL) : "");
-		txtPath.setText(props.getProperty(OTRS.PR_PATH) != null ? props.getProperty(OTRS.PR_PATH) : "");
-		OTRSApplicationAWT.LOG.info("Load config properties");
+//		txtTime.setText((String) props.getProperty(OTRS.PR_CHECK_TIME)!= null ? props.getProperty(OTRS.PR_CHECK_TIME) : "5"); 
+//		button_0.setSelection(props.getProperty(OTRS.PR_LOGIN_SAVE)!= null ? Boolean.parseBoolean(props.getProperty(OTRS.PR_LOGIN_SAVE)) : true );
+//		button_1.setSelection(props.getProperty(OTRS.PR_AUTOLOGIN)!= null ? Boolean.parseBoolean(props.getProperty(OTRS.PR_AUTOLOGIN)) : true );
+//		button_2.setSelection(props.getProperty(OTRS.PR_REMINDER)!= null ? Boolean.parseBoolean(props.getProperty(OTRS.PR_REMINDER)) : true);
+//		button_4.setSelection(props.getProperty(OTRS.PR_SOUND)!= null ? Boolean.parseBoolean(props.getProperty(OTRS.PR_SOUND)) : false);
+//		button_5.setSelection(props.getProperty(OTRS.PR_CONFIRMATION)!= null ? Boolean.parseBoolean(props.getProperty(OTRS.PR_CONFIRMATION)) : true);
+//		txtUrl.setText(props.getProperty(OTRS.PR_OTRS_URL) != null ? props.getProperty(OTRS.PR_OTRS_URL) : "");
+//		txtPath.setText(props.getProperty(OTRS.PR_PATH) != null ? props.getProperty(OTRS.PR_PATH) : "");
+//		OTRSApplicationAWT.LOG.info("Load config properties");
 		
 	}
 }
