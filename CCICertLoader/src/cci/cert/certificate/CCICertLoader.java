@@ -4,6 +4,8 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
+
+import cci.cert.form.OTRSApplicationAWT;
 import cci.cert.service.CERTService;
 
 public class CCICertLoader {
@@ -24,8 +26,10 @@ public class CCICertLoader {
 		CERTService service = context.getBean("CERTService",
 			CERTService.class);
 		
-		service.uploadCertificateFromFTP();
-	
+		new OTRSApplicationAWT().start();
+		
+		
+		//service.uploadCertificateFromFTP();
 	}
 	
 }

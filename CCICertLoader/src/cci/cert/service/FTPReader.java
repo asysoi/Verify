@@ -23,19 +23,10 @@ import cci.cert.repositiry.CertificateDAO;
 import cci.cert.util.XMLService;
 
 
-
 @Component
 public class FTPReader {
 	static final Logger LOG = Logger.getLogger(FTPReader.class);
 	
-	private boolean isdelete = true;
-	private String[] ftpdirs = {"minsk", "vitebsk", "grodno", "gomel", "brest", "mogilev"};
-	private String server = "212.98.164.233";
-	private String username = "cci_ca";
-	private String password = "MoonLight_2014";
-	private int limit = 1000;
-	private int delay = 200000;
-
 	@Autowired
 	XMLService xmlreader;
 
@@ -44,10 +35,10 @@ public class FTPReader {
 
 		while (true) {
 
-			for (String directory : ftpdirs) {
+			for (String directory : Config.ftpdirs) {
 				try {
-					ftp.connect(server);
-					ftp.login(username, password);
+					ftp.connect(Config.ftpserver);
+					ftp.login(Config.username, Config.password);
 
 					FTPFile[] files = ftp.listFiles(directory);
 					InputStream input;
@@ -122,8 +113,8 @@ public class FTPReader {
 																	cert_id,
 																	lfile);
 															
-	
-															if (isdelete) {
+	 
+															if (Config.isdelete) {
 																ftp.deleteFile(directory
 																		+ Config.ftpseparator
 																		+ file.getName());
@@ -153,7 +144,7 @@ public class FTPReader {
 														LOG.info("Сертификат c номером " + cert.getNomercert() + " уже зарегистрирован. Пропуск... ");
 													}
 
-													if (isdelete) {
+													if (Config.isdelete) {
 														ftp.deleteFile(directory
 																+ Config.ftpseparator
 																+ file.getName());
@@ -179,7 +170,7 @@ public class FTPReader {
 										+ file.getName() + " составила: " + (System.currentTimeMillis()
 										- start));
 							}
-							if (++counter > limit) {
+							if (++counter > Config.filelimit) {
 								break;
 							}
 						}
@@ -198,13 +189,14 @@ public class FTPReader {
 
 			try {
 				LOG.info("Пауза в чтении FTP сервера");
-				Thread.sleep(delay);
+				Thread.sleep(Config.processdelay);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 		} 
 	}
 
+	
 	private boolean saveFileIntoLоcalDirectory(String lfile, String xmltext) {
 		OutputStream fop = null;
 		boolean ret = false;
