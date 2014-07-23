@@ -22,18 +22,22 @@ import cci.cert.model.Certificate;
 import cci.cert.repositiry.CertificateDAO;
 import cci.cert.util.XMLService;
 
-
 @Component
 public class FTPReader {
 	static final Logger LOG = Logger.getLogger(FTPReader.class);
-	
+
 	@Autowired
 	XMLService xmlreader;
 
+	private boolean exitflag = false;
+
+	private boolean stopped;
+
 	public void load(CertificateDAO dao) {
 		FTPClient ftp = new FTPClient();
+		stopped = false;
 
-		while (true) {
+		while (!exitflag) {
 
 			for (String directory : Config.ftpdirs) {
 				try {
@@ -58,7 +62,7 @@ public class FTPReader {
 							if (file.getType() == FTPFile.FILE_TYPE) {
 
 								start = System.currentTimeMillis();
-								
+
 								try {
 									LOG.info("Найден FTP файл: " + directory
 											+ Config.ftpseparator
@@ -76,7 +80,7 @@ public class FTPReader {
 															xmltext.getBytes()));
 										} catch (Exception ex) {
 											LOG.error("Ошибка загрузки сертификата: "
-															+ ex.toString());
+													+ ex.toString());
 											ex.printStackTrace();
 										}
 										input.close();
@@ -101,32 +105,39 @@ public class FTPReader {
 
 												if (checkcert == null) {
 													cert_id = dao.save(cert);
-													LOG.info("Сертификат с номером " + cert_id + " добавлен в базу данных");
+													LOG.info("Сертификат с номером "
+															+ cert_id
+															+ " добавлен в базу данных");
 
 													if (cert_id > 0) {
 														saved = saveFileIntoLоcalDirectory(
 																lfile, xmltext);
 
 														if (saved) {
-															LOG.info("Файл сертификата с номером " + cert_id + " сохранен в локальном хранилище");
+															LOG.info("Файл сертификата с номером "
+																	+ cert_id
+																	+ " сохранен в локальном хранилище");
 															dao.saveFile(
 																	cert_id,
 																	lfile);
-															
-	 
+
 															if (Config.isdelete) {
 																ftp.deleteFile(directory
 																		+ Config.ftpseparator
 																		+ file.getName());
-																LOG.info("Файл " + directory
+																LOG.info("Файл "
+																		+ directory
 																		+ Config.ftpseparator
-																		+ file.getName() + " удален с FTP");
+																		+ file.getName()
+																		+ " удален с FTP");
 															}
 														}
 													}
 												} else {
 													if (!checkcert.equals(cert)) {
-														LOG.info("Сертификатc номером " + cert.getNomercert() + " изменился. Выполняется обновление... ");
+														LOG.info("Сертификатc номером "
+																+ cert.getNomercert()
+																+ " изменился. Выполняется обновление... ");
 														cert_id = checkcert
 																.getCert_id();
 														cert.setCert_id(cert_id);
@@ -141,7 +152,9 @@ public class FTPReader {
 																	lfile);
 														}
 													} else {
-														LOG.info("Сертификат c номером " + cert.getNomercert() + " уже зарегистрирован. Пропуск... ");
+														LOG.info("Сертификат c номером "
+																+ cert.getNomercert()
+																+ " уже зарегистрирован. Пропуск... ");
 													}
 
 													if (Config.isdelete) {
@@ -150,10 +163,10 @@ public class FTPReader {
 																+ file.getName());
 													}
 												}
-												
+
 											} catch (Exception ex) {
 												LOG.error("Ошибка сохранения сертификата: "
-																+ ex.toString());
+														+ ex.toString());
 												ex.printStackTrace();
 											}
 										}
@@ -162,15 +175,15 @@ public class FTPReader {
 									}
 								} catch (Exception ex) {
 									LOG.error("Сертификат не загружен из-за ошибки: "
-													+ ex.toString());
+											+ ex.toString());
 									ex.printStackTrace();
 								}
-								LOG.info("Время загрузки сертификата из файла " + directory
-										+ Config.ftpseparator
-										+ file.getName() + " составила: " + (System.currentTimeMillis()
-										- start));
+								LOG.info("Время загрузки сертификата из файла "
+										+ directory + Config.ftpseparator
+										+ file.getName() + " составила: "
+										+ (System.currentTimeMillis() - start));
 							}
-							if (++counter > Config.filelimit) {
+							if (++counter > Config.filelimit || exitflag) {
 								break;
 							}
 						}
@@ -185,6 +198,14 @@ public class FTPReader {
 					LOG.error("Ошибка ввода-вывода");
 					e.printStackTrace();
 				}
+
+				if (exitflag) {
+					break;
+				}
+			}
+
+			if (exitflag) {
+				break;
 			}
 
 			try {
@@ -193,10 +214,12 @@ public class FTPReader {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-		} 
+		}
+
+		stopped = true;
+		LOG.info("FTPReader finished");
 	}
 
-	
 	private boolean saveFileIntoLоcalDirectory(String lfile, String xmltext) {
 		OutputStream fop = null;
 		boolean ret = false;
@@ -281,5 +304,18 @@ public class FTPReader {
 		}
 
 		return sb.toString();
+	}
+
+	public void finished(boolean flag) {
+		LOG.info("FTPReader finishing...");
+		this.exitflag = flag;
+
+		while (!stopped) {
+			try {
+				Thread.sleep(200);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

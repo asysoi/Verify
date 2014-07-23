@@ -16,20 +16,22 @@ public class CCICertLoader {
 		new CCICertLoader().start();
 	}
 
-	public void start() {  
-
+	public void start() {
+			
 		LOG.info("Certificate Loader started");  
 		
 		ApplicationContext context = new FileSystemXmlApplicationContext(
 				"conf/jdbcconfig.xml");
 		
-		CERTService service = context.getBean("CERTService",
-			CERTService.class);
+		// CERTService service = context.getBean("CERTService",
+		//		CERTService.class);
+		// service.uploadCertificateFromFTP();
+	
+		OTRSApplicationAWT appl = context.getBean("OTRSApplicationAWT",
+				OTRSApplicationAWT.class);
 		
-		new OTRSApplicationAWT().start();
-		
-		
-		//service.uploadCertificateFromFTP();
+		appl.start();
+
 	}
 	
 }

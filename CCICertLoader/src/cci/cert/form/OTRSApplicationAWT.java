@@ -12,8 +12,9 @@ import javax.swing.*;
 import javax.xml.soap.SOAPMessage;
 
 import org.apache.log4j.Logger;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.MessageBox;
+import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 
 import cci.cert.certificate.CCIProperty;
 import cci.cert.certificate.Config;
@@ -25,10 +26,10 @@ import cci.cert.form.listener.StartMenuListener;
 import cci.cert.repositiry.FormRepository;
 import cci.cert.util.DesEncrypter;
 
-
-
+@Component
 public class OTRSApplicationAWT {
-	public static Logger LOG=Logger.getLogger("OTRS Reminder");
+	
+	public static Logger LOG=Logger.getLogger(OTRSApplicationAWT.class);
 	private MenuItem startItem;
 	private MenuItem propertyItem;
 	private MenuItem exitItem;
@@ -47,7 +48,7 @@ public class OTRSApplicationAWT {
 			ex.printStackTrace();
 		}
 		UIManager.put("swing.boldMetal", Boolean.FALSE);
-
+		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				LOG.info("Application started" );
@@ -97,6 +98,7 @@ public class OTRSApplicationAWT {
 		startItem.addActionListener(new StartMenuListener());
 		propertyItem.addActionListener(new PropertyMenuListener());
 		exitItem.addActionListener(new ExitMenuListener());
+		
 
 		FormRepository.getInstance().setTopMenu(topMenu);
 

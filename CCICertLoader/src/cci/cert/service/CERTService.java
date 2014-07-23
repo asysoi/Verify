@@ -13,16 +13,24 @@ import cci.cert.repositiry.CertificateDAO;
 import cci.cert.util.XMLService;
 
 @Component
-public class CERTService  {
+public class CERTService extends Thread {
 
 	@Autowired
 	private CertificateDAO  certificateDAO;
 	
 	@Autowired
-	XMLService xmlService;
+	private XMLService xmlService;
 	
 	@Autowired
-	FTPReader ftpReader;
+	private FTPReader ftpReader;
+	
+	public void run() {
+		uploadCertificateFromFTP();
+	}
+	
+	public void setFinished(boolean exitflag) {
+		ftpReader.finished(exitflag);
+	}
 	
 	public List<Certificate> readCertificatesPage(int page, int pagesize) {
 		Locale.setDefault(new Locale("en", "us"));

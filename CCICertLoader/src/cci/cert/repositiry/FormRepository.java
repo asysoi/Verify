@@ -8,6 +8,8 @@ import java.awt.TrayIcon;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
+import cci.cert.service.CERTService;
+
 public class FormRepository {
 	private SystemTray tray;
 	private TrayIcon trayIcon;
@@ -19,8 +21,17 @@ public class FormRepository {
 	private Image LogoffImage;
 	private Image ReminderImage;
 	private int counter;
+	private CERTService service;
     
-    public static FormRepository getInstance() {
+    public CERTService getService() {
+		return service;
+	}
+
+	public void setService(CERTService service) {
+		this.service = service;
+	}
+
+	public static FormRepository getInstance() {
     	if (repository == null) {
     		repository = new FormRepository();
     	}
