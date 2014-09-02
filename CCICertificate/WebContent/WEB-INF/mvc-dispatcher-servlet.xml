@@ -13,7 +13,7 @@ http://www.springframework.org/schema/mvc
 http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
 
- 	<context:component-scan base-package="cci.cert" />
+ 	<context:component-scan base-package="cci" />
   	<mvc:annotation-driven/>
 
 	<bean id="viewResolver"
@@ -26,16 +26,18 @@ http://www.springframework.org/schema/mvc/spring-mvc.xsd">
           </property>
     </bean>
 
-
-	<bean class="cci.cert.web.validator.CustomerValidator" />
-	
 	<bean id="messageSource"
 		class="org.springframework.context.support.ResourceBundleMessageSource">
 		<property name="basename" value="cci/cert/web/properties/Customer" />
 	</bean>
  	     
     <!--  database configuration -->     
-    <bean id="certificateDAO" class="cci.cert.repositiry.JDBCCertificateDAO">
+    <bean id="certificateDAO" class="cci.cert.repository.JDBCCertificateDAO">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    
+     <!--  database configuration -->     
+    <bean id="purchaseDAO" class="cci.purchase.repository.JDBCPurchaseDAO">
         <property name="dataSource" ref="dataSource"/>
     </bean>
         

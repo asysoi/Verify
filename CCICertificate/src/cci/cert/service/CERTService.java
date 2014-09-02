@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import cci.cert.config.Config;
 import cci.cert.model.Certificate;
-import cci.cert.repositiry.CertificateDAO;
+import cci.cert.repository.CertificateDAO;
 import cci.cert.util.XMLService;
 
 @Component

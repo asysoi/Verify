@@ -7,7 +7,7 @@
 
 
 <div class="col-md-10 col-md-offset-2 main">
-	<h1 class="page-header">Login</h1>
+	<h1 class="page-header">Вход в систему</h1>
 
 	<div class="row placeholders">
     

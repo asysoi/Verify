@@ -1,4 +1,4 @@
-package cci.cert.repositiry;
+package cci.cert.repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

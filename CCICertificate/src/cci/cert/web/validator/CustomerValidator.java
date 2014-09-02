@@ -1,13 +1,14 @@
 package cci.cert.web.validator;
 
 
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import cci.cert.model.Customer;
 
-
+@Component
 public class CustomerValidator implements Validator{
 
 	@Override

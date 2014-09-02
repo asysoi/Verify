@@ -9,7 +9,7 @@ import org.apache.commons.net.ftp.FTPFile;
 import org.springframework.stereotype.Component;
 
 import cci.cert.model.Certificate;
-import cci.cert.repositiry.CertificateDAO;
+import cci.cert.repository.CertificateDAO;
 import cci.cert.util.XMLService;
 
 @Component

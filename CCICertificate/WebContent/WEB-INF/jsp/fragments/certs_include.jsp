@@ -42,6 +42,11 @@
 	        </tr>
      </c:forEach>
      <tr>
+     <td><br></td>
+     <td> </td><td></td><td> </td><td> </td>
+     <td><br></td>
+     </tr>
+     <tr>
      <td><a href="${prev_page}">Предыдущая страница</a></td>
      <td> </td><td></td><td> </td><td> </td>
      <td><a href="${next_page}">Следующая страница</a></td>
