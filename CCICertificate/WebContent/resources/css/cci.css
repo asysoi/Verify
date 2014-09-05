@@ -1,3 +1,16 @@
+table.purchase {
+border-collapse: collapse;
+width: 100%;
+}
+
+table.purchase td {
+border: 1px solid #d4d4d4;
+padding: 5px;
+padding-top: 7px;
+padding-bottom: 7px;
+vertical-align: top;
+}
+
 cci.container {
     padding-top: 10px;
     margin-left: 50px;

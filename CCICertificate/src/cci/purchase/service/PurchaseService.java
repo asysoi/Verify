@@ -128,20 +128,33 @@ public class PurchaseService {
 	}
 
 
-	public List<PurchaseView> readPurchaseViewPage(int page, int pagesize, String sortby, String order) {
+	public List<PurchaseView> readPurchaseViewPage(int page, int pagesize, String sortby, String order, PurchaseFilter filter) {
 		Locale.setDefault(new Locale("en", "en"));
 
 		List<PurchaseView> purchases = null;
 		
 		try {
-			purchases = purchaseDAO.findViewNextPage(page, pagesize, sortby, order);
+			purchases = purchaseDAO.findViewNextPage(page, pagesize, sortby, order, filter);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		
 		return purchases;
-		
 	}
+	
+	public int getPurchaseViewPageCount(PurchaseFilter filter) {
+		Locale.setDefault(new Locale("en", "en"));
+        int counter=0;
+		try {
+			counter = purchaseDAO.getPurchaseViewPageCount(filter);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return counter;
+	}
+	
+	
+	
 
 
 	public PurchaseView readPurchaseView(Long id) {

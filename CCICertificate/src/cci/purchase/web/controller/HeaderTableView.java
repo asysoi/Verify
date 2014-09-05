@@ -1,12 +1,26 @@
 package cci.purchase.web.controller;
 
 public class HeaderTableView {
+	private int position; 
+	private String dbfield;
 	private int width;
 	private String name;
 	private String link;
 	private boolean selected;
 	private String selection;
-	
+
+	public int getPosition() {
+		return position;
+	}
+	public void setPosition(int position) {
+		this.position = position;
+	}
+	public String getDbfield() {
+		return dbfield;
+	}
+	public void setDbfield(String dbfield) {
+		this.dbfield = dbfield;
+	}
 	public int getWidth() {
 		return width;
 	}

@@ -20,11 +20,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.SessionStatus;
 
-import cci.cert.model.Certificate;
-import cci.cert.service.CERTService;
 import cci.purchase.model.Company;
 import cci.purchase.model.Product;
 import cci.purchase.model.Purchase;
+import cci.purchase.service.PurchaseFilter;
 import cci.purchase.service.PurchaseService;
 import cci.purchase.web.validator.PurchaseValidator;
 
@@ -50,50 +49,132 @@ public class PurchaseController {
 			@RequestParam(value = "pagesize", required = false) Integer pagesize,
 			@RequestParam(value = "orderby", required = false) String orderby,
 			@RequestParam(value = "order", required = false) String order,
+			@RequestParam(value = "filter", required = false) Boolean filter,			
+			@RequestParam(value = "filterfield", required = false) String filterfield,
+			@RequestParam(value = "filteroperator", required = false) String filteroperator,
+			@RequestParam(value = "filtervalue", required = false) String filtervalue,
 			ModelMap model) {
         
-		String[] hnames = {"Дата закупки", "Товар", "Покупатель", "Цена", "Объем", "Продавец"};
-		String[] ordnames = {"pchdate", "product", "department", "price", "volume", "company"};
-	    int[] widths = {15, 15, 40, 10, 10, 10};
+		String[] hnames = {"Дата закупки", "Товар", "Продавец", "Цена", "Объем", "Покупатель"};
+		String[] ordnames = {"pchdate", "product", "company", "price", "volume", "department"};
+	    int[] widths = {15, 15, 20, 10, 10, 30};
 		String ordasc = "asc";
         String orddesc = "desc";
         
 		int page_index = (page == null ? 1 : page);
 		int page_size = (pagesize == null ? 20 : pagesize);
 		
-		if (orderby == null || orderby.isEmpty()) orderby = "PCHDATE";
+		if (orderby == null || orderby.isEmpty()) orderby = "pchdate";
 		if (order == null || order.isEmpty()) order = ordasc;
+		if (filter == null ) filter = false;
+		
 		
         List<HeaderTableView> headers = new ArrayList<HeaderTableView>(); 
         for (int i = 0; i < widths.length ; i++) {
         	if (ordnames[i].equals(orderby)) {
-   	           headers.add(makeHeaderTableView(widths[i], hnames[i], ordnames[i], order.equals(ordasc) ? orddesc : ordasc, true));
+   	           headers.add(makeHeaderTableView(widths[i], hnames[i], page_index, page_size, ordnames[i], order.equals(ordasc) ? orddesc : ordasc, true));
         	} else {
-        	   headers.add(makeHeaderTableView(widths[i], hnames[i], ordnames[i], ordasc, false)); 	
+        	   headers.add(makeHeaderTableView(widths[i], hnames[i], page_index, page_size, ordnames[i], ordasc, false)); 	
         	}
         }
-		
-		List<PurchaseView> purchases= purchaseService.readPurchaseViewPage(page_index, page_size, orderby, order);
+        
+	    List<PurchaseView> purchases= purchaseService.readPurchaseViewPage(page_index, page_size, orderby, order, getFilter(filter, filterfield, filteroperator, filtervalue));
 		model.addAttribute("purchases", purchases);
 		model.addAttribute("headers", headers);
+		model.addAttribute("page", page_index);
+		model.addAttribute("pagesize", page_size);
 		model.addAttribute("orderby", orderby);
 		model.addAttribute("order", order);
-		model.addAttribute("next_page", "purchaselist.do?page=" + (page_index + 1)+"&pagesize="+ page_size + "&sortby="+orderby+"&order="+order);
-		model.addAttribute("prev_page", "purchaselist.do?page=" + (page_index - 1)+"&pagesize="+ page_size + "&sortby="+orderby+"&order="+order);
+		model.addAttribute("filterfield", filterfield);
+		model.addAttribute("filteroperator", filteroperator);
+		model.addAttribute("filtervalue", filtervalue);
+		model.addAttribute("filter", filter);
+		
+		int prcount = purchaseService.getPurchaseViewPageCount(getFilter(filter, filterfield, filteroperator, filtervalue));
+		model.addAttribute("next_page", getNextPageLink(page_index, page_size, prcount, orderby, order) );
+		model.addAttribute("prev_page", getPrevPageLink(page_index, page_size, prcount, orderby, order) );
+		model.addAttribute("pages", getPagesList(page_index, page_size, prcount));
+		model.addAttribute("sizes", getSizesList());
+		
 		model.addAttribute("jspName", "pch/purchaselist.jsp");
 		return "window";
 	}
 	
 	
-	private HeaderTableView makeHeaderTableView(int width, String name,
+	private PurchaseFilter getFilter(Boolean filter, String field,
+			String operator, String value) {
+		if (filter) {
+			PurchaseFilter pf  = new PurchaseFilter();
+			pf.setField(field);
+			pf.setOperator(operator);
+			pf.setValue(value);
+			return pf;
+		} else {
+		   return null;
+		}
+	}
+
+
+	private List<Integer> getSizesList() {
+		List<Integer> sizes = new ArrayList<Integer>();
+        sizes.add(new Integer(5));
+        sizes.add(new Integer(10));
+        sizes.add(new Integer(15));
+        sizes.add(new Integer(20));
+        sizes.add(new Integer(50));
+		return sizes;
+	}
+
+
+	private List<Integer> getPagesList(int page, int page_size, int prcount) {
+		List<Integer> pages = new ArrayList<Integer>();
+		
+		int pagelast = (prcount + (page_size -1))/page_size;
+		int pagestart = page - 5; 
+		if (pagestart < 1) pagestart = 1;
+		
+		int pageend = pagestart + 9;
+		if (pageend > pagelast) pageend = pagelast;
+		if (pagelast - 9 < pagestart && pagelast > 10) pagestart = pagelast - 9; 
+		
+		for (int i = pagestart; i <= pageend; i++) {
+			pages.add(new Integer(i));
+		}
+        return pages;
+	}
+
+
+	private String getPrevPageLink(int page_index, int page_size, int prcount, String orderby, String order) {
+		String link = "#";
+		
+		if (page_index > 1) {
+		   link  = "purchaselist.do?page=" + (page_index -1)+"&pagesize="+ page_size + "&orderby="+orderby+"&order="+order;
+		} 
+ 
+		return link;
+	}
+	
+	private String getNextPageLink(int page_index, int page_size, int prcount, String orderby, String order) {
+		String link = "#";
+		
+	    if ((page_size * page_index) < prcount) {
+		   link  = "purchaselist.do?page=" + (page_index + 1)+"&pagesize="+ page_size + "&orderby="+orderby+"&order="+order;
+	    }
+ 
+		return link;
+	}
+
+
+	private HeaderTableView makeHeaderTableView(int width, String name, int page, int pagesize,
 			String orderby, String order, boolean selected) {
 		
         HeaderTableView header = new HeaderTableView();
         header.setWidth(width);
         header.setName(name);
-        header.setLink("purchaselist.do?orderby=" + orderby + "&order=" + order);
+        header.setDbfield(orderby);
+        header.setLink("purchaselist.do?pagesize=" + pagesize + "&orderby=" + orderby + "&order=" + order);
         header.setSelected(selected);
-        header.setSelection(selected ? (order.equals("asc") ?  "▼" : "▲") : "");
+        header.setSelection(selected ? (order.equals("asc") ?  "▲" : "▼") : "");
 		return header;
 	}
 
