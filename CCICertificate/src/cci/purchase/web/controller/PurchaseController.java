@@ -181,11 +181,17 @@ public class PurchaseController {
 
 	@RequestMapping(value="purchaseview.do")
 	public String purchaseView(@RequestParam(value = "id", required = true) Long id,
+						       @RequestParam(value = "popup", required = false) Boolean popup,	
 	                          ModelMap model) {
         PurchaseView purchaseView = purchaseService.readPurchaseView(id);
         model.addAttribute("purchase", purchaseView);
-        model.addAttribute("jspName", "pch/purchaseview.jsp");
-		return "window";
+        
+        if (popup!=null && popup) {
+        	return "pch/purchaseviewpopup";
+        } else {
+        	model.addAttribute("jspName", "pch/purchaseview.jsp");
+    		return "window";
+        }
 	}
 	
 

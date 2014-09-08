@@ -6,6 +6,10 @@
 <spring:url value="resources/css/login.css" var="LoginCss"/>
 <!--link href="${LoginCss}" rel="stylesheet"/-->
 <script>
+	$( document ).ready(function() {
+	    $( "#pview" ).dialog({autoOpen: false});
+	 });
+
 	function goToList(link) {
 		var url = link;
                                    if (document.getElementById("filter").checked) {
@@ -32,9 +36,11 @@
     }
 
     function loadPurchase(link) {
-    	   document.location.href = link; 
            $("#pview").load(link);
-           
+           $("#pview" ).dialog( "option", "title", 'Сделка');
+           $("#pview" ).dialog( "option", "width", 600);
+           $("#pview" ).dialog( "option", "modal", true );
+           $("#pview" ).dialog("open");
     }
 
                  
@@ -95,7 +101,7 @@
      </tr>  
 	 <c:forEach items="${purchases}" var="item">
 	        <tr>
-	        <td style="width:15%"><a href="javascript: loadPurchase('purchaseview.do?id=${item.id}');">${item.pchDateString}</a></td>
+	        <td style="width:15%"><a href="javascript: loadPurchase('purchaseview.do?id=${item.id}&popup=true');">${item.pchDateString}</a></td>
 	        <td style="width:15%">${item.product}</td>
 	        <td style="width:20%">${item.company}</td>
 	        <td style="width:10%">${item.price}</td>
@@ -121,8 +127,7 @@
      </table>  
 
      <div id="pview" name="pview">   
-     
-          
+               
      </div> 
     
 </div>
