@@ -6,7 +6,150 @@ import java.util.List;
 import cci.purchase.web.controller.HeaderTableView;
 
 public class ViewManager {
+	private String[] hnames; 
+	private String[] ordnames;
+	private int[] widths;
+	private String orderby;
+	private String order;
+	private List<Object> elements;
+	private int pagecount;
+	private int pagesize;
+	private int page;
+	private String filterfield;
+	private String filteroperator;
+	private String filtervalue;
+	private Boolean filter;
+	private String  url;
 	
+
+	public String[] getHnames() {
+		return hnames;
+	}
+
+
+	public void setHnames(String[] hnames) {
+		this.hnames = hnames;
+	}
+
+
+	public String[] getOrdnames() {
+		return ordnames;
+	}
+
+
+	public void setOrdnames(String[] ordnames) {
+		this.ordnames = ordnames;
+	}
+
+
+	public int[] getWidths() {
+		return widths;
+	}
+
+
+	public void setWidths(int[] widths) {
+		this.widths = widths;
+	}
+
+
+	public String getOrderby() {
+		return orderby;
+	}
+
+
+	public void setOrderby(String orderby) {
+		this.orderby = orderby;
+	}
+
+
+	public String getOrder() {
+		return order;
+	}
+
+
+	public void setOrder(String order) {
+		this.order = order;
+	}
+
+
+	public List<Object> getElements() {
+		return elements;
+	}
+
+
+	public void setElements(List<Object> elements) {
+		this.elements = elements;
+	}
+
+
+	public int getPagecount() {
+		return pagecount;
+	}
+
+
+	public void setPagecount(int pagecount) {
+		this.pagecount = pagecount;
+	}
+
+
+	public int getPage() {
+		return page;
+	}
+
+
+	public void setPage(int page) {
+		this.page = page;
+	}
+
+
+	public int getPagesize() {
+		return pagesize;
+	}
+
+
+	public void setPagesize(int pagesize) {
+		this.pagesize = pagesize;
+	}
+
+
+	public String getFilterfield() {
+		return filterfield;
+	}
+
+
+	public void setFilterfield(String filterfield) {
+		this.filterfield = filterfield;
+	}
+
+
+	public String getFilteroperator() {
+		return filteroperator;
+	}
+
+
+	public void setFilteroperator(String filteroperator) {
+		this.filteroperator = filteroperator;
+	}
+
+
+	public String getFiltervalue() {
+		return filtervalue;
+	}
+
+
+	public void setFiltervalue(String filtervalue) {
+		this.filtervalue = filtervalue;
+	}
+
+
+	public Boolean getFilter() {
+		return filter;
+	}
+
+
+	public void setFilter(Boolean filter) {
+		this.filter = filter;
+	}
 	
 	public List<Integer> getSizesList() {
 		List<Integer> sizes = new ArrayList<Integer>();
@@ -19,10 +162,10 @@ public class ViewManager {
 	}
 
 
-	public List<Integer> getPagesList(int page, int page_size, int prcount) {
+	public List<Integer> getPagesList() {
 		List<Integer> pages = new ArrayList<Integer>();
 		
-		int pagelast = (prcount + (page_size -1))/page_size;
+		int pagelast = (pagecount + (pagesize -1))/pagesize;
 		int pagestart = page - 5; 
 		if (pagestart < 1) pagestart = 1;
 		
@@ -37,38 +180,59 @@ public class ViewManager {
 	}
 
 
-	public String getPrevPageLink(int page_index, int page_size, int prcount, String orderby, String order) {
+	public String getPrevPageLink() {
 		String link = "#";
 		
 		if (page_index > 1) {
-		   link  = "purchaselist.do?page=" + (page_index -1)+"&pagesize="+ page_size + "&orderby="+orderby+"&order="+order;
+		   link  = pagename + "?page=" + (page_index -1)+"&pagesize="+ page_size + "&orderby="+orderby+"&order="+order;
 		} 
  
 		return link;
 	}
 	
-	private String getNextPageLink(int page_index, int page_size, int prcount, String orderby, String order) {
+	public String getNextPageLink(String pagename, int page_index, int page_size, int prcount, String orderby, String order) {
 		String link = "#";
 		
 	    if ((page_size * page_index) < prcount) {
-		   link  = "purchaselist.do?page=" + (page_index + 1)+"&pagesize="+ page_size + "&orderby="+orderby+"&order="+order;
+		   link  = pagename + "?page=" + (page_index + 1)+"&pagesize="+ page_size + "&orderby="+orderby+"&order="+order;
 	    }
  
 		return link;
 	}
 
 
-	private HeaderTableView makeHeaderTableView(int width, String name, int page, int pagesize,
+	private HeaderTableView makeHeaderTableView(String pagename, int width, String name, int page, int pagesize,
 			String orderby, String order, boolean selected) {
 		
         HeaderTableView header = new HeaderTableView();
         header.setWidth(width);
         header.setName(name);
         header.setDbfield(orderby);
-        header.setLink("purchaselist.do?pagesize=" + pagesize + "&orderby=" + orderby + "&order=" + order);
+        header.setLink(pagename + "?pagesize=" + pagesize + "&orderby=" + orderby + "&order=" + order);
         header.setSelected(selected);
         header.setSelection(selected ? (order.equals("asc") ?  "▲" : "▼") : "");
 		return header;
 	}
+	
+	
+	public initHeaders() {
+		List<HeaderTableView> headers = new ArrayList<HeaderTableView>(); 
+        for (int i = 0; i < widths.length ; i++) {
+        	if (ordnames[i].equals(orderby)) {
+   	           headers.add(makeHeaderTableView(widths[i], hnames[i], page_index, page_size, ordnames[i], order.equals(ordasc) ? orddesc : ordasc, true));
+        	} else {
+        	   headers.add(makeHeaderTableView(widths[i], hnames[i], page_index, page_size, ordnames[i], ordasc, false)); 	
+        	}
+        }
+	}
 
+
+	public String getPagename() {
+		return pagename;
+	}
+
+
+	public void setPagename(String pagename) {
+		this.pagename = pagename;
+	}
 }

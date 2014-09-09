@@ -94,31 +94,32 @@ public class CertController {
 			@RequestParam(value = "filtervalue", required = false) String filtervalue,
 			ModelMap model) {
 		
-		String[] hnames = {"Номер Сертификата", "Эксперт", "Получатель", "УНП", "Номер бланка", "Дата сертификата"};
-		String[] ordnames = {"", "", "", "", "", ""};
-	    int[] widths = {15, 15, 20, 10, 10, 30, 10};
+		ViewManager vmanager = new ViewManager();
+		vmanager.setHnames(new String[] {"Номер Сертификата", "Эксперт", "Получатель", "УНП", "Номер бланка", "Дата сертификата"});
+		vmanager.setOrdnames(new String[] {"", "", "", "", "", ""});
+		vmanager.setWidths(new int[] {15, 15, 20, 10, 10, 30, 10});
 		String ordasc = "asc";
-        String orddesc = "desc";
+		String orddesc = "desc";
         
-		int page_index = (page == null ? 1 : page);
-		int page_size = (pagesize == null ? 10 : pagesize);
+		vmanager.setPage(page == null ? 1 : page);
+		vmanager.setPagesize(pagesize == null ? 10 : pagesize);
 		
 		if (orderby == null || orderby.isEmpty()) orderby = "";
 		if (order == null || order.isEmpty()) order = ordasc;
 		if (filter == null ) filter = false;
 		
-		
-        List<HeaderTableView> headers = new ArrayList<HeaderTableView>(); 
-        for (int i = 0; i < widths.length ; i++) {
-        	if (ordnames[i].equals(orderby)) {
-   	           headers.add(makeHeaderTableView(widths[i], hnames[i], page_index, page_size, ordnames[i], order.equals(ordasc) ? orddesc : ordasc, true));
-        	} else {
-        	   headers.add(makeHeaderTableView(widths[i], hnames[i], page_index, page_size, ordnames[i], ordasc, false)); 	
-        	}
-        }
+		vmanager.setOrderby(orderby);
+		vmanager.setOrder(order);
+		vmanager.initHeaders();		
+		vmanager.setPagename("/certs.do");        
         
-	    List<PurchaseView> purchases= purchaseService.readPurchaseViewPage(page_index, page_size, orderby, order, getFilter(filter, filterfield, filteroperator, filtervalue));
-		model.addAttribute("purchases", purchases);
+		certService.getCertificatePageCount(vmanager.getFilter());
+		List certs = certService.readCertificatesPage(page_index, page_size, orderby, order, vmanager.getFilter());
+		vmanager.setElements(certs);
+	    
+		model.addAttribute("vmanager", vmanager);
+		
+		model.addAttribute("certs", certs);
 		model.addAttribute("headers", headers);
 		model.addAttribute("page", page_index);
 		model.addAttribute("pagesize", page_size);
@@ -128,24 +129,11 @@ public class CertController {
 		model.addAttribute("filteroperator", filteroperator);
 		model.addAttribute("filtervalue", filtervalue);
 		model.addAttribute("filter", filter);
-		
-		int prcount = purchaseService.getPurchaseViewPageCount(getFilter(filter, filterfield, filteroperator, filtervalue));
-		model.addAttribute("next_page", getNextPageLink(page_index, page_size, prcount, orderby, order) );
-		model.addAttribute("prev_page", getPrevPageLink(page_index, page_size, prcount, orderby, order) );
-		model.addAttribute("pages", getPagesList(page_index, page_size, prcount));
+		model.addAttribute("next_page", getNextPageLink() );
+		model.addAttribute("prev_page", getPrevPageLink() );
+		model.addAttribute("pages", getPagesList());
 		model.addAttribute("sizes", getSizesList());
-				
-		
-		
-		
-		
-		
-		List<Certificate> certs = certService.readCertificatesPage(page_index, 20);
-		
-		model.addAttribute("certs", certs);
-		model.addAttribute("next_page", "certs.do?page=" + (page_index + 1));
-		model.addAttribute("prev_page", "certs.do?page=" + (page_index - 1));
-		
+						
 		return "listcertificates";
 	}
 
