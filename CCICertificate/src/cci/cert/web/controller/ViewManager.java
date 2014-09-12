@@ -3,23 +3,27 @@ package cci.cert.web.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import cci.purchase.service.Filter;
 import cci.purchase.web.controller.HeaderTableView;
 
 public class ViewManager {
+	
+	public static final String ORDASC ="asc";
+	public static final String ORDDESC ="desc";
 	private String[] hnames; 
 	private String[] ordnames;
 	private int[] widths;
 	private String orderby;
 	private String order;
-	private List<Object> elements;
+	private List elements;
 	private int pagecount;
 	private int pagesize;
 	private int page;
 	private String filterfield;
 	private String filteroperator;
 	private String filtervalue;
-	private Boolean filter;
-	private String  url;
+	private Boolean onfilter;
+	private String url;
 	
 
 	public String[] getHnames() {
@@ -72,12 +76,12 @@ public class ViewManager {
 	}
 
 
-	public List<Object> getElements() {
+	public List getElements() {
 		return elements;
 	}
 
 
-	public void setElements(List<Object> elements) {
+	public void setElements(List elements) {
 		this.elements = elements;
 	}
 
@@ -142,13 +146,22 @@ public class ViewManager {
 	}
 
 
-	public Boolean getFilter() {
-		return filter;
+	public Boolean getOnfilter() {
+		return onfilter;
 	}
 
 
-	public void setFilter(Boolean filter) {
-		this.filter = filter;
+	public void setOnfilter(Boolean onfilter) {
+		this.onfilter = onfilter;
+	}
+	
+	public String getUrl() {
+		return url;
+	}
+
+
+	public void setUrl(String url) {
+		this.url = url;
 	}
 	
 	public List<Integer> getSizesList() {
@@ -183,56 +196,64 @@ public class ViewManager {
 	public String getPrevPageLink() {
 		String link = "#";
 		
-		if (page_index > 1) {
-		   link  = pagename + "?page=" + (page_index -1)+"&pagesize="+ page_size + "&orderby="+orderby+"&order="+order;
+		if (page > 1) {
+		   link  = url + "?page=" + (page -1)+"&pagesize="+ pagesize + "&orderby="+orderby+"&order="+order;
 		} 
  
 		return link;
 	}
 	
-	public String getNextPageLink(String pagename, int page_index, int page_size, int prcount, String orderby, String order) {
+	public String getNextPageLink() {
 		String link = "#";
 		
-	    if ((page_size * page_index) < prcount) {
-		   link  = pagename + "?page=" + (page_index + 1)+"&pagesize="+ page_size + "&orderby="+orderby+"&order="+order;
+	    if ((pagesize * page) < pagecount) {
+		   link  = url + "?page=" + (page + 1)+"&pagesize="+ pagesize + "&orderby="+orderby+"&order="+order;
 	    }
  
 		return link;
 	}
 
 
-	private HeaderTableView makeHeaderTableView(String pagename, int width, String name, int page, int pagesize,
-			String orderby, String order, boolean selected) {
+	private HeaderTableView makeHeaderTableView(int width, String name, String orderby, String order, boolean selected) {
 		
         HeaderTableView header = new HeaderTableView();
         header.setWidth(width);
         header.setName(name);
         header.setDbfield(orderby);
-        header.setLink(pagename + "?pagesize=" + pagesize + "&orderby=" + orderby + "&order=" + order);
+        header.setLink(url + "?pagesize=" + pagesize + "&orderby=" + orderby + "&order=" + order);
         header.setSelected(selected);
         header.setSelection(selected ? (order.equals("asc") ?  "▲" : "▼") : "");
 		return header;
 	}
 	
 	
-	public initHeaders() {
+	public List<HeaderTableView> getHeaders() {
 		List<HeaderTableView> headers = new ArrayList<HeaderTableView>(); 
         for (int i = 0; i < widths.length ; i++) {
         	if (ordnames[i].equals(orderby)) {
-   	           headers.add(makeHeaderTableView(widths[i], hnames[i], page_index, page_size, ordnames[i], order.equals(ordasc) ? orddesc : ordasc, true));
+   	           headers.add(makeHeaderTableView(widths[i], hnames[i], ordnames[i], order.equals(ORDASC) ? ORDDESC : ORDASC, true));
         	} else {
-        	   headers.add(makeHeaderTableView(widths[i], hnames[i], page_index, page_size, ordnames[i], ordasc, false)); 	
+        	   headers.add(makeHeaderTableView(widths[i], hnames[i], ordnames[i], ORDASC, false)); 	
         	}
         }
+        return headers;
+	}
+	
+
+	public Filter getFilter() {
+		Filter pf  = new Filter();
+		pf.setField(filterfield);
+		pf.setOperator(filteroperator);
+		pf.setValue(filtervalue);
+		pf.setOnfilter(onfilter);
+		return pf;
 	}
 
-
-	public String getPagename() {
-		return pagename;
+	public String getLastPageLink() {
+		return url + "?page=" + ((pagecount + (pagesize -1))/pagesize) + "&pagesize="+ pagesize + "&orderby="+orderby+"&order="+order;
 	}
 
-
-	public void setPagename(String pagename) {
-		this.pagename = pagename;
+	public String getFirstPageLink() {
+		return url + "?page=1&pagesize="+ pagesize + "&orderby="+orderby+"&order="+order;
 	}
 }

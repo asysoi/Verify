@@ -6,7 +6,7 @@ import java.util.Map;
 import cci.purchase.model.Product;
 import cci.purchase.model.Company;
 import cci.purchase.model.Purchase;
-import cci.purchase.service.PurchaseFilter;
+import cci.purchase.service.Filter;
 import cci.purchase.web.controller.PurchaseView;
 
 public interface PurchaseDAO {
@@ -31,8 +31,8 @@ public interface PurchaseDAO {
 	
 	public PurchaseView findPurchaseViewByID(long id);
 	
-	public List<PurchaseView> findViewNextPage(int page, int pagesize, String orderby, String order, PurchaseFilter filter);
+	public List<PurchaseView> findViewNextPage(int page, int pagesize, String orderby, String order, Filter filter);
 
-	public int  getPurchaseViewPageCount(PurchaseFilter filter);
-}
+	public int  getViewPageCount(Filter filter);   
+}  
 

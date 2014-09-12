@@ -19,6 +19,8 @@ import org.springframework.stereotype.Repository;
 
 import cci.cert.model.Certificate;
 import cci.cert.model.Product;
+import cci.purchase.service.Filter;
+import cci.purchase.web.controller.PurchaseView;
 
 @Repository
 public class JDBCCertificateDAO implements CertificateDAO {
@@ -30,6 +32,15 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		this.template = new NamedParameterJdbcTemplate(dataSource);
 	}
 
+	// ---------------------------------------------------------------
+	// количкество сертификатов в списке
+	// ---------------------------------------------------------------
+	public int getViewPageCount(Filter filter) {
+		String sql = "SELECT count(*) FROM CERT_VIEW " + filter.makeWhereFilter(); 
+		
+	    return this.template.getJdbcOperations().queryForInt(sql);
+	}
+	
 	// ---------------------------------------------------------------
 	// поиск сертификата по id
 	// ---------------------------------------------------------------
@@ -132,19 +143,21 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	// ---------------------------------------------------------------
 	// вернуть очередную страницу списка сертификатов
 	// ---------------------------------------------------------------
-	public List<Certificate> findNextPage(int pageindex, int pagesize) {
-		//String sql = "select * from c_CERT where ROWNUM < " + pageindex
-		//		* pagesize + " AND ROWNUM > " + (pageindex - 1) * pagesize;
+	public List<Certificate> findViewNextPage(int page, int pagesize, String orderby, String order, Filter filter) {
 		
 		String sql = " SELECT cert.* " + 
-				     " FROM (SELECT t.*, ROW_NUMBER() OVER (ORDER BY t.NOMERCERT) rw FROM CERT_VIEW t) cert " + 
-				     " WHERE cert.rw > "  + ((pageindex - 1) *  pagesize) +
-		             " AND cert.rw <= " + (pageindex *  pagesize);
+				     " FROM (SELECT t.*, ROW_NUMBER() OVER " +  
+				     " (ORDER BY t." + orderby + " " + order + ", t.CERT_ID " + order + ") rw " + 
+				     " FROM CERT_VIEW t " +  filter.makeWhereFilter() + " )" + 
+				     " cert " + 
+				     " WHERE cert.rw > "  + ((page - 1) *  pagesize) +
+		             " AND cert.rw <= " + (page *  pagesize);
 		
 		System.out.println("SQL get next page : " + sql);
 		return this.template.getJdbcOperations().query(sql,
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));
 	}
+
 
 	
 	// ---------------------------------------------------------------

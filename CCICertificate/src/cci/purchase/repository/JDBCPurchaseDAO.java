@@ -16,11 +16,12 @@ import cci.cert.model.Certificate;
 import cci.purchase.model.Product;
 import cci.purchase.model.Company;
 import cci.purchase.model.Purchase;
-import cci.purchase.service.PurchaseFilter;
+import cci.purchase.service.Filter;
 import cci.purchase.web.controller.PurchaseView;
 
 public class JDBCPurchaseDAO implements PurchaseDAO { 
-
+   
+	
 	private NamedParameterJdbcTemplate template;
 
 	@Autowired
@@ -60,12 +61,12 @@ public class JDBCPurchaseDAO implements PurchaseDAO {
 				new BeanPropertyRowMapper<Purchase>(Purchase.class));
 	}
 	
-	public List<PurchaseView> findViewNextPage(int page, int pagesize, String orderby, String order, PurchaseFilter filter) {
+	public List<PurchaseView> findViewNextPage(int page, int pagesize, String orderby, String order, Filter filter) {
 		
 		String sql = " SELECT purchase.* " + 
 			         " FROM (SELECT t.*, ROW_NUMBER() OVER " +
 				     " (ORDER BY t." + orderby + " " + order + ") rw " +
-				     " FROM PCH_PURCHASE_VIEW t " +  makeWhereFilter(filter) + " )" +
+				     " FROM PCH_PURCHASE_VIEW t " +  filter.makeWhereFilter() + " )" +
 				     " purchase " + 
 			         " WHERE purchase.rw > "  + ((page - 1) *  pagesize) +
 	                 " AND purchase.rw <= " + (page *  pagesize);
@@ -75,21 +76,12 @@ public class JDBCPurchaseDAO implements PurchaseDAO {
 				new BeanPropertyRowMapper<PurchaseView>(PurchaseView.class));
 	}
 	
-	public int getPurchaseViewPageCount(PurchaseFilter filter) {
-		String sql = "SELECT count(*) FROM PCH_PURCHASE_VIEW " + makeWhereFilter(filter); 
+	public int getViewPageCount(Filter filter) {
+		String sql = "SELECT count(*) FROM PCH_PURCHASE_VIEW " + filter.makeWhereFilter(); 
 		
 	    return this.template.getJdbcOperations().queryForInt(sql);
 	}
-	
-	private String makeWhereFilter(PurchaseFilter filter) {
-		String wherefilter = "";
 		
-		if (filter != null) {
-			wherefilter = " where UPPER(" + filter.getField() + ") " + filter.getOperator() + " "   
-							+ (filter.getOperator().equals("like") ? "'%" + filter.getValue().toUpperCase() +"%'" : "'" + filter.getValue().toUpperCase() +"'");   
-		}
-		return wherefilter;
-	}
 
 	public Purchase findPurchaseByID(long id) {
 		Purchase item = null;
@@ -141,7 +133,7 @@ public class JDBCPurchaseDAO implements PurchaseDAO {
 			ex.printStackTrace();
 		}
 	}
-
+      
 	@Override
 	public void updatePurchase(Purchase purchase) {
 		// TODO Auto-generated method stub
@@ -156,6 +148,5 @@ public class JDBCPurchaseDAO implements PurchaseDAO {
 	public void saveCompany(Company company) {
 		// TODO Auto-generated method stub
 	}
-
 
 }

@@ -88,59 +88,50 @@ public class CertController {
 			@RequestParam(value = "pagesize", required = false) Integer pagesize,
 			@RequestParam(value = "orderby", required = false) String orderby,
 			@RequestParam(value = "order", required = false) String order,
-			@RequestParam(value = "filter", required = false) Boolean filter,			
+			@RequestParam(value = "filter", required = false) Boolean onfilter,			
 			@RequestParam(value = "filterfield", required = false) String filterfield,
 			@RequestParam(value = "filteroperator", required = false) String filteroperator,
 			@RequestParam(value = "filtervalue", required = false) String filtervalue,
 			ModelMap model) {
 		
 		ViewManager vmanager = new ViewManager();
-		vmanager.setHnames(new String[] {"Номер Сертификата", "Эксперт", "Получатель", "УНП", "Номер бланка", "Дата сертификата"});
-		vmanager.setOrdnames(new String[] {"", "", "", "", "", ""});
-		vmanager.setWidths(new int[] {15, 15, 20, 10, 10, 30, 10});
-		String ordasc = "asc";
-		String orddesc = "desc";
-        
+		vmanager.setHnames(new String[] {"Номер Сертификата", "Отделение", "Получатель", "УНП", "Номер бланка", "Дата", "Эксперт", "Послед."});
+		vmanager.setOrdnames(new String[] {"nomercert", "name", "kontrp", "unn", "nblanka", "datacert", "expert", "child"});
+		vmanager.setWidths(new int[] {10, 17, 35, 9, 8, 5, 10, 5});
+		        
 		vmanager.setPage(page == null ? 1 : page);
 		vmanager.setPagesize(pagesize == null ? 10 : pagesize);
 		
-		if (orderby == null || orderby.isEmpty()) orderby = "";
-		if (order == null || order.isEmpty()) order = ordasc;
-		if (filter == null ) filter = false;
+		if (orderby == null || orderby.isEmpty()) orderby = "datacert";
+		if (order == null || order.isEmpty()) order = ViewManager.ORDASC;
+		if (onfilter == null ) onfilter = false;
 		
 		vmanager.setOrderby(orderby);
 		vmanager.setOrder(order);
-		vmanager.initHeaders();		
-		vmanager.setPagename("/certs.do");        
+		vmanager.setOnfilter(onfilter);
+		vmanager.setFiltervalue(filtervalue);
+		vmanager.setFilterfield(filterfield);
+		vmanager.setFilteroperator(filteroperator);
+		
+		vmanager.setUrl("certs.do");        
+        vmanager.setPagecount(certService.getViewPageCount(vmanager.getFilter()));
         
-		certService.getCertificatePageCount(vmanager.getFilter());
-		List certs = certService.readCertificatesPage(page_index, page_size, orderby, order, vmanager.getFilter());
+		List<Certificate> certs = certService.readCertificatesPage(vmanager.getPage(), vmanager.getPagesize(), vmanager.getOrderby(), vmanager.getOrder(), vmanager.getFilter());
 		vmanager.setElements(certs);
 	    
 		model.addAttribute("vmanager", vmanager);
-		
 		model.addAttribute("certs", certs);
-		model.addAttribute("headers", headers);
-		model.addAttribute("page", page_index);
-		model.addAttribute("pagesize", page_size);
-		model.addAttribute("orderby", orderby);
-		model.addAttribute("order", order);
-		model.addAttribute("filterfield", filterfield);
-		model.addAttribute("filteroperator", filteroperator);
-		model.addAttribute("filtervalue", filtervalue);
-		model.addAttribute("filter", filter);
-		model.addAttribute("next_page", getNextPageLink() );
-		model.addAttribute("prev_page", getPrevPageLink() );
-		model.addAttribute("pages", getPagesList());
-		model.addAttribute("sizes", getSizesList());
-						
+		
+		model.addAttribute("next_page", vmanager.getNextPageLink());
+		model.addAttribute("prev_page", vmanager.getPrevPageLink());
+		model.addAttribute("last_page", vmanager.getLastPageLink());
+		model.addAttribute("first_page", vmanager.getFirstPageLink());
+		model.addAttribute("pages", vmanager.getPagesList());
+		model.addAttribute("sizes", vmanager.getSizesList());
+		
 		return "listcertificates";
 	}
 
-	
-	
-	
-	
 	
 	
 	@RequestMapping(value = "/gocert.do")

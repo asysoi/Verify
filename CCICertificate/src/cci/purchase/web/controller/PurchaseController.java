@@ -23,7 +23,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import cci.purchase.model.Company;
 import cci.purchase.model.Product;
 import cci.purchase.model.Purchase;
-import cci.purchase.service.PurchaseFilter;
+import cci.purchase.service.Filter;
 import cci.purchase.service.PurchaseService;
 import cci.purchase.web.validator.PurchaseValidator;
 
@@ -101,17 +101,14 @@ public class PurchaseController {
 	}
 	
 	
-	private PurchaseFilter getFilter(Boolean filter, String field,
+	private Filter getFilter(Boolean filter, String field,
 			String operator, String value) {
-		if (filter) {
-			PurchaseFilter pf  = new PurchaseFilter();
-			pf.setField(field);
-			pf.setOperator(operator);
-			pf.setValue(value);
-			return pf;
-		} else {
-		   return null;
-		}
+		Filter pf  = new Filter();
+		pf.setField(field);
+		pf.setOperator(operator);
+		pf.setValue(value);
+		pf.setOnfilter(filter);
+		return pf;
 	}
 
 

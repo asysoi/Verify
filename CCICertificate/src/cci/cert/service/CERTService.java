@@ -14,6 +14,7 @@ import cci.cert.config.Config;
 import cci.cert.model.Certificate;
 import cci.cert.repository.CertificateDAO;
 import cci.cert.util.XMLService;
+import cci.purchase.service.Filter;
 
 @Component
 public class CERTService  {
@@ -27,13 +28,14 @@ public class CERTService  {
 	@Autowired
 	FTPReader ftpReader;
 	
-	public List<Certificate> readCertificatesPage(int page, int pagesize) {
+	
+	public List<Certificate> readCertificatesPage(int page, int pagesize, String orderby, String order, Filter filter) {
 		Locale.setDefault(new Locale("en", "en"));
 
 		List<Certificate> certs = null;
 		
 		try {
-			certs = certificateDAO.findNextPage(page, pagesize);
+			certs = certificateDAO.findViewNextPage(page, pagesize, orderby, order, filter);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -139,4 +141,15 @@ public class CERTService  {
 		return rcert;
 	}
 	
+	
+	public int getViewPageCount(Filter filter) {
+		Locale.setDefault(new Locale("en", "en"));
+        int counter=0;
+		try {
+			counter = certificateDAO.getViewPageCount(filter);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return counter;
+	}
 }

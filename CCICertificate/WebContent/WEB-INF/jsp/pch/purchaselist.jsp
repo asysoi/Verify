@@ -12,7 +12,7 @@
 
 	function goToList(link) {
 		var url = link;
-                                   if (document.getElementById("filter").checked) {
+          if (document.getElementById("filter").checked) {
 			url = url + "&filterfield="
 				+ document.getElementById("filterfield").value;
 			url = url + "&filteroperator="
@@ -71,7 +71,8 @@
 					$(document).ready(function() {
 						document.getElementById("filterfield").value = "${filterfield}";
 						document.getElementById("filteroperator").value = "${filteroperator}";
-                                                                                                         document.getElementById("filter").checked=${filter};
+                        document.getElementById("filter").checked=${filter};
+                        
 						if (${filter})	{ 
        					                     document.getElementById("filterbutton").disabled=false; 
   						    //document.getElementById("filterbutton").style.display='show';
