@@ -95,9 +95,14 @@ public class CertController {
 			ModelMap model) {
 		
 		ViewManager vmanager = new ViewManager();
-		vmanager.setHnames(new String[] {"Номер Сертификата", "Отделение", "Получатель", "УНП", "Номер бланка", "Дата", "Эксперт", "Послед."});
-		vmanager.setOrdnames(new String[] {"nomercert", "name", "kontrp", "unn", "nblanka", "datacert", "expert", "child"});
-		vmanager.setWidths(new int[] {10, 17, 35, 9, 8, 5, 10, 5});
+		vmanager.setHnames(new String[] {"Номер Сертификата", "Отделение", "Грузоотправитель/Экспортер", "Номер бланка", "Дата", "Послед."});
+		vmanager.setOrdnames(new String[] {"nomercert", "name", "kontrp", "nblanka", "datacert", "child"});
+		vmanager.setFfields(new String[] {"Номер Сертификата", "Отделение", "Грузоотправитель/Экспортер", "Номер бланка", "Дата", "Товар"});
+		vmanager.setFieldnames(new String[] {"nomercert", "name", "kontrp", "nblanka", "datacert", });
+		
+		// "select count(*) from cert_view where cert_id in (select distinct cert_id from c_product where UPPER(tovar) like '%ЛАСО%');"
+		
+		vmanager.setWidths(new int[] {10, 20, 45, 10, 10, 5});
 		        
 		vmanager.setPage(page == null ? 1 : page);
 		vmanager.setPagesize(pagesize == null ? 10 : pagesize);

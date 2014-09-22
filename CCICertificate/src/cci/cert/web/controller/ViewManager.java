@@ -12,6 +12,8 @@ public class ViewManager {
 	public static final String ORDDESC ="desc";
 	private String[] hnames; 
 	private String[] ordnames;
+	private String[] ffields; 
+	private String[] fieldnames;
 	private int[] widths;
 	private String orderby;
 	private String order;
@@ -25,11 +27,25 @@ public class ViewManager {
 	private Boolean onfilter;
 	private String url;
 	
+	public String[] getFfields() {
+		return ffields;
+	}
+
+	public void setFfields(String[] ffields) {
+		this.ffields = ffields;
+	}
+
+	public String[] getFieldnames() {
+		return fieldnames;
+	}
+
+	public void setFieldnames(String[] fieldnames) {
+		this.fieldnames = fieldnames;
+	}
 
 	public String[] getHnames() {
 		return hnames;
 	}
-
 
 	public void setHnames(String[] hnames) {
 		this.hnames = hnames;

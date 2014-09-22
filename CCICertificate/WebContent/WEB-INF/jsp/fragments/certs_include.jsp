@@ -97,11 +97,9 @@
 	        <td><a href="gocert.do?certid=${cert.cert_id}">${cert.nomercert}</a></td>
 	        <td>${cert.otd_name}</td>
 	        <td>${cert.kontrp}</td>
-	        <td>${cert.unn}</td>
 	        <td>${cert.nblanka}</td>
 	        <td>${cert.datacert}</td>
-	        <td>${cert.expert}</td>
-	        
+        
 	        <!-- 
 	        <td>
 	        <c:if test="${cert.child_id != null}">
