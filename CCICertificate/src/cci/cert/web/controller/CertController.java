@@ -92,13 +92,14 @@ public class CertController {
 			@RequestParam(value = "filterfield", required = false) String filterfield,
 			@RequestParam(value = "filteroperator", required = false) String filteroperator,
 			@RequestParam(value = "filtervalue", required = false) String filtervalue,
+			@RequestParam(value = "fullsearchvalue", required = false) String fullsearchvalue,
 			ModelMap model) {
 		
 		ViewManager vmanager = new ViewManager();
 		vmanager.setHnames(new String[] {"Номер Сертификата", "Отделение", "Грузоотправитель/Экспортер", "Номер бланка", "Дата", "Послед."});
-		vmanager.setOrdnames(new String[] {"nomercert", "name", "kontrp", "nblanka", "datacert", "child"});
+		vmanager.setOrdnames(new String[] {"nomercert", "name", "kontrp", "nblanka", "issuedate", "child"});
 		vmanager.setFfields(new String[] {"Номер Сертификата", "Отделение", "Грузоотправитель/Экспортер", "Номер бланка", "Дата", "Товар"});
-		vmanager.setFieldnames(new String[] {"nomercert", "name", "kontrp", "nblanka", "datacert", });
+		vmanager.setFieldnames(new String[] {"nomercert", "name", "kontrp", "nblanka", "datacert", "tovar"});
 		
 		// "select count(*) from cert_view where cert_id in (select distinct cert_id from c_product where UPPER(tovar) like '%ЛАСО%');"
 		
@@ -107,7 +108,7 @@ public class CertController {
 		vmanager.setPage(page == null ? 1 : page);
 		vmanager.setPagesize(pagesize == null ? 10 : pagesize);
 		
-		if (orderby == null || orderby.isEmpty()) orderby = "datacert";
+		if (orderby == null || orderby.isEmpty()) orderby = "issuedate";
 		if (order == null || order.isEmpty()) order = ViewManager.ORDASC;
 		if (onfilter == null ) onfilter = false;
 		
@@ -117,6 +118,8 @@ public class CertController {
 		vmanager.setFiltervalue(filtervalue);
 		vmanager.setFilterfield(filterfield);
 		vmanager.setFilteroperator(filteroperator);
+		vmanager.setFullsearchvalue(fullsearchvalue);
+		
 		
 		vmanager.setUrl("certs.do");        
         vmanager.setPagecount(certService.getViewPageCount(vmanager.getFilter()));

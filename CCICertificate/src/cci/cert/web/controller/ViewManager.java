@@ -21,12 +21,23 @@ public class ViewManager {
 	private int pagecount;
 	private int pagesize;
 	private int page;
+	
 	private String filterfield;
 	private String filteroperator;
 	private String filtervalue;
+	
 	private Boolean onfilter;
 	private String url;
-	
+	private String fullsearchvalue;
+		
+	public String getFullsearchvalue() {
+		return fullsearchvalue;
+	}
+
+	public void setFullsearchvalue(String fullsearchvalue) {
+		this.fullsearchvalue = fullsearchvalue;
+	}
+
 	public String[] getFfields() {
 		return ffields;
 	}

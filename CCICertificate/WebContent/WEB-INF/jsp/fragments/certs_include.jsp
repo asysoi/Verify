@@ -24,15 +24,17 @@
 	function goToList(link) {
 		var url = link;
           if (document.getElementById("filter").checked) {
-			url = url + "&filterfield="
-				+ document.getElementById("filterfield").value;
-			url = url + "&filteroperator="
-				+ document.getElementById("filteroperator").value;
-			url = url + "&filtervalue="
-				+ document.getElementById("filtervalue").value;
-                                    } 
-		url = url + "&filter="
-			+ document.getElementById("filter").checked;
+			//url = url + "&filterfield="
+			//	+ document.getElementById("filterfield").value;
+			//url = url + "&filteroperator="
+			//	+ document.getElementById("filteroperator").value;
+			//url = url + "&filtervalue="
+			//	+ document.getElementById("filtervalue").value;
+			//		url = url + "&filter="
+			//+ document.getElementById("filter").checked;
+
+        	 url = url + "&fullsearchvalue="
+				+ document.getElementById("fullsearchvalue").value; 
 		document.location.href = url ;
 	}
 
@@ -59,7 +61,8 @@
      <h3> Список сертификатов </h3>
      <table style="width:100%">
         <tr>
-	    <td style="width:70%"><input id="filter" type="checkbox" onclick="javascript:swithFilter();">Фильтр:</input> 
+            <!-- 
+	        <td style="width:70%"><input id="filter" type="checkbox" onclick="javascript:swithFilter();">Фильтр:</input> 
                      <select id="filterfield" name="filterfield"> 
 	            		<c:forEach items="${vmanager.headers}" var="item">
 	                      <option value="${item.dbfield}">${item.name}</option>
@@ -75,13 +78,26 @@
                <input id="filtervalue" value="${vmanager.filtervalue}"/>
                 <button id="filterbutton" onclick="javascript:goToList('certs.do?page=1&pagesize=${vmanager.pagesize}&orderby=${vmanager.orderby}&order=${vmanager.order}');">применить</button>               
                </td>
+             -->
+               
+ 	       <td style="width:20%">
+ 	           <input id="filter" type="checkbox" onclick="javascript:swithFilter();">Фильтр</input>
+ 	       </td>
+ 	        
+ 	       <td style="width:50%">    
+               <input id="fullsearchvalue" value="${vmanager.fullsearchvalue}"/>
+               <button id="filterbutton" onclick="javascript:goToList('certs.do?page=1&pagesize=${vmanager.pagesize}&orderby=${vmanager.orderby}&order=${vmanager.order}');">
+               <img srcsrc="resources/images/red_searc.png" alt="Искать"></button>               
+           </td>
                 
-	        <td style="width:30%;text-align: right">Строк в списке: 
+           <td style="width:30%;text-align: right">Строк в списке: 
 	           <c:forEach items="${sizes}" var="item">
 	           	   &nbsp;	
 	               <a href="javascript: goToList('certs.do?page=1&pagesize=${item}&orderby=${vmanager.orderby}&order=${vmanager.order}');">${item}</a>
 	           </c:forEach>
 	        </td>
+	        
+	        
         </tr>
      </table>
         
