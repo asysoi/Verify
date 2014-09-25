@@ -13,8 +13,9 @@ import org.springframework.stereotype.Service;
 import cci.cert.config.Config;
 import cci.cert.model.Certificate;
 import cci.cert.repository.CertificateDAO;
+import cci.cert.repository.SQLBuilder;
 import cci.cert.util.XMLService;
-import cci.purchase.service.Filter;
+import cci.purchase.service.FilterCondition;
 
 @Component
 public class CERTService  {
@@ -29,13 +30,13 @@ public class CERTService  {
 	FTPReader ftpReader;
 	
 	
-	public List<Certificate> readCertificatesPage(int page, int pagesize, String orderby, String order, Filter filter) {
+	public List<Certificate> readCertificatesPage(int page, int pagesize, String orderby, String order, SQLBuilder builder) {
 		Locale.setDefault(new Locale("en", "en"));
 
 		List<Certificate> certs = null;
 		
 		try {
-			certs = certificateDAO.findViewNextPage(page, pagesize, orderby, order, filter);
+			certs = certificateDAO.findViewNextPage(page, pagesize, orderby, order, builder);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -142,11 +143,11 @@ public class CERTService  {
 	}
 	
 	
-	public int getViewPageCount(Filter filter) {
+	public int getViewPageCount(SQLBuilder builder) {
 		Locale.setDefault(new Locale("en", "en"));
         int counter=0;
 		try {
-			counter = certificateDAO.getViewPageCount(filter);
+			counter = certificateDAO.getViewPageCount(builder);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

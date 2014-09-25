@@ -16,7 +16,7 @@ import cci.cert.model.Certificate;
 import cci.purchase.model.Product;
 import cci.purchase.model.Company;
 import cci.purchase.model.Purchase;
-import cci.purchase.service.Filter;
+import cci.purchase.service.FilterCondition;
 import cci.purchase.web.controller.PurchaseView;
 
 public class JDBCPurchaseDAO implements PurchaseDAO { 
@@ -61,7 +61,7 @@ public class JDBCPurchaseDAO implements PurchaseDAO {
 				new BeanPropertyRowMapper<Purchase>(Purchase.class));
 	}
 	
-	public List<PurchaseView> findViewNextPage(int page, int pagesize, String orderby, String order, Filter filter) {
+	public List<PurchaseView> findViewNextPage(int page, int pagesize, String orderby, String order, FilterCondition filter) {
 		
 		String sql = " SELECT purchase.* " + 
 			         " FROM (SELECT t.*, ROW_NUMBER() OVER " +
@@ -76,7 +76,7 @@ public class JDBCPurchaseDAO implements PurchaseDAO {
 				new BeanPropertyRowMapper<PurchaseView>(PurchaseView.class));
 	}
 	
-	public int getViewPageCount(Filter filter) {
+	public int getViewPageCount(FilterCondition filter) {
 		String sql = "SELECT count(*) FROM PCH_PURCHASE_VIEW " + filter.makeWhereFilter(); 
 		
 	    return this.template.getJdbcOperations().queryForInt(sql);

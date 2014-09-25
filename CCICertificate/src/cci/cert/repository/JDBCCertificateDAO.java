@@ -19,7 +19,7 @@ import org.springframework.stereotype.Repository;
 
 import cci.cert.model.Certificate;
 import cci.cert.model.Product;
-import cci.purchase.service.Filter;
+import cci.purchase.service.FilterCondition;
 import cci.purchase.web.controller.PurchaseView;
 
 @Repository
@@ -35,8 +35,9 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	// ---------------------------------------------------------------
 	// количкество сертификатов в списке
 	// ---------------------------------------------------------------
-	public int getViewPageCount(Filter filter) {
-		String sql = "SELECT count(*) FROM CERT_VIEW " + filter.makeWhereFilter(); 
+	public int getViewPageCount(SQLBuilder builder) {
+		String sql = "SELECT count(*) FROM CERT_VIEW " + builder.getWhereClause(); 
+		System.out.println(sql);
 		
 	    return this.template.getJdbcOperations().queryForInt(sql);
 	}
@@ -143,12 +144,12 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	// ---------------------------------------------------------------
 	// вернуть очередную страницу списка сертификатов
 	// ---------------------------------------------------------------
-	public List<Certificate> findViewNextPage(int page, int pagesize, String orderby, String order, Filter filter) {
+	public List<Certificate> findViewNextPage(int page, int pagesize, String orderby, String order, SQLBuilder builder) {
 		
 		String sql = " SELECT cert.* " + 
 				     " FROM (SELECT t.*, ROW_NUMBER() OVER " +  
 				     " (ORDER BY t." + orderby + " " + order + ", t.CERT_ID " + order + ") rw " + 
-				     " FROM CERT_VIEW t " +  filter.makeWhereFilter() + " )" + 
+				     " FROM CERT_VIEW t " +  builder.getWhereClause()  + " )" + 
 				     " cert " + 
 				     " WHERE cert.rw > "  + ((page - 1) *  pagesize) +
 		             " AND cert.rw <= " + (page *  pagesize);

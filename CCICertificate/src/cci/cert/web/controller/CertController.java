@@ -16,8 +16,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 
 import cci.cert.model.Certificate;
+import cci.cert.repository.SQLBuilder;
+import cci.cert.repository.SQLBuilderCertificate;
 import cci.cert.service.CERTService;
 import cci.cert.service.FTPReader;
+import cci.cert.service.Filter;
+import cci.cert.service.FilterCertificate;
 import cci.purchase.web.controller.HeaderTableView;
 import cci.purchase.web.controller.PurchaseView;
 
@@ -89,47 +93,43 @@ public class CertController {
 			@RequestParam(value = "orderby", required = false) String orderby,
 			@RequestParam(value = "order", required = false) String order,
 			@RequestParam(value = "filter", required = false) Boolean onfilter,			
-			@RequestParam(value = "filterfield", required = false) String filterfield,
-			@RequestParam(value = "filteroperator", required = false) String filteroperator,
-			@RequestParam(value = "filtervalue", required = false) String filtervalue,
 			@RequestParam(value = "fullsearchvalue", required = false) String fullsearchvalue,
 			ModelMap model) {
 		
 		ViewManager vmanager = new ViewManager();
 		vmanager.setHnames(new String[] {"Номер Сертификата", "Отделение", "Грузоотправитель/Экспортер", "Номер бланка", "Дата", "Послед."});
 		vmanager.setOrdnames(new String[] {"nomercert", "name", "kontrp", "nblanka", "issuedate", "child"});
-		vmanager.setFfields(new String[] {"Номер Сертификата", "Отделение", "Грузоотправитель/Экспортер", "Номер бланка", "Дата", "Товар"});
-		vmanager.setFieldnames(new String[] {"nomercert", "name", "kontrp", "nblanka", "datacert", "tovar"});
-		
-		// "select count(*) from cert_view where cert_id in (select distinct cert_id from c_product where UPPER(tovar) like '%ЛАСО%');"
-		
 		vmanager.setWidths(new int[] {10, 20, 45, 10, 10, 5});
-		        
 		vmanager.setPage(page == null ? 1 : page);
 		vmanager.setPagesize(pagesize == null ? 10 : pagesize);
 		
 		if (orderby == null || orderby.isEmpty()) orderby = "issuedate";
 		if (order == null || order.isEmpty()) order = ViewManager.ORDASC;
 		if (onfilter == null ) onfilter = false;
+		if (fullsearchvalue == null ) fullsearchvalue = "";
 		
 		vmanager.setOrderby(orderby);
 		vmanager.setOrder(order);
 		vmanager.setOnfilter(onfilter);
-		vmanager.setFiltervalue(filtervalue);
-		vmanager.setFilterfield(filterfield);
-		vmanager.setFilteroperator(filteroperator);
 		vmanager.setFullsearchvalue(fullsearchvalue);
 		
+		vmanager.setUrl("certs.do");
 		
-		vmanager.setUrl("certs.do");        
-        vmanager.setPagecount(certService.getViewPageCount(vmanager.getFilter()));
-        
-		List<Certificate> certs = certService.readCertificatesPage(vmanager.getPage(), vmanager.getPagesize(), vmanager.getOrderby(), vmanager.getOrder(), vmanager.getFilter());
+		Filter filter = vmanager.getFilter();
+		if (filter == null)  {
+			filter = new FilterCertificate();
+			vmanager.setFilter(filter);
+		}
+
+ 		SQLBuilder builder = new SQLBuilderCertificate();
+		builder.setFilter(filter);
+		
+        vmanager.setPagecount(certService.getViewPageCount(builder));
+        List<Certificate> certs = certService.readCertificatesPage(vmanager.getPage(), vmanager.getPagesize(), vmanager.getOrderby(), vmanager.getOrder(), builder);
 		vmanager.setElements(certs);
 	    
 		model.addAttribute("vmanager", vmanager);
 		model.addAttribute("certs", certs);
-		
 		model.addAttribute("next_page", vmanager.getNextPageLink());
 		model.addAttribute("prev_page", vmanager.getPrevPageLink());
 		model.addAttribute("last_page", vmanager.getLastPageLink());

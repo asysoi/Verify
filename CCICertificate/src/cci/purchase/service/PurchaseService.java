@@ -128,7 +128,7 @@ public class PurchaseService {
 	}
 
 
-	public List<PurchaseView> readPurchaseViewPage(int page, int pagesize, String sortby, String order, Filter filter) {
+	public List<PurchaseView> readPurchaseViewPage(int page, int pagesize, String sortby, String order, FilterCondition filter) {
 		Locale.setDefault(new Locale("en", "en"));
 
 		List<PurchaseView> purchases = null;
@@ -142,7 +142,7 @@ public class PurchaseService {
 		return purchases;
 	}
 	
-	public int getPurchaseViewPageCount(Filter filter) {
+	public int getPurchaseViewPageCount(FilterCondition filter) {
 		Locale.setDefault(new Locale("en", "en"));
         int counter=0;
 		try {

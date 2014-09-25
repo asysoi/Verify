@@ -3,7 +3,7 @@ package cci.cert.repository;
 import java.util.List;
 
 import cci.cert.model.Certificate;
-import cci.purchase.service.Filter;
+import cci.purchase.service.FilterCondition;
 
 public interface CertificateDAO {
 
@@ -19,12 +19,12 @@ public interface CertificateDAO {
 		
 	public List<Certificate> findByCertificate(Certificate cert);
 	
-	public List<Certificate> findViewNextPage(int page, int pagesize, String orderby, String order, Filter filter);
+	public List<Certificate> findViewNextPage(int page, int pagesize, String orderby, String order, SQLBuilder builder);
 
 	public int save(Certificate cert);
 
 	public void update(Certificate cert);
 	
-	public int getViewPageCount(Filter filter);
+	public int getViewPageCount(SQLBuilder builder);
 	
 }

@@ -3,7 +3,8 @@ package cci.cert.web.controller;
 import java.util.ArrayList;
 import java.util.List;
 
-import cci.purchase.service.Filter;
+import cci.cert.service.Filter;
+import cci.purchase.service.FilterCondition;
 import cci.purchase.web.controller.HeaderTableView;
 
 public class ViewManager {
@@ -21,11 +22,7 @@ public class ViewManager {
 	private int pagecount;
 	private int pagesize;
 	private int page;
-	
-	private String filterfield;
-	private String filteroperator;
-	private String filtervalue;
-	
+	private Filter filter;
 	private Boolean onfilter;
 	private String url;
 	private String fullsearchvalue;
@@ -102,7 +99,6 @@ public class ViewManager {
 		this.order = order;
 	}
 
-
 	public List getElements() {
 		return elements;
 	}
@@ -143,36 +139,7 @@ public class ViewManager {
 	}
 
 
-	public String getFilterfield() {
-		return filterfield;
-	}
-
-
-	public void setFilterfield(String filterfield) {
-		this.filterfield = filterfield;
-	}
-
-
-	public String getFilteroperator() {
-		return filteroperator;
-	}
-
-
-	public void setFilteroperator(String filteroperator) {
-		this.filteroperator = filteroperator;
-	}
-
-
-	public String getFiltervalue() {
-		return filtervalue;
-	}
-
-
-	public void setFiltervalue(String filtervalue) {
-		this.filtervalue = filtervalue;
-	}
-
-
+	
 	public Boolean getOnfilter() {
 		return onfilter;
 	}
@@ -266,16 +233,6 @@ public class ViewManager {
         return headers;
 	}
 	
-
-	public Filter getFilter() {
-		Filter pf  = new Filter();
-		pf.setField(filterfield);
-		pf.setOperator(filteroperator);
-		pf.setValue(filtervalue);
-		pf.setOnfilter(onfilter);
-		return pf;
-	}
-
 	public String getLastPageLink() {
 		return url + "?page=" + ((pagecount + (pagesize -1))/pagesize) + "&pagesize="+ pagesize + "&orderby="+orderby+"&order="+order;
 	}
@@ -283,4 +240,14 @@ public class ViewManager {
 	public String getFirstPageLink() {
 		return url + "?page=1&pagesize="+ pagesize + "&orderby="+orderby+"&order="+order;
 	}
+	
+	public Filter getFilter() {
+		return filter;
+	}
+	
+	public void setFilter(Filter filter) {
+		this.filter = filter;
+	}
+	
+
 }
