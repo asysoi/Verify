@@ -1,4 +1,4 @@
-﻿<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -15,7 +15,7 @@
           document.getElementById("filter").checked=${vmanager.onfilter};
 
 		if (document.getElementById("filter").checked) {
-			$("#filterlink").html('<a  href="javascript: loadWindow();">&nbsp;Фильтр</a>');
+			$("#filterlink").html('<a  href="javascript: loadWindow(filter.do);">&nbsp;Фильтр</a>');
 		} else {
 			$("#filterlink").html('&nbsp;Фильтр');
 		}
@@ -34,7 +34,7 @@
 
 	function swithFilter() {
 		if (document.getElementById("filter").checked) {
-			$("#filterlink").html('<a href="javascript: loadWindow();">&nbsp;Фильтр</a>');
+			$("#filterlink").html('<a href="javascript: loadWindow(filter.do);">&nbsp;Фильтр</a>');
 		} else {
 			$("#filterlink").html('&nbsp;Фильтр');
 			goToList('certs.do?page=1&pagesize=${pagesize}&orderby=${orderby}&order=${order}');
@@ -42,7 +42,6 @@
 	}
 
 	function loadWindow(link) {
-                                   link="filter.do";
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Фильтр поиска');
 		$("#pview").dialog("option", "width", 600);
@@ -70,9 +69,7 @@
 					items="${sizes}" var="item">
 	           	   &nbsp;	
 	               <a
-						href="javascript: goToList('certs.do?page=1&pagesize=${item}&orderby=${vmanager.orderby}&order=
-
-${vmanager.order}');">${item}</a>
+						href="javascript: goToList('certs.do?page=1&pagesize=${item}&orderby=${vmanager.orderby}&order=${vmanager.order}');">${item}</a>
 				</c:forEach>
 			</td>
 
@@ -122,9 +119,7 @@ ${vmanager.order}');">${item}</a>
 					items="${pages}" var="item">
 	           	   &nbsp;	
 	               <a
-						href="javascript: goToList('certs.do?page=${item}&pagesize=${vmanager.pagesize}&orderby=${vmanager.orderby}
-
-&order=${vmanager.order}');"
+						href="javascript: goToList('certs.do?page=${item}&pagesize=${vmanager.pagesize}&orderby=${vmanager.orderby}&order=${vmanager.order}');"
 						<c:if test="${item==vmanager.page}">style="border-style: solid; border-width: 1px;"</c:if>>
 						${item} </a>
 				</c:forEach> &nbsp; (количество сертификатов - ${vmanager.pagecount})</td>

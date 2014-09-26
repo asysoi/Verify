@@ -1,6 +1,6 @@
 package cci.purchase.service;
 
-public class Filter {
+public class FilterCondition {
 	private String field;
 	private String operator;
 	private String value;
@@ -36,8 +36,18 @@ public class Filter {
 			
 			if (onfilter != null && onfilter && field != null && operator != null && value != null) {
 				wherefilter = " where UPPER(" + field + ") " + operator + " "   
-								+ (operator.equals("like") ? "'%" + value.toUpperCase() +"%'" : "'" + value.toUpperCase() +"'");   
+								+ (operator.equals("like") ? "'%" + value.toUpperCase() +"%'" : "'" + value.toUpperCase() +"' ");   
 			}
 			return wherefilter;
 	}
+	
+	public String getWhereClause() {
+		String wherefilter = "";
+		
+		if (field != null && operator != null && value != null) {
+			wherefilter = " UPPER(" + field + ") " + operator + " "   
+							+ (operator.equals("like") ? "'%" + value.toUpperCase() +"%'" : "'" + value.toUpperCase() +"' ");   
+		}
+		return wherefilter;
+}
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import cci.cert.model.Certificate;
@@ -26,6 +27,7 @@ import cci.purchase.web.controller.HeaderTableView;
 import cci.purchase.web.controller.PurchaseView;
 
 @Controller
+@SessionAttributes("certfilter")
 public class CertController {
 	
 	@Autowired
@@ -87,13 +89,15 @@ public class CertController {
 		return certificate;
 	}
 
-	@RequestMapping(value = "/certs.do")
+	
+	
+	
+	@RequestMapping(value = "/certs.do", method = RequestMethod.GET)
 	public String listcerts(@RequestParam(value = "page", required = false) Integer page,
 			@RequestParam(value = "pagesize", required = false) Integer pagesize,
 			@RequestParam(value = "orderby", required = false) String orderby,
 			@RequestParam(value = "order", required = false) String order,
 			@RequestParam(value = "filter", required = false) Boolean onfilter,			
-			@RequestParam(value = "fullsearchvalue", required = false) String fullsearchvalue,
 			ModelMap model) {
 		
 		ViewManager vmanager = new ViewManager();
@@ -106,20 +110,26 @@ public class CertController {
 		if (orderby == null || orderby.isEmpty()) orderby = "issuedate";
 		if (order == null || order.isEmpty()) order = ViewManager.ORDASC;
 		if (onfilter == null ) onfilter = false;
-		if (fullsearchvalue == null ) fullsearchvalue = "";
+		//if (fullsearchvalue == null ) fullsearchvalue = "";
 		
 		vmanager.setOrderby(orderby);
 		vmanager.setOrder(order);
 		vmanager.setOnfilter(onfilter);
-		vmanager.setFullsearchvalue(fullsearchvalue);
+		//vmanager.setFullsearchvalue(fullsearchvalue);
 		
 		vmanager.setUrl("certs.do");
 		
 		Filter filter = vmanager.getFilter();
 		if (filter == null)  {
-			filter = new FilterCertificate();
+			if (model.get("certfilter") != null) {
+			   filter = (Filter) model.get("certfilter");
+			} else {
+				filter = new FilterCertificate();
+				model.addAttribute("certtfilter", filter);
+			}
 			vmanager.setFilter(filter);
 		}
+		System.out.println(filter.getFullsearchvalue());
 
  		SQLBuilder builder = new SQLBuilderCertificate();
 		builder.setFilter(filter);
@@ -140,6 +150,32 @@ public class CertController {
 		return "listcertificates";
 	}
 
+	
+	@RequestMapping(value="/filter.do", method = RequestMethod.GET)
+	public String openFilter(ModelMap model) {
+		Filter fc;
+		if (model.get("certfilter") == null) {
+			fc = new FilterCertificate();
+			model.addAttribute("certtfilter", fc);
+			System.out.println("Filter: " + fc);
+		} else {
+			fc = (Filter) model.get("certfilter");
+		}
+		System.out.println("filter.do. Step 2");
+		model.addAttribute("filter", fc);
+      	return "fragments/filter";
+	}
+	
+	@RequestMapping(value="/filter.do", method = RequestMethod.POST)
+	public String submitFilter(@ModelAttribute("filter") FilterCertificate fc,
+			BindingResult result, SessionStatus status, ModelMap model) {
+        model.addAttribute("certfilter", fc);  
+		System.out.println("filter.do. Post Step");
+		return "fragments/filter";
+	}
+	
+
+	
 	
 	
 	@RequestMapping(value = "/gocert.do")
