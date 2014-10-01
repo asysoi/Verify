@@ -26,5 +26,7 @@ public interface CertificateDAO {
 	public void update(Certificate cert);
 	
 	public int getViewPageCount(SQLBuilder builder);
+
+	public List<String> getDepartmentsList();
 	
 }

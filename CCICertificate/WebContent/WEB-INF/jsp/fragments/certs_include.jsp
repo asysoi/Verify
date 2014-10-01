@@ -37,15 +37,15 @@
 			$("#filterlink").html('<a href="javascript: loadWindow();">&nbsp;Фильтр</a>');
 		} else {
 			$("#filterlink").html('&nbsp;Фильтр');
-			goToList('certs.do?page=1&pagesize=${pagesize}&orderby=${orderby}&order=${order}');
 		}
+		goToList('certs.do?page=1&pagesize=${vmanager.pagesize}&orderby=${vmanager.orderby}&order=${vmanager.order}');		
 	}
 
 	function loadWindow(link) {
-                                   link="filter.do";
+        link="filter.do?&pagesize=${vmanager.pagesize}&orderby=${vmanager.orderby}&order=${vmanager.order}";
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Фильтр поиска');
-		$("#pview").dialog("option", "width", 600);
+		$("#pview").dialog("option", "width", 800);
 		$("#pview").dialog("option", "modal", true);
 		$("#pview").dialog("open");
 	}

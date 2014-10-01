@@ -25,13 +25,6 @@ public abstract class Filter {
 
 	public void setFullsearchvalue(String fullsearchvalue) {
 		this.fullsearchvalue = fullsearchvalue;
-		
-		// if (conditions != null) {
-		//   for (String key : conditions.keySet()) {
-		//		conditions.get(key).setOperator("like");
-		//		conditions.get(key).setValue(fullsearchvalue);
-		//   }
-		// }
 	}
 
 	public Boolean getOnfilter() {
@@ -65,4 +58,12 @@ public abstract class Filter {
 			conditions.put(upkey, filter);
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "Filter [conditions=" + conditions + ", fullsearchvalue="
+				+ fullsearchvalue + ", onfilter=" + onfilter + "]";
+	}
+	
+	
 }

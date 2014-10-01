@@ -16,19 +16,20 @@ public class SQLBuilderCertificate extends SQLBuilder {
 			for (String key : getFilter().getConditions().keySet()) {
 				FilterCondition condition =getFilter().getConditions().get(key);
 				
-				if (!condition.getValue().trim().isEmpty() && !condition.getOperator().trim().isEmpty()) {
-				    where += (where.isEmpty() ? "" : " AND ")
-						+ condition.getWhereClause();
+				if (condition.getValue() != null && condition.getOperator() != null && !condition.getValue().trim().isEmpty() && !condition.getOperator().trim().isEmpty()) {
+					
+					if (key.equals("TOVAR")) {
+					     where += (where.trim().isEmpty() ? "" : " AND ") + 
+									"cert_id in ( SELECT cert_id FROM C_Product where " +
+									condition.getWhereClause() + 
+									") ";
+					} else {
+				       where += (where.trim().isEmpty() ? "" : " AND ")
+					  	         +  condition.getWhereClause();
+					}
 			    }
-            
-			    if (getFilter().getConditions().containsKey("TOVAR") && !getFilter().getConditions().get("TOVAR").getValue().isEmpty()) {
-				     where += (where.isEmpty() ? "" : " AND ") + 
-						"cert_id in ( SELECT cert_id FROM C_Product where upper(tovar) like '%" +getFilter().getFullsearchvalue() + "%')";
-
-			    }
-			
-			    where = (where.isEmpty() ? "" : " where " + where);
 			}
+		    where = (where.trim().isEmpty() ? "" : " where " + where);
 			
 		}
 		return where;

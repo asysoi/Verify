@@ -153,4 +153,19 @@ public class CERTService  {
 		}
 		return counter;
 	}
+
+
+	public List<String> getDepartmentsList() {
+		Locale.setDefault(new Locale("en", "en"));
+		
+		List<String> departments = null;
+		
+		try {
+			departments = certificateDAO.getDepartmentsList();
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		
+		return departments;
+	}
 }

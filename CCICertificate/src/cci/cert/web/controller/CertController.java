@@ -1,7 +1,11 @@
 package cci.cert.web.controller;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,19 +27,24 @@ import cci.cert.service.CERTService;
 import cci.cert.service.FTPReader;
 import cci.cert.service.Filter;
 import cci.cert.service.FilterCertificate;
+import cci.purchase.model.Company;
+import cci.purchase.model.Product;
 import cci.purchase.web.controller.HeaderTableView;
 import cci.purchase.web.controller.PurchaseView;
 
 @Controller
-@SessionAttributes("certfilter")
+@SessionAttributes({"certfilter", "vmanager"})
 public class CertController {
-	
+
 	@Autowired
 	private CERTService certService;
+	
+	
+	private Map<String, String> operators = new LinkedHashMap<String, String>();
 
 	@RequestMapping(value = "/main.do", method = RequestMethod.GET)
 	public String mainpage(ModelMap model) {
-
+        
 		return "welcome";
 	}
 
@@ -54,7 +63,6 @@ public class CertController {
 
 	@RequestMapping(value = "/login.do", method = RequestMethod.GET)
 	public String loginInit(ModelMap model) {
-
 		User user = new User();
 		model.addAttribute("user", user);
 		return "login";
@@ -89,55 +97,69 @@ public class CertController {
 		return certificate;
 	}
 
-	
-	
-	
 	@RequestMapping(value = "/certs.do", method = RequestMethod.GET)
-	public String listcerts(@RequestParam(value = "page", required = false) Integer page,
+	public String listcerts(
+			//HttpServletRequest request,
+			@RequestParam(value = "page", required = false) Integer page,
 			@RequestParam(value = "pagesize", required = false) Integer pagesize,
 			@RequestParam(value = "orderby", required = false) String orderby,
 			@RequestParam(value = "order", required = false) String order,
-			@RequestParam(value = "filter", required = false) Boolean onfilter,			
+			@RequestParam(value = "filter", required = false) Boolean onfilter,
 			ModelMap model) {
+        
+        System.out.println("=============================================================== >");
+        
+        //ViewManager vmanager = (ViewManager) request.getSession().getAttribute("vmanager");
+        ViewManager vmanager = (ViewManager) model.get("vmanager");
+        
+        if (vmanager == null) {
+        	vmanager = new ViewManager();
+        	vmanager.setHnames(new String[] { "Номер Сертификата", "Отделение",
+    				"Грузоотправитель/Экспортер", "Номер бланка", "Дата", "Послед." });
+    		vmanager.setOrdnames(new String[] { "nomercert", "name", "kontrp",
+    				"nblanka", "issuedate", "child" });
+    		vmanager.setWidths(new int[] { 10, 20, 45, 10, 10, 5 });
+    		model.addAttribute("vmanager", vmanager);
+    		//request.getSession().setAttribute("vmanager", vmanager);    		
+        }
+
+		if (orderby == null || orderby.isEmpty())
+			orderby = "issuedate";
+		if (order == null || order.isEmpty())
+			order = ViewManager.ORDASC;
+		if (onfilter == null)
+			onfilter = false;
 		
-		ViewManager vmanager = new ViewManager();
-		vmanager.setHnames(new String[] {"Номер Сертификата", "Отделение", "Грузоотправитель/Экспортер", "Номер бланка", "Дата", "Послед."});
-		vmanager.setOrdnames(new String[] {"nomercert", "name", "kontrp", "nblanka", "issuedate", "child"});
-		vmanager.setWidths(new int[] {10, 20, 45, 10, 10, 5});
-		vmanager.setPage(page == null ? 1 : page);
+        vmanager.setPage(page == null ? 1 : page);
 		vmanager.setPagesize(pagesize == null ? 10 : pagesize);
-		
-		if (orderby == null || orderby.isEmpty()) orderby = "issuedate";
-		if (order == null || order.isEmpty()) order = ViewManager.ORDASC;
-		if (onfilter == null ) onfilter = false;
-		//if (fullsearchvalue == null ) fullsearchvalue = "";
-		
 		vmanager.setOrderby(orderby);
 		vmanager.setOrder(order);
 		vmanager.setOnfilter(onfilter);
-		//vmanager.setFullsearchvalue(fullsearchvalue);
-		
 		vmanager.setUrl("certs.do");
-		
-		Filter filter = vmanager.getFilter();
-		if (filter == null)  {
-			if (model.get("certfilter") != null) {
-			   filter = (Filter) model.get("certfilter");
-			} else {
-				filter = new FilterCertificate();
-				model.addAttribute("certtfilter", filter);
-			}
-			vmanager.setFilter(filter);
-		}
-		System.out.println(filter.getFullsearchvalue());
 
- 		SQLBuilder builder = new SQLBuilderCertificate();
+		Filter filter = null;
+		if (onfilter) {
+			filter = vmanager.getFilter();
+			
+			if (filter == null) {
+				if (model.get("certfilter") != null) {
+					filter = (Filter) model.get("certfilter");
+				} else {
+					filter = new FilterCertificate();
+					model.addAttribute("certfilter", filter);
+				}
+				vmanager.setFilter(filter);
+			}
+		} 
+
+		SQLBuilder builder = new SQLBuilderCertificate();
 		builder.setFilter(filter);
-		
-        vmanager.setPagecount(certService.getViewPageCount(builder));
-        List<Certificate> certs = certService.readCertificatesPage(vmanager.getPage(), vmanager.getPagesize(), vmanager.getOrderby(), vmanager.getOrder(), builder);
+		vmanager.setPagecount(certService.getViewPageCount(builder));
+		List<Certificate> certs = certService.readCertificatesPage(
+				vmanager.getPage(), vmanager.getPagesize(),
+				vmanager.getOrderby(), vmanager.getOrder(), builder);
 		vmanager.setElements(certs);
-	    
+
 		model.addAttribute("vmanager", vmanager);
 		model.addAttribute("certs", certs);
 		model.addAttribute("next_page", vmanager.getNextPageLink());
@@ -146,38 +168,51 @@ public class CertController {
 		model.addAttribute("first_page", vmanager.getFirstPageLink());
 		model.addAttribute("pages", vmanager.getPagesList());
 		model.addAttribute("sizes", vmanager.getSizesList());
-		
+
 		return "listcertificates";
 	}
 
-	
-	@RequestMapping(value="/filter.do", method = RequestMethod.GET)
-	public String openFilter(ModelMap model) {
-		Filter fc;
-		if (model.get("certfilter") == null) {
+	@RequestMapping(value = "/filter.do", method = RequestMethod.GET)
+	public String openFilter(
+			@ModelAttribute("certfilter") FilterCertificate fc, 
+			ModelMap model) {
+
+		if (fc == null) {
 			fc = new FilterCertificate();
-			model.addAttribute("certtfilter", fc);
-			System.out.println("Filter: " + fc);
+			System.out.println("New filterCertificate created in GET method");
+			model.addAttribute("certfilter", fc);
 		} else {
-			fc = (Filter) model.get("certfilter");
+			System.out.println("Found FilterCertificate in GET : ");
 		}
-		System.out.println("filter.do. Step 2");
-		model.addAttribute("filter", fc);
-      	return "fragments/filter";
-	}
-	
-	@RequestMapping(value="/filter.do", method = RequestMethod.POST)
-	public String submitFilter(@ModelAttribute("filter") FilterCertificate fc,
-			BindingResult result, SessionStatus status, ModelMap model) {
-        model.addAttribute("certfilter", fc);  
-		System.out.println("filter.do. Post Step");
+
+		ViewFilter vf = new ViewFilter(
+				((FilterCertificate) fc).getCertificate(),
+				((FilterCertificate) fc).getCondition());
+		model.addAttribute("viewfilter", vf);
 		return "fragments/filter";
 	}
-	
 
-	
-	
-	
+	@RequestMapping(value = "/filter.do", method = RequestMethod.POST)
+	public String submitFilter(
+			@ModelAttribute("viewfilter") ViewFilter viewfilter,
+			@ModelAttribute("certfilter") FilterCertificate fc,
+			BindingResult result, SessionStatus status, ModelMap model) {
+
+		if (fc == null) {
+			fc = new FilterCertificate();
+			System.out
+					.println("New filterCertificate created in the POST method");
+		} else {
+			System.out.println("Found FilterCertificate in POST");
+		}
+
+		fc.loadCertificate(viewfilter.getCertificate());
+		fc.loadCondition(viewfilter.getCondition());
+
+		model.addAttribute("certfilter", fc);
+		return "fragments/filter";
+	}
+
 	@RequestMapping(value = "/gocert.do")
 	public String gocert(
 			@RequestParam(value = "certid", required = true) Integer certid,
@@ -220,12 +255,33 @@ public class CertController {
 		}
 		return retpage;
 	}
-	
-	
+
 	@RequestMapping(value = "/upload.do", method = RequestMethod.GET)
 	public String uploadFromFTP(ModelMap model) {
-		certService.uploadCertificateFromFTP();          
+		certService.uploadCertificateFromFTP();
 		return "window";
+	}
+
+	@ModelAttribute("operators")
+	public Map<String, String> populateOperatorsList() {
+		operators.put("", "");
+		operators.put(">", "больше");
+		operators.put("<", "меньше");
+		operators.put("=", "равно");
+		operators.put("like", "включает");
+		return operators;
+	}
+
+	@ModelAttribute("countryList")
+	public Map<String, String> populateCompanyList() {
+
+		return null;
+	}
+	
+	@ModelAttribute("departments")
+	public List<String> populateDepartmentssList() {
+		
+		return certService.getDepartmentsList();
 	}
 
 }

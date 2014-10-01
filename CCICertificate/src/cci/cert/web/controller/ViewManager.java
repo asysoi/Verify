@@ -1,12 +1,18 @@
 package cci.cert.web.controller;
 
 import java.util.ArrayList;
+
 import java.util.List;
+
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 import cci.cert.service.Filter;
 import cci.purchase.service.FilterCondition;
 import cci.purchase.web.controller.HeaderTableView;
 
+@Component
+@Scope("session")
 public class ViewManager {
 	
 	public static final String ORDASC ="asc";

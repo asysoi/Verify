@@ -280,4 +280,13 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		
 		return certs;
 	}
+
+	// ---------------------------------------------------------------
+	// Get list of departments
+	// ---------------------------------------------------------------
+	public List<String> getDepartmentsList() {
+    	 String sql = "SELECT name from C_OTD";
+		 
+ 		 return (List<String>) template.getJdbcOperations().queryForList(sql, String.class);		 
+	}
 }
