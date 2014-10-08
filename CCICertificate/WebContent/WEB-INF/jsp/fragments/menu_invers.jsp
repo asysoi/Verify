@@ -90,9 +90,6 @@
 						<li><a href="#">Договора</a></li>					
 					</ul>
 				</li>
-				
-								
-				<li><a href="#out.do">О Нас</a></li>
 				<li><a href="login.do">Войти</a></li>
 				<li><a href="help.do">Помощь</a></li>
 			</ul>

@@ -52,9 +52,9 @@ public class Certificate {
 	private String parentstatus = "";
 	private String denorm;
 	private String tovar;
-
 	private String childnumber = "";
 	private Integer child_id = 0;
+	private Long parent_id;
 
 	public String getChildnumber() {
 		return childnumber;
@@ -805,5 +805,13 @@ public class Certificate {
 
 	public void setTovar(String tovar) {
 		this.tovar = tovar;
+	}
+
+	public Long getParent_id() {
+		return parent_id;
+	}
+
+	public void setParent_id(Long parent_id) {
+		this.parent_id = parent_id;
 	}
 }

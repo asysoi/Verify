@@ -5,29 +5,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
-<script>
-	function clear() {
-		$('input').val('');
-		$('select').val('');
-	}
-
-	function reset() {
-		$('#ffilter')[0].reset();
-	}
-
-	function submit() {
-		url = $("#ffilter").attr("action");
-		$.post(url, $("#ffilter").serialize());
-		goToList('certs.do?page=1&pagesize=${vmanager.pagesize}&orderby=${vmanager.orderby}&order=${vmanager.order}');		
-		$("#pview").dialog("close");
-	}
-
-	function close() {
-		$("#pview").dialog("close");
-	}
-</script>
-
-
 <form:form id="ffilter" method="POST" commandName="viewfilter">
 	<table class="filter">
 		<tr>
@@ -92,33 +69,5 @@
 		</tr>
 		<tr />
 	</table>
-
-	<div style="text-align: center">
-
-		<button type="button"
-			class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
-			role="button">
-			<span class="ui-button-text"><a href="javascript: submit();">применить</a></span>
-		</button>
-		<button type="button"
-			class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
-			role="button">
-			<span class="ui-button-text"> <a href="javascript:clear();">очистить</a></span>
-		</button>
-
-		<button type="button"
-			class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
-			role="button">
-			<span class="ui-button-text"> <a href="javascript:reset();">отменить
-					изменения</a></span>
-		</button>
-
-		<button type="button"
-			class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only"
-			role="button">
-			<span class="ui-button-text"> <a href="javascript:close();">закрыть</a></span>
-		</button>
-
-	</div>
-
+	
 </form:form>

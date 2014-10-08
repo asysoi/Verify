@@ -33,18 +33,17 @@ import cci.purchase.web.controller.HeaderTableView;
 import cci.purchase.web.controller.PurchaseView;
 
 @Controller
-@SessionAttributes({"certfilter", "vmanager"})
+@SessionAttributes({ "certfilter", "vmanager" })
 public class CertController {
 
 	@Autowired
 	private CERTService certService;
-	
-	
+
 	private Map<String, String> operators = new LinkedHashMap<String, String>();
 
 	@RequestMapping(value = "/main.do", method = RequestMethod.GET)
 	public String mainpage(ModelMap model) {
-        
+
 		return "welcome";
 	}
 
@@ -99,29 +98,32 @@ public class CertController {
 
 	@RequestMapping(value = "/certs.do", method = RequestMethod.GET)
 	public String listcerts(
-			//HttpServletRequest request,
+			// HttpServletRequest request,
 			@RequestParam(value = "page", required = false) Integer page,
 			@RequestParam(value = "pagesize", required = false) Integer pagesize,
 			@RequestParam(value = "orderby", required = false) String orderby,
 			@RequestParam(value = "order", required = false) String order,
 			@RequestParam(value = "filter", required = false) Boolean onfilter,
 			ModelMap model) {
-        
-        System.out.println("=============================================================== >");
-        
-        //ViewManager vmanager = (ViewManager) request.getSession().getAttribute("vmanager");
-        ViewManager vmanager = (ViewManager) model.get("vmanager");
-        
-        if (vmanager == null) {
-        	vmanager = new ViewManager();
-        	vmanager.setHnames(new String[] { "Номер Сертификата", "Отделение",
-    				"Грузоотправитель/Экспортер", "Номер бланка", "Дата", "Послед." });
-    		vmanager.setOrdnames(new String[] { "nomercert", "name", "kontrp",
-    				"nblanka", "issuedate", "child" });
-    		vmanager.setWidths(new int[] { 10, 20, 45, 10, 10, 5 });
-    		model.addAttribute("vmanager", vmanager);
-    		//request.getSession().setAttribute("vmanager", vmanager);    		
-        }
+
+		System.out
+				.println("=============================================================== >");
+
+		// ViewManager vmanager = (ViewManager)
+		// request.getSession().getAttribute("vmanager");
+		ViewManager vmanager = (ViewManager) model.get("vmanager");
+
+		if (vmanager == null) {
+			vmanager = new ViewManager();
+			vmanager.setHnames(new String[] { "Номер Сертификата", "Отделение",
+					"Грузоотправитель/Экспортер", "Номер бланка", "Дата",
+					"Замена." });
+			vmanager.setOrdnames(new String[] { "nomercert", "name", "kontrp",
+					"nblanka", "issuedate", "parent_id" });
+			vmanager.setWidths(new int[] { 10, 20, 45, 10, 10, 5 });
+			model.addAttribute("vmanager", vmanager);
+			// request.getSession().setAttribute("vmanager", vmanager);
+		}
 
 		if (orderby == null || orderby.isEmpty())
 			orderby = "issuedate";
@@ -129,8 +131,8 @@ public class CertController {
 			order = ViewManager.ORDASC;
 		if (onfilter == null)
 			onfilter = false;
-		
-        vmanager.setPage(page == null ? 1 : page);
+
+		vmanager.setPage(page == null ? 1 : page);
 		vmanager.setPagesize(pagesize == null ? 10 : pagesize);
 		vmanager.setOrderby(orderby);
 		vmanager.setOrder(order);
@@ -140,7 +142,7 @@ public class CertController {
 		Filter filter = null;
 		if (onfilter) {
 			filter = vmanager.getFilter();
-			
+
 			if (filter == null) {
 				if (model.get("certfilter") != null) {
 					filter = (Filter) model.get("certfilter");
@@ -150,7 +152,7 @@ public class CertController {
 				}
 				vmanager.setFilter(filter);
 			}
-		} 
+		}
 
 		SQLBuilder builder = new SQLBuilderCertificate();
 		builder.setFilter(filter);
@@ -174,8 +176,7 @@ public class CertController {
 
 	@RequestMapping(value = "/filter.do", method = RequestMethod.GET)
 	public String openFilter(
-			@ModelAttribute("certfilter") FilterCertificate fc, 
-			ModelMap model) {
+			@ModelAttribute("certfilter") FilterCertificate fc, ModelMap model) {
 
 		if (fc == null) {
 			fc = new FilterCertificate();
@@ -245,12 +246,11 @@ public class CertController {
 				retpage = "certificate";
 			} else {
 				model.addAttribute("cert", cert);
-				model.addAttribute(
-						"msg",
-						"Сертификат " + cert.getNomercert() + " на бланке "
-								+ cert.getNblanka() + " от "
-								+ cert.getDatacert() + " не зарегистрирован");
-				retpage = "check";
+				String msg = "Сертификат номер [" + cert.getNomercert() + "] на бланке ["
+						+ cert.getNblanka() + "] от [" + cert.getDatacert()
+						+ "] не найден в центральном хранилище";
+				model.addAttribute("msg", msg);
+				retpage = "fragments/message";
 			}
 		}
 		return retpage;
@@ -277,10 +277,10 @@ public class CertController {
 
 		return null;
 	}
-	
+
 	@ModelAttribute("departments")
 	public List<String> populateDepartmentssList() {
-		
+
 		return certService.getDepartmentsList();
 	}
 

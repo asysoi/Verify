@@ -14,6 +14,7 @@ vertical-align: top;
 table.certificate {
 border-collapse: collapse;
 width: 100%;
+font-size: 90%;
 }
 
 table.certificate td {
@@ -22,10 +23,12 @@ padding: 5px;
 padding-top: 7px;
 padding-bottom: 7px;
 vertical-align: top;
+font-size: 90%;
 }
 
 table.filter {
 width: 100%;
+font-size: 90%;
 }
 
 table.filter td {
@@ -34,8 +37,28 @@ padding: 5px;
 padding-top: 7px;
 padding-bottom: 7px;
 vertical-align: top;
+font-size: 90%;
 }
 
+table.verification {
+width: 100%;
+font-size: 100%;
+}
+
+table.verification td {
+border: 0px;
+padding: 5px;
+padding-top: 8px;
+padding-bottom: 8px;
+vertical-align: top;
+font-size: 100%;
+}
+
+.ver_message {
+  text-align: center;
+  font-size: 120%;
+  color: red;   
+}
 
 cci.container {
     padding-top: 10px;

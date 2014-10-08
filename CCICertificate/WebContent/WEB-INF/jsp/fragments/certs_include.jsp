@@ -7,12 +7,34 @@
 <link href="${LoginCss}" rel="stylesheet" />
 
 <script>
+	function clear() {
+		$('input').val('');
+		$('select').val('');
+	}
+
+	function reset() {
+		$('#ffilter')[0].reset();
+	}
+
+	function submit() {
+		url = $("#ffilter").attr("action");
+		$.post(url, $("#ffilter").serialize());
+		goToList('certs.do?page=1&pagesize=${vmanager.pagesize}&orderby=${vmanager.orderby}&order=${vmanager.order}');		
+		$("#pview").dialog("close");
+	}
+
+	function close() {
+		$("#pview").dialog("close");
+	}
+</script>
+
+<script>
 	$(document).ready(function() {
 		$("#pview").dialog({
 			autoOpen : false
 		});
 	
-          document.getElementById("filter").checked=${vmanager.onfilter};
+        document.getElementById("filter").checked=${vmanager.onfilter};
 
 		if (document.getElementById("filter").checked) {
 			$("#filterlink").html('<a  href="javascript: loadWindow();">&nbsp;Фильтр</a>');
@@ -47,11 +69,19 @@
 		$("#pview").dialog("option", "title", 'Фильтр поиска');
 		$("#pview").dialog("option", "width", 800);
 		$("#pview").dialog("option", "modal", true);
+		$("#pview").dialog({ buttons: [ { text: "Применить",  click : function() { submit(); } },  
+				               { text: "Очистить Все ", click: function() { clear(); } },
+ 				               { text: "Отменить изменения", click: function() { reset(); } },
+				               { text: "Отмена", click: function() { $( this ).dialog( "close" ); } }
+                  	                                               ] });
+              
+		$("#pview").dialog( "option", "position", { my: "center",  at: "center", of:window} );
 		$("#pview").dialog("open");
 	}
+	
 </script>
 
-<div class="col-md-10 col-md-offset-2 main">
+<div id="listvindow" class="col-md-10 col-md-offset-2 main">
 	<h3>Список сертификатов</h3>
 	<table style="width: 100%">
 		<tr>
@@ -59,7 +89,9 @@
 			<td style="width: 70%">
 			    <!--  <input id="fullsearchvalue"
 				value="${vmanager.fullsearchvalue}" />
-				<a href="javascript:goToList('certs.do?page=1&pagesize=${vmanager.pagesize}&orderby=${vmanager.orderby}&order=${vmanager.order}');">
+				<a href="javascript:goToList('certs.do?page=1&pagesize=${vmanager.pagesize}&orderby=${vmanager.orderby}&order=
+
+${vmanager.order}');">
 				<img src="resources/images/red_search.png" alt="Искать"/></a> -->
 				
                 <input id="filter" type="checkbox"	onclick="javascript:swithFilter();" >
@@ -70,7 +102,9 @@
 					items="${sizes}" var="item">
 	           	   &nbsp;	
 	               <a
-						href="javascript: goToList('certs.do?page=1&pagesize=${item}&orderby=${vmanager.orderby}&order=
+						href="javascript: goToList('certs.do?page=1&pagesize=${item}&orderby=${vmanager.orderby}
+
+&order=
 
 ${vmanager.order}');">${item}</a>
 				</c:forEach>
@@ -105,8 +139,8 @@ ${vmanager.order}');">${item}</a>
 	        </td>  
 	        -->
 
-				<td><c:if test="${cert.parentnumber != null}">
-						<a href="gocert.do?certid=${cert.parentnumber}">parent</a>
+				<td><c:if test="${cert.parent_id > 0}">
+						<a href="gocert.do?certid=${cert.parent_id}">замена для</a>
 					</c:if></td>
 			</tr>
 		</c:forEach>
@@ -122,7 +156,9 @@ ${vmanager.order}');">${item}</a>
 					items="${pages}" var="item">
 	           	   &nbsp;	
 	               <a
-						href="javascript: goToList('certs.do?page=${item}&pagesize=${vmanager.pagesize}&orderby=${vmanager.orderby}
+						href="javascript: goToList('certs.do?page=${item}&pagesize=${vmanager.pagesize}&orderby=
+
+${vmanager.orderby}
 
 &order=${vmanager.order}');"
 						<c:if test="${item==vmanager.page}">style="border-style: solid; border-width: 1px;"</c:if>>
