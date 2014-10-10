@@ -6,36 +6,36 @@ import java.util.Map;
 import cci.cert.model.Certificate;
 
 public class ViewFilter {
-    private Certificate certificate;
-   	private ViewCondition condition;
+   	private ViewCondition condition = new ViewCondition();
+   	private ViewCertificate viewcertificate = new ViewCertificate();;
    
-   	
-	public Certificate getCertificate() {
-		return certificate;
-	}
-	public void setCertificate(Certificate certificate) {
-		this.certificate = certificate;
-	}
 	public ViewCondition getCondition() {
 		return condition;
 	}
 	public void setCondition(ViewCondition condition) {
 		this.condition = condition;
 	}
-	
+
+	public ViewCertificate getViewcertificate() {
+		return viewcertificate;
+	}
+	public void setViewcertificate(ViewCertificate viewcertificate) {
+		this.viewcertificate = viewcertificate;
+	}
+		
 	public ViewFilter() {
 		super();		
 	}
-	
-	public ViewFilter(Certificate certificate, ViewCondition condition) {
+
+	public ViewFilter(ViewCertificate viewcertificate, ViewCondition condition) {
 		super();
-		this.certificate = certificate;
 		this.condition = condition;
+		this.viewcertificate = viewcertificate;
 	}
 	
 	@Override
 	public String toString() {
-		return "ViewFilter [certificate=" + certificate + ", condition="
+		return "ViewFilter [viewcertificate=" + viewcertificate + "] \n [condition="
 				+ condition + "]";
 	}
 	

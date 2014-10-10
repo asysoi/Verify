@@ -36,10 +36,16 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	// количкество сертификатов в списке
 	// ---------------------------------------------------------------
 	public int getViewPageCount(SQLBuilder builder) {
-		String sql = "SELECT count(*) FROM CERT_VIEW " + builder.getWhereClause(); 
-		System.out.println(sql);
+		long start = System.currentTimeMillis();
 		
-	    return this.template.getJdbcOperations().queryForInt(sql);
+		String sql = "SELECT count(*) FROM CERT_VIEW " + builder.getWhereClause(); 
+		
+		int count = this.template.getJdbcOperations().queryForInt(sql);
+		
+		System.out.println(sql);
+		System.out.println("Query time: " + (System.currentTimeMillis() - start));
+		
+	    return count; 
 	}
 	
 	// ---------------------------------------------------------------
@@ -145,7 +151,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	// вернуть очередную страницу списка сертификатов
 	// ---------------------------------------------------------------
 	public List<Certificate> findViewNextPage(int page, int pagesize, String orderby, String order, SQLBuilder builder) {
-		
+		long start = System.currentTimeMillis();
 		String sql = " SELECT cert.* " + 
 				     " FROM (SELECT t.*, ROW_NUMBER() OVER " +  
 				     " (ORDER BY t." + orderby + " " + order + ", t.CERT_ID " + order + ") rw " + 
@@ -154,7 +160,8 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				     " WHERE cert.rw > "  + ((page - 1) *  pagesize) +
 		             " AND cert.rw <= " + (page *  pagesize);
 		
-		System.out.println("SQL get next page : " + sql);
+		System.out.println("Next page : " + sql);
+		System.out.println("Query time: " + (System.currentTimeMillis() - start));
 		return this.template.getJdbcOperations().query(sql,
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));
 	}

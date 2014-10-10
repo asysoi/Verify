@@ -107,7 +107,7 @@ public class CertController {
 			ModelMap model) {
 
 		System.out
-				.println("=============================================================== >");
+				.println("=========================== GET CERT LIST =================================== >");
 
 		// ViewManager vmanager = (ViewManager)
 		// request.getSession().getAttribute("vmanager");
@@ -116,11 +116,11 @@ public class CertController {
 		if (vmanager == null) {
 			vmanager = new ViewManager();
 			vmanager.setHnames(new String[] { "Номер Сертификата", "Отделение",
-					"Грузоотправитель/Экспортер", "Номер бланка", "Дата",
+					"Грузоотправитель/Экспортер", "Номер бланка", "Дата", "Доп. лист", 
 					"Замена." });
 			vmanager.setOrdnames(new String[] { "nomercert", "name", "kontrp",
-					"nblanka", "issuedate", "parent_id" });
-			vmanager.setWidths(new int[] { 10, 20, 45, 10, 10, 5 });
+					"nblanka", "issuedate", "koldoplist", "parent_id" });
+			vmanager.setWidths(new int[] { 10, 20, 40, 8, 8, 9, 5 });
 			model.addAttribute("vmanager", vmanager);
 			// request.getSession().setAttribute("vmanager", vmanager);
 		}
@@ -153,7 +153,7 @@ public class CertController {
 				vmanager.setFilter(filter);
 			}
 		}
-
+        
 		SQLBuilder builder = new SQLBuilderCertificate();
 		builder.setFilter(filter);
 		vmanager.setPagecount(certService.getViewPageCount(builder));
@@ -187,7 +187,7 @@ public class CertController {
 		}
 
 		ViewFilter vf = new ViewFilter(
-				((FilterCertificate) fc).getCertificate(),
+				((FilterCertificate) fc).getViewcertificate(),
 				((FilterCertificate) fc).getCondition());
 		model.addAttribute("viewfilter", vf);
 		return "fragments/filter";
@@ -207,9 +207,9 @@ public class CertController {
 			System.out.println("Found FilterCertificate in POST");
 		}
 
-		fc.loadCertificate(viewfilter.getCertificate());
+		fc.loadViewcertificate(viewfilter.getViewcertificate());
 		fc.loadCondition(viewfilter.getCondition());
-
+		
 		model.addAttribute("certfilter", fc);
 		return "fragments/filter";
 	}

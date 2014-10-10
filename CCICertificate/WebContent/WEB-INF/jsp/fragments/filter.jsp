@@ -9,64 +9,64 @@
 	<table class="filter">
 		<tr>
 			<td>Грузоотправитель/экспортер</td>
-			<td><form:select path="condition.kontrp" items="${operators}" /></td>
-			<td><form:input path="certificate.kontrp" /></td>
+			<!-- <td><form:select path="condition.kontrp" items="${operators}" /></td>  -->
+			<td><form:input path="viewcertificate.kontrp" /></td>
 
 		</tr>
 		<tr>
 			<td>Адрес грузоотправителя/экспортера</td>
-			<td><form:select path="condition.adress" items="${operators}" /></td>
-			<td><form:input path="certificate.adress" /></td>
+			<!-- <td><form:select path="condition.adress" items="${operators}" /></td> -->
+			<td><form:input path="viewcertificate.adress" /></td>
 		</tr>
 		<td>Грузопролучатель/импортер</td>
-		<td><form:select path="condition.poluchat" items="${operators}" /></td>
-		<td><form:input path="certificate.poluchat" /></td>
+		<!-- <td><form:select path="condition.poluchat" items="${operators}" /></td> -->
+		<td><form:input path="viewcertificate.poluchat" /></td>
 
 		</tr>
 		<tr>
 			<td>Адрес грузополучателя/импортера</td>
-			<td><form:select path="condition.adresspol" items="${operators}" /></td>
-			<td><form:input path="certificate.adresspol" /></td>
+			<td><form:input path="viewcertificate.adresspol" /></td>
 		</tr>
 
 		<tr>
 			<td>Маршрут транспорта</td>
-			<td><form:select path="condition.marshrut" items="${operators}" /></td>
-			<td><form:input path="certificate.marshrut" /></td>
+			<td><form:input path="viewcertificate.marshrut" /></td>
 		</tr>
 		<tr>
 			<td>Отделение</td>
-			<td><form:select path="condition.otd_name" items="${operators}" /></td>
-			<td><form:select path="certificate.otd_name"  items="${departments}"/></td>
+			<td><form:select path="viewcertificate.otd_name"  items="${departments}"/></td>
 		</tr>
 		<tr>
 			<td>Номер сертификата</td>
-			<td><form:select path="condition.nomercert" items="${operators}" /></td>
-			<td><form:input path="certificate.nomercert" /></td>
+			<td><form:input path="viewcertificate.nomercert" /></td>
 		</tr>
 		<tr>
 			<td>Номер бланка</td>
-			<td><form:select path="condition.nblanka" items="${operators}" /></td>
-			<td><form:input path="certificate.nblanka" /></td>
+			<td><form:input path="viewcertificate.nblanka" /></td>
 		</tr>
-		
 		
 		<tr>
 			<td>Страна предоставления</td>
-			<td><form:select path="condition.stranapr" items="${operators}" /></td>
-			<td><form:input path="certificate.stranapr" /></td>
+			<td><form:input path="viewcertificate.stranapr" /></td>
 		</tr>
 
 		<tr>
 			<td>Отметка</td>
-			<td><form:select path="condition.otmetka" items="${operators}" /></td>
-			<td><form:input path="certificate.otmetka" /></td>
+			<td><form:input path="viewcertificate.otmetka" /></td>
 		</tr>
 		<tr>
 			<td>Товар</td>
-			<td><form:select path="condition.tovar" items="${operators}" /></td>
-			<td><form:input path="certificate.tovar" /></td>
+			<td><form:input path="viewcertificate.tovar" /></td>
 		</tr>
+		<tr>
+			<td>Критерий происхождения</td>
+			<td><form:input path="viewcertificate.kriter" /></td>
+		</tr>
+		<tr>
+			<td>Счет фактура</td>
+			<td><form:input path="viewcertificate.schet" /></td>
+		</tr>
+		
 		<tr />
 	</table>
 	

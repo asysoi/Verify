@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import cci.cert.model.Certificate;
+import cci.cert.web.controller.ViewCertificate;
 import cci.cert.web.controller.ViewCondition;
 import cci.purchase.service.FilterCondition;
 
@@ -23,11 +24,15 @@ public class FilterCertificate extends Filter {
 				"STATUS", "KOLDOPLIST", "FLEXP", "UNNEXP", "EXPP", "EXPS",
 				"EXPADRESS", "FLIMP", "IMPORTER", "ADRESSIMP", "FLSEZ", "SEZ",
 				"FLSEZREZ", "STRANAP", "OTD_ID", "OTD_NAME", "PARENTNUMBER",
-				"PARENTSTATUS", "TOVAR", "DENORM" };
-		
+				"PARENTSTATUS", "TOVAR", "DENORM", "KRITER", "SCHET", "DATEFROM", "DATETO" };
 		this.init(fields);
-		
 	}
+	
+	//public void init(String[] fields) {
+    //    for(String field : fields) {
+    //  	  this.setConditionValue(field, "like", "");
+    //    }
+	//}
 	
 	
 	public void setFullsearchvalue(String fullsearchvalue) {
@@ -38,8 +43,28 @@ public class FilterCertificate extends Filter {
 		
 	}
 	
-	public Certificate getCertificate() {
-		Certificate cert = new Certificate();
+	private Method getMethod(Object obj, String name, Class[] params) {
+		Method m = null;
+		try {
+			 try {
+			    m = obj.getClass().getMethod(name, params);
+			 } catch (Exception ex) {
+				m = obj.getClass().getSuperclass().getMethod(name, params); 
+			 }
+			 
+		} catch (Exception ex) {
+			LOG.info("Error get nethod: " + ex.getMessage());
+		}
+         
+		//if (m != null) {
+		//	System.out.println("Метод: " + m.getName());
+		//}
+		return m;
+	}
+
+	
+	public ViewCertificate getViewcertificate() {
+		ViewCertificate cert = new ViewCertificate();
 		
 		for (String field : getConditions().keySet()) {
 			FilterCondition fcond = getConditions().get(field);
@@ -47,13 +72,12 @@ public class FilterCertificate extends Filter {
 			
 			if (fcond != null) {
 				try {
-					Method m = cert.getClass().getDeclaredMethod(setter, new Class[] {String.class});
-					m.invoke(cert, new Object[]{fcond.getValue()});
-					//System.out.println("Обработано: " +  field);
+					Method m = getMethod(cert, setter, new Class[] {String.class});
+					if (m != null) {
+					    m.invoke(cert, new Object[]{fcond.getValue()});
+					}
 				} catch (Exception ex) {
 					LOG.info("Error get certificate." + ex.getMessage());
-					//ex.printStackTrace();
-					//System.out.println("Error get certificate." + ex.getMessage());
 				}
 			}
 		}
@@ -71,13 +95,12 @@ public class FilterCertificate extends Filter {
 			
 			if (fcond != null) {
 				try {
-					Method m = cond.getClass().getDeclaredMethod(setter, new Class[] {String.class});
-					m.invoke(cond, new Object[]{fcond.getOperator()});
-					//System.out.println("Обработано: " +  field);
+					Method m = getMethod(cond, setter, new Class[] {String.class});
+					if (m != null) {
+					    m.invoke(cond, new Object[]{fcond.getOperator()});
+					}
 				} catch (Exception ex) {
-					//ex.printStackTrace();
-					LOG.info("Error get condition." + ex.getMessage());
-					//System.out.println("Error get condition." + ex.getMessage());
+    				LOG.info("Error get condition." + ex.getMessage());
 				}
 			}
 		}
@@ -85,7 +108,7 @@ public class FilterCertificate extends Filter {
 	}
 	
 	
-	public void loadCertificate (Certificate cert) {
+	public void loadViewcertificate (ViewCertificate cert) {
 	
 		for (String field : getConditions().keySet()) {
 			FilterCondition fcond = getConditions().get(field);
@@ -94,13 +117,12 @@ public class FilterCertificate extends Filter {
 			
 			if (fcond != null) {
 				try {
-					Method m = cert.getClass().getDeclaredMethod(getter, new Class[] {});
-					fcond.setValue((String) m.invoke(cert, new Object[]{}));
-					//System.out.println("Обработано: " +  field + " Установлено значение: " + fcond.getValue());					
+					Method m = getMethod(cert, getter, new Class[] {});
+					if (m != null) {
+						fcond.setValue((String) m.invoke(cert, new Object[]{}));
+					}
 				} catch (Exception ex) {
 					LOG.info("Error certificate load." + ex.getMessage());
-					//ex.printStackTrace();
-					//System.out.println("Error certificate load." + ex.getMessage());
 				}
 			}
 		}
@@ -114,14 +136,12 @@ public class FilterCertificate extends Filter {
 			
 			if (fcond != null) {
 				try {
-					Method m = cond.getClass().getDeclaredMethod(getter, new Class[] {});
-					fcond.setOperator((String) m.invoke(cond, new Object[]{}));
-					
-					//System.out.println("Обработано: " +  field + " Установлено значение оператора: " + fcond.getOperator());					
+					Method m = getMethod(cond, getter, new Class[] {});
+					if (m != null) {
+						fcond.setOperator((String) m.invoke(cond, new Object[]{}));
+					}
 				} catch (Exception ex) {
 					LOG.info("Error condition load." + ex.getMessage());
-					//ex.printStackTrace();
-					//System.out.println("Error condition load." + ex.getMessage());
 				}
 			}
 		}
@@ -137,6 +157,4 @@ public class FilterCertificate extends Filter {
 	private String convertFieldNameToSetter(String field) {
 		return "set" + field.substring(0, 1).toUpperCase() + field.substring(1).toLowerCase();
 	}
-
-    
 }

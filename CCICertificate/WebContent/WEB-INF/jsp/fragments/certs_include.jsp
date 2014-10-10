@@ -130,7 +130,7 @@ ${vmanager.order}');">${item}</a>
 				<td>${cert.kontrp}</td>
 				<td>${cert.nblanka}</td>
 				<td>${cert.datacert}</td>
-
+                <td>${cert.koldoplist}</td> 
 				<!-- 
 	        <td>
 	        <c:if test="${cert.child_id != null}">

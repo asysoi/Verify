@@ -2,48 +2,52 @@ package cci.cert.web.controller;
 
 public class ViewCondition {
 
-	private String cert_id;
-	private String forms;
-	private String unn;
-	private String kontrp;
-	private String kontrs;
-	private String adress;
-	private String poluchat;
-	private String adresspol;
-	private String datacert;
-	private String nomercert;
-	private String expert;
-	private String nblanka;
-	private String rukovod;
-	private String transport;
-	private String marshrut;
-	private String otmetka;
-	private String stranav;
-	private String stranapr;
-	private String status;
-	private String koldoplist;
-	private String flexp;
-	private String unnexp;
-	private String expp;
-	private String exps;
-	private String expadress;
-	private String flimp;
-	private String importer;
-	private String adressimp;
-	private String flsez;
-	private String sez;
-	private String flsezrez;
-	private String stranap;
-	private String otd_id;
-	private String otd_name;
-	private String otd_address_index;
-	private String otd_address_city;
-	private String otd_address_line;
-	private String otd_address_home;
-	private String parentnumber = "";
-	private String parentstatus = "";
-	private String denorm;
-	private String tovar;
+	private String cert_id = "like";
+	private String forms = "like";
+	private String unn = "like";
+	private String kontrp= "like";
+	private String kontrs= "like";
+	private String adress= "like";
+	private String poluchat= "like";
+	private String adresspol= "like";
+	private String datacert= "like";
+	private String nomercert= "like";
+	private String expert= "like";
+	private String nblanka= "like";
+	private String rukovod= "like";
+	private String transport= "like";
+	private String marshrut= "like";
+	private String otmetka= "like";
+	private String stranav= "like";
+	private String stranapr= "like";
+	private String status= "like";
+	private String koldoplist= "like";
+	private String flexp= "like";
+	private String unnexp= "like";
+	private String expp= "like";
+	private String exps= "like";
+	private String expadress= "like";
+	private String flimp= "like";
+	private String importer= "like";
+	private String adressimp= "like";
+	private String flsez= "like";
+	private String sez= "like";
+	private String flsezrez= "like";
+	private String stranap= "like";
+	private String otd_id= "like";
+	private String otd_name= "like";
+	private String otd_address_index= "like";
+	private String otd_address_city= "like";
+	private String otd_address_line= "like";
+	private String otd_address_home= "like";
+	private String parentnumber = "like";
+	private String parentstatus= "like";
+	private String denorm= "like";
+	private String tovar= "like";
+	private String kriter= "like";
+	private String schet= "like";
+	private String datefrom= ">";
+	private String dateto= "<";
 	
 	public String getTovar() {
 		return tovar;
@@ -321,6 +325,30 @@ public class ViewCondition {
 				+ ", otd_address_home=" + otd_address_home + ", parentnumber="
 				+ parentnumber + ", parentstatus=" + parentstatus + ", denorm="
 				+ denorm + ", tovar=" + tovar + "]";
+	}
+	public String getKriter() {
+		return kriter;
+	}
+	public void setKriter(String kriter) {
+		this.kriter = kriter;
+	}
+	public String getSchet() {
+		return schet;
+	}
+	public void setSchet(String schet) {
+		this.schet = schet;
+	}
+	public String getDatefrom() {
+		return datefrom;
+	}
+	public void setDatefrom(String datefrom) {
+		this.datefrom = datefrom;
+	}
+	public String getDateto() {
+		return dateto;
+	}
+	public void setDateto(String dateto) {
+		this.dateto = dateto;
 	}
 	
 }

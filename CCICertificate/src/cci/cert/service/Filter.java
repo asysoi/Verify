@@ -61,9 +61,16 @@ public abstract class Filter {
 
 	@Override
 	public String toString() {
-		return "Filter [conditions=" + conditions + ", fullsearchvalue="
-				+ fullsearchvalue + ", onfilter=" + onfilter + "]";
+		String ret = "";
+		
+		for (String field : getConditions().keySet()) {
+            ret += "\n";  
+            ret += getConditions().get(field).toString();	  
+        }
+		return ret;
 	}
+
+	
 	
 	
 }
