@@ -33,9 +33,9 @@ font-size: 90%;
 
 table.filter td {
 border: 0px;
-padding: 2px;
-padding-top: 2px;
-padding-bottom: 2px;
+padding: 1px;
+padding-top: 1px;
+padding-bottom: 1px;
 vertical-align: top;
 font-size: 90%;
 }
@@ -52,6 +52,11 @@ padding-top: 8px;
 padding-bottom: 8px;
 vertical-align: top;
 font-size: 100%;
+}
+
+fieldset.legend.group_title {
+	font-size: 16px;
+	font-weight: bold;
 }
 
 .ver_message {
@@ -71,7 +76,7 @@ cci.form-horizontal {
 }
 
 input[type="text"] {
-    height: 25px;
+    height: 16px;
 }
 
 cci.navbar cci.nav > li > a {
@@ -114,3 +119,4 @@ cci.loginbox {
 .navbar-static-top {
   margin-bottom: 19px;
 }
+
