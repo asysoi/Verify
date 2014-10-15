@@ -25,15 +25,28 @@ public class FilterCertificate extends Filter {
 				"EXPADRESS", "FLIMP", "IMPORTER", "ADRESSIMP", "FLSEZ", "SEZ",
 				"FLSEZREZ", "STRANAP", "OTD_ID", "OTD_NAME", "PARENTNUMBER",
 				"PARENTSTATUS", "TOVAR", "DENORM", "KRITER", "SCHET", "DATEFROM", "DATETO" };
-		this.init(fields);
+		
+		String[] dbfields = new String[] { "CERT_ID", "FORMS", "UNN", "KONTRP",
+				"KONTRS", "ADRESS", "POLUCHAT", "ADRESSPOL", "DATACERT",
+				"ISSUEDATE", "NOMERCERT", "EXPERT", "NBLANKA", "RUKOVOD",
+				"TRANSPORT", "MARSHRUT", "OTMETKA", "STRANAV", "STRANAPR",
+				"STATUS", "KOLDOPLIST", "FLEXP", "UNNEXP", "EXPP", "EXPS",
+				"EXPADRESS", "FLIMP", "IMPORTER", "ADRESSIMP", "FLSEZ", "SEZ",
+				"FLSEZREZ", "STRANAP", "OTD_ID", "OTD_NAME", "PARENTNUMBER",
+				"PARENTSTATUS", "TOVAR", "DENORM", "KRITER", "SCHET", "ISSUEDATE", "ISSUEDATE" };
+		
+		FieldType[] types = new FieldType[] {
+				FieldType.ID, FieldType.STRING, FieldType.STRING,FieldType.STRING,FieldType.STRING,FieldType.STRING,FieldType.STRING,
+				FieldType.STRING,FieldType.DATE,FieldType.DATE, FieldType.STRING, FieldType.STRING, FieldType.STRING, 
+				FieldType.STRING, FieldType.STRING, FieldType.STRING,FieldType.STRING, FieldType.STRING, FieldType.STRING,
+				FieldType.STRING, FieldType.STRING, FieldType.STRING,FieldType.STRING, FieldType.STRING, FieldType.STRING,
+				FieldType.STRING, FieldType.STRING, FieldType.STRING,FieldType.STRING, FieldType.STRING, FieldType.STRING,
+				FieldType.STRING, FieldType.STRING, FieldType.STRING,FieldType.STRING, FieldType.STRING, FieldType.STRING,
+				FieldType.STRING, FieldType.STRING, FieldType.STRING,FieldType.STRING, FieldType.DATE, FieldType.DATE};
+		
+		
+		this.init(fields, dbfields, types);
 	}
-	
-	//public void init(String[] fields) {
-    //    for(String field : fields) {
-    //  	  this.setConditionValue(field, "like", "");
-    //    }
-	//}
-	
 	
 	public void setFullsearchvalue(String fullsearchvalue) {
 		super.setFullsearchvalue(fullsearchvalue);

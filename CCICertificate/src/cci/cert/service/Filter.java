@@ -35,13 +35,14 @@ public abstract class Filter {
 		this.onfilter = onfilter;
 	}
 
-	public void init(String[] fields) {
-        for(String field : fields) {
-      	  this.setConditionValue(field, "", "");
+	public void init(String[] fields, String[] dbfields, FieldType[] types) {
+		
+        for(int i = 0; i < fields.length; i++) {
+      	  this.setConditionValue(fields[i], dbfields[i], "", "", types[i]);
         }
 	}
 
-	public void setConditionValue(String field, String operator, String value) {
+	public void setConditionValue(String field, String dbfield, String operator, String value, FieldType type) {
 		if (conditions == null) {
 			conditions = new HashMap<String, FilterCondition>();
 		}
@@ -55,6 +56,8 @@ public abstract class Filter {
 			filter.setField(field);
 			filter.setOperator(operator);
 			filter.setValue(value);
+			filter.setDbfield(dbfield);
+			filter.setType(type);
 			conditions.put(upkey, filter);
 		}
 	}

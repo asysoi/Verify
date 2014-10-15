@@ -67,7 +67,7 @@
         link="filter.do?&pagesize=${vmanager.pagesize}&orderby=${vmanager.orderby}&order=${vmanager.order}";
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Фильтр поиска');
-		$("#pview").dialog("option", "width", 800);
+		$("#pview").dialog("option", "width", 650);
 		$("#pview").dialog("option", "modal", true);
 		$("#pview").dialog({ buttons: [ { text: "Применить",  click : function() { submit(); } },  
 				               { text: "Очистить Все ", click: function() { clear(); } },
@@ -175,7 +175,7 @@ ${vmanager.orderby}
 	
 	<div id="pview" name="pview">
 	</div>
-
+    <p>${timeduration}</p> 
 </div>
 
 

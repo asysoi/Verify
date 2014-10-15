@@ -3,7 +3,7 @@ package cci.cert.web.controller;
 public class ViewCondition {
 
 	private String cert_id = "like";
-	private String forms = "like";
+	private String forms = "=";
 	private String unn = "like";
 	private String kontrp= "like";
 	private String kontrs= "like";
@@ -19,7 +19,7 @@ public class ViewCondition {
 	private String marshrut= "like";
 	private String otmetka= "like";
 	private String stranav= "like";
-	private String stranapr= "like";
+	private String stranapr= "=";
 	private String status= "like";
 	private String koldoplist= "like";
 	private String flexp= "like";
@@ -33,7 +33,7 @@ public class ViewCondition {
 	private String flsez= "like";
 	private String sez= "like";
 	private String flsezrez= "like";
-	private String stranap= "like";
+	private String stranap= "=";
 	private String otd_id= "like";
 	private String otd_name= "like";
 	private String otd_address_index= "like";
@@ -46,8 +46,8 @@ public class ViewCondition {
 	private String tovar= "like";
 	private String kriter= "like";
 	private String schet= "like";
-	private String datefrom= ">";
-	private String dateto= "<";
+	private String datefrom= ">=";
+	private String dateto= "<=";
 	
 	public String getTovar() {
 		return tovar;

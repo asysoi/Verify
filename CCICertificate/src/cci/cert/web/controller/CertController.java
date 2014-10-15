@@ -5,7 +5,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -24,13 +23,8 @@ import cci.cert.model.Certificate;
 import cci.cert.repository.SQLBuilder;
 import cci.cert.repository.SQLBuilderCertificate;
 import cci.cert.service.CERTService;
-import cci.cert.service.FTPReader;
 import cci.cert.service.Filter;
 import cci.cert.service.FilterCertificate;
-import cci.purchase.model.Company;
-import cci.purchase.model.Product;
-import cci.purchase.web.controller.HeaderTableView;
-import cci.purchase.web.controller.PurchaseView;
 
 @Controller
 @SessionAttributes({ "certfilter", "vmanager" })
@@ -105,7 +99,8 @@ public class CertController {
 			@RequestParam(value = "order", required = false) String order,
 			@RequestParam(value = "filter", required = false) Boolean onfilter,
 			ModelMap model) {
-
+		
+        long start = System.currentTimeMillis();   
 		System.out
 				.println("=========================== GET CERT LIST =================================== >");
 
@@ -138,7 +133,8 @@ public class CertController {
 		vmanager.setOrder(order);
 		vmanager.setOnfilter(onfilter);
 		vmanager.setUrl("certs.do");
-
+		long step1 = System.currentTimeMillis();
+		
 		Filter filter = null;
 		if (onfilter) {
 			filter = vmanager.getFilter();
@@ -154,14 +150,20 @@ public class CertController {
 			}
 		}
         
+		long step2 = System.currentTimeMillis();
 		SQLBuilder builder = new SQLBuilderCertificate();
+		long step21 = System.currentTimeMillis();
 		builder.setFilter(filter);
+		long step22 = System.currentTimeMillis();
 		vmanager.setPagecount(certService.getViewPageCount(builder));
+		long step23 = System.currentTimeMillis();
 		List<Certificate> certs = certService.readCertificatesPage(
 				vmanager.getPage(), vmanager.getPagesize(),
 				vmanager.getOrderby(), vmanager.getOrder(), builder);
+		long step3 = System.currentTimeMillis();
 		vmanager.setElements(certs);
 
+		long step4 = System.currentTimeMillis();
 		model.addAttribute("vmanager", vmanager);
 		model.addAttribute("certs", certs);
 		model.addAttribute("next_page", vmanager.getNextPageLink());
@@ -170,6 +172,11 @@ public class CertController {
 		model.addAttribute("first_page", vmanager.getFirstPageLink());
 		model.addAttribute("pages", vmanager.getPagesList());
 		model.addAttribute("sizes", vmanager.getSizesList());
+		model.addAttribute("timeduration", (System.currentTimeMillis() - start) + " = " +
+		                                   (step1 - start) + "+" + (step2 -step1) + "+" + (step21 - step2) +
+		                                   (step22 - step21) + "+" +(step23 - step22) + "+" +
+		                                   (step3 - step23) + "+" +(step4 - step3) + "+" +
+		                                   (System.currentTimeMillis() - step4));
 
 		return "listcertificates";
 	}
@@ -272,16 +279,19 @@ public class CertController {
 		return operators;
 	}
 
-	@ModelAttribute("countryList")
+	@ModelAttribute("countries")
 	public Map<String, String> populateCompanyList() {
-
-		return null;
+		return certService.getCountriesList();
 	}
 
 	@ModelAttribute("departments")
 	public List<String> populateDepartmentssList() {
-
 		return certService.getDepartmentsList();
+	}
+	
+	@ModelAttribute("forms")
+	public List<String> populateFormsList() {
+		return certService.getFormsList();
 	}
 
 }

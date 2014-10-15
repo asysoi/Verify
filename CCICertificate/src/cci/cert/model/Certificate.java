@@ -50,7 +50,7 @@ public class Certificate {
 	private String otd_address_home;
 	private String parentnumber = "";
 	private String parentstatus = "";
-	private String denorm;
+	// private String denorm;
 	private String childnumber = "";
 	private Integer child_id = 0;
 	private Long parent_id;
@@ -790,14 +790,6 @@ public class Certificate {
 		this.otd_id = otd_id;
 	}
 
-	public String getDenorm() {
-		return denorm;
-	}
-
-	public void setDenorm(String denorm) {
-		this.denorm = denorm;
-	}
-
 	public Long getParent_id() {
 		return parent_id;
 	}
@@ -805,4 +797,14 @@ public class Certificate {
 	public void setParent_id(Long parent_id) {
 		this.parent_id = parent_id;
 	}
+	
+	//public String getDenorm() {
+	//	return denorm;
+	//}
+
+	//public void setDenorm(String denorm) {
+	//	this.denorm = denorm;
+	//}
+
+	
 }

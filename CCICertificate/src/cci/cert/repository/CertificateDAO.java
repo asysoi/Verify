@@ -1,6 +1,7 @@
 package cci.cert.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import cci.cert.model.Certificate;
 import cci.purchase.service.FilterCondition;
@@ -28,5 +29,9 @@ public interface CertificateDAO {
 	public int getViewPageCount(SQLBuilder builder);
 
 	public List<String> getDepartmentsList();
+
+	public Map<String, String> getCountriesList();
+
+	public List<String> getFormsList();
 	
 }
