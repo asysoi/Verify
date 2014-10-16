@@ -15,6 +15,9 @@ import org.eclipse.swt.widgets.Text;
 
 import cci.cert.certificate.CCICertLoader;
 import cci.cert.certificate.CCIProperty;
+import cci.cert.certificate.Config;
+import cci.cert.certificate.ConfigReader;
+import cci.cert.util.DesEncrypter;
 
 
 public class PropertiesForm extends Dialog {
@@ -30,7 +33,7 @@ public class PropertiesForm extends Dialog {
 	private Label lblFtpPassword;
 	private Text txtPassword;
 	private Label label;
-	private Text txtLimitFiles;
+	private Text txtFiles;
 	private Label label_1;
 	private Text txtDelay;
 	
@@ -79,9 +82,9 @@ public class PropertiesForm extends Dialog {
 		label.setFont(SWTResourceManager.getFont("Arial", 10, SWT.NORMAL));
 		label.setBounds(20, 87, 98, 16);
 		
-		txtLimitFiles = new Text(shlOtrs, SWT.BORDER);
-		txtLimitFiles.setFont(SWTResourceManager.getFont("Tahoma", 10, SWT.NORMAL));
-		txtLimitFiles.setBounds(124, 84, 143, 19);
+		txtFiles = new Text(shlOtrs, SWT.BORDER);
+		txtFiles.setFont(SWTResourceManager.getFont("Tahoma", 10, SWT.NORMAL));
+		txtFiles.setBounds(124, 84, 143, 19);
 		
 		label_1 = new Label(shlOtrs, SWT.NONE);
 		label_1.setText("\u0417\u0430\u0434\u0435\u0440\u0436\u043A\u0430");
@@ -185,59 +188,52 @@ public class PropertiesForm extends Dialog {
 		btnPath.setBounds(392, 135, 26, 21);
 		btnPath.setText("...");
 		
-		
 	}
 
 	private void saveProps() {
 		
 		CCIProperty props = CCIProperty.getInstance();
-		/*		
-		props.setProperty(OTRS.PR_LOGIN_SAVE, button_0.getSelection() ? "true" : "false");
-		props.setProperty(OTRS.PR_AUTOLOGIN, button_1.getSelection() ? "true" : "false");;
-		props.setProperty(OTRS.PR_REMINDER, button_2.getSelection() ? "true" : "false");;
-		props.setProperty(OTRS.PR_SOUND, button_4.getSelection()  ? "true" : "false");;
-		props.setProperty(OTRS.PR_CONFIRMATION, button_5.getSelection()  ? "true" : "false");;
-		props.setProperty(OTRS.PR_CHECK_TIME, txtTime.getText());
-		props.setProperty(OTRS.PR_OTRS_URL, txtUrl.getText());
-		props.setProperty(OTRS.PR_PATH, txtPath.getText());
-		
-		try {
 			
+		props.setProperty(Config.ISDELETE, btnDelete.getSelection() ? "true" : "false");
+		props.setProperty(Config.URL, txtURL.getText());
+		props.setProperty(Config.LOGIN, txtLogin.getText());
+		props.setProperty(Config.PSW, txtPassword.getText());
+		props.setProperty(Config.FILES, txtFiles.getText());
+		props.setProperty(Config.DELAY, txtDelay.getText());
+		props.setProperty(Config.REPPATH, txtRepoPath.getText());
+		
+	
+		try {
 				DesEncrypter encrypter = new DesEncrypter();
-				if (props.getProperty(OTRS.PR_PSW) != null) {
-					props.setProperty(OTRS.PR_PSW,
-							encrypter.encrypt(props.getProperty(OTRS.PR_PSW)));
+				if (props.getProperty(Config.PSW) != null) {
+					props.setProperty(Config.PSW,
+							encrypter.encrypt(props.getProperty(Config.PSW)));
 				
 					ConfigReader.getInstance().storeConfig(
 						CCIProperty.getInstance().getProperties());
 				
-					props.setProperty(OTRS.PR_PSW,
-							encrypter.decrypt(props.getProperty(OTRS.PR_PSW)));
+					props.setProperty(Config.PSW,
+							encrypter.decrypt(props.getProperty(Config.PSW)));
 				} else {
 					ConfigReader.getInstance().storeConfig(
 							CCIProperty.getInstance().getProperties());
 				}
 		} catch (Exception ex) {
-			OTRSApplicationAWT.LOG.error("Config saving. " + ex.getMessage());;
+			LOG.error("Config saving. " + ex.getMessage());;
 		}
-		*/
+	
 	}
 	
 	private void loadProps() {
 		CCIProperty props = CCIProperty.getInstance();
 		
-		txtURL.setText((String) props.getProperty("ftpserver")!= null ? props.getProperty("ftpserver") : "");
-		btnDelete.setSelection(props.getProperty("isdelete")!= null ? Boolean.parseBoolean(props.getProperty("isdelete")) : true);
-		txtURL.setText(props.getProperty("ftpserver") != null ? props.getProperty("ftpserver") : "");
-		
-		LOG.info(props.getProperty("username"));
-		LOG.info("TXTLogin:" + txtLogin);
-		
-		txtLogin.setText(props.getProperty("username") != null ? props.getProperty("username") : "");
-		txtPassword.setText(props.getProperty("password") != null ? props.getProperty("password") : "");
-		txtLimitFiles.setText(props.getProperty("filelimit") != null ? props.getProperty("filelimit") : "");
-		txtDelay.setText(props.getProperty("delay") != null ? props.getProperty("delay") : "");
-		txtRepoPath.setText(props.getProperty("REPPATH") != null ? props.getProperty("REPPATH") : "");
+		txtURL.setText((String) props.getProperty(Config.URL)!= null ? props.getProperty(Config.URL) : "");
+		btnDelete.setSelection(props.getProperty(Config.ISDELETE)!= null ? Boolean.parseBoolean(props.getProperty(Config.ISDELETE)) : true);
+		txtLogin.setText(props.getProperty(Config.LOGIN) != null ? props.getProperty(Config.LOGIN) : "");
+		txtPassword.setText(props.getProperty(Config.PSW) != null ? props.getProperty(Config.PSW) : "");
+		txtFiles.setText(props.getProperty(Config.FILES) != null ? props.getProperty(Config.FILES) : "");
+		txtDelay.setText(props.getProperty(Config.DELAY) != null ? props.getProperty(Config.DELAY) : "");
+		txtRepoPath.setText(props.getProperty(Config.REPPATH) != null ? props.getProperty(Config.REPPATH) : "");
 		
 		LOG.info("Load config properties");
 	}

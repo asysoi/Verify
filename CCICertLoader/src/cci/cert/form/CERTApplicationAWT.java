@@ -27,9 +27,9 @@ import cci.cert.repositiry.FormRepository;
 import cci.cert.util.DesEncrypter;
 
 @Component
-public class OTRSApplicationAWT {
+public class CERTApplicationAWT {
 	
-	public static Logger LOG=Logger.getLogger(OTRSApplicationAWT.class);
+	public static Logger LOG=Logger.getLogger(CERTApplicationAWT.class);
 	private MenuItem startItem;
 	private MenuItem propertyItem;
 	private MenuItem exitItem;
@@ -52,7 +52,7 @@ public class OTRSApplicationAWT {
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				LOG.info("Application started" );
-				new OTRSApplicationAWT().createAndShowGUI();
+				new CERTApplicationAWT().createAndShowGUI();
 			}
 		});
 	}
@@ -64,9 +64,11 @@ public class OTRSApplicationAWT {
 		}
 
 		loadImages();
+		LOG.info(System.getProperty("user.dir"));
+				
 		final TrayIcon trayIcon = new TrayIcon(FormRepository.getInstance()
 				.getLogoffImage(), "OTRS icon");
-		System.getProperty("user.dir");
+		
 
 		final PopupMenu topMenu = new PopupMenu();
 		startItem = new MenuItem(Config.M_START); 
@@ -107,6 +109,8 @@ public class OTRSApplicationAWT {
 			CCIProperty props = CCIProperty.getInstance();
 			props.setProperties(ConfigReader.getInstance().readConfig());
 			DesEncrypter encrypter = new DesEncrypter();
+			props.setProperty(Config.PSW,
+					encrypter.decrypt(props.getProperty(Config.PSW)));
 		} catch (FileNotFoundException ex) {
 			LOG.info("Default properties loading ...");
 		} catch (Exception ex) {
@@ -115,7 +119,7 @@ public class OTRSApplicationAWT {
 	}
 
 	private  Image createImage(String path, String description) {
-		URL imageURL = OTRSApplicationAWT.class.getResource(path);
+		URL imageURL = CERTApplicationAWT.class.getResource(path);
 
 		if (imageURL == null) {
 			LOG.info("Ресурс не найден: " + path);

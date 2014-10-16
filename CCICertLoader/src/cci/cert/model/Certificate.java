@@ -50,9 +50,10 @@ public class Certificate {
 	private String otd_address_home;
 	private String parentnumber = "";
 	private String parentstatus = "";
+	private String denorm;
 	
 	private String childnumber = "";
-	private int child_id = 0;
+	private Integer child_id = 0;
 	
 	public String getChildnumber() {
 		return childnumber;
@@ -60,10 +61,10 @@ public class Certificate {
 	public void setChildnumber(String childnumber) {
 		this.childnumber = childnumber;
 	}
-	public int getChild_id() {
+	public Integer getChild_id() {
 		return child_id;
 	}
-	public void setChild_id(int child_id) {
+	public void setChild_id(Integer child_id) {
 		this.child_id = child_id;
 	}
 	public String getParentnumber() {
@@ -674,5 +675,11 @@ public class Certificate {
 	
 	public void setOtd_id(int otd_id) {
 		this.otd_id = otd_id;
+	}
+	public String getDenorm() {
+		return denorm;
+	}
+	public void setDenorm(String denorm) {
+		this.denorm = denorm;
 	}
 }

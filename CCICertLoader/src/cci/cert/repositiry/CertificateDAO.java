@@ -22,7 +22,7 @@ public interface CertificateDAO {
 
 	public long save(Certificate cert);
 
-	public void update(Certificate cert);
+	public void update(Certificate cert) throws Exception;
 
 	public long getOtdIdBySynonimName(String directory);
 

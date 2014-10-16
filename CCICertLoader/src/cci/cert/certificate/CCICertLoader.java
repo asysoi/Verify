@@ -1,11 +1,11 @@
-package cci.cert.certificate;
+     package cci.cert.certificate;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
-import cci.cert.form.OTRSApplicationAWT;
+import cci.cert.form.CERTApplicationAWT;
 import cci.cert.service.CERTService;
 
 public class CCICertLoader {
@@ -27,8 +27,8 @@ public class CCICertLoader {
 		//		CERTService.class);
 		// service.uploadCertificateFromFTP();
 	
-		OTRSApplicationAWT appl = context.getBean("OTRSApplicationAWT",
-				OTRSApplicationAWT.class);
+		CERTApplicationAWT appl = context.getBean("CERTApplicationAWT",
+				CERTApplicationAWT.class);
 		
 		appl.start();
 

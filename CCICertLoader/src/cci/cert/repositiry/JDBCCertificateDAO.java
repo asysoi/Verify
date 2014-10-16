@@ -173,7 +173,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				+ ":nomercert, :expert, :nblanka, :rukovod, :transport, :marshrut, :otmetka,"
 				+ ":stranav, :stranapr, :status, :koldoplist, :flexp, :unnexp, :expp, "
 				+ ":exps, :expadress, :flimp, :importer, :adressimp, :flsez, :sez,"
-				+ ":flsezrez, :stranap, :otd_id, :parentnumber, :parentstatus)";
+				+ ":flsezrez, :stranap, :otd_id, :parentnumber, :parentstatus, TO_DATE(:datacert,'DD.MM.YY'), :denorm )";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);
 		GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
@@ -206,19 +206,20 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	// ---------------------------------------------------------------
 	// изменить сертификат
 	// ---------------------------------------------------------------
-	public void update(Certificate cert) {
+	public void update(Certificate cert) throws Exception{
 
 		String sql_cert = "update c_cert SET "
+				
 				+ "forms = :forms, unn = :unn, kontrp = :kontrp, kontrs = :kontrs, adress = :adress, poluchat = :poluchat, adresspol = :adresspol, datacert = :datacert,"
 				+ "nomercert = :nomercert, expert = :expert, nblanka = :nblanka, rukovod = :rukovod, transport = :transport, marshrut = :marshrut, otmetka = :otmetka,"
 				+ "stranav = :stranav, stranapr = :stranapr, status = :status, koldoplist = :koldoplist, flexp = :flexp, unnexp = :unnexp, expp = :expp, "
 				+ "exps = :exps, expadress = :expadress, flimp = :flimp, importer = :importer, adressimp = :adressimp, flsez = :flsez, sez = :sez,"
-				+ "flsezrez = :flsezrez, stranap = :stranap, otd_id = :otd_id; parentnumber = :parentnumber, parentstatus = :parentstatus "
+				+ "flsezrez = :flsezrez, stranap = :stranap, otd_id = :otd_id, parentnumber = :parentnumber, parentstatus = :parentstatus, issuedate = TO_DATE(:datacert,'DD.MM.YY') "
 				+ "WHERE cert_id = :cert_id";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);
 
-		try {
+		//try {
 
 			int row = template.update(sql_cert, parameters);
 
@@ -237,10 +238,10 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				int[] updateCounts = template.batchUpdate(sql_product, batch);
 			}
 
-		} catch (Exception ex) {
-			LOG.error("Ошибка сохранения сертификата " + cert.getNomercert());
-			ex.printStackTrace();
-		}
+		//} catch (Exception ex) {
+		//	LOG.error("Ошибка сохранения сертификата " + cert.getNomercert());
+		//	ex.printStackTrace();
+		//}
 
 	}
 
@@ -285,7 +286,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		long id = 0;
 
 		try {
-			String sql = "select otd_id from C_OTD WHERE OTD_NAME_SYN = ?";
+			String sql = "select id from C_OTD WHERE NAME_SYN = ?";
 			id = template.getJdbcOperations().queryForObject(sql,
 					new Object[] { directory }, Long.class);
 		} catch (Exception ex) {
