@@ -1,12 +1,12 @@
 package cci.cert.web.controller;
 
 import java.util.ArrayList;
-
 import java.util.List;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import cci.cert.config.DownloadConfig;
 import cci.cert.service.Filter;
 import cci.purchase.service.FilterCondition;
 import cci.purchase.web.controller.HeaderTableView;
@@ -32,6 +32,7 @@ public class ViewManager {
 	private Boolean onfilter;
 	private String url;
 	private String fullsearchvalue;
+	private DownloadConfig downloadconfig;
 		
 	public String getFullsearchvalue() {
 		return fullsearchvalue;
@@ -253,6 +254,14 @@ public class ViewManager {
 	
 	public void setFilter(Filter filter) {
 		this.filter = filter;
+	}
+
+	public DownloadConfig getDownloadconfig() {
+		return downloadconfig;
+	}
+
+	public void setDownloadconfig(DownloadConfig downloadconfig) {
+		this.downloadconfig = downloadconfig;
 	}
 	
 

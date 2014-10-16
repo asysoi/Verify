@@ -190,4 +190,20 @@ public class CERTService {
 		}
 		return forms;
 	}
+
+	public List<Certificate> readCertificates(String orderby, String order,
+			SQLBuilder builder) {
+		Locale.setDefault(new Locale("en", "en"));
+
+		List<Certificate> certs = null;
+
+		try {
+			certs = certificateDAO.getCertificates(orderby,
+					order, builder);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return certs;
+	}
 }

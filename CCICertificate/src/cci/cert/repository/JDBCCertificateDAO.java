@@ -328,4 +328,20 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		return (List<String>) template.getJdbcOperations().queryForList(sql,
 				String.class);
 	}
+
+	
+	// ---------------------------------------------------------------
+	// Get list of certificates by filter 
+	// ---------------------------------------------------------------
+	public List<Certificate> getCertificates(String orderby, String order,
+			SQLBuilder builder) {
+		long start = System.currentTimeMillis();
+		String sql = " SELECT cert.* "
+				+ " FROM CERT_VIEW cert " + builder.getWhereClause() + 				
+				"ORDER BY " +  orderby + " " + order;
+
+		System.out.println("Get certificates: " + sql);
+		return this.template.getJdbcOperations().query(sql,
+				new BeanPropertyRowMapper<Certificate>(Certificate.class));
+	}
 }

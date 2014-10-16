@@ -3,8 +3,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
-<spring:url value="resources/css/login.css" var="LoginCss" />
-<link href="${LoginCss}" rel="stylesheet" />
+<spring:url value="resources/css/cci.css" var="CCICss" />
+<link href="${CCICss}" rel="stylesheet" />
 
 <script>
 	function clear() {
@@ -26,9 +26,7 @@
 	function close() {
 		$("#pview").dialog("close");
 	}
-</script>
-
-<script>
+	
 	$(document).ready(function() {
 		$("#pview").dialog({
 			autoOpen : false
@@ -67,8 +65,10 @@
         link="filter.do?&pagesize=${vmanager.pagesize}&orderby=${vmanager.orderby}&order=${vmanager.order}";
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Фильтр поиска');
-		$("#pview").dialog("option", "width", 650);
+		$("#pview").dialog("option", "width", 740);
+		$("#pview").dialog("option", "height", 610);
 		$("#pview").dialog("option", "modal", true);
+		$("#pview").dialog("option", "resizable", false );
 		$("#pview").dialog({ buttons: [ { text: "Применить",  click : function() { submit(); } },  
 				               { text: "Очистить Все ", click: function() { clear(); } },
  				               { text: "Отменить изменения", click: function() { reset(); } },
@@ -79,27 +79,75 @@
 		$("#pview").dialog("open");
 	}
 	
+
+	function downloadCertificates() {
+		link = "config.do";
+		$("#pview").load(link);
+		$("#pview").dialog("option", "title", 'Экспорт списка сертификатов');
+		$("#pview").dialog("option", "width", 550);
+		$("#pview").dialog("option", "height", 440);
+		$("#pview").dialog("option", "modal", true);
+		$("#pview").dialog("option", "resizable", false);
+		$("#pview").dialog({
+			buttons : [ { text : "Загрузить",	click : function() {download();}}, 
+ 				{ text : "Очистить Все ", click : function() {clearconfig(); }}, 
+ 				{ text : "Выбрать Все ", click : function() {selectall(); }}, 
+				{ text : "Закрыть",	click : function() {$(this).dialog("close");}
+			} ]
+		});
+
+		$("#pview").dialog("option", "position", {
+			my : "center",
+			at : "center",
+			of : window
+		});
+		$("#pview").dialog("open");
+	}
+
+
+	function clearconfig() {
+	      $('form input[type="checkbox"]').prop('checked', false);
+	}
+
+	function selectall() {
+	      $('form input[type="checkbox"]').prop('checked', true);
+	}
+
+	function download() {
+		url = $("#config").attr("action");
+		$.post(url, $("#config").serialize());
+		
+   		var hiddenIFrameID = 'hiddenDownloader';
+        var iframe = document.getElementById(hiddenIFrameID);
+        
+    	if (iframe == null) {
+        	iframe = document.createElement('iframe');
+        	iframe.id = hiddenIFrameID;
+	    	iframe.style.display = 'none';
+	    	document.body.appendChild(iframe);
+    	}
+    	iframe.src = "download.do";
+		
+		//$("#pview").dialog("close");
+	}
+
 </script>
+
 
 <div id="listvindow" class="col-md-10 col-md-offset-2 main">
 	<h3>Список сертификатов</h3>
 	<table style="width: 100%">
 		<tr>
 
-			<td style="width: 70%">
-			    <!--  <input id="fullsearchvalue"
-				value="${vmanager.fullsearchvalue}" />
-				<a href="javascript:goToList('certs.do?page=1&pagesize=${vmanager.pagesize}&orderby=${vmanager.orderby}&order=
-
-${vmanager.order}');">
-				<img src="resources/images/red_search.png" alt="Искать"/></a> -->
-				
+			<td style="width: 60%">
                 <input id="filter" type="checkbox"	onclick="javascript:swithFilter();" >
                 <span id="filterlink"></span>
                 </input></td>
 
-			<td style="width: 30%; text-align: right">Строк в списке: <c:forEach
-					items="${sizes}" var="item">
+			<td style="width: 40%; text-align: right">
+				<a href="javascript:downloadCertificates();"><img src="resources/images/exp_excel.png" alt="Загрузить"/></a>
+				   &nbsp;			        
+			       Строк в списке: <c:forEach items="${sizes}" var="item">
 	           	   &nbsp;	
 	               <a
 						href="javascript: goToList('certs.do?page=1&pagesize=${item}&orderby=${vmanager.orderby}

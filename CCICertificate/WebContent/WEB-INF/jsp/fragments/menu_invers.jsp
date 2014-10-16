@@ -66,6 +66,7 @@
 						<li><a href="cert.do">Добавить Сертификат</a></li>
 						<li><a href="certs.do">Список Сертификатов</a></li>
 						<li><a href="check.do">Верификация</a></li>
+						<li><a href="config.do">Конфигурация</a></li>
 						<li><a href="#">Акты экспертиз</a></li>
 						<li><a href="find.do">Найти</a></li>
 						<li class="divider"></li>

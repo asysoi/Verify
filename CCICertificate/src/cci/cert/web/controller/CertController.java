@@ -5,6 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,12 +21,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
+import cci.cert.config.DownloadConfig;
 import cci.cert.model.Certificate;
 import cci.cert.repository.SQLBuilder;
 import cci.cert.repository.SQLBuilderCertificate;
 import cci.cert.service.CERTService;
 import cci.cert.service.Filter;
 import cci.cert.service.FilterCertificate;
+import cci.cert.service.XSLWriter;
 
 @Controller
 @SessionAttributes({ "certfilter", "vmanager" })
@@ -90,6 +94,81 @@ public class CertController {
 		return certificate;
 	}
 
+	
+	@RequestMapping(value = "/config.do", method = RequestMethod.GET)
+	public String openConfig(ModelMap model) {
+		ViewManager vmanager = (ViewManager) model.get("vmanager");
+
+		if (vmanager == null) {
+			vmanager = initViewManager(model);
+		}
+       
+		if (vmanager.getDownloadconfig() == null) {
+			vmanager.setDownloadconfig(new DownloadConfig());
+		}
+		
+		model.addAttribute("downloadconfig", vmanager.getDownloadconfig());
+		model.addAttribute("headermap", vmanager.getDownloadconfig().getHeadermap());
+		return "fragments/config";
+	}
+
+	@RequestMapping(value = "/config.do", method = RequestMethod.POST)
+	public String submitConfig(@ModelAttribute("downloadconfig") DownloadConfig config,
+			BindingResult result, SessionStatus status, ModelMap model) {
+		
+		ViewManager vmanager = (ViewManager) model.get("vmanager");
+		vmanager.setDownloadconfig(config);
+                
+		model.addAttribute("downloadconfig", vmanager.getDownloadconfig());
+		model.addAttribute("headermap", config.getHeadermap());
+		return "fragments/config";
+	}
+	
+	@RequestMapping(value = "/download.do", method = RequestMethod.GET)
+	public void XSLFileDownload(HttpSession session,
+			HttpServletResponse response, ModelMap model) {
+		try {
+			
+            System.out.println("Download started...");   
+			ViewManager vmanager = (ViewManager) model.get("vmanager");
+
+			Filter filter = vmanager.getFilter();
+			if (filter == null) {
+				if (model.get("certfilter") != null) {
+					filter = (Filter) model.get("certfilter");
+				} else {
+					filter = new FilterCertificate();
+					model.addAttribute("certfilter", filter);
+				}
+				vmanager.setFilter(filter);
+			}
+
+			if (vmanager.getDownloadconfig() == null) {
+				vmanager.setDownloadconfig(new DownloadConfig());
+			}
+
+			SQLBuilder builder = new SQLBuilderCertificate();
+			builder.setFilter(filter);
+			List<Certificate> certs = certService.readCertificates(
+					vmanager.getOrderby(), vmanager.getOrder(), builder);
+			
+			System.out.println("Download. Certificates loaded from database..."); 
+			response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+			//response.setContentType("application/octet-stream");
+			response.setHeader("Content-Disposition",
+					"attachment; filename=certificates.xlsx");
+			(new XSLWriter()).getWorkbook(certs,
+					vmanager.getDownloadconfig().getHeaders(),
+					vmanager.getDownloadconfig().getFields()).write(
+					response.getOutputStream());
+			response.flushBuffer();
+			System.out.println("Download finished...");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
 	@RequestMapping(value = "/certs.do", method = RequestMethod.GET)
 	public String listcerts(
 			// HttpServletRequest request,
@@ -99,8 +178,8 @@ public class CertController {
 			@RequestParam(value = "order", required = false) String order,
 			@RequestParam(value = "filter", required = false) Boolean onfilter,
 			ModelMap model) {
-		
-        long start = System.currentTimeMillis();   
+
+		long start = System.currentTimeMillis();
 		System.out
 				.println("=========================== GET CERT LIST =================================== >");
 
@@ -109,15 +188,7 @@ public class CertController {
 		ViewManager vmanager = (ViewManager) model.get("vmanager");
 
 		if (vmanager == null) {
-			vmanager = new ViewManager();
-			vmanager.setHnames(new String[] { "Номер Сертификата", "Отделение",
-					"Грузоотправитель/Экспортер", "Номер бланка", "Дата", "Доп. лист", 
-					"Замена." });
-			vmanager.setOrdnames(new String[] { "nomercert", "name", "kontrp",
-					"nblanka", "issuedate", "koldoplist", "parent_id" });
-			vmanager.setWidths(new int[] { 10, 20, 40, 8, 8, 9, 5 });
-			model.addAttribute("vmanager", vmanager);
-			// request.getSession().setAttribute("vmanager", vmanager);
+			vmanager = initViewManager(model);
 		}
 
 		if (orderby == null || orderby.isEmpty())
@@ -134,7 +205,7 @@ public class CertController {
 		vmanager.setOnfilter(onfilter);
 		vmanager.setUrl("certs.do");
 		long step1 = System.currentTimeMillis();
-		
+
 		Filter filter = null;
 		if (onfilter) {
 			filter = vmanager.getFilter();
@@ -149,7 +220,7 @@ public class CertController {
 				vmanager.setFilter(filter);
 			}
 		}
-        
+
 		long step2 = System.currentTimeMillis();
 		SQLBuilder builder = new SQLBuilderCertificate();
 		long step21 = System.currentTimeMillis();
@@ -172,13 +243,27 @@ public class CertController {
 		model.addAttribute("first_page", vmanager.getFirstPageLink());
 		model.addAttribute("pages", vmanager.getPagesList());
 		model.addAttribute("sizes", vmanager.getSizesList());
-		model.addAttribute("timeduration", (System.currentTimeMillis() - start) + " = " +
-		                                   (step1 - start) + "+" + (step2 -step1) + "+" + (step21 - step2) +
-		                                   (step22 - step21) + "+" +(step23 - step22) + "+" +
-		                                   (step3 - step23) + "+" +(step4 - step3) + "+" +
-		                                   (System.currentTimeMillis() - step4));
+		model.addAttribute("timeduration", (System.currentTimeMillis() - start)
+				+ " = " + (step1 - start) + "+" + (step2 - step1) + "+"
+				+ (step21 - step2) + (step22 - step21) + "+"
+				+ (step23 - step22) + "+" + (step3 - step23) + "+"
+				+ (step4 - step3) + "+" + (System.currentTimeMillis() - step4));
 
 		return "listcertificates";
+	}
+
+	private ViewManager initViewManager(ModelMap model) {
+		ViewManager vmanager = new ViewManager();
+		vmanager.setHnames(new String[] { "Номер Сертификата", "Отделение",
+				"Грузоотправитель/Экспортер", "Номер бланка", "Дата",
+				"Доп. лист", "Замена." });
+		vmanager.setOrdnames(new String[] { "nomercert", "name", "kontrp",
+				"nblanka", "issuedate", "koldoplist", "parent_id" });
+		vmanager.setWidths(new int[] { 10, 20, 40, 8, 8, 9, 5 });
+		model.addAttribute("vmanager", vmanager);
+		// request.getSession().setAttribute("vmanager", vmanager);
+
+		return vmanager;
 	}
 
 	@RequestMapping(value = "/filter.do", method = RequestMethod.GET)
@@ -216,7 +301,7 @@ public class CertController {
 
 		fc.loadViewcertificate(viewfilter.getViewcertificate());
 		fc.loadCondition(viewfilter.getCondition());
-		
+
 		model.addAttribute("certfilter", fc);
 		return "fragments/filter";
 	}
@@ -253,8 +338,9 @@ public class CertController {
 				retpage = "certificate";
 			} else {
 				model.addAttribute("cert", cert);
-				String msg = "Сертификат номер [" + cert.getNomercert() + "] на бланке ["
-						+ cert.getNblanka() + "] от [" + cert.getDatacert()
+				String msg = "Сертификат номер [" + cert.getNomercert()
+						+ "] на бланке [" + cert.getNblanka() + "] от ["
+						+ cert.getDatacert()
 						+ "] не найден в центральном хранилище";
 				model.addAttribute("msg", msg);
 				retpage = "fragments/message";
@@ -288,7 +374,7 @@ public class CertController {
 	public List<String> populateDepartmentssList() {
 		return certService.getDepartmentsList();
 	}
-	
+
 	@ModelAttribute("forms")
 	public List<String> populateFormsList() {
 		return certService.getFormsList();

@@ -33,5 +33,8 @@ public interface CertificateDAO {
 	public Map<String, String> getCountriesList();
 
 	public List<String> getFormsList();
+
+	public List<Certificate> getCertificates(String orderby, String order,
+			SQLBuilder builder);
 	
 }
