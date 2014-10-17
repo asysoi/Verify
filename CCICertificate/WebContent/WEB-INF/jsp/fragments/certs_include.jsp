@@ -84,8 +84,8 @@
 		link = "config.do";
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Экспорт списка сертификатов');
-		$("#pview").dialog("option", "width", 550);
-		$("#pview").dialog("option", "height", 440);
+		$("#pview").dialog("option", "width", 850);
+		$("#pview").dialog("option", "height", 520);
 		$("#pview").dialog("option", "modal", true);
 		$("#pview").dialog("option", "resizable", false);
 		$("#pview").dialog({
@@ -223,7 +223,7 @@ ${vmanager.orderby}
 	
 	<div id="pview" name="pview">
 	</div>
-    <p>${timeduration}</p> 
+    <p>Время загрузки страницы в милисек.: ${timeduration}</p> 
 </div>
 
 

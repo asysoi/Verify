@@ -331,14 +331,13 @@ public class JDBCCertificateDAO implements CertificateDAO {
 
 	
 	// ---------------------------------------------------------------
-	// Get list of certificates by filter 
+	// Get full list of certificates by filter with tovar 
 	// ---------------------------------------------------------------
 	public List<Certificate> getCertificates(String orderby, String order,
 			SQLBuilder builder) {
 		long start = System.currentTimeMillis();
-		String sql = " SELECT cert.* "
-				+ " FROM CERT_VIEW cert " + builder.getWhereClause() + 				
-				"ORDER BY " +  orderby + " " + order;
+		String sql = " SELECT * FROM CERT_VIEW_TOFILE " 
+				+ builder.getWhereClause() + " ORDER BY " +  orderby + " " + order;
 
 		System.out.println("Get certificates: " + sql);
 		return this.template.getJdbcOperations().query(sql,

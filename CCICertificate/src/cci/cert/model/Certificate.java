@@ -51,9 +51,21 @@ public class Certificate {
 	private String parentnumber = "";
 	private String parentstatus = "";
 	// private String denorm;
+	// denorm product
+	private String tovar;
+	// список продукции
+	private List<Product> products;
 	private String childnumber = "";
 	private Integer child_id = 0;
 	private Long parent_id;
+
+	public String getTovar() {
+		return tovar;
+	}
+
+	public void setTovar(String tovar) {
+		this.tovar = tovar;
+	}
 
 	public String getChildnumber() {
 		return childnumber;
@@ -87,9 +99,7 @@ public class Certificate {
 		this.parentstatus = parentstatus;
 	}
 
-	// список продукции
-	private List<Product> products;
-
+	
 	// private Party otdelenie;
 
 	public Long getCert_id() {
