@@ -1,4 +1,4 @@
-package cci.cert.repositiry;
+package cci.cert.repository;
 
 import java.awt.Image;
 import java.awt.PopupMenu;

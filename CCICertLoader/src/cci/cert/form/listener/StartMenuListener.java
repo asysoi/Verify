@@ -9,7 +9,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import cci.cert.certificate.Config;
-import cci.cert.repositiry.FormRepository;
+import cci.cert.repository.FormRepository;
 import cci.cert.service.CERTService;
 
 public class StartMenuListener implements ActionListener {

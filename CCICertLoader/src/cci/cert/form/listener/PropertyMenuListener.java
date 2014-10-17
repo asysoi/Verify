@@ -9,7 +9,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 import cci.cert.form.PropertiesForm;
-import cci.cert.repositiry.FormRepository;
+import cci.cert.repository.FormRepository;
 
 
 public class PropertyMenuListener implements ActionListener {

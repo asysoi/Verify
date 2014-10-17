@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 import cci.cert.certificate.Config;
 import cci.cert.model.Certificate;
-import cci.cert.repositiry.CertificateDAO;
+import cci.cert.repository.CertificateDAO;
 import cci.cert.util.XMLService;
 
 @Component

@@ -20,7 +20,7 @@ import cci.cert.certificate.CCICertLoader;
 import cci.cert.certificate.CCIProperty;
 import cci.cert.certificate.Config;
 import cci.cert.model.Certificate;
-import cci.cert.repositiry.CertificateDAO;
+import cci.cert.repository.CertificateDAO;
 import cci.cert.util.XMLService;
 
 @Component

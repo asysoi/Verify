@@ -10,7 +10,7 @@
 
     <context:component-scan base-package="cci.cert" />
     
-    <bean id="certificateDAO" class="cci.cert.repositiry.JDBCCertificateDAO">
+    <bean id="certificateDAO" class="cci.cert.repository.JDBCCertificateDAO">
         <property name="dataSource" ref="dataSource"/>
     </bean>
     

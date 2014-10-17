@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 
 import cci.cert.certificate.CCICertLoader;
 import cci.cert.certificate.Config;
-import cci.cert.repositiry.FormRepository;
+import cci.cert.repository.FormRepository;
 
 
 public class ExitMenuListener implements ActionListener {

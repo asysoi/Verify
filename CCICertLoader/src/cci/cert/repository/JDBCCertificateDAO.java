@@ -1,4 +1,4 @@
-package cci.cert.repositiry;
+package cci.cert.repository;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
@@ -193,7 +194,18 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				SqlParameterSource[] batch = SqlParameterSourceUtils
 						.createBatch(cert.getProducts().toArray());
 				int[] updateCounts = template.batchUpdate(sql_product, batch);
+				
+				// create denorm record
+				String tovar = "";
+				for (Product product: cert.getProducts()) {
+					tovar += product.getTovar() +  ", " + product.getKriter() + ", " + product.getVes() + "; "; 
+				}
+				
+				sql_product = "insert into C_PRODUCT_DENORM values (:cert_id, :tovar)";
+				parameters = new MapSqlParameterSource().addValue("cert_id", cert_id).addValue("tovar",tovar);
+				template.update(sql_product, parameters);
 			}
+			
 
 		} catch (Exception ex) {
 			LOG.error("Ошибка добавления сертификата " + cert.getNomercert());

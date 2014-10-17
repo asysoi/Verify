@@ -23,7 +23,7 @@ import cci.cert.form.listener.ApplicationListener;
 import cci.cert.form.listener.ExitMenuListener;
 import cci.cert.form.listener.PropertyMenuListener;
 import cci.cert.form.listener.StartMenuListener;
-import cci.cert.repositiry.FormRepository;
+import cci.cert.repository.FormRepository;
 import cci.cert.util.DesEncrypter;
 
 @Component
