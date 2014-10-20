@@ -10,7 +10,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import cci.cert.config.Config;
 import cci.cert.model.Certificate;
 import cci.cert.repository.CertificateDAO;
 import cci.cert.repository.SQLBuilder;
@@ -80,11 +79,11 @@ public class CERTService {
 			Long start = System.currentTimeMillis();
 			int i = 0;
 
-			for (String filename : new File(Config.XMLPATH).list()) {
+			for (String filename : new File("[path to file]").list()) {
 				try {
 					i++;
 					cert = xmlService
-							.loadCertificate(Config.XMLPATH + filename);
+							.loadCertificate("[path to file]" + filename);
 					printCertificate(cert);
 					certificateDAO.save(cert);
 				} catch (Exception ex) {

@@ -1,11 +1,13 @@
 package cci.cert.model;
 
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import org.springframework.stereotype.Component;
+
 
 @XmlRootElement(name = "cert")
 @Component
@@ -50,14 +52,15 @@ public class Certificate {
 	private String otd_address_home;
 	private String parentnumber = "";
 	private String parentstatus = "";
-	// private String denorm;
-	// denorm product
 	private String tovar;
+	// private String denorm;
 	// список продукции
 	private List<Product> products;
 	private String childnumber = "";
 	private Integer child_id = 0;
 	private Long parent_id;
+	private ProductIterator iterator;
+	public int cursor;
 
 	public String getTovar() {
 		return tovar;
@@ -98,9 +101,6 @@ public class Certificate {
 	public void setParentstatus(String parentstatus) {
 		this.parentstatus = parentstatus;
 	}
-
-	
-	// private Party otdelenie;
 
 	public Long getCert_id() {
 		return cert_id;
@@ -816,5 +816,59 @@ public class Certificate {
 	//	this.denorm = denorm;
 	//}
 
+	
+	public ProductIterator getIterator() {
+		if (iterator == null) {
+			iterator = new ProductIteratorImpl();
+		}
+		return iterator;
+	}
+
+	public class ProductIteratorImpl implements ProductIterator {
+
+		public ProductIteratorImpl() {
+			cursor = -1;
+		}
+
+		public Product first() {
+			Product product = null;
+			if (products != null && products.size() > 0) {
+				cursor = 0;
+				product = products.get(cursor);
+			}
+			return product;
+		}
+
+		public boolean hasNext() {
+			return ((products != null) && (products.size() > 0) && (cursor < products
+					.size() - 1));
+		}
+
+		public Product next() {
+			Product product = null;
+			if (products != null && products.size() > 0
+					&& (cursor < products.size() - 1)) {
+				cursor++;
+				product = products.get(cursor);
+			}
+			return product;
+		}
+
+		public Product prev() {
+			Product product = null;
+			if (products != null && products.size() > 0 && (cursor > 0)) {
+				cursor--;
+				product = products.get(cursor);
+			}
+			return product;
+		}
+
+		@Override
+		public void reset() {
+			cursor = -1;
+		}
+
+	}
+	
 	
 }
