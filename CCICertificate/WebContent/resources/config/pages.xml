@@ -111,9 +111,9 @@
 <boxes>
 <box>
 <xl>20</xl>
-<yl>287</yl>
+<yl>258</yl>
 <xr>111</xr>
-<yr>258</yr>
+<yr>287</yr>
 <border>15</border>
 <widthborderline>1</widthborderline>
 <colorfill></colorfill>
@@ -121,9 +121,9 @@
 	    
 <box>
 <xl>20</xl>
-<yl>258</yl>
+<yl>233</yl>
 <xr>111</xr>
-<yr>233</yr>
+<yr>258</yr>
 <border>15</border>
 <widthborderline>1</widthborderline>
 <colorfill></colorfill>
@@ -131,9 +131,9 @@
 	  
 <box>
 <xl>20</xl>
-<yl>233</yl>
+<yl>207</yl>
 <xr>111</xr>
-<yr>207</yr>
+<yr>233</yr>
 <border>15</border>
 <widthborderline>1</widthborderline>
 <colorfill></colorfill>
@@ -141,9 +141,9 @@
     
 <box>
 <xl>111</xl>
-<yl>287</yl>
+<yl>233</yl>
 <xr>201</xr>
-<yr>233</yr>
+<yr>287</yr>
 <border>15</border>
 <widthborderline>1</widthborderline>
 <colorfill></colorfill>
@@ -151,9 +151,9 @@
 
 <box>
 <xl>111</xl>
-<yl>233</yl>
+<yl>207</yl>
 <xr>201</xr>
-<yr>207</yr>
+<yr>233</yr>
 <border>15</border>
 <widthborderline>1</widthborderline>
 <colorfill></colorfill>
@@ -161,9 +161,9 @@
 	  
 <box>
 <xl>20</xl>
-<yl>111</yl>
+<yl>13</yl>
 <xr>111</xr>
-<yr>13</yr>
+<yr>111</yr>
 <border>15</border>
 <widthborderline>1</widthborderline>
 <colorfill></colorfill>
@@ -171,9 +171,9 @@
 	    
 <box>
 <xl>111</xl>
-<yl>111</yl>
+<yl>13</yl>
 <xr>201</xr>
-<yr>13</yr>
+<yr>111</yr>
 <border>15</border>
 <widthborderline>1</widthborderline>
 <colorfill></colorfill>
@@ -184,12 +184,12 @@
 <box>
 <text>1. Грузоотправитель/экспортер (наименование и адрес)</text>
 <xl>22</xl>
-<yl>287</yl>
+<yl>273</yl>
 <xr>109</xr>
-<yr>278</yr>
+<yr>284</yr>
 <font>ARIAL</font>
-<fontsize>6</fontsize>
-<widthtextline>0.3</widthtextline>
+<fontsize>7</fontsize>
+<widthtextline>0.2</widthtextline>
 <galign>LEFT</galign>
 <valign>MIDDLE</valign>
 <border>15</border>
@@ -202,12 +202,12 @@
 <box>
 <text>2. Грузополучатель/импорттер (наименование и адрес)</text>
 <xl>22</xl>
-<yl>259</yl>
+<yl>250</yl>
 <xr>109</xr>
-<yr>250</yr>
+<yr>255</yr>
 <font>ARIAL</font>
-<fontsize>6</fontsize>
-<widthtextline>0.3</widthtextline>
+<fontsize>7</fontsize>
+<widthtextline>0.2</widthtextline>
 <galign>LEFT</galign>
 <valign>MIDDLE</valign>
 <border>15</border>
@@ -220,12 +220,12 @@
 <box>
 <text>3. Средства транспрорта и маршрут следования (насколько это известно)</text>
 <xl>22</xl>
-<yl>233</yl>
+<yl>221</yl>
 <xr>109</xr>
-<yr>224</yr>
+<yr>230</yr>
 <font>ARIAL</font>
-<fontsize>6</fontsize>
-<widthtextline>0.1</widthtextline>
+<fontsize>7</fontsize>
+<widthtextline>0.2</widthtextline>
 <galign>LEFT</galign>
 <valign>MIDDLE</valign>
 <border>15</border>
@@ -238,17 +238,17 @@
 <box>
 <text>4. № </text>
 <xl>113</xl>
-<yl>287</yl>
+<yl>278</yl>
 <xr>199</xr>
-<yr>278</yr>
+<yr>284</yr>
 <font>ARIAL</font>
-<fontsize>6</fontsize>
+<fontsize>7</fontsize>
 <widthtextline>0.1</widthtextline>
 <galign>LEFT</galign>
 <valign>MIDDLE</valign>
 <border>15</border>
 <widthborderline>0</widthborderline>
-<leading>6</leading>
+<leading>0</leading>
 <colorfill></colorfill>
 <rotation></rotation>
 </box>
@@ -256,9 +256,9 @@
 <box>
 <text>СЕРТИФИКАТ</text>
 <xl>152</xl>
-<yl>278</yl>
+<yl>274</yl>
 <xr>185</xr>
-<yr>274</yr>
+<yr>278</yr>
 <font>ARIAL</font>
 <fontsize>6</fontsize>
 <widthtextline>0.3</widthtextline>
@@ -274,9 +274,9 @@
 <box>
 <text>ПРОИСХОЖДЕНИИ ТОВАРА </text>
 <xl>152</xl>
-<yl>274</yl>
+<yl>270</yl>
 <xr>185</xr>
-<yr>270</yr>
+<yr>274</yr>
 <font>ARIAL</font>
 <fontsize>6</fontsize>
 <widthtextline>0.3</widthtextline>
@@ -292,9 +292,9 @@
 <box>
 <text>форма СТ-1</text>
 <xl>152</xl>
-<yl>270</yl>
+<yl>266</yl>
 <xr>185</xr>
-<yr>266</yr>
+<yr>270</yr>
 <font>ARIAL</font>
 <fontsize>6</fontsize>
 <widthtextline>0.3</widthtextline>
@@ -312,13 +312,13 @@
 <box>
 <text>5. Для служебных отметок</text>
 <xl>113</xl>
-<yl>233</yl>
+<yl>221</yl>
 <xr>199</xr>
-<yr>224</yr>
+<yr>230</yr>
 <font>ARIAL</font>
-<fontsize>6</fontsize>
+<fontsize>7</fontsize>
 <widthtextline>0.1</widthtextline>
-<galign>CENTER</galign>
+<galign>LEFT</galign>
 <valign>MIDDLE</valign>
 <border>15</border>
 <widthborderline>0</widthborderline>
@@ -330,9 +330,9 @@
 
 <table>
 <xl>20</xl>
-<yl>207</yl>
+<yl>111</yl>
 <xr>201</xr>
-<yr>111</yr>
+<yr>207</yr>
 <colnumber>6</colnumber>
 <colwidth>
 	<col number="0">12</col>
@@ -355,11 +355,10 @@
 <bodyrow  height="1">
     <cell number="0" font="ARIAL" fsize="7" align="CENTER" border="12" valign="TOP" bwidth="1"></cell>
 	<cell number="1" font="ARIAL" fsize="7" align="LEFT" border="12" valign="TOP" bwidth="1"></cell>
-	<cell number="2" font="ARIAL" fsize="7" align="CENTER" border="12" valign="TOP" bwidth="1"></cell>
-	<cell number="3" font="ARIAL" fsize="7" align="CENTER" border="12" valign="TOP" bwidth="1"></cell>
-	<cell number="4" font="ARIAL" fsize="7" align="CENTER" border="12" valign="TOP" bwidth="1"></cell>
-	<cell number="5" font="ARIAL" fsize="7" align="CENTER" border="12" valign="TOP" bwidth="1"></cell>
-	<cell number="6" font="ARIAL" fsize="7" align="CENTER" border="12" valign="TOP" bwidth="1.5" colorfill="yes"></cell>
+	<cell number="2" font="ARIAL" fsize="7" align="LEFT" border="12" valign="TOP" bwidth="1"></cell>
+	<cell number="3" font="ARIAL" fsize="7" align="LEFT" border="12" valign="TOP" bwidth="1"></cell>
+	<cell number="4" font="ARIAL" fsize="7" align="LEFT" border="12" valign="TOP" bwidth="1"></cell>
+	<cell number="5" font="ARIAL" fsize="7" align="LEFT" border="12" valign="TOP" bwidth="1"></cell>
 </bodyrow>
 </table>
 
