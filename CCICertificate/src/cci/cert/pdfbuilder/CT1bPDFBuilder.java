@@ -1,6 +1,7 @@
 package cci.cert.pdfbuilder;
 
 import cci.cert.model.Certificate;
+import cci.cert.service.CountryConverter;
 
 public class CT1bPDFBuilder extends PDFBuilder {
 	
@@ -9,21 +10,27 @@ public class CT1bPDFBuilder extends PDFBuilder {
 
 		String str = "";
 
-		if ("exporter".equals(map)) {
-			if (certificate.getKontrp() != null) {
-			   str = certificate.getKontrp()  
-				+ certificate.getAdress();
-			}
-		} else if ("importer".equals(map)) {
-			if (certificate.getImporter() != null) {
-			  str = certificate.getImporter();
-			}
-		} else if ("use".equals(map)) {
-			str = certificate.getAdress();
-		} else if ("number".equals(map)) {
-			str = certificate.getAdressimp();
-		} else if ("listammount".equals(map)) {
-			str = "";
+		if ("certnumber".equals(map)) {
+			str = certificate.getNomercert();
+		} else if ("department".equals(map)) {
+			str = "Унитарное предприятие по оказанию услуг "
+					+ '"' + certificate.getOtd_name() + '"' + " "
+					+ certificate.getOtd_address_index() + ", "
+					+ certificate.getOtd_address_city() + ", "
+					+ certificate.getOtd_address_line() + ", "
+					+ certificate.getOtd_address_home() + "";
+		} else if ("expert".equals(map)) {
+			str = certificate.getExpert() == null ? "" : certificate.getExpert() ;
+		} else if ("customer".equals(map)) {
+			str = certificate.getRukovod() == null ? "" : certificate.getRukovod();
+		} else if ("dateexpert".equals(map)) {
+			str = certificate.getDatacert();
+		} else if ("datecustomer".equals(map)) {
+			str = certificate.getDatacert();
+		} else if ("issuecountry".equals(map)) {
+			str = (certificate.getStranap() == null ? "Республике Беларусь" : CountryConverter.getCountryNameByCode(certificate.getStranap()));
+		}  else if ("listnumber".equals(map)) {
+			str = "" + certificate.getCurrentlist();  
 		}
 
 		return str;

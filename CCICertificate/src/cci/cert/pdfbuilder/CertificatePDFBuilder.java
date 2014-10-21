@@ -68,13 +68,15 @@ public class CertificatePDFBuilder {
 
 	private void createMain(Certificate cert) throws DocumentException, IOException {
 		String pagename = "CT-1";
+		cert.setCurrentlist(0);  // start from main certification list
 		
 		while (cert.getIterator().hasNext()) {
 		    pconfig = xreader.getPDFPageConfig(pagename);
 		    PDFBuilder pmaker = PDFBuilderFactory.getPADFBuilder(pagename);
 		    pmaker.createPDFPage(writer, cert, pconfig);
 		    pagename = pconfig.getNextPage();
-		    document.newPage();
+		    cert.setCurrentlist(cert.getCurrentlist() + 1);
+;		    document.newPage();
 		}
 	}
 	

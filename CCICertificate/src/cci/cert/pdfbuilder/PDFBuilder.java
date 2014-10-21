@@ -151,8 +151,8 @@ public abstract class PDFBuilder {
 
 	public void makeTexBoxtInAbsolutePosition(PdfWriter writer, String text,
 			BoxConfig config) throws IOException, DocumentException {
-		System.out.println("makeTexBoxtInAbsolutePosition");
-		System.out.println(config);
+		//System.out.println("makeTexBoxtInAbsolutePosition");
+		//System.out.println(config);
 		PdfContentByte canvas = writer.getDirectContent();
 		canvas.saveState();
 		canvas.beginText();
@@ -177,7 +177,7 @@ public abstract class PDFBuilder {
 
 	public void makeBorderedBoxtInAbsolutePosition(PdfWriter writer,
 			BoxConfig config) throws IOException, DocumentException {
-		System.out.println("makeBorderedBoxtInAbsolutePosition");
+		//System.out.println("makeBorderedBoxtInAbsolutePosition");
 		Rectangle rect = new Rectangle(Utilities.millimetersToPoints(config
 				.getXl()), Utilities.millimetersToPoints(config.getYl()),
 				Utilities.millimetersToPoints(config.getXr()),
@@ -193,7 +193,7 @@ public abstract class PDFBuilder {
 
 	public void makeFilledBorderedBoxtInAbsolutePosition(PdfWriter writer,
 			BoxConfig config) throws IOException, DocumentException {
-		System.out.println("makeFilledBorderedBoxtInAbsolutePosition");
+		//System.out.println("makeFilledBorderedBoxtInAbsolutePosition");
 		PdfContentByte canvas = writer.getDirectContentUnder();
 		canvas.saveState();
 		Rectangle rect = new Rectangle(Utilities.millimetersToPoints(config
@@ -234,7 +234,7 @@ public abstract class PDFBuilder {
 	public void makeRotatedTextBoxtInAbsolutePosition(PdfWriter writer,
 			String text, BoxConfig config) throws IOException,
 			DocumentException {
-		System.out.println("makeRotatedTextBoxtInAbsolutePosition");
+		//System.out.println("makeRotatedTextBoxtInAbsolutePosition");
 		PdfContentByte canvas = writer.getDirectContent();
 		canvas.saveState();
 		canvas.beginText();
@@ -257,7 +257,7 @@ public abstract class PDFBuilder {
 			String text, BoxConfig config) throws IOException,
 			DocumentException {
 
-		System.out.println("makeVerticalTextBoxInAbsolutePosition");
+		//System.out.println("makeVerticalTextBoxInAbsolutePosition");
 		PdfContentByte canvas = writer.getDirectContent();
 		canvas.setLineWidth(config.getWidthTextLine());
 		canvas.saveState(); // ?????
@@ -311,12 +311,12 @@ public abstract class PDFBuilder {
 				Utilities.millimetersToPoints(tablecon.getYr()),
 				writer.getDirectContent());
 
-		// System.out.println("Table height : " + table.getTotalHeight()
-		// + "  Calculate height : " + getTableHeight(table));
-		// System.out.println("Table height : "
-		// + Utilities.pointsToMillimeters(table.getTotalHeight())
-		// + "  Calculate height : "
-		// + Utilities.pointsToMillimeters(getTableHeight(table)));
+		 System.out.println("Table height : " + table.getTotalHeight()
+		 + "  Calculate height : " + getTableHeight(table));
+		 System.out.println("Table height : "
+		 + Utilities.pointsToMillimeters(table.getTotalHeight())
+		 + "  Calculate height : "
+		 + Utilities.pointsToMillimeters(getTableHeight(table)));
 		return table;
 	}
 
@@ -354,9 +354,7 @@ public abstract class PDFBuilder {
 			ex.printStackTrace();
 		}
 		table.setLockedWidth(true);
-		
-        System.out.println("Headers: " + tablecon.getHeader().size());
-        
+       
 		for (int i = 0; i < tablecon.getHeader().size(); i++) {
 			
 			List<CTCell> row = tablecon.getHeader().get(i);
@@ -373,9 +371,7 @@ public abstract class PDFBuilder {
 			throws DocumentException, IOException {
 				
 		for (int i = 0; i < row.size(); i++) {
-			System.out.println("    Print row cell: " + row.get(i) + " Row cell text: " + row.get(i).getText()); 
 			table.addCell(makeCell(row.get(i)));
-			//table.addCell(row.get(i).getText());
 		}
 	}
 
@@ -395,9 +391,6 @@ public abstract class PDFBuilder {
 		cell.setHorizontalAlignment(ctCell.getAlign());
 		cell.setVerticalAlignment(ctCell.getVerticalAlign());
 		cell.setColspan(ctCell.getColspan());
-		
-		System.out.println("    PDFCELL: " + cell + " Row cell text: " + cell.getPhrase());
-		
 		return cell;
 	}
 
@@ -413,29 +406,31 @@ public abstract class PDFBuilder {
 		try {
 			while (cursor.hasNext()) {
 				Product product = cursor.next();
-				if (product.getNumerator() != null) {
-					row.get(0).setText(product.getNumerator());
-					row.get(1).setText(product.getVidup());
-					row.get(2).setText("" + product.getTovar());
-					row.get(3).setText("" + product.getKriter());
-					row.get(4).setText("" + product.getVes());
-					row.get(5).setText(product.getSchet());
-					writeRow(table, row);
+				row.get(0).setText(product.getNumerator() == null ? "" : product.getNumerator());
+				row.get(1).setText(product.getVidup() == null ? "" : product.getVidup());
+				row.get(2).setText(product.getTovar() == null ? "" : product.getTovar());
+				row.get(3).setText(product.getKriter() == null ? "" : product.getKriter());
+				row.get(4).setText(product.getVes() == null ? "" : product.getVes());
+				row.get(5).setText(product.getSchet() == null ? "" : product.getSchet());
+				writeRow(table, row);
 
 					ht += table.getRows().get(table.getLastCompletedRowIndex())
 							.getMaxHeights();
-
-					if (ht > Utilities.millimetersToPoints(tablecon
+					
+                // System.out.println("Cursor HT : " + ht + " Table Height: " + Utilities.millimetersToPoints(tablecon
+				//		.getWorkHeight()));
+                    
+				if (ht > Utilities.millimetersToPoints(tablecon
 							.getWorkHeight())) {
 						ht -= table.getRows()
 								.get(table.getLastCompletedRowIndex())
 								.getMaxHeights();
 						table.deleteLastRow();
 						cursor.prev();
+						
 						break;
-					}
-
 				}
+				
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();

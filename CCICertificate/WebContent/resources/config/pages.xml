@@ -69,7 +69,7 @@
 <box>
 <map>certnumber</map>
 <text></text>
-<xl>121</xl>
+<xl>123</xl>
 <yl>278</yl>
 <xr>199</xr>
 <yr>283</yr>
@@ -89,7 +89,7 @@
 <box>
 <map>blanknumber</map>
 <text></text>
-<xl>170</xl>
+<xl>176</xl>
 <yl>278</yl>
 <xr>199</xr>
 <yr>283</yr>
@@ -112,7 +112,7 @@
 <xl>140</xl>
 <yl>235</yl>
 <xr>198</xr>
-<yr>245</yr>
+<yr>244</yr>
 <font>ARIAL</font>
 <fontsize>10</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -136,7 +136,7 @@
 <font>ARIAL</font>
 <fontsize>10</fontsize>
 <widthtextline>0.1</widthtextline>
-<galign>CENTER</galign>
+<galign>LEFT</galign>
 <valign>MIDDLE</valign>
 <border>0</border>
 <widthborderline>0</widthborderline>
@@ -157,7 +157,7 @@
 <font>ARIAL</font>
 <fontsize>10</fontsize>
 <widthtextline>0.1</widthtextline>
-<galign>CENTER</galign>
+<galign>LEFT</galign>
 <valign>MIDDLE</valign>
 <border>0</border>
 <widthborderline>0</widthborderline>
@@ -167,14 +167,13 @@
 <vertical></vertical>
 </box>
 
-
 <box>
-<map>customer</map>
+<map>issuecountry</map>
 <text></text>
-<xl>140</xl>
-<yl>15</yl>
-<xr>170</xr>
-<yr>29</yr>
+<xl>117</xl>
+<yl>70</yl>
+<xr>190</xr>
+<yr>82</yr>
 <font>ARIAL</font>
 <fontsize>10</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -187,18 +186,19 @@
 <rotation></rotation>
 <vertical></vertical>
 </box>
+
 
 <box>
 <map>expert</map>
 <text></text>
-<xl>55</xl>
-<yl>15</yl>
-<xr>80</xr>
-<yr>29</yr>
+<xl>40</xl>
+<yl>30</yl>
+<xr>75</xr>
+<yr>39</yr>
 <font>ARIAL</font>
 <fontsize>10</fontsize>
 <widthtextline>0.1</widthtextline>
-<galign>CENTER</galign>
+<galign>LEFT</galign>
 <valign>MIDDLE</valign>
 <border>0</border>
 <widthborderline>0</widthborderline>
@@ -208,8 +208,66 @@
 <vertical></vertical>
 </box>
 
+<box>
+<map>dateexpert</map>
+<text></text>
+<xl>84</xl>
+<yl>30</yl>
+<xr>109</xr>
+<yr>39</yr>
+<font>ARIAL</font>
+<fontsize>10</fontsize>
+<widthtextline>0.1</widthtextline>
+<galign>LEFT</galign>
+<valign>MIDDLE</valign>
+<border>0</border>
+<widthborderline>0</widthborderline>
+<leading>10</leading>
+<colorfill></colorfill>
+<rotation></rotation>
+<vertical></vertical>
+</box>
 
+<box>
+<map>customer</map>
+<text></text>
+<xl>135</xl>
+<yl>30</yl>
+<xr>165</xr>
+<yr>39</yr>
+<font>ARIAL</font>
+<fontsize>10</fontsize>
+<widthtextline>0.1</widthtextline>
+<galign>LEFT</galign>
+<valign>MIDDLE</valign>
+<border>0</border>
+<widthborderline>0</widthborderline>
+<leading>10</leading>
+<colorfill></colorfill>
+<rotation></rotation>
+<vertical></vertical>
+</box>
 
+<box>
+<map>datecustomer</map>
+<text></text>
+<xl>170</xl>
+<yl>30</yl>
+<xr>198</xr>
+<yr>39</yr>
+<font>ARIAL</font>
+<fontsize>10</fontsize>
+<widthtextline>0.1</widthtextline>
+<galign>LEFT</galign>
+<valign>MIDDLE</valign>
+<border>0</border>
+<widthborderline>0</widthborderline>
+<leading>10</leading>
+<colorfill></colorfill>
+<rotation></rotation>
+<vertical></vertical>
+</box>
+    
 </outputs>
 
 
@@ -325,10 +383,10 @@
 </box>
 
 <box>
-<xl>113</xl>
-<yl>284</yl>
-<xr>156</xr>
-<yr>284</yr>
+<xl>120</xl>
+<yl>282</yl>
+<xr>160</xr>
+<yr>282</yr>
 <border>15</border>
 <widthborderline>0.1</widthborderline>
 <colorfill></colorfill>
@@ -860,171 +918,545 @@
 </page>
 
 
-<page name="CT-1b" color="Green" height="297" width="210" nextpage="СТ-1b">
+<page name="CT-1b" color="Green" height="297" width="210" nextpage="CT-1b">
 
-<table>
-<xl>14</xl>
-<yl>28</yl>
-<xr>195</xr>
-<yr>279</yr>
-<colnumber>7</colnumber>
-<colwidth>
-	<col number="0">20</col>
-	<col number="1">67</col> 
-	<col number="2">14</col>
-	<col number="3">19</col>
-	<col number="4">25</col>
-	<col number="5">14</col>
-	<col number="6">22</col>
-</colwidth>
 
- <headerrow number="0" height="24">
-    <cell number="0" font="ARIAL" fsize="7" align="CENTER" valign="MIDDLE" border="15" bwidth="1" >Item No./Поз. No</cell>
-	<cell number="1" font="ARIAL" fsize="7" align="CENTER" valign="MIDDLE" border="15" bwidth="1">Trade description of goods and marks and numbers, if any/  Описание товаров, меток и номеров при их наличии</cell>
-	<cell number="2" font="ARIAL" fsize="7" align="CENTER" valign="MIDDLE" border="15" bwidth="1">Number of Pieces/ Количество (шт.)</cell>
-	<cell number="3" font="ARIAL" fsize="7" align="CENTER" valign="MIDDLE" border="15" bwidth="1">Weight or Value/ Вес или объем</cell>
-	<cell number="4" font="ARIAL" fsize="7" align="CENTER" valign="MIDDLE" border="15" bwidth="1">Value*/ Стоимость*</cell>
-	<cell number="5" font="ARIAL" fsize="7" align="CENTER" valign="MIDDLE" border="15" bwidth="1">**Country of origin/  **Страна происхождения</cell>
-	<cell number="6" font="ARIAL" fsize="6" align="CENTER" valign="MIDDLE" border="15" bwidth="1.5" colorfill="yes">For Customs Use/ Для использования таможенными органами   Identification marks/ Опозновательные знаки</cell>
- </headerrow>
- <headerrow number="1" height="5">
-    <cell number="0" font="ARIAL" fsize="7" align="CENTER" border="15" valign="MIDDLE" bwidth="1">1</cell>
-	<cell number="1" font="ARIAL" fsize="7" align="CENTER" border="15" valign="MIDDLE" bwidth="1">2</cell>
-	<cell number="2" font="ARIAL" fsize="7" align="CENTER" border="15" valign="MIDDLE" bwidth="1">3</cell>
-	<cell number="3" font="ARIAL" fsize="7" align="CENTER" border="15" valign="MIDDLE" bwidth="1">4</cell>
-	<cell number="4" font="ARIAL" fsize="7" align="CENTER" border="15" valign="MIDDLE" bwidth="1">5</cell>
-	<cell number="5" font="ARIAL" fsize="7" align="CENTER" border="15" valign="MIDDLE" bwidth="1">6</cell>
-	<cell number="6" font="ARIAL" fsize="7" align="CENTER" border="15" valign="MIDDLE" bwidth="1.5" colorfill="yes">7</cell>
-</headerrow>
-  
-<bodyrow  height="1">
-   <cell number="0" font="ARIAL" fsize="8" align="CENTER" border="12" valign="TOP" bwidth="1"></cell>
-	<cell number="1" font="ARIAL" fsize="8" align="LEFT" border="12" valign="TOP" bwidth="1"></cell>
-	<cell number="2" font="ARIAL" fsize="8" align="CENTER" border="12" valign="TOP" bwidth="1"></cell>
-	<cell number="3" font="ARIAL" fsize="8" align="CENTER" border="12" valign="TOP" bwidth="1"></cell>
-	<cell number="4" font="ARIAL" fsize="8" align="CENTER" border="12" valign="TOP" bwidth="1"></cell>
-	<cell number="5" font="ARIAL" fsize="8" align="CENTER" border="12" valign="TOP" bwidth="1"></cell>
-	<cell number="6" font="ARIAL" fsize="8" align="CENTER" border="12" valign="TOP" bwidth="1.5" colorfill="yes"></cell>
-</bodyrow>
+<outputs>
 
-<footerrow  height="12">
-    <cell number="0" font="ARIAL" fsize="7" align="CENTER" border="15" valign="TOP" bwidth="1" colspan ="2">TOTAL or CARRIED OVER / Всего представлено</cell>
-	<cell number="1" font="ARIAL" fsize="7" align="CENTER" border="15" valign="TOP" bwidth="1"></cell>
-	<cell number="2" font="ARIAL" fsize="7" align="CENTER" border="15" valign="TOP" bwidth="1"></cell>
-	<cell number="3" font="ARIAL" fsize="7" align="CENTER" border="15" valign="TOP" bwidth="1"></cell>
-	<cell number="4" font="ARIAL" fsize="7" align="CENTER" border="15" valign="TOP" bwidth="1"></cell>
-	<cell number="5" font="ARIAL" fsize="7" align="CENTER" border="14" valign="TOP" bwidth="1.5" colorfill="yes"></cell>
-</footerrow>
-</table>
+<box>
+<map>certnumber</map>
+<text></text>
+<xl>135</xl>
+<yl>278</yl>
+<xr>190</xr>
+<yr>283</yr>
+<font>ARIAL</font>
+<fontsize>10</fontsize>
+<widthtextline>0.1</widthtextline>
+<galign>LEFT</galign>
+<valign>MIDDLE</valign>
+<border>0</border>
+<widthborderline>0</widthborderline>
+<leading>0</leading>
+<colorfill></colorfill>
+<rotation></rotation>
+<vertical></vertical>
+</box>
+
+<box>
+<map>listnumber</map>
+<text></text>
+<xl>192</xl>
+<yl>278</yl>
+<xr>199</xr>
+<yr>284</yr>
+<font>ARIAL</font>
+<fontsize>10</fontsize>
+<widthtextline>0.1</widthtextline>
+<galign>CENTER</galign>
+<valign>MIDDLE</valign>
+<border>0</border>
+<widthborderline>0</widthborderline>
+<leading>0</leading>
+<colorfill></colorfill>
+<rotation></rotation>
+<vertical></vertical>
+</box>
+
+
+
+
+<box>
+<map>department</map>
+<text></text>
+<xl>25</xl>
+<yl>40</yl>
+<xr>109</xr>
+<yr>88</yr>
+<font>ARIAL</font>
+<fontsize>10</fontsize>
+<widthtextline>0.1</widthtextline>
+<galign>LEFT</galign>
+<valign>MIDDLE</valign>
+<border>0</border>
+<widthborderline>0</widthborderline>
+<leading>10</leading>
+<colorfill></colorfill>
+<rotation></rotation>
+<vertical></vertical>
+</box>
+
+<box>
+<map>issuecountry</map>
+<text></text>
+<xl>117</xl>
+<yl>70</yl>
+<xr>190</xr>
+<yr>82</yr>
+<font>ARIAL</font>
+<fontsize>10</fontsize>
+<widthtextline>0.1</widthtextline>
+<galign>CENTER</galign>
+<valign>MIDDLE</valign>
+<border>0</border>
+<widthborderline>0</widthborderline>
+<leading>10</leading>
+<colorfill></colorfill>
+<rotation></rotation>
+<vertical></vertical>
+</box>
+
+
+<box>
+<map>expert</map>
+<text></text>
+<xl>40</xl>
+<yl>30</yl>
+<xr>75</xr>
+<yr>39</yr>
+<font>ARIAL</font>
+<fontsize>10</fontsize>
+<widthtextline>0.1</widthtextline>
+<galign>LEFT</galign>
+<valign>MIDDLE</valign>
+<border>0</border>
+<widthborderline>0</widthborderline>
+<leading>10</leading>
+<colorfill></colorfill>
+<rotation></rotation>
+<vertical></vertical>
+</box>
+
+<box>
+<map>dateexpert</map>
+<text></text>
+<xl>84</xl>
+<yl>30</yl>
+<xr>109</xr>
+<yr>39</yr>
+<font>ARIAL</font>
+<fontsize>10</fontsize>
+<widthtextline>0.1</widthtextline>
+<galign>LEFT</galign>
+<valign>MIDDLE</valign>
+<border>0</border>
+<widthborderline>0</widthborderline>
+<leading>10</leading>
+<colorfill></colorfill>
+<rotation></rotation>
+<vertical></vertical>
+</box>
+
+<box>
+<map>customer</map>
+<text></text>
+<xl>135</xl>
+<yl>30</yl>
+<xr>165</xr>
+<yr>39</yr>
+<font>ARIAL</font>
+<fontsize>10</fontsize>
+<widthtextline>0.1</widthtextline>
+<galign>LEFT</galign>
+<valign>MIDDLE</valign>
+<border>0</border>
+<widthborderline>0</widthborderline>
+<leading>10</leading>
+<colorfill></colorfill>
+<rotation></rotation>
+<vertical></vertical>
+</box>
+
+<box>
+<map>datecustomer</map>
+<text></text>
+<xl>170</xl>
+<yl>30</yl>
+<xr>198</xr>
+<yr>39</yr>
+<font>ARIAL</font>
+<fontsize>10</fontsize>
+<widthtextline>0.1</widthtextline>
+<galign>LEFT</galign>
+<valign>MIDDLE</valign>
+<border>0</border>
+<widthborderline>0</widthborderline>
+<leading>10</leading>
+<colorfill></colorfill>
+<rotation></rotation>
+<vertical></vertical>
+</box>
+    
+</outputs>
+
+
+<boxes>
+<box>
+<xl>20</xl>
+<yl>276</yl>
+<xr>201</xr>
+<yr>287</yr>
+<border>15</border>
+<widthborderline>1</widthborderline>
+<colorfill></colorfill>
+</box>
+	  
+<box>
+<xl>20</xl>
+<yl>13</yl>
+<xr>111</xr>
+<yr>111</yr>
+<border>15</border>
+<widthborderline>1</widthborderline>
+<colorfill></colorfill>
+</box>	  
+	    
+<box>
+<xl>111</xl>
+<yl>13</yl>
+<xr>201</xr>
+<yr>111</yr>
+<border>15</border>
+<widthborderline>1</widthborderline>
+<colorfill></colorfill>
+</box>
+
+<box>
+<xl>117</xl>
+<yl>77</yl>
+<xr>190</xr>
+<yr>77</yr>
+<border>15</border>
+<widthborderline>0.1</widthborderline>
+<colorfill></colorfill>
+</box>
+
+<box>
+<xl>113</xl>
+<yl>34</yl>
+<xr>198</xr>
+<yr>34</yr>
+<border>15</border>
+<widthborderline>0.1</widthborderline>
+<colorfill></colorfill>
+</box>
+
+<box>
+<xl>130</xl>
+<yl>282</yl>
+<xr>185</xr>
+<yr>282</yr>
+<border>15</border>
+<widthborderline>0.1</widthborderline>
+<colorfill></colorfill>
+</box>
+
+
+<box>
+<xl>22</xl>
+<yl>34</yl>
+<xr>109</xr>
+<yr>34</yr>
+<border>15</border>
+<widthborderline>0.1</widthborderline>
+<colorfill></colorfill>
+</box>
+
+
+
+</boxes>
 
 <textboxes>
+
 <box>
-<text>A.T.A. CARNET</text>
-<xl>14</xl>
-<yl>278</yl>
-<xr>44</xr>
-<yr>281</yr>
+<text>ДОПОЛНИТЕЛЬНЫЙ ЛИСТ СЕРТИФИКАТА  №</text>
+<xl>55</xl>
+<yl>273</yl>
+<xr>130</xr>
+<yr>283</yr>
 <font>ARIAL</font>
-<fontsize>8</fontsize>
-<widthtextline>0.5</widthtextline>
-<galign>LEFT</galign>
-<valign></valign>
-<border>0</border>
+<fontsize>9</fontsize>
+<widthtextline>0.1</widthtextline>
+<galign>JUSTIFIED</galign>
+<valign>MIDDLE</valign>
+<border>15</border>
 <widthborderline>0</widthborderline>
 <leading>0</leading>
 <colorfill></colorfill>
+<rotation></rotation>
 </box>
 
 <box>
-<text>GENERAL LIST/ОБЩИЙ СПИСОК</text>
-<xl>89</xl>
-<yl>278</yl>
-<xr>141</xr>
-<yr>281</yr>
+<text>О ПРОИСХОЖДЕНИИ ТОВАРА форма СТ-1</text>
+<xl>55</xl>
+<yl>269</yl>
+<xr>130</xr>
+<yr>279</yr>
 <font>ARIAL</font>
-<fontsize>8</fontsize>
-<widthtextline>0.5</widthtextline>
-<galign>CENTER</galign>
-<valign></valign>
-<border>0</border>
+<fontsize>9</fontsize>
+<widthtextline>0.1</widthtextline>
+<galign>JUSTIFIED</galign>
+<valign>MIDDLE</valign>
+<border>15</border>
 <widthborderline>0</widthborderline>
 <leading>0</leading>
 <colorfill></colorfill>
+<rotation></rotation>
 </box>
 
 <box>
-<text>КАРНЕТ  А.Т.А</text>
-<xl>172</xl>
-<yl>278</yl>
-<xr>196</xr>
-<yr>281</yr>
-<font>ARIAL</font>
-<fontsize>8</fontsize>
-<widthtextline>0.5</widthtextline>
-<galign>CENTER</galign>
-<valign></valign>
-<border>0</border>
-<widthborderline>0</widthborderline>
-<leading>0</leading>
-<colorfill></colorfill>
-</box>
-
-<box>
-<text>Stamp/ Печать</text>
+<text>12. Удостоверение</text>
 <xl>22</xl>
-<yl>17</yl>
-<xr>33</xr>
-<yr>24</yr>
+<yl>100</yl>
+<xr>109</xr>
+<yr>107</yr>
+<font>ARIAL</font>
+<fontsize>8</fontsize>
+<widthtextline>0.1</widthtextline>
+<galign>LEFT</galign>
+<valign>MIDDLE</valign>
+<border>15</border>
+<widthborderline>0</widthborderline>
+<leading>0</leading>
+<colorfill></colorfill>
+<rotation></rotation>
+</box>
+
+<box>
+<text>Настоящим удостоверяется, что декларация заявителя соответствует действительности</text>
+<xl>26</xl>
+<yl>70</yl>
+<xr>90</xr>
+<yr>102</yr>
+<font>ARIAL</font>
+<fontsize>8</fontsize>
+<widthtextline>0.1</widthtextline>
+<galign>LEFT</galign>
+<valign>MIDDLE</valign>
+<border>15</border>
+<widthborderline>0</widthborderline>
+<leading>9</leading>
+<colorfill></colorfill>
+<rotation></rotation>
+</box>
+
+
+<box>
+<text>13. Декларация заявителя</text>
+<xl>113</xl>
+<yl>100</yl>
+<xr>199</xr>
+<yr>107</yr>
+<font>ARIAL</font>
+<fontsize>8</fontsize>
+<widthtextline>0.1</widthtextline>
+<galign>LEFT</galign>
+<valign>MIDDLE</valign>
+<border>15</border>
+<widthborderline>0</widthborderline>
+<leading>0</leading>
+<colorfill></colorfill>
+<rotation></rotation>
+</box>
+
+<box>
+<text>Нижеподписавшийся заявляет, что вышеприведенные  сведения соответствуют действительности; что все товары полностью произведены или подвергнуты достаточной переработке в </text>
+<xl>117</xl>
+<yl>70</yl>
+<xr>194</xr>
+<yr>102</yr>
+<font>ARIAL</font>
+<fontsize>8</fontsize>
+<widthtextline>0.1</widthtextline>
+<galign>JUSTIFIED</galign>
+<valign>MIDDLE</valign>
+<border>15</border>
+<widthborderline>0</widthborderline>
+<leading>9</leading>
+<colorfill></colorfill>
+<rotation></rotation>
+</box>
+	 
+<box>
+<text>(наименование страны)</text>
+<xl>140</xl>
+<yl>68</yl>
+<xr>172</xr>
+<yr>75</yr>
 <font>ARIAL</font>
 <fontsize>7</fontsize>
-<widthtextline>0.2</widthtextline>
+<widthtextline>0.1</widthtextline>
 <galign>CENTER</galign>
-<valign>MIDDLE</valign>
-<border>0</border>
+<valign>TOP</valign>
+<border>15</border>
 <widthborderline>0</widthborderline>
-<leading>7</leading>
+<leading>0</leading>
 <colorfill></colorfill>
+<rotation></rotation>
+</box>	 
+
+<box>
+<text>и что они отвечают требованиям происхождения,  установленным в отношении таких товаров</text>
+<xl>117</xl>
+<yl>58</yl>
+<xr>190</xr>
+<yr>70</yr>
+<font>ARIAL</font>
+<fontsize>8</fontsize>
+<widthtextline>0.1</widthtextline>
+<galign>LEFT</galign>
+<valign>MIDDLE</valign>
+<border>15</border>
+<widthborderline>0</widthborderline>
+<leading>9</leading>
+<colorfill></colorfill>
+<rotation></rotation>
 </box>
 
 <box>
-<text>* Commercial value in country/customs territory of issue in the currency, unless stated differently./ * Коммерческая стоимость в стране выдачи Карнета и в ее валюте, если не установлено иное </text>
-<xl>14</xl>
-<yl>8</yl>
-<xr>195</xr>
-<yr>13</yr>
+<text>Подпись</text>
+<xl>22</xl>
+<yl>22</yl>
+<xr>109</xr>
+<yr>29</yr>
 <font>ARIAL</font>
-<fontsize>7</fontsize>
-<widthtextline>0.2</widthtextline>
+<fontsize>8</fontsize>
+<widthtextline>0.1</widthtextline>
 <galign>LEFT</galign>
 <valign>MIDDLE</valign>
-<border>0</border>
+<border>15</border>
 <widthborderline>0</widthborderline>
-<leading>5</leading>
+<leading>0</leading>
 <colorfill></colorfill>
+<rotation></rotation>
 </box>
 
 <box>
-<text>** Show country of origin if different from country/customs of issue of the Carnet, using ISO country code./ ** Если иная, чем страна выдачи Карнета, используя коды страны ISO </text>
-<xl>14</xl>
-<yl>3</yl>
-<xr>195</xr>
-<yr>8</yr>
+<text>Дата</text>
+<xl>84</xl>
+<yl>22</yl>
+<xr>109</xr>
+<yr>29</yr>
 <font>ARIAL</font>
-<fontsize>7</fontsize>
-<widthtextline>0.2</widthtextline>
+<fontsize>8</fontsize>
+<widthtextline>0.1</widthtextline>
 <galign>LEFT</galign>
 <valign>MIDDLE</valign>
-<border>0</border>
+<border>15</border>
 <widthborderline>0</widthborderline>
-<leading>5</leading>
+<leading>0</leading>
 <colorfill></colorfill>
+<rotation></rotation>
 </box>
+<box>
+
+<text>Печать</text>
+<xl>22</xl>
+<yl>11</yl>
+<xr>109</xr>
+<yr>19</yr>
+<font>ARIAL</font>
+<fontsize>8</fontsize>
+<widthtextline>0.1</widthtextline>
+<galign>LEFT</galign>
+<valign>MIDDLE</valign>
+<border>15</border>
+<widthborderline>0</widthborderline>
+<leading>0</leading>
+<colorfill></colorfill>
+<rotation></rotation>
+</box>
+
+<box>
+<text>Подпись</text>
+<xl>113</xl>
+<yl>22</yl>
+<xr>190</xr>
+<yr>29</yr>
+<font>ARIAL</font>
+<fontsize>8</fontsize>
+<widthtextline>0.1</widthtextline>
+<galign>LEFT</galign>
+<valign>MIDDLE</valign>
+<border>15</border>
+<widthborderline>0</widthborderline>
+<leading>0</leading>
+<colorfill></colorfill>
+<rotation></rotation>
+</box>
+
+<box>
+<text>Дата</text>
+<xl>171</xl>
+<yl>22</yl>
+<xr>190</xr>
+<yr>29</yr>
+<font>ARIAL</font>
+<fontsize>8</fontsize>
+<widthtextline>0.1</widthtextline>
+<galign>LEFT</galign>
+<valign>MIDDLE</valign>
+<border>15</border>
+<widthborderline>0</widthborderline>
+<leading>0</leading>
+<colorfill></colorfill>
+<rotation></rotation>
+</box>
+<box>
+
+<text>Печать</text>
+<xl>113</xl>
+<yl>11</yl>
+<xr>190</xr>
+<yr>19</yr>
+<font>ARIAL</font>
+<fontsize>8</fontsize>
+<widthtextline>0.1</widthtextline>
+<galign>LEFT</galign>
+<valign>MIDDLE</valign>
+<border>15</border>
+<widthborderline>0</widthborderline>
+<leading>0</leading>
+<colorfill></colorfill>
+<rotation></rotation>
+</box>
+	 
+	 
 </textboxes>
-<stamp>
-<x>27.5</x>
-<y>20.8</y>
-<r>6</r>
-</stamp>
+
+<table>
+<xl>20</xl>
+<yl>111</yl>
+<xr>201</xr>
+<yr>276</yr>
+<colnumber>6</colnumber>
+<colwidth>
+	<col number="0">12</col>
+	<col number="1">27</col> 
+	<col number="2">71</col>
+	<col number="3">25</col>
+	<col number="4">24</col>
+	<col number="5">24</col>
+</colwidth>
+
+ <headerrow number="0" height="13">
+    <cell number="0" font="ARIAL" fsize="8" align="CENTER" valign="TOP" border="15" bwidth="1" >6. №</cell>
+	<cell number="1" font="ARIAL" fsize="8" align="LEFT" valign="TOP" border="15" bwidth="1">7. Количество мест и вид упаковки</cell>
+	<cell number="2" font="ARIAL" fsize="8" align="LEFT" valign="TOP" border="15" bwidth="1">8. Описание товара</cell>
+	<cell number="3" font="ARIAL" fsize="8" align="LEFT" valign="TOP" border="15" bwidth="1">9. Критерий происхождения </cell>
+	<cell number="4" font="ARIAL" fsize="8" align="LEFT" valign="TOP" border="15" bwidth="1">10. Количество товара</cell>
+	<cell number="5" font="ARIAL" fsize="8" align="LEFT" valign="TOP" border="15" bwidth="1">11. Номер и дата счета-фактуры</cell>
+ </headerrow>
+  
+<bodyrow  height="1">
+    <cell number="0" font="ARIAL" fsize="11" align="CENTER" border="12" valign="TOP" bwidth="1"></cell>
+	<cell number="1" font="ARIAL" fsize="11" align="LEFT" border="12" valign="TOP" bwidth="1"></cell>
+	<cell number="2" font="ARIAL" fsize="11" align="LEFT" border="12" valign="TOP" bwidth="1"></cell>
+	<cell number="3" font="ARIAL" fsize="11" align="LEFT" border="12" valign="TOP" bwidth="1"></cell>
+	<cell number="4" font="ARIAL" fsize="11" align="LEFT" border="12" valign="TOP" bwidth="1"></cell>
+	<cell number="5" font="ARIAL" fsize="11" align="LEFT" border="12" valign="TOP" bwidth="1"></cell>
+</bodyrow>
+</table>
 </page>
 
 </certificates>

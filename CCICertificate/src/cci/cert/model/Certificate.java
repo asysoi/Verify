@@ -61,6 +61,15 @@ public class Certificate {
 	private Long parent_id;
 	private ProductIterator iterator;
 	public int cursor;
+	public int currentlist;
+
+	public int getCurrentlist() {
+		return currentlist;
+	}
+
+	public void setCurrentlist(int currentlist) {
+		this.currentlist = currentlist;
+	}
 
 	public String getTovar() {
 		return tovar;

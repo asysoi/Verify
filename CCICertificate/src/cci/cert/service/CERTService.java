@@ -165,6 +165,8 @@ public class CERTService {
 		}
 		return departments;
 	}
+	
+	
 
 	public Map<String, String> getCountriesList() {
 		if (countries == null) {

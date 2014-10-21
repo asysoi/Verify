@@ -5,6 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -23,9 +24,12 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import cci.cert.config.DownloadConfig;
 import cci.cert.model.Certificate;
+import cci.cert.model.Product;
+import cci.cert.pdfbuilder.CertificatePDFBuilder;
 import cci.cert.repository.SQLBuilder;
 import cci.cert.repository.SQLBuilderCertificate;
 import cci.cert.service.CERTService;
+import cci.cert.service.CountryConverter;
 import cci.cert.service.Filter;
 import cci.cert.service.FilterCertificate;
 import cci.cert.service.XSLWriter;
@@ -307,13 +311,32 @@ public class CertController {
 	}
 
 	@RequestMapping(value = "/gocert.do")
-	public String gocert(
+	public String gocert(HttpServletRequest request, 
 			@RequestParam(value = "certid", required = true) Integer certid,
 			ModelMap model) {
+		String relativeWebPath = "/resources/out";
+		String  absoluteDiskPath= request.getSession().getServletContext().getRealPath(relativeWebPath);
+		System.out.println("Absolute path: " + absoluteDiskPath);
+		
 		Certificate cert = certService.readCertificate(certid);
 		model.addAttribute("cert", cert);
 		certService.printCertificate(cert);
+		makepdffile(absoluteDiskPath, cert);
 		return "certificate";
+	}
+
+	private void makepdffile(String absoluteDiskPath, Certificate cert) {
+		CertificatePDFBuilder builder = new CertificatePDFBuilder();
+		String fout = absoluteDiskPath + "\\" + cert.getNomercert().trim() + ".pdf";
+		String fconf = "d:\\Java\\git\\CCICertificate\\CCICertificate\\WebContent\\resources\\config\\pages.xml";
+		
+		CountryConverter.setCountrymap(certService.getCountriesList());
+		
+		try {
+		   builder.createPdf(fout, cert, fconf);
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	@RequestMapping(value = "/check.do", method = RequestMethod.GET)
