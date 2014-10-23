@@ -67,7 +67,7 @@ public class CertificatePDFBuilder {
 	
 
 	private void createMain(Certificate cert) throws DocumentException, IOException {
-		String pagename = "CT-1";
+		String pagename = cert.getForms().trim();
 		cert.setCurrentlist(0);  // start from main certification list
 		
 		while (cert.getIterator().hasNext()) {

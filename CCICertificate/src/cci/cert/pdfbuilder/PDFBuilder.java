@@ -10,6 +10,7 @@ import cci.cert.config.PDFPageConfig;
 import cci.cert.model.Certificate;
 import cci.cert.model.Product;
 import cci.cert.model.ProductIterator;
+import cci.cert.service.CountryConverter;
 import cci.cert.config.BoxConfig;
 import cci.cert.config.CTCell;
 import cci.cert.config.PDFPageConfig;
@@ -112,9 +113,6 @@ public abstract class PDFBuilder {
 		drawStamp(writer, stamps);
 	}
 
-	protected String getCertificateTextByMap(Certificate certificate, String map) {
-		return "";
-	}
 
 	public void makeBorderedTexBoxtInAbsolutePosition(PdfWriter writer,
 			String text, BoxConfig config) throws IOException,
@@ -367,7 +365,7 @@ public abstract class PDFBuilder {
 
 	}
 
-	private void writeRow(PdfPTable table, List<CTCell> row)
+	protected void writeRow(PdfPTable table, List<CTCell> row)
 			throws DocumentException, IOException {
 				
 		for (int i = 0; i < row.size(); i++) {
@@ -406,19 +404,11 @@ public abstract class PDFBuilder {
 		try {
 			while (cursor.hasNext()) {
 				Product product = cursor.next();
-				row.get(0).setText(product.getNumerator() == null ? "" : product.getNumerator());
-				row.get(1).setText(product.getVidup() == null ? "" : product.getVidup());
-				row.get(2).setText(product.getTovar() == null ? "" : product.getTovar());
-				row.get(3).setText(product.getKriter() == null ? "" : product.getKriter());
-				row.get(4).setText(product.getVes() == null ? "" : product.getVes());
-				row.get(5).setText(product.getSchet() == null ? "" : product.getSchet());
+				fillInRow(row, product);
 				writeRow(table, row);
 
-					ht += table.getRows().get(table.getLastCompletedRowIndex())
+				ht += table.getRows().get(table.getLastCompletedRowIndex())
 							.getMaxHeights();
-					
-                // System.out.println("Cursor HT : " + ht + " Table Height: " + Utilities.millimetersToPoints(tablecon
-				//		.getWorkHeight()));
                     
 				if (ht > Utilities.millimetersToPoints(tablecon
 							.getWorkHeight())) {
@@ -440,7 +430,10 @@ public abstract class PDFBuilder {
 				- ht;
 		PdfPRow tabrow = table.getRows().get(table.getLastCompletedRowIndex());
 		tabrow.setMaxHeights(tabrow.getMaxHeights() + delta);
+	}
 
+	protected void fillInRow(List<CTCell> row, Product product) {
+		// overwrite it in subclass
 	}
 
 	private float getTableHeight(PdfPTable table) {
@@ -449,5 +442,85 @@ public abstract class PDFBuilder {
 			height += row.getMaxHeights();
 		}
 		return height;
+	}
+	
+	protected String getCertificateTextByMap(Certificate certificate, String map) {
+
+		String str = "";
+
+		if ("exporter".equals(map)) {
+			str = 
+					renderString(certificate.getExpp(), " ") + 
+					renderString(certificate.getExpadress(),  " ") +
+					((certificate.getExpp() != null && certificate.getExpp().trim() != "" ) || 
+					(certificate.getExpadress() != null && certificate.getExpadress().trim() != "") ? "  по поручению  " : "") + 
+					renderString(certificate.getKontrp(), " ") + 
+					renderString(certificate.getAdress(), "");
+
+		} else if  ("exporterenglish".equals(map)) {
+			str = 
+					renderString(certificate.getExpp(), " ") + 
+					renderString(certificate.getExpadress(),  " ") +
+					((certificate.getExpp() != null && certificate.getExpp().trim() != "" ) || 
+					(certificate.getExpadress() != null && certificate.getExpadress().trim() != "") ? "  on errand  " : "") + 
+					renderString(certificate.getKontrp(), " ") + 
+					renderString(certificate.getAdress(), "");
+
+		} else if ("importer".equals(map)) {
+			str = 
+					renderString(certificate.getImporter(), " ")   + 
+					renderString(certificate.getAdressimp(), " ") +
+					((certificate.getImporter() != null && certificate.getImporter().trim() != "" ) || 
+					(certificate.getAdressimp() != null && certificate.getAdressimp().trim() != "") ? "  по поручению  " : "") + 
+					renderString(certificate.getPoluchat(), " ") + 
+					renderString(certificate.getAdresspol(), "");
+		} else if ("importerenglish".equals(map)) {
+			str = 
+					renderString(certificate.getImporter(), " ")   + 
+					renderString(certificate.getAdressimp(), " ") +
+					((certificate.getImporter() != null && certificate.getImporter().trim() != "" ) || 
+					(certificate.getAdressimp() != null && certificate.getAdressimp().trim() != "") ? "  on errand  " : "") + 
+					renderString(certificate.getPoluchat(), " ") + 
+					renderString(certificate.getAdresspol(), "");
+		}else if ("drive".equals(map)) {
+			str = renderString(certificate.getTransport(), " / ") + 
+				  renderString(certificate.getMarshrut(), "");
+		} else if ("certnumber".equals(map)) {
+			str = certificate.getNomercert();
+		} else if ("blanknumber".equals(map)) {
+			str = certificate.getNblanka();
+		} else if ("subcountry".equals(map)) {
+			str = CountryConverter.getCountryNameByCode(certificate.getStranapr());
+		} else if ("sourcecountry".equals(map)) {
+			str = CountryConverter.getCountryNameByCode(certificate.getStranav());
+		}else if ("note".equals(map)) {
+			str = certificate.getOtmetka() == null ? "" : certificate.getOtmetka();
+		} else if ("department".equals(map)) {
+			str = "Унитарное предприятие по оказанию услуг "
+					+ '"' + certificate.getOtd_name() + '"' + " "
+					+ certificate.getOtd_address_index() + ", "
+					+ certificate.getOtd_address_city() + ", "
+					+ certificate.getOtd_address_line() + ", "
+					+ certificate.getOtd_address_home() + "";
+		} else if ("expert".equals(map)) {
+			str = renderString(certificate.getExpert(), "");;
+		} else if ("customer".equals(map)) {
+			str = renderString(certificate.getRukovod(), "");
+		} else if ("dateexpert".equals(map)) {
+			str = certificate.getDatacert();
+		} else if ("datecustomer".equals(map)) {
+			str = certificate.getDatacert();
+		} else if ("issuecountry".equals(map)) {
+			str = (certificate.getStranap() == null ? "Республике Беларусь" : CountryConverter.getCountryNameByCode(certificate.getStranap()));
+		} else if ("listnumber".equals(map)) {
+			str = "" + certificate.getCurrentlist();  
+		}
+
+		return str;
+	}
+
+
+	private String renderString(String field, String strtermination) {
+		return (field != null && field.trim() != "") ? field.trim() + strtermination: "";
 	}
 }

@@ -314,21 +314,20 @@ public class CertController {
 	public String gocert(HttpServletRequest request, 
 			@RequestParam(value = "certid", required = true) Integer certid,
 			ModelMap model) {
-		String relativeWebPath = "/resources/out";
+		String relativeWebPath = "/resources";
 		String  absoluteDiskPath= request.getSession().getServletContext().getRealPath(relativeWebPath);
 		System.out.println("Absolute path: " + absoluteDiskPath);
 		
 		Certificate cert = certService.readCertificate(certid);
-		model.addAttribute("cert", cert);
-		certService.printCertificate(cert);
 		makepdffile(absoluteDiskPath, cert);
-		return "certificate";
+		model.addAttribute("cert", cert);
+		return "redirect:" + "/resources/out/" + cert.getNomercert().trim() + ".pdf";
 	}
 
 	private void makepdffile(String absoluteDiskPath, Certificate cert) {
 		CertificatePDFBuilder builder = new CertificatePDFBuilder();
-		String fout = absoluteDiskPath + "\\" + cert.getNomercert().trim() + ".pdf";
-		String fconf = "d:\\Java\\git\\CCICertificate\\CCICertificate\\WebContent\\resources\\config\\pages.xml";
+		String fout = absoluteDiskPath + "/out/" + cert.getNomercert().trim() + ".pdf";
+		String fconf = absoluteDiskPath + "/config/pages.xml";
 		
 		CountryConverter.setCountrymap(certService.getCountriesList());
 		
