@@ -13,7 +13,7 @@ public class Config {
 	public static int processdelay = 30000;
 	*/
 	
-	public static String[] ftpdirs = {"vitebsk", "grodno", "gomel", "brest", "mogilev", "minsk"};
+	public static String[] ftpdirs = {"vitebsk_", "grodno_", "gomel_", "brest", "mogilev_", "minsk"};
 	public static String M_START= "Старт";
 	public static String M_STOP = "Стоп";
 	public static String M_PROPERTY = "Праметры";
