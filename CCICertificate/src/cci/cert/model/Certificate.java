@@ -53,6 +53,10 @@ public class Certificate {
 	private String parentnumber = "";
 	private String parentstatus = "";
 	private String tovar;
+	private String codestranav;
+	private String codestranapr;
+	private String codestranap;
+	
 	// private String denorm;
 	// список продукции
 	private List<Product> products;
@@ -60,8 +64,10 @@ public class Certificate {
 	private Integer child_id = 0;
 	private Long parent_id;
 	private ProductIterator iterator;
-	public int cursor;
-	public int currentlist;
+	private int cursor;
+	private int currentlist;
+	
+	
 
 	public int getCurrentlist() {
 		return currentlist;
@@ -817,6 +823,30 @@ public class Certificate {
 		this.parent_id = parent_id;
 	}
 	
+	public String getCodestranav() {
+		return codestranav;
+	}
+
+	public void setCodestranav(String codestranav) {
+		this.codestranav = codestranav;
+	}
+
+	public String getCodestranapr() {
+		return codestranapr;
+	}
+
+	public void setCodestranapr(String codestranapr) {
+		this.codestranapr = codestranapr;
+	}
+
+	public String getCodestranap() {
+		return codestranap;
+	}
+
+	public void setCodestranap(String codestranap) {
+		this.codestranap = codestranap;
+	}
+	
 	//public String getDenorm() {
 	//	return denorm;
 	//}
@@ -878,6 +908,7 @@ public class Certificate {
 		}
 
 	}
+	
 	
 	
 }

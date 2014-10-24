@@ -11,7 +11,8 @@ public class PDFBuilderFactory {
 	  public static final String PAGE_CT2_b = "СТ-2b";
 	  public static final String PAGE_CT2_ENG = "СТ-2 англ.";
 	  public static final String PAGE_CT2_ENG_b = "СТ-2 англ.b";
-	  
+	  public static final String PAGE_A = "А";
+	  public static final String PAGE_TEXTILE = "Текстиль";
 	  
 	  
 	  
@@ -38,12 +39,11 @@ public class PDFBuilderFactory {
     		  builder = new CT2PDFBuilder();    		  
     	  } else if (pagename.equals(PAGE_CT2_ENG_b)) {
     		  builder = new CT2PDFBuilder();    		  
-    	  }    		
-    		
-    		
-
-    	  
-    	      	  
+    	  } else if (pagename.equals(PAGE_A)) {
+    		  builder = new ADFBuilder();    		  
+    	  } else if (pagename.equals(PAGE_TEXTILE)) {
+    		  builder = new TextilePDFBuilder();    		  
+    	  }  
     	  return builder;
       }
 }

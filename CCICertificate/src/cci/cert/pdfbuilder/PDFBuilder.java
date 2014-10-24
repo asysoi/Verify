@@ -462,7 +462,7 @@ public abstract class PDFBuilder {
 					renderString(certificate.getExpp(), " ") + 
 					renderString(certificate.getExpadress(),  " ") +
 					((certificate.getExpp() != null && certificate.getExpp().trim() != "" ) || 
-					(certificate.getExpadress() != null && certificate.getExpadress().trim() != "") ? "  on errand  " : "") + 
+					(certificate.getExpadress() != null && certificate.getExpadress().trim() != "") ? "  by order  " : "") + 
 					renderString(certificate.getKontrp(), " ") + 
 					renderString(certificate.getAdress(), "");
 
@@ -479,11 +479,11 @@ public abstract class PDFBuilder {
 					renderString(certificate.getImporter(), " ")   + 
 					renderString(certificate.getAdressimp(), " ") +
 					((certificate.getImporter() != null && certificate.getImporter().trim() != "" ) || 
-					(certificate.getAdressimp() != null && certificate.getAdressimp().trim() != "") ? "  on errand  " : "") + 
+					(certificate.getAdressimp() != null && certificate.getAdressimp().trim() != "") ? "  by order  " : "") + 
 					renderString(certificate.getPoluchat(), " ") + 
 					renderString(certificate.getAdresspol(), "");
 		}else if ("drive".equals(map)) {
-			str = renderString(certificate.getTransport(), " / ") + 
+			str = renderString(certificate.getTransport(), "\n") + 
 				  renderString(certificate.getMarshrut(), "");
 		} else if ("certnumber".equals(map)) {
 			str = certificate.getNomercert();
@@ -502,7 +502,14 @@ public abstract class PDFBuilder {
 					+ certificate.getOtd_address_city() + ", "
 					+ certificate.getOtd_address_line() + ", "
 					+ certificate.getOtd_address_home() + "";
-		} else if ("expert".equals(map)) {
+		} else if ("departmentenglish".equals(map)) {
+			str = "Unitary service enterprise "
+					+ '"' + certificate.getOtd_name() + '"' + " "
+					+ certificate.getOtd_address_index() + ", "
+					+ certificate.getOtd_address_city() + ", "
+					+ certificate.getOtd_address_line() + ", "
+					+ certificate.getOtd_address_home() + "";
+		}else if ("expert".equals(map)) {
 			str = renderString(certificate.getExpert(), "");;
 		} else if ("customer".equals(map)) {
 			str = renderString(certificate.getRukovod(), "");

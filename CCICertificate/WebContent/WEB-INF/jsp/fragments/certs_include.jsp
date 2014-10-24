@@ -31,8 +31,10 @@
 		$("#pview").dialog({
 			autoOpen : false
 		});
-	
-        document.getElementById("filter").checked=${vmanager.onfilter};
+		$("#pdfview").dialog({
+			autoOpen : false
+		});
+                                 document.getElementById("filter").checked=${vmanager.onfilter};
 
 		if (document.getElementById("filter").checked) {
 			$("#filterlink").html('<a  href="javascript: loadWindow();">&nbsp;Фильтр</a>');
@@ -78,6 +80,42 @@
 		$("#pview").dialog( "option", "position", { my: "center",  at: "center", of:window} );
 		$("#pview").dialog("open");
 	}
+
+	function viewCertificate(certid) {
+                		$('#pdf').contents().find("body").html("<div style='color:black; text-align:center; font-size:16pt;'>Воспроизведение бумажной версии 
+
+сертификата. <p>Результат воспроизведения может незначительно отличаться по форме и стилю отображения, но полностью воспроизводит 
+
+содержание документа.</p></div> ");
+                                   $('#pdf').contents().find('body').attr('style', 'background-color: white'); 
+		link = "gocert.do?certid=" + certid;
+		$("#pdfview").dialog("option", "title", 'Сертификат');
+		$("#pdfview").dialog("option", "width", 955);
+		$("#pdfview").dialog("option", "height", 600);
+		$("#pdfview").dialog("option", "modal", true);
+		$("#pdfview").dialog("option", "resizable", false);
+		$("#pdfview").dialog({
+			buttons : [ 	{ text : "Закрыть",	click : function() {$(this).dialog("close"); $('#pdf').contents().find("body").html('');}} ]
+		});
+
+		$("#pdfview").dialog("option", "position", {
+			my : "center",
+			at : "center",
+			of : window
+		});
+                                   
+//        		var iframe = document.getElementById('pdf');
+//	    	iframe.src = link;
+                                 
+                                   $('#pdf').attr('height', 440);
+                                   $('#pdf').attr('width', 920);
+                                   $('#pdf').attr('scrolling', 'yes');
+		$('#pdf').attr('src', link);
+
+
+		$("#pdfview").dialog("open");
+	}
+
 	
 
 	function downloadCertificates() {
@@ -128,7 +166,6 @@
     	}
     	iframe.src = "download.do";
 		
-		//$("#pview").dialog("close");
 	}
 
 </script>
@@ -173,7 +210,7 @@ ${vmanager.order}');">${item}</a>
 
 		<c:forEach items="${certs}" var="cert">
 			<tr>
-				<td><a href="gocert.do?certid=${cert.cert_id}">${cert.nomercert}</a></td>
+				<td><a href="javascript:viewCertificate('${cert.cert_id}')">${cert.nomercert}</a></td>
 				<td>${cert.otd_name}</td>
 				<td>${cert.kontrp}</td>
 				<td>${cert.nblanka}</td>
@@ -223,6 +260,11 @@ ${vmanager.orderby}
 	
 	<div id="pview" name="pview">
 	</div>
+
+	<div id="pdfview" name="pdfview" style="text-align:center;">
+                  <iframe class="pdf" id="pdf"></iframe>
+	</div>
+
     <p>Время загрузки страницы в милисек.: ${timeduration}</p> 
 </div>
 
