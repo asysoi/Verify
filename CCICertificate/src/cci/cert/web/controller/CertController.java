@@ -260,10 +260,10 @@ public class CertController {
 		ViewManager vmanager = new ViewManager();
 		vmanager.setHnames(new String[] { "Номер Сертификата", "Отделение",
 				"Грузоотправитель/Экспортер", "Номер бланка", "Дата",
-				"Доп. лист", "Замена." });
+				"Доп. лист", "Замена для." });
 		vmanager.setOrdnames(new String[] { "nomercert", "name", "kontrp",
-				"nblanka", "issuedate", "koldoplist", "parent_id" });
-		vmanager.setWidths(new int[] { 10, 20, 40, 8, 8, 9, 5 });
+				"nblanka", "issuedate", "koldoplist", "parentnumber" });
+		vmanager.setWidths(new int[] { 10, 20, 40, 8, 8, 6, 8 });
 		model.addAttribute("vmanager", vmanager);
 		// request.getSession().setAttribute("vmanager", vmanager);
 
@@ -321,12 +321,12 @@ public class CertController {
 		Certificate cert = certService.readCertificate(certid);
 		makepdffile(absoluteDiskPath, cert);
 		model.addAttribute("cert", cert);
-		return "redirect:" + "/resources/out/" + cert.getNomercert().trim() + ".pdf";
+		return "redirect:" + "/resources/out/" + cert.getCert_id() + ".pdf";
 	}
 
 	private void makepdffile(String absoluteDiskPath, Certificate cert) {
 		CertificatePDFBuilder builder = new CertificatePDFBuilder();
-		String fout = absoluteDiskPath + "/out/" + cert.getNomercert().trim() + ".pdf";
+		String fout = absoluteDiskPath + "/out/" + cert.getCert_id() + ".pdf";
 		String fconf = absoluteDiskPath + "/config/pages.xml";
 		
 		CountryConverter.setCountrymap(certService.getCountriesList());
@@ -348,7 +348,7 @@ public class CertController {
 
 	@RequestMapping(value = "/check.do", method = RequestMethod.POST)
 	public String check(@ModelAttribute("cert") Certificate cert,
-			BindingResult result, SessionStatus status, ModelMap model) {
+			BindingResult result, SessionStatus status, ModelMap model, HttpServletRequest request) {
 		String retpage = "check";
 
 		if (cert.getNomercert() != null && cert.getNblanka() != null
@@ -356,8 +356,26 @@ public class CertController {
 			Certificate rcert = certService.checkCertificate(cert);
 
 			if (rcert != null) {
-				model.addAttribute("cert", rcert);
-				retpage = "certificate";
+				//model.addAttribute("cert", rcert);
+				//retpage = "certificate";
+				
+				String relativeWebPath = "/resources";
+				String  absoluteDiskPath= request.getSession().getServletContext().getRealPath(relativeWebPath);
+				makepdffile(absoluteDiskPath, rcert);
+				
+				String msg = "<p>Найден сертификат номер [" + cert.getNomercert()
+						+ "] на бланке [" + cert.getNblanka() + "] от ["
+						+ cert.getDatacert()
+						+ "].</p> "+
+				        "<p>Воспроизведение бумажной версии сертификата <a href=\"javascript:viewCertificate(\'" +
+						//rcert.getCert_id() +
+						"resources/out/" + rcert.getCert_id() + ".pdf" +
+						"')\">" + rcert.getNomercert() + "</a><p>" + 
+			            "<p>Результат воспроизведения может незначительно отличаться по форме и стилю отображения," +
+			            "но полностью воспроизводит содержание документа.</p>";
+				
+				model.addAttribute("msg", msg);
+				retpage = "fragments/message";
 			} else {
 				model.addAttribute("cert", cert);
 				String msg = "Сертификат номер [" + cert.getNomercert()

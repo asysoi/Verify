@@ -6,6 +6,14 @@
 <link href="${LoginCss}" rel="stylesheet" />
 
 <script>
+
+                 $("document").ready(function() {
+		$("#pdfview").dialog({
+			autoOpen : false
+		});
+	});
+
+
 	$(function() {
 
 		$("#datepicker").datepicker({
@@ -17,7 +25,6 @@
 			$("#datepicker").datepicker("option", "dateFormat", 'dd.mm.yy');
 			$("#datepicker").datepicker("setDate", "${cert.datacert}");
 		});
-
 	});
 
 	function submit() {
@@ -30,6 +37,33 @@
 			$("#certview").html(content);
 		});
 	}
+
+	function viewCertificate(link) {
+	    $('#pdf').contents().find('body').attr('style', 'background-color: black'); 
+		$("#pdfview").dialog("option", "title", 'Сертификат');
+		$("#pdfview").dialog("option", "width", 963);
+		$("#pdfview").dialog("option", "height", 570);
+		$("#pdfview").dialog("option", "modal", true);
+		$("#pdfview").dialog("option", "resizable", false);
+		$("#pdfview").dialog({
+			buttons : [ 	{ text : "Закрыть",	click : function() {$(this).dialog("close"); $('#pdf').contents().find("body").html('');}} ]
+		});
+
+		$("#pdfview").dialog("option", "position", {
+			my : "center",
+			at : "center",
+			of : window
+		});
+                                   
+        $('#pdf').attr('height', $("#pdfview").dialog("option", "height") - 150);
+        $('#pdf').attr('width', $("#pdfview").dialog("option", "width") - 40);
+        $('#pdf').attr('scrolling', 'yes');
+		$('#pdf').attr('src', link);
+
+		$("#pdfview").dialog("open");
+	}
+
+
 </script>
 
 <div class="col-md-10 col-md-offset-2 main">
@@ -66,4 +100,12 @@
 
 	<div id="certview" name="certview" align="center"></div>
 
+
+	<div id="pdfview" name="pdfview" style="text-align:center;">
+	          <iframe class="pdf" id="pdf"></iframe>
+                 </div> 
 </div>
+
+
+
+

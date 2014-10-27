@@ -50,8 +50,7 @@
 			url = url + "&filter="
 			        + document.getElementById("filter").checked;
    	    }
-                                   //alert(url);
-		document.location.href = url;
+  		document.location.href = url;
 	}
 
 	function swithFilter() {
@@ -82,16 +81,15 @@
 	}
 
 	function viewCertificate(certid) {
-                		$('#pdf').contents().find("body").html("<div style='color:black; text-align:center; font-size:16pt;'>Воспроизведение бумажной версии 
-
-сертификата. <p>Результат воспроизведения может незначительно отличаться по форме и стилю отображения, но полностью воспроизводит 
-
-содержание документа.</p></div> ");
+		memo = "Воспроизведение бумажной версиисертификата. <p>" + 
+		       "Результат воспроизведения может незначительно отличаться по форме и стилю отображения," +
+		       "но полностью воспроизводит содержание документа.</p>"
+        $('#pdf').contents().find("body").html("<div style='color:black; text-align:center; font-size:16pt;'>" + memo + "</div> ");
                                    $('#pdf').contents().find('body').attr('style', 'background-color: white'); 
 		link = "gocert.do?certid=" + certid;
 		$("#pdfview").dialog("option", "title", 'Сертификат');
-		$("#pdfview").dialog("option", "width", 955);
-		$("#pdfview").dialog("option", "height", 600);
+		$("#pdfview").dialog("option", "width", 963);
+		$("#pdfview").dialog("option", "height", 570);
 		$("#pdfview").dialog("option", "modal", true);
 		$("#pdfview").dialog("option", "resizable", false);
 		$("#pdfview").dialog({
@@ -99,17 +97,14 @@
 		});
 
 		$("#pdfview").dialog("option", "position", {
-			my : "center",
+			my : "center top",
 			at : "center",
-			of : window
+			of :  listwindow
 		});
                                    
-//        		var iframe = document.getElementById('pdf');
-//	    	iframe.src = link;
-                                 
-                                   $('#pdf').attr('height', 440);
-                                   $('#pdf').attr('width', 920);
-                                   $('#pdf').attr('scrolling', 'yes');
+        $('#pdf').attr('height', $("#pdfview").dialog("option", "height") - 150);
+        $('#pdf').attr('width', $("#pdfview").dialog("option", "width") - 40);
+        $('#pdf').attr('scrolling', 'yes');
 		$('#pdf').attr('src', link);
 
 
@@ -171,7 +166,7 @@
 </script>
 
 
-<div id="listvindow" class="col-md-10 col-md-offset-2 main">
+<div id="listwindow" class="col-md-10 col-md-offset-2 main">
 	<h3>Список сертификатов</h3>
 	<table style="width: 100%">
 		<tr>
@@ -182,12 +177,16 @@
                 </input></td>
 
 			<td style="width: 40%; text-align: right">
-				<a href="javascript:downloadCertificates();"><img src="resources/images/exp_excel.png" alt="Загрузить"/></a>
+				<a href="javascript:downloadCertificates();"><img src="resources/images/exp_excel.png" 
+
+alt="Загрузить"/></a>
 				   &nbsp;			        
 			       Строк в списке: <c:forEach items="${sizes}" var="item">
 	           	   &nbsp;	
 	               <a
-						href="javascript: goToList('certs.do?page=1&pagesize=${item}&orderby=${vmanager.orderby}
+						href="javascript: goToList('certs.do?page=1&pagesize=${item}&orderby=
+
+${vmanager.orderby}
 
 &order=
 
@@ -204,7 +203,9 @@ ${vmanager.order}');">${item}</a>
 			<c:forEach items="${vmanager.headers}" var="item">
 				<td
 					style="width:${item.width}%;background-color: gray; color: black"><a
-					href="javascript: goToList('${item.link}');" style="color: white">${item.name}${item.selection}</a></td>
+					href="javascript: goToList('${item.link}');" style="color: white">${item.name}${item.selection}
+
+</a></td>
 			</c:forEach>
 		</tr>
 
@@ -225,7 +226,7 @@ ${vmanager.order}');">${item}</a>
 	        -->
 
 				<td><c:if test="${cert.parent_id > 0}">
-						<a href="gocert.do?certid=${cert.parent_id}">замена для</a>
+						<a href="gocert.do?certid=${cert.parent_id}">${cert.parentnumber}</a>
 					</c:if></td>
 			</tr>
 		</c:forEach>
@@ -241,12 +242,16 @@ ${vmanager.order}');">${item}</a>
 					items="${pages}" var="item">
 	           	   &nbsp;	
 	               <a
-						href="javascript: goToList('certs.do?page=${item}&pagesize=${vmanager.pagesize}&orderby=
+						href="javascript: goToList('certs.do?page=${item}&pagesize=${vmanager.pagesize}
+
+&orderby=
 
 ${vmanager.orderby}
 
 &order=${vmanager.order}');"
-						<c:if test="${item==vmanager.page}">style="border-style: solid; border-width: 1px;"</c:if>>
+						<c:if test="${item==vmanager.page}">style="border-style: solid; border-width: 
+
+1px;"</c:if>>
 						${item} </a>
 				</c:forEach> &nbsp; (количество сертификатов - ${vmanager.pagecount})</td>
 			<td style="width: 20%; text-align: right"><a
