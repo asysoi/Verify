@@ -3,6 +3,7 @@ package cci.cert.form;
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Dialog;
+import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
@@ -26,6 +27,7 @@ public class PropertiesForm extends Dialog {
 	private Object result;
 	private Shell shlOtrs;
 	private Button btnDelete;
+	private Button btnZip;
 	private Text txtURL;
 	private Text txtRepoPath;
 	private Label lblFtpLogin;
@@ -36,6 +38,9 @@ public class PropertiesForm extends Dialog {
 	private Text txtFiles;
 	private Label label_1;
 	private Text txtDelay;
+	private Text txtFilePath;
+	
+	
 	
 	/**
 	 * Create the dialog.
@@ -115,7 +120,7 @@ public class PropertiesForm extends Dialog {
 	private void createContents() {
 		shlOtrs = new Shell(getParent(), SWT.BORDER | SWT.TITLE);
 		shlOtrs.setText("\u041F\u0430\u0440\u0430\u043C\u0435\u0442\u0440\u044B \u0437\u0430\u0433\u0440\u0443\u0437\u043A\u0438");
-		shlOtrs.setSize(439, 229);
+		shlOtrs.setSize(439, 250);
 		
 		Label lblFtpServer = new Label(shlOtrs, SWT.NONE);
 		lblFtpServer.setFont(SWTResourceManager.getFont("Arial", 10, SWT.NORMAL));
@@ -128,36 +133,18 @@ public class PropertiesForm extends Dialog {
 
 		btnDelete = new Button(shlOtrs, SWT.CHECK);
 		btnDelete.addSelectionListener(new SelectionAdapter() {
-			@Override
 			public void widgetSelected(SelectionEvent arg0) {
 			}
 		});
 		btnDelete.setFont(SWTResourceManager.getFont("Arial", 10, SWT.NORMAL));
 		btnDelete.setBounds(274, 87, 149, 16);
 		btnDelete.setText("\u0423\u0434\u0430\u043B\u044F\u0442\u044C \u0444\u0430\u0439\u043B\u044B \u0441 FTP");
-
-		Button btnSave = new Button(shlOtrs, SWT.NONE);
-		btnSave.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-				saveProps();
-				shlOtrs.close();
-			}
-		});
-		btnSave.setText("\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C");
-		btnSave.setFont(SWTResourceManager.getFont("Arial", 9, SWT.NORMAL));
-		btnSave.setBounds(262, 166, 75, 25);
-
-		Button btnCancel = new Button(shlOtrs, SWT.NONE);
-		btnCancel.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent arg0) {
-                shlOtrs.close();
-			}
-		});
-		btnCancel.setText("\u041E\u0442\u043C\u0435\u043D\u0430");
-		btnCancel.setFont(SWTResourceManager.getFont("Arial", 9, SWT.NORMAL));
-		btnCancel.setBounds(343, 166, 75, 25);
+		
+		
+		btnZip = new Button(shlOtrs, SWT.CHECK);
+		btnZip.setFont(SWTResourceManager.getFont("Arial", 10, SWT.NORMAL));
+		btnZip.setBounds(274, 112, 149, 16);
+		btnZip.setText("Грузить из ZIP");
 		
 		Label labelPath = new Label(shlOtrs, SWT.NONE);
 		labelPath.setFont(SWTResourceManager.getFont("Arial", 10, SWT.NORMAL));
@@ -171,11 +158,9 @@ public class PropertiesForm extends Dialog {
 		Button btnPath = new Button(shlOtrs, SWT.NONE);
 		btnPath.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent arg0) {
-				FileDialog fd = new FileDialog(shlOtrs, SWT.OPEN);
+				DirectoryDialog fd = new DirectoryDialog(shlOtrs, SWT.OPEN);
 				fd.setText("Путь к репозиторию хранения файлов сертификатов");
-				fd.setFilterPath("C:/");
-				String[] filterExt = { "*.exe", "*.*" };
-				fd.setFilterExtensions(filterExt);
+				fd.setFilterPath(txtRepoPath.getText());
 				String selected = fd.open();
 				System.out.println(selected);
 
@@ -187,7 +172,56 @@ public class PropertiesForm extends Dialog {
 		btnPath.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.NORMAL));
 		btnPath.setBounds(392, 135, 26, 21);
 		btnPath.setText("...");
+
+		Label labelFilesPath = new Label(shlOtrs, SWT.NONE);
+		labelFilesPath.setFont(SWTResourceManager.getFont("Arial", 10, SWT.NORMAL));
+		labelFilesPath.setBounds(20, 159, 107, 21);
+		labelFilesPath.setText("Путь к XML");
 		
+		txtFilePath = new Text(shlOtrs, SWT.BORDER);
+		txtFilePath.setFont(SWTResourceManager.getFont("Arial", 10, SWT.NORMAL));
+		txtFilePath.setBounds(124, 162, 267, 21);
+		
+		Button btnFiles = new Button(shlOtrs, SWT.NONE);
+		btnFiles.addSelectionListener(new SelectionAdapter() {
+			public void widgetSelected(SelectionEvent arg0) {
+				DirectoryDialog fd = new DirectoryDialog(shlOtrs, SWT.OPEN);
+				fd.setText("Путь к каталогу файлов сертификатов");
+				fd.setFilterPath(txtFilePath.getText());
+				String selected = fd.open();
+				System.out.println(selected);
+
+				if (selected != null && !selected.isEmpty()) {
+					txtFilePath.setText(selected);
+				}
+			}
+		});
+		btnFiles.setFont(SWTResourceManager.getFont("Segoe UI", 10, SWT.NORMAL));
+		btnFiles.setBounds(392, 162, 26, 21);
+		btnFiles.setText("...");		
+
+		Button btnSave = new Button(shlOtrs, SWT.NONE);
+		btnSave.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				saveProps();
+				shlOtrs.close();
+			}
+		});
+		btnSave.setText("\u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C");
+		btnSave.setFont(SWTResourceManager.getFont("Arial", 9, SWT.NORMAL));
+		btnSave.setBounds(262, 188, 75, 25);
+
+		Button btnCancel = new Button(shlOtrs, SWT.NONE);
+		btnCancel.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+                shlOtrs.close();
+			}
+		});
+		btnCancel.setText("\u041E\u0442\u043C\u0435\u043D\u0430");
+		btnCancel.setFont(SWTResourceManager.getFont("Arial", 9, SWT.NORMAL));
+		btnCancel.setBounds(343, 188, 75, 25);
 	}
 
 	private void saveProps() {
@@ -195,12 +229,14 @@ public class PropertiesForm extends Dialog {
 		CCIProperty props = CCIProperty.getInstance();
 			
 		props.setProperty(Config.ISDELETE, btnDelete.getSelection() ? "true" : "false");
+		props.setProperty(Config.ISZIP, btnZip.getSelection() ? "true" : "false");
 		props.setProperty(Config.URL, txtURL.getText());
 		props.setProperty(Config.LOGIN, txtLogin.getText());
 		props.setProperty(Config.PSW, txtPassword.getText());
 		props.setProperty(Config.FILES, txtFiles.getText());
 		props.setProperty(Config.DELAY, txtDelay.getText());
 		props.setProperty(Config.REPPATH, txtRepoPath.getText());
+		props.setProperty(Config.XMLPATH, txtFilePath.getText());
 		
 	
 		try {
@@ -229,11 +265,13 @@ public class PropertiesForm extends Dialog {
 		
 		txtURL.setText((String) props.getProperty(Config.URL)!= null ? props.getProperty(Config.URL) : "");
 		btnDelete.setSelection(props.getProperty(Config.ISDELETE)!= null ? Boolean.parseBoolean(props.getProperty(Config.ISDELETE)) : true);
+		btnZip.setSelection(props.getProperty(Config.ISZIP)!= null ? Boolean.parseBoolean(props.getProperty(Config.ISZIP)) : true);
 		txtLogin.setText(props.getProperty(Config.LOGIN) != null ? props.getProperty(Config.LOGIN) : "");
 		txtPassword.setText(props.getProperty(Config.PSW) != null ? props.getProperty(Config.PSW) : "");
 		txtFiles.setText(props.getProperty(Config.FILES) != null ? props.getProperty(Config.FILES) : "");
 		txtDelay.setText(props.getProperty(Config.DELAY) != null ? props.getProperty(Config.DELAY) : "");
 		txtRepoPath.setText(props.getProperty(Config.REPPATH) != null ? props.getProperty(Config.REPPATH) : "");
+		txtFilePath.setText(props.getProperty(Config.XMLPATH) != null ? props.getProperty(Config.XMLPATH) : "");
 		
 		LOG.info("Load config properties");
 	}

@@ -23,10 +23,6 @@ public class CCICertLoader {
 		ApplicationContext context = new FileSystemXmlApplicationContext(
 				"conf/jdbcconfig.xml");
 		
-		// CERTService service = context.getBean("CERTService",
-		//		CERTService.class);
-		// service.uploadCertificateFromFTP();
-	
 		CERTApplicationAWT appl = context.getBean("CERTApplicationAWT",
 				CERTApplicationAWT.class);
 		

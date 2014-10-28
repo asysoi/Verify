@@ -10,7 +10,10 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 import cci.cert.certificate.Config;
 import cci.cert.repository.FormRepository;
+import cci.cert.service.CERTReader;
 import cci.cert.service.CERTService;
+import cci.cert.service.FSReader;
+import cci.cert.service.FTPReader;
 
 public class StartMenuListener implements ActionListener {
 	
@@ -20,31 +23,28 @@ public class StartMenuListener implements ActionListener {
 		MenuItem item = (MenuItem) e.getSource();
 		
         try {
-			// ProcessBuilder process = new ProcessBuilder(OTRSProperty.getInstance().getProperty(OTRS.PR_PATH), 
-			//		      OTRSProperty.getInstance().getProperty(OTRS.PR_OTRS_URL) + "/otrs/index.pl?Action=Login&Lang=ru&User=" +
-			//		      OTRSProperty.getInstance().getProperty(OTRS.PR_LOGIN) +  
-			//		      "&Password=" +
-			//		      OTRSProperty.getInstance().getProperty(OTRS.PR_PSW));
-			// process.start();
         	
     		if (Config.M_START.equals(item.getLabel())) {
+    			LOG.info("Loading started...");
     			ApplicationContext context = new FileSystemXmlApplicationContext(
         				"conf/jdbcconfig.xml");
-            	
             	CERTService service = context.getBean("CERTService",
             			CERTService.class);
-            	LOG.info("Loading started...");
             	
+            	CERTReader reader = context.getBean("FSReader",
+            			FSReader.class);
+
+            	service.setReader(reader);
             	FormRepository.getInstance().setService(service);
+            	
             	service.start();
 	            item.setLabel(Config.M_STOP);
     		} else {
+    			LOG.info("Sending a finish signal...");
     			FormRepository.getInstance().getService().setFinished(true);
     			item.setLabel(Config.M_START);
+    			LOG.info("Finish signal has been sent...");
     		}
-        	
-
-        	
         	
 		} catch (Exception ex) {
 			LOG.error("Browser launch error. " + ex.getMessage());

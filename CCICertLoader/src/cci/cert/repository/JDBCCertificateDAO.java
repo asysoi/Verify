@@ -48,8 +48,8 @@ public class JDBCCertificateDAO implements CertificateDAO {
 					new Object[] { cert.getCert_id() },
 					new BeanPropertyRowMapper<Product>(Product.class)));
 		} catch (Exception ex) {
-			LOG.error("Ошибка поиска сертификата по ID " + id);
-			ex.printStackTrace();
+			LOG.error("Ошибка поиска сертификата по ID " + id + ": " + ex.getMessage());
+			//ex.printStackTrace();
 		}
 		return cert;
 	}
@@ -61,12 +61,13 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		Certificate rcert = null;
 
 		try {
-			String sql = "select * from CERT_VIEW WHERE NOMERCERT = ? AND NBLANKA = ? AND DATACERT=? ";
+			String sql = "select * from CERT_VIEW WHERE NOMERCERT = ? AND NBLANKA = ? AND (DATACERT=? or ISSUEDATE=TO_DATE(?,'DD.MM.YY'))";
 			rcert = template.getJdbcOperations().queryForObject(
 					sql,
 					new Object[] { cert.getNomercert(), cert.getNblanka(),
-							cert.getDatacert() },
+							cert.getDatacert(), cert.getDatacert() },
 					new BeanPropertyRowMapper<Certificate>(Certificate.class));
+			
 			if (rcert != null) {
 				sql = "select * from c_PRODUCT WHERE cert_id = ?  ORDER BY product_id";
 				rcert.setProducts(template.getJdbcOperations().query(sql,
@@ -79,7 +80,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		} catch (Exception ex) {
 			LOG.error("Проверка наличия в базе сертификата "
 					+ cert.getNomercert() + " Ошибка: " + ex.getMessage());
-			ex.printStackTrace();
+			// ex.printStackTrace();
 		}
 		return rcert;
 	}
@@ -105,8 +106,8 @@ public class JDBCCertificateDAO implements CertificateDAO {
 						new BeanPropertyRowMapper<Product>(Product.class)));
 			}
 		} catch (Exception ex) {
-			LOG.error("Ошибка поиска сертификата по номеру бланка " + number);
-			ex.printStackTrace();
+			LOG.error("Ошибка поиска сертификата по номеру бланка " + number  + ": " + ex.getMessage());
+			//ex.printStackTrace();
 		}
 		return certs;
 	}
@@ -131,28 +132,13 @@ public class JDBCCertificateDAO implements CertificateDAO {
 			}
 		} catch (Exception ex) {
 			LOG.error("Ошибка поиска сертификата по номеру сертификата "
-					+ number);
-			ex.printStackTrace();
+					+ number + ": " + ex.getMessage());
+			//ex.printStackTrace();
 		}
 		return certs;
 	}
 
 	
-	// ---------------------------------------------------------------
-	// вернуть следующую страницу сертификатов
-	// ---------------------------------------------------------------
-	public List<Certificate> findNextPage(int pageindex, int pagesize) {
-
-		String sql = " SELECT cert.* "
-				+ " FROM (SELECT t.*, ROW_NUMBER() OVER (ORDER BY t.NOMERCERT) rw FROM CERT_VIEW t) cert "
-				+ " WHERE cert.rw > " + ((pageindex - 1) * pagesize)
-				+ " AND cert.rw <= " + (pageindex * pagesize);
-
-		LOG.debug("SQL get next page : " + sql);
-		return this.template.getJdbcOperations().query(sql,
-				new BeanPropertyRowMapper<Certificate>(Certificate.class));
-	}
-
 	// ---------------------------------------------------------------
 	// найти все сертификаты
 	// ---------------------------------------------------------------
@@ -170,11 +156,12 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	public long save(Certificate cert) {
 		String sql_cert = "insert into c_cert values "
 				+ "(beltpp.cert_id_seq.nextval, "
-				+ ":forms, :unn, :kontrp, :kontrs, :adress, :poluchat, :adresspol, :datacert,"
+				+ "TRIM(:forms), :unn, :kontrp, :kontrs, :adress, :poluchat, :adresspol, :datacert,"
 				+ ":nomercert, :expert, :nblanka, :rukovod, :transport, :marshrut, :otmetka,"
 				+ ":stranav, :stranapr, :status, :koldoplist, :flexp, :unnexp, :expp, "
 				+ ":exps, :expadress, :flimp, :importer, :adressimp, :flsez, :sez,"
-				+ ":flsezrez, :stranap, :otd_id, :parentnumber, :parentstatus, TO_DATE(:datacert,'DD.MM.YY'), :denorm )";
+				+ ":flsezrez, :stranap, :otd_id, :parentnumber, :parentstatus, TO_DATE(:datacert,'DD.MM.YY'), :denorm, "
+				+ ":category, :codestranav, :codestranapr, :codestranap )";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);
 		GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
@@ -188,14 +175,14 @@ public class JDBCCertificateDAO implements CertificateDAO {
 			String sql_product = "insert into c_PRODUCT values ("
 					+ " beltpp.product_id_seq.nextval, " + cert_id
 					+ ", "
-					+ " :numerator, :tovar, :vidup, :kriter, :ves, :schet)";
+					+ " :numerator, :tovar, :vidup, :kriter, :ves, :schet, :fobvalue)";
 
 			if (cert.getProducts() != null && cert.getProducts().size() > 0) {
 				SqlParameterSource[] batch = SqlParameterSourceUtils
 						.createBatch(cert.getProducts().toArray());
 				int[] updateCounts = template.batchUpdate(sql_product, batch);
 				
-				// create denorm record
+				// create product  denorm record
 				String tovar = "";
 				for (Product product: cert.getProducts()) {
 					tovar += product.getTovar() +  ", " + product.getKriter() + ", " + product.getVes() + "; "; 
@@ -208,8 +195,8 @@ public class JDBCCertificateDAO implements CertificateDAO {
 			
 
 		} catch (Exception ex) {
-			LOG.error("Ошибка добавления сертификата " + cert.getNomercert());
-			ex.printStackTrace();
+			LOG.error("Ошибка добавления сертификата " + cert.getNomercert() + ": " + ex.getMessage());
+			//ex.printStackTrace();
 		}
 		return cert_id;
 	}
@@ -218,15 +205,16 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	// ---------------------------------------------------------------
 	// изменить сертификат
 	// ---------------------------------------------------------------
-	public void update(Certificate cert) throws Exception{
+	public void update(Certificate cert) throws Exception {
 
 		String sql_cert = "update c_cert SET "
 				
-				+ "forms = :forms, unn = :unn, kontrp = :kontrp, kontrs = :kontrs, adress = :adress, poluchat = :poluchat, adresspol = :adresspol, datacert = :datacert,"
+				+ "forms = TRIM(:forms), unn = :unn, kontrp = :kontrp, kontrs = :kontrs, adress = :adress, poluchat = :poluchat, adresspol = :adresspol, datacert = :datacert,"
 				+ "nomercert = :nomercert, expert = :expert, nblanka = :nblanka, rukovod = :rukovod, transport = :transport, marshrut = :marshrut, otmetka = :otmetka,"
 				+ "stranav = :stranav, stranapr = :stranapr, status = :status, koldoplist = :koldoplist, flexp = :flexp, unnexp = :unnexp, expp = :expp, "
 				+ "exps = :exps, expadress = :expadress, flimp = :flimp, importer = :importer, adressimp = :adressimp, flsez = :flsez, sez = :sez,"
-				+ "flsezrez = :flsezrez, stranap = :stranap, otd_id = :otd_id, parentnumber = :parentnumber, parentstatus = :parentstatus, issuedate = TO_DATE(:datacert,'DD.MM.YY') "
+				+ "flsezrez = :flsezrez, stranap = :stranap, otd_id = :otd_id, parentnumber = :parentnumber, parentstatus = :parentstatus, issuedate = TO_DATE(:datacert,'DD.MM.YY'), "
+				+ "category = :category, codestranav = :codestranav, codestranapr = :codestranapr, codestranap = :codestranap "
 				+ "WHERE cert_id = :cert_id";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);
@@ -242,7 +230,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 			String sql_product = "insert into c_PRODUCT values ("
 					+ " beltpp.product_id_seq.nextval, "
 					+ cert.getCert_id() + ", "
-					+ " :numerator, :tovar, :vidup, :kriter, :ves, :schet)";
+					+ " :numerator, :tovar, :vidup, :kriter, :ves, :schet, :fobvalue)";
 
 			if (cert.getProducts() != null && cert.getProducts().size() > 0) {
 				SqlParameterSource[] batch = SqlParameterSourceUtils
@@ -251,8 +239,8 @@ public class JDBCCertificateDAO implements CertificateDAO {
 			}
 
 		//} catch (Exception ex) {
-		//	LOG.error("Ошибка сохранения сертификата " + cert.getNomercert());
-		//	ex.printStackTrace();
+		//	LOG.error("Ошибка сохранения сертификата " + cert.getNomercert() + ": " + ex.getMessage());
+			//ex.printStackTrace();
 		//}
 
 	}
@@ -284,8 +272,8 @@ public class JDBCCertificateDAO implements CertificateDAO {
 
 		} catch (Exception ex) {
 			LOG.error("Ошибка поиска сертификатов по шаблону сертификата: "
-					+ qcert);
-			ex.printStackTrace();
+					+ qcert + ": " + ex.getMessage());
+			//ex.printStackTrace();
 		}
 
 		return certs;
@@ -303,8 +291,8 @@ public class JDBCCertificateDAO implements CertificateDAO {
 					new Object[] { directory }, Long.class);
 		} catch (Exception ex) {
 			LOG.error("Ошибка поиска ID отделения по его синониму: "
-					+ directory);
-			ex.printStackTrace();
+					+ directory+ ": " + ex.getMessage());
+			//ex.printStackTrace();
 		}
 
 		return id;
@@ -326,8 +314,14 @@ public class JDBCCertificateDAO implements CertificateDAO {
 			row = template.update(sql, parameters);
 		} catch (Exception ex) {
 			LOG.error("Ошибка сохранения записи о файле " +lfile  + " сертификата " + cert_id + " в таблицу file_in");
-			ex.printStackTrace();
+			//ex.printStackTrace();
 		}
 		return row;
+	}
+
+	@Override
+	public List<Certificate> findNextPage(int pageindex, int pagesize) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

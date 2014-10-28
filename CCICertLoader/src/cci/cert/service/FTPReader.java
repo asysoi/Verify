@@ -1,13 +1,9 @@
 package cci.cert.service;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.net.SocketException;
 
 import org.apache.commons.net.ftp.FTPClient;
@@ -16,7 +12,6 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import cci.cert.certificate.CCICertLoader;
 import cci.cert.certificate.CCIProperty;
 import cci.cert.certificate.Config;
 import cci.cert.model.Certificate;
@@ -24,26 +19,25 @@ import cci.cert.repository.CertificateDAO;
 import cci.cert.util.XMLService;
 
 @Component
-public class FTPReader {
+public class FTPReader extends CERTReader {
 	static final Logger LOG = Logger.getLogger(FTPReader.class);
 
 	@Autowired
 	XMLService xmlreader;
 
-	private boolean exitflag = false;
-	private boolean stopped;
 	CCIProperty props = CCIProperty.getInstance();
 
 	public void load(CertificateDAO dao) {
 		FTPClient ftp = new FTPClient();
-		stopped = false;
+		setStopped(false);
 
-		while (!exitflag) {
+		while (!isExitflag()) {
 
 			for (String directory : Config.ftpdirs) {
 				try {
 					ftp.connect(props.getProperty(Config.URL));
-					ftp.login(props.getProperty(Config.LOGIN), props.getProperty(Config.PSW));
+					ftp.login(props.getProperty(Config.LOGIN),
+							props.getProperty(Config.PSW));
 
 					FTPFile[] files = ftp.listFiles(directory);
 					InputStream input;
@@ -65,12 +59,14 @@ public class FTPReader {
 								start = System.currentTimeMillis();
 
 								try {
-									LOG.info("Найден FTP файл: " + directory
+									LOG.info("Найден FTP файл: "
+											+ directory
 											+ props.getProperty(Config.FTPSEPARATOR)
 											+ file.getName());
-									input = ftp.retrieveFileStream(directory
-											+ props.getProperty(Config.FTPSEPARATOR)
-											+ file.getName());
+									input = ftp
+											.retrieveFileStream(directory
+													+ props.getProperty(Config.FTPSEPARATOR)
+													+ file.getName());
 
 									if (input != null) {
 										xmltext = getStringFromInputStream(input);
@@ -100,14 +96,15 @@ public class FTPReader {
 																				// наличие
 												boolean saved;
 
-												String lfile = props.getProperty(Config.REPPATH)
+												String lfile = props
+														.getProperty(Config.REPPATH)
 														+ directory
 														+ File.separator
 														+ file.getName();
 
 												if (checkcert == null) {
 													cert_id = dao.save(cert);
-													
+
 													if (cert_id > 0) {
 														LOG.info("Сертификат с номером "
 																+ cert_id
@@ -123,7 +120,9 @@ public class FTPReader {
 																	cert_id,
 																	lfile);
 
-															if (Boolean.parseBoolean(props.getProperty(Config.ISDELETE))) {
+															if (Boolean
+																	.parseBoolean(props
+																			.getProperty(Config.ISDELETE))) {
 																ftp.deleteFile(directory
 																		+ props.getProperty(Config.FTPSEPARATOR)
 																		+ file.getName());
@@ -163,11 +162,13 @@ public class FTPReader {
 																+ " уже зарегистрирован. Пропуск... ");
 													}
 
-													if (Boolean.parseBoolean(props.getProperty(Config.ISDELETE))) {
+													if (Boolean
+															.parseBoolean(props
+																	.getProperty(Config.ISDELETE))) {
 														ftp.deleteFile(directory
 																+ props.getProperty(Config.FTPSEPARATOR)
 																+ file.getName());
-														
+
 														LOG.info("Файл "
 																+ directory
 																+ props.getProperty(Config.FTPSEPARATOR)
@@ -180,7 +181,7 @@ public class FTPReader {
 												LOG.error("Ошибка сохранения сертификата: "
 														+ ex.toString());
 												ex.printStackTrace();
-										   }
+											}
 										}
 									} else {
 										LOG.info("FTP Input не был открыт");
@@ -191,13 +192,15 @@ public class FTPReader {
 									ex.printStackTrace();
 								}
 								LOG.info("Время загрузки сертификата из файла "
-										+ directory + props.getProperty(Config.FTPSEPARATOR)
+										+ directory
+										+ props.getProperty(Config.FTPSEPARATOR)
 										+ file.getName() + " составила: "
 										+ (System.currentTimeMillis() - start));
 							}
-							if (++counter > Integer.parseInt(props.getProperty(Config.FILES)) || exitflag) {
+							if (++counter > Integer.parseInt(props
+									.getProperty(Config.FILES)) || isExitflag()) {
 								break;
-							}   
+							}
 						}
 					}
 					ftp.logout();
@@ -211,12 +214,12 @@ public class FTPReader {
 					e.printStackTrace();
 				}
 
-				if (exitflag) {
+				if (isExitflag()) {
 					break;
 				}
 			}
 
-			if (exitflag) {
+			if (isExitflag()) {
 				break;
 			}
 
@@ -228,106 +231,8 @@ public class FTPReader {
 			}
 		}
 
-		stopped = true;
+		setStopped(true);
 		LOG.info("FTPReader finished");
 	}
 
-	private boolean saveFileIntoLоcalDirectory(String lfile, String xmltext) {
-		OutputStream fop = null;
-		boolean ret = false;
-
-		try {
-			File file = new File(lfile);
-			fop = new FileOutputStream(file);
-
-			if (!file.exists()) {
-				file.createNewFile();
-			}
-
-			byte[] contentInBytes = xmltext.getBytes();
-
-			fop.write(contentInBytes);
-			fop.flush();
-			fop.close();
-			ret = true;
-		} catch (IOException e) {
-			LOG.error("Ошибка ввода вывода при сохранении файла " + lfile);
-			e.printStackTrace();
-		} finally {
-			try {
-				if (fop != null) {
-					fop.close();
-				}
-			} catch (IOException e) {
-				LOG.error("Ошибка ввода вывода при сохранении файла " + lfile);
-				e.printStackTrace();
-			}
-		}
-
-		return ret;
-	}
-
-	private boolean saveFileIntoLоcalDirectory(String lfile, InputStream input) {
-		byte[] buffer = new byte[1024];
-		int bytesRead;
-		boolean ret = false;
-
-		try {
-			File file = new File(lfile);
-			OutputStream output = new FileOutputStream(file);
-
-			while ((bytesRead = input.read(buffer)) != -1) {
-				output.write(buffer, 0, bytesRead);
-			}
-			output.flush();
-			output.close();
-			ret = true;
-		} catch (Exception ex) {
-			LOG.error("Ошибка ввода вывода при сохранении файла " + lfile);
-			ex.printStackTrace();
-		}
-		return ret;
-	}
-
-	private static String getStringFromInputStream(InputStream is) {
-
-		BufferedReader br = null;
-		StringBuilder sb = new StringBuilder();
-
-		String line;
-		try {
-
-			br = new BufferedReader(new InputStreamReader(is));
-			while ((line = br.readLine()) != null) {
-				sb.append(line);
-			}
-
-		} catch (IOException e) {
-			LOG.error("Ошибка загрузки строки из входного потока");
-			e.printStackTrace();
-		} finally {
-			if (br != null) {
-				try {
-					br.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-
-		return sb.toString();
-	}
-
-	public void finished(boolean flag) {
-		LOG.info("FTPReader finishing...");
-		this.exitflag = flag;
-
-		while (!stopped) {
-			try {
-				Thread.sleep(200);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-	}
 }
