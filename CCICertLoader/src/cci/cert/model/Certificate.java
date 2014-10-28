@@ -51,11 +51,12 @@ public class Certificate {
 	private String otd_address_home;
 	private String parentnumber = "";
 	private String parentstatus = "";
+	private String denorm;
 	private String codestranav;
 	private String codestranapr;
 	private String codestranap;
 	private String category;
-	private String denorm;
+	
 	private List<Product> products;
 	private String childnumber = "";
 	private Integer child_id = 0;

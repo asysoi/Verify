@@ -213,9 +213,9 @@ public class FSReader extends CERTReader {
 	// -------------------------------------------------------
 	private void deleteFile(String fullfilename) {
 		if ((new File(fullfilename)).delete()) {
-			LOG.info("Файл " + fullfilename + " удален");
+			LOG.info("    Файл " + fullfilename + " удален");
 		} else {
-			LOG.info("Файл " + fullfilename + " НЕ удален");
+			LOG.info("    Файл " + fullfilename + " НЕ удален");
 		}
 	}
 

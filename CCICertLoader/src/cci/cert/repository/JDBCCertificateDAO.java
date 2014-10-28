@@ -214,7 +214,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				+ "stranav = :stranav, stranapr = :stranapr, status = :status, koldoplist = :koldoplist, flexp = :flexp, unnexp = :unnexp, expp = :expp, "
 				+ "exps = :exps, expadress = :expadress, flimp = :flimp, importer = :importer, adressimp = :adressimp, flsez = :flsez, sez = :sez,"
 				+ "flsezrez = :flsezrez, stranap = :stranap, otd_id = :otd_id, parentnumber = :parentnumber, parentstatus = :parentstatus, issuedate = TO_DATE(:datacert,'DD.MM.YY'), "
-				+ "category = :category, codestranav = :codestranav, codestranapr = :codestranapr, codestranap = :codestranap "
+				+ "denorm = :denorm, codestranav = :codestranav, codestranapr = :codestranapr, codestranap = :codestranap, category = :category "
 				+ "WHERE cert_id = :cert_id";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);
@@ -226,6 +226,11 @@ public class JDBCCertificateDAO implements CertificateDAO {
 			template.getJdbcOperations().update(
 					"delete from c_PRODUCT where cert_id = ?",
 					Long.valueOf(cert.getCert_id()));
+			
+			template.getJdbcOperations().update(
+					"delete from c_PRODUCT_DENORM where cert_id = ?",
+					Long.valueOf(cert.getCert_id()));
+
 
 			String sql_product = "insert into c_PRODUCT values ("
 					+ " beltpp.product_id_seq.nextval, "
@@ -237,6 +242,17 @@ public class JDBCCertificateDAO implements CertificateDAO {
 						.createBatch(cert.getProducts().toArray());
 				int[] updateCounts = template.batchUpdate(sql_product, batch);
 			}
+			
+			// create product  denorm record
+			String tovar = "";
+			for (Product product: cert.getProducts()) {
+				tovar += product.getTovar() +  ", " + product.getKriter() + ", " + product.getVes() + "; "; 
+			}
+			
+			sql_product = "insert into C_PRODUCT_DENORM values (:cert_id, :tovar)";
+			parameters = new MapSqlParameterSource().addValue("cert_id", Long.valueOf(cert.getCert_id())).addValue("tovar",tovar);
+			template.update(sql_product, parameters);
+					
 
 		//} catch (Exception ex) {
 		//	LOG.error("Ошибка сохранения сертификата " + cert.getNomercert() + ": " + ex.getMessage());
