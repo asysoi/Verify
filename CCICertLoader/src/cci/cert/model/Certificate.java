@@ -6,11 +6,14 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
+
 
 @XmlRootElement(name = "cert")
 @Component
 public class Certificate {
+	static final Logger LOG = Logger.getLogger(Certificate.class);
 	private Long cert_id;
 	private String forms;
 	private String unn;
@@ -51,7 +54,6 @@ public class Certificate {
 	private String otd_address_home;
 	private String parentnumber = "";
 	private String parentstatus = "";
-	private String denorm;
 	private String codestranav;
 	private String codestranapr;
 	private String codestranap;
@@ -414,14 +416,6 @@ public class Certificate {
 		this.otd_id = otd_id;
 	}
 
-	public String getDenorm() {
-		return denorm;
-	}
-
-	public void setDenorm(String denorm) {
-		this.denorm = denorm;
-	}
-
 	public String getCategory() {
 		return category;
 	}
@@ -455,29 +449,7 @@ public class Certificate {
 	}
 	
 	
-
-	public String toString() {
-		return "Certificate [cert_id=" + cert_id + ", forms=" + forms
-				+ ", unn=" + unn + ", kontrp=" + kontrp + ", kontrs=" + kontrs
-				+ ", adress=" + adress + ", poluchat=" + poluchat
-				+ ", adresspol=" + adresspol + ", datacert=" + datacert
-				+ ", nomercert=" + nomercert + ", expert=" + expert
-				+ ", nblanka=" + nblanka + ", rukovod=" + rukovod
-				+ ", transport=" + transport + ", marshrut=" + marshrut
-				+ ", otmetka=" + otmetka + ", stranav=" + stranav
-				+ ", stranapr=" + stranapr + ", status=" + status
-				+ ", koldoplist=" + koldoplist + ", flexp=" + flexp
-				+ ", unnexp=" + unnexp + ", expp=" + expp + ", exps=" + exps
-				+ ", expadress=" + expadress + ", flimp=" + flimp
-				+ ", importer=" + importer + ", adressimp=" + adressimp
-				+ ", flsez=" + flsez + ", sez=" + sez + ", flsezrez="
-				+ flsezrez + ", stranap=" + stranap + ", otd_id=" + otd_id
-				+ ", otd_name=" + otd_name + ", otd_address_index="
-				+ otd_address_index + ", otd_address_city=" + otd_address_city
-				+ ", otd_address_line=" + otd_address_line
-				+ ", otd_address_home=" + otd_address_home + "]";
-	}
-
+	
 	// old version. see new version	
 	public int hashCodeOld() {
 		final int prime = 31;
@@ -530,302 +502,360 @@ public class Certificate {
 	}
 
 	// old version. see new version
-	public boolean equalsOld(Object obj) {
+	public boolean equals(Object obj) {
+		//LOG.info("---------------------- > Starting certificate comparing.... < -------------------------");
+		
 		if (this == obj) {
 			return true;
 		}
+
 		if (obj == null) {
-			System.out.print(" |  " + 1);
+			LOG.info(" Compare FALSE :  " + 1);
 			return false;
 		}
 		if (getClass() != obj.getClass()) {
-			System.out.print(" |  " + 2);
+			LOG.info(" Compare FALSE :  " + 2);
 			return false;
 		}
 		Certificate other = (Certificate) obj;
+		//LOG.info(this);
+		//LOG.info(other);
+		
 		if (adress == null) {
 			if (other.adress != null && other.adress.length() > 0) {
-				System.out.print(" |  " + 3);
+				LOG.info(" Compare FALSE :  " + 3);
 				return false;
 			}
 		} else if (!adress.equals(other.adress)) {
-			System.out.print(" |  " + 4);
+			LOG.info(" Compare FALSE :  " + 4);
 			return false;
 		}
 		if (adressimp == null) {
 			if (other.adressimp != null && other.adressimp.length() > 0) {
-				System.out.print(" |  " + 5);
+				LOG.info(" Compare FALSE :  " + 5);
 				return false;
 			}
 		} else if (!adressimp.equals(other.adressimp)) {
-			System.out.print(" |  " + 6);
+			LOG.info(" Compare FALSE :  " + 6);
 			return false;
 		}
 		if (adresspol == null) {
 			if (other.adresspol != null && other.adresspol.length() > 0) {
-				System.out.print(" |  " + 7);
+				LOG.info(" Compare FALSE :  " + 7);
 				return false;
 			}
 		} else if (!adresspol.equals(other.adresspol)) {
-			System.out.print(" |  " + 8);
+			LOG.info(" Compare FALSE :  " + 8);
 			return false;
 		}
+		
+		
+		if (category == null) {
+			if (other.category != null && other.category.length() > 0) {
+				LOG.info(" Compare FALSE :  " + 101);
+				return false;
+			}
+		} else if (!category.equals(other.category)) {
+			LOG.info(" Compare FALSE :  " + 102);
+			return false; }
+		if (codestranap == null) {
+			if (other.codestranap != null && other.codestranap.length() > 0) {
+				LOG.info(" Compare FALSE :  " + 103);
+				return false; }
+		} else if (!codestranap.equals(other.codestranap)) {
+			LOG.info(" Compare FALSE :  " + 104);
+				return false; }
+		if (codestranapr == null) {
+			if (other.codestranapr != null && other.codestranapr.length() > 0) {
+				LOG.info(" Compare FALSE :  " + 105);
+				return false; }
+		} else if (!codestranapr.equals(other.codestranapr)) {
+			LOG.info(" Compare FALSE :  " + 106);
+			return false;
+		}
+		if (codestranav == null) {
+			if (other.codestranav != null && other.codestranav.length() > 0) {
+				LOG.info(" Compare FALSE :  " + 107);
+				return false; }
+		} else if (!codestranav.equals(other.codestranav)) {
+			LOG.info(" Compare FALSE :  " + 108);
+			return false;
+		}
+		if (parentnumber == null) {
+			if (other.parentnumber != null && other.parentnumber.length() > 0) {
+				LOG.info(" Compare FALSE :  " + 109);
+				return false; }
+		} else if (!parentnumber.equals(other.parentnumber)) {
+			LOG.info(" Compare FALSE :  " + 110);
+			return false;
+		}
+		if (parentstatus == null) {
+			if (other.parentstatus != null && other.parentstatus.length() > 0) {
+				LOG.info(" Compare FALSE :  " + 111);
+				return false; }
+		} else if (!parentstatus.equals(other.parentstatus)) {
+			LOG.info(" Compare FALSE :  " + 112);
+			return false;
+		}
+		
+		
 		if (datacert == null) {
 			if (other.datacert != null && other.datacert.length() > 0) {
-				System.out.print(" |  " + 9);
+				LOG.info(" Compare FALSE :  " + 9);
 				return false;
 			}
 		} else if (!datacert.equals(other.datacert)) {
-			System.out.print(" |  " + 10);
+			LOG.info(" Compare FALSE :  " + 10);
 			return false;
 		}
 		if (expadress == null) {
 			if (other.expadress != null && other.expadress.length() > 0) {
-				System.out.print(" |  " + 11);
+				LOG.info(" Compare FALSE :  " + 11);
 				return false;
 			}
 		} else if (!expadress.equals(other.expadress)) {
-			System.out.print(" |  " + 12);
+			LOG.info(" Compare FALSE :  " + 12);
 			return false;
 		}
 		if (expert == null) {
 			if (other.expert != null && other.expert.length() > 0) {
-				System.out.print(" |  " + 13);
+				LOG.info(" Compare FALSE :  " + 13);
 				return false;
 			}
 		} else if (!expert.equals(other.expert)) {
-			System.out.print(" |  " + 14);
+			LOG.info(" Compare FALSE :  " + 14);
 			return false;
 		}
 		if (expp == null) {
 			if (other.expp != null && other.expp.length() > 0) {
-				System.out.print(" |  " + 15);
+				LOG.info(" Compare FALSE :  " + 15);
 				return false;
 			}
 		} else if (!expp.equals(other.expp)) {
-			System.out.print(" |  " + 16);
+			LOG.info(" Compare FALSE :  " + 16);
 			return false;
 		}
 		if (exps == null) {
 			if (other.exps != null && other.exps.length() > 0) {
-				System.out.print(" |  " + 17);
+				LOG.info(" Compare FALSE :  " + 17);
 				return false;
 			}
 		} else if (!exps.equals(other.exps)) {
-			System.out.print(" |  " + 18);
+			LOG.info(" Compare FALSE :  " + 18);
 			return false;
 		}
 		if (flexp == null) {
 			if (other.flexp != null && other.flexp.length() > 0) {
-				System.out.print(" |  " + 19);
+				LOG.info(" Compare FALSE :  " + 19);
 				return false;
 			}
 		} else if (!flexp.equals(other.flexp)) {
-			System.out.print(" |  " + 20);
+			LOG.info(" Compare FALSE :  " + 20);
 			return false;
 		}
 		if (flimp == null) {
 			if (other.flimp != null && other.flimp.length() > 0) {
-				System.out.print(" |  " + 21);
+				LOG.info(" Compare FALSE :  " + 21);
 				return false;
 			}
 		} else if (!flimp.equals(other.flimp)) {
-			System.out.print(" |  " + 22);
+			LOG.info(" Compare FALSE :  " + 22);
 			return false;
 		}
 		if (flsez == null) {
 			if (other.flsez != null && other.flsez.length() > 0) {
-				System.out.print(" |  " + 23);
+				LOG.info(" Compare FALSE :  " + 23);
 				return false;
 			}
 		} else if (!flsez.equals(other.flsez)) {
-			System.out.print(" |  " + 24);
+			LOG.info(" Compare FALSE :  " + 24);
 			return false;
 		}
 		if (flsezrez == null) {
 			if (other.flsezrez != null && other.flsezrez.length() > 0) {
-				System.out.print(" |  " + 25);
+				LOG.info(" Compare FALSE :  " + 25);
 				return false;
 			}
 		} else if (!flsezrez.equals(other.flsezrez)) {
-			System.out.print(" |  " + 26);
+			LOG.info(" Compare FALSE :  " + 26);
 			return false;
 		}
 		if (forms == null) {
 			if (other.forms != null && other.forms.length() > 0) {
-				System.out.print(" |  " + 27);
+				LOG.info(" Compare FALSE :  " + 27);
 				return false;
 			}
 		} else if (!forms.equals(other.forms)) {
-			System.out.print(" |  " + 28);
+			LOG.info(" Compare FALSE :  " + 28);
 			return false;
 		}
 		if (importer == null) {
 			if (other.importer != null && other.importer.length() > 0) {
-				System.out.print(" |  " + 29);
+				LOG.info(" Compare FALSE :  " + 29);
 				return false;
 			}
 		} else if (!importer.equals(other.importer)) {
-			System.out.print(" |  " + 30);
+			LOG.info(" Compare FALSE :  " + 30);
 			return false;
 		}
 		if (koldoplist == null) {
 			if (other.koldoplist != null && other.koldoplist.length() > 0) {
-				System.out.print(" |  " + 31);
+				LOG.info(" Compare FALSE :  " + 31);
 				return false;
 			}
 		} else if (!koldoplist.equals(other.koldoplist)) {
-			System.out.print(" |  " + 32);
+			LOG.info(" Compare FALSE :  " + 32);
 			return false;
 		}
 		if (kontrp == null) {
 			if (other.kontrp != null && other.kontrp.length() > 0) {
-				System.out.print(" |  " + 33);
+				LOG.info(" Compare FALSE :  " + 33);
 				return false;
 			}
 		} else if (!kontrp.equals(other.kontrp)) {
-			System.out.print(" |  " + 34);
+			LOG.info(" Compare FALSE :  " + 34);
 			return false;
 		}
 		if (kontrs == null) {
 			if (other.kontrs != null && other.kontrs.length() > 0) {
-				System.out.print(" |  " + 36);
+				LOG.info(" Compare FALSE :  " + 36);
 				return false;
 			}
 		} else if (!kontrs.equals(other.kontrs)) {
-			System.out.print(" |  " + 37);
+			LOG.info(" Compare FALSE :  " + 37);
 			return false;
 		}
 		if (marshrut == null) {
 			if (other.marshrut != null && other.marshrut.length() > 0) {
-				System.out.print(" |  " + 38);
+				LOG.info(" Compare FALSE :  " + 38);
 				return false;
 			}
 		} else if (!marshrut.equals(other.marshrut)) {
-			System.out.print(" |  " + 39 + " " + marshrut + "  |  "
+			LOG.info(" Compare FALSE :  " + 39 + " " + marshrut + "  |  "
 					+ other.getMarshrut());
 			return false;
 		}
 		if (nblanka == null) {
 			if (other.nblanka != null && other.nblanka.length() > 0) {
-				System.out.print(" |  " + 40);
+				LOG.info(" Compare FALSE :  " + 40);
 				return false;
 			}
 		} else if (!nblanka.equals(other.nblanka)) {
-			System.out.print(" |  " + 41);
+			LOG.info(" Compare FALSE :  " + 41);
 			return false;
 		}
 		if (nomercert == null) {
 			if (other.nomercert != null && other.nomercert.length() > 0) {
-				System.out.print(" |  " + 42);
+				LOG.info(" Compare FALSE :  " + 42);
 				return false;
 			}
 		} else if (!nomercert.equals(other.nomercert)) {
-			System.out.print(" |  " + 43);
+			LOG.info(" Compare FALSE :  " + 43);
 			return false;
 		}
 		if (otd_id != other.otd_id) {
-			System.out.print(" |  " + 44);
+			LOG.info(" Compare FALSE :  " + 44);
 			return false;
 		}
 		if (otmetka == null) {
 			if (other.otmetka != null && other.otmetka.length() > 0) {
-				System.out.print(" |  " + 45);
+				LOG.info(" Compare FALSE :  " + 45);
 				return false;
 			}
 		} else if (!otmetka.equals(other.otmetka)) {
-			System.out.print(" |  " + 46 + " " + otmetka + "  |  "
+			LOG.info(" Compare FALSE :  " + 46 + " " + otmetka + "  |  "
 					+ other.getOtmetka());
 			return false;
 		}
+		
 		if (poluchat == null) {
 			if (other.poluchat != null && other.poluchat.length() > 0) {
-				System.out.print(" |  " + 47);
+				LOG.info(" Compare FALSE :  " + 47);
 				return false;
 			}
 		} else if (!poluchat.equals(other.poluchat)) {
-			System.out.print(" |  " + 48);
+			LOG.info(" Compare FALSE :  " + 48);
 			return false;
 		}
 		if (rukovod == null) {
 			if (other.rukovod != null && other.rukovod.length() > 0) {
-				System.out.print(" |  " + 49);
+				LOG.info(" Compare FALSE :  " + 49);
 				return false;
 			}
 		} else if (!rukovod.equals(other.rukovod)) {
-			System.out.print(" |  " + 50);
+			LOG.info(" Compare FALSE :  " + 50);
 			return false;
 		}
 		if (sez == null) {
 			if (other.sez != null && other.sez.length() > 0) {
-				System.out.print(" |  " + 51);
+				LOG.info(" Compare FALSE :  " + 51);
 				return false;
 			}
 		} else if (!sez.equals(other.sez)) {
-			System.out.print(" |  " + 52);
+			LOG.info(" Compare FALSE :  " + 52);
 			return false;
 		}
 		if (status == null) {
 			if (other.status != null && other.status.length() > 0) {
-				System.out.print(" |  " + 53);
+				LOG.info(" Compare FALSE :  " + 53);
 				return false;
 			}
 		} else if (!status.equals(other.status)) {
-			System.out.print(" |  " + 54);
+			LOG.info(" Compare FALSE :  " + 54);
 			return false;
 		}
 		if (stranap == null) {
 			if (other.stranap != null && other.stranap.length() > 0) {
-				System.out.print(" |  " + 55);
+				LOG.info(" Compare FALSE :  " + 55);
 				return false;
 			}
 		} else if (!stranap.equals(other.stranap)) {
-			System.out.print(" |  " + 56);
+			LOG.info(" Compare FALSE :  " + 56);
 			return false;
 		}
 		if (stranapr == null) {
 			if (other.stranapr != null && other.stranapr.length() > 0) {
-				System.out.print(" |  " + 57);
+				LOG.info(" Compare FALSE :  " + 57);
 				return false;
 			}
 		} else if (!stranapr.equals(other.stranapr)) {
-			System.out.print(" |  " + 58);
+			LOG.info(" Compare FALSE :  " + 58);
 			return false;
 		}
 		if (stranav == null) {
 			if (other.stranav != null && other.stranav.length() > 0) {
-				System.out.print(" |  " + 59);
+				LOG.info(" Compare FALSE :  " + 59);
 				return false;
 			}
 		} else if (!stranav.equals(other.stranav)) {
-			System.out.print(" |  " + 60);
+			LOG.info(" Compare FALSE :  " + 60);
 			return false;
 		}
 		if (transport == null) {
 			if (other.transport != null && other.transport.length() > 0) {
-				System.out.print(" |  " + 61);
+				LOG.info(" Compare FALSE :  " + 61);
 				return false;
 			}
 		} else if (!transport.equals(other.transport)) {
-			System.out.print(" |  " + 62);
+			LOG.info(" Compare FALSE :  " + 62);
 			return false;
 		}
 		if (unn == null) {
 			if (other.unn != null && other.unn.length() > 0) {
-				System.out.print(" |  " + 63);
+				LOG.info(" Compare FALSE :  " + 63);
 				return false;
 			}
 		} else if (!unn.equals(other.unn)) {
-			System.out.print(" |  " + 64);
+			LOG.info(" Compare FALSE :  " + 64);
 			return false;
 		}
 		if (unnexp == null) {
 			if (other.unnexp != null && other.unnexp.length() > 0) {
-				System.out.print(" |  " + 65);
+				LOG.info(" Compare FALSE :  " + 65);
 				return false;
 			}
 		} else if (!unnexp.equals(other.unnexp)) {
-			System.out.print(" |  " + 66);
+			LOG.info(" Compare FALSE :  " + 66);
 			return false;
 		}
 		return true;
@@ -893,14 +923,14 @@ public class Certificate {
 		return result;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
+	public boolean equals_new(Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
+		
 		Certificate other = (Certificate) obj;
 		if (adress == null) {
 			if (other.adress != null)
@@ -1087,7 +1117,31 @@ public class Certificate {
 				return false;
 		} else if (!unnexp.equals(other.unnexp))
 			return false;
+		LOG.info("---------------------- > Finished certificate comparing! < -------------------------");
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Certificate [cert_id=" + cert_id + ", forms=" + forms
+				+ ", unn=" + unn + ", kontrp=" + kontrp + ", kontrs=" + kontrs
+				+ ", adress=" + adress + ", poluchat=" + poluchat
+				+ ", adresspol=" + adresspol + ", datacert=" + datacert
+				+ ", nomercert=" + nomercert + ", expert=" + expert
+				+ ", nblanka=" + nblanka + ", rukovod=" + rukovod
+				+ ", transport=" + transport + ", marshrut=" + marshrut
+				+ ", otmetka=" + otmetka + ", stranav=" + stranav
+				+ ", stranapr=" + stranapr + ", status=" + status
+				+ ", koldoplist=" + koldoplist + ", flexp=" + flexp
+				+ ", unnexp=" + unnexp + ", expp=" + expp + ", exps=" + exps
+				+ ", expadress=" + expadress + ", flimp=" + flimp
+				+ ", importer=" + importer + ", adressimp=" + adressimp
+				+ ", flsez=" + flsez + ", sez=" + sez + ", flsezrez="
+				+ flsezrez + ", stranap=" + stranap + ", otd_id=" + otd_id
+				+ ", otd_name=" + otd_name + ", parentnumber=" + parentnumber
+				+ ", parentstatus=" + parentstatus + ", codestranav=" + codestranav 
+				+ ", codestranapr="	+ codestranapr + ", codestranap=" + codestranap + ", category="
+				+ category + "]";
 	}
 	
 }

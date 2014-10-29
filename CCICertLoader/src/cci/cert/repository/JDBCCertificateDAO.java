@@ -156,12 +156,12 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	public long save(Certificate cert) {
 		String sql_cert = "insert into c_cert values "
 				+ "(beltpp.cert_id_seq.nextval, "
-				+ "TRIM(:forms), :unn, :kontrp, :kontrs, :adress, :poluchat, :adresspol, :datacert,"
-				+ ":nomercert, :expert, :nblanka, :rukovod, :transport, :marshrut, :otmetka,"
+				+ "TRIM(:forms), :unn, :kontrp, :kontrs, :adress, :poluchat, :adresspol, :datacert, "
+				+ ":nomercert, :expert, :nblanka, :rukovod, :transport, :marshrut, :otmetka, "
 				+ ":stranav, :stranapr, :status, :koldoplist, :flexp, :unnexp, :expp, "
-				+ ":exps, :expadress, :flimp, :importer, :adressimp, :flsez, :sez,"
-				+ ":flsezrez, :stranap, :otd_id, :parentnumber, :parentstatus, TO_DATE(:datacert,'DD.MM.YY'), :denorm, "
-				+ ":category, :codestranav, :codestranapr, :codestranap )";
+				+ ":exps, :expadress, :flimp, :importer, :adressimp, :flsez, :sez, "
+				+ ":flsezrez, :stranap, :otd_id, :parentnumber, :parentstatus, TO_DATE(:datacert,'DD.MM.YY'),  "
+				+ ":codestranav, :codestranapr, :codestranap,  :category )";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);
 		GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
@@ -214,7 +214,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				+ "stranav = :stranav, stranapr = :stranapr, status = :status, koldoplist = :koldoplist, flexp = :flexp, unnexp = :unnexp, expp = :expp, "
 				+ "exps = :exps, expadress = :expadress, flimp = :flimp, importer = :importer, adressimp = :adressimp, flsez = :flsez, sez = :sez,"
 				+ "flsezrez = :flsezrez, stranap = :stranap, otd_id = :otd_id, parentnumber = :parentnumber, parentstatus = :parentstatus, issuedate = TO_DATE(:datacert,'DD.MM.YY'), "
-				+ "denorm = :denorm, codestranav = :codestranav, codestranapr = :codestranapr, codestranap = :codestranap, category = :category "
+				+ "codestranav = :codestranav, codestranapr = :codestranapr, codestranap = :codestranap, category = :category "
 				+ "WHERE cert_id = :cert_id";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);

@@ -34,7 +34,7 @@ public class FSReader extends CERTReader {
 					Certificate checkcert = null;
 					long start;
 					long cert_id;
-					int counter = 1;
+					long counter = 1l;
 
 					String[] files = new File(props.getProperty(Config.XMLPATH)
 							+ directory).list();
@@ -53,7 +53,7 @@ public class FSReader extends CERTReader {
 										+ directory + File.separator + filename;
 								// + FileSystems.getDefault().getSeparator()
 
-								LOG.info("Найден файл: " + fullfilename);
+								LOG.info(counter + ". " + "Найден файл: " + fullfilename);
 
 								try {
 									cert = xmlreader
@@ -106,6 +106,7 @@ public class FSReader extends CERTReader {
 														+ " НЕ МОЖЕТ БЫТЬ добавлен в базу данных. Ошибка загрузки сертификата...");
 											}
 										} else {
+											
 											if (!checkcert.equals(cert)) {
 												LOG.info("    Сертификатc номером "
 														+ cert.getNomercert()
