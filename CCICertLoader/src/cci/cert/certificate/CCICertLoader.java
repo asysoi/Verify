@@ -1,4 +1,4 @@
-     package cci.cert.certificate;
+package cci.cert.certificate;
 
 import org.apache.log4j.Logger;
 import org.springframework.context.ApplicationContext;
@@ -14,7 +14,8 @@ public class CCICertLoader {
 	}
 
 	public void start() {
-			
+		
+					
 		LOG.info("Certificate Loader started");  
 		
 		ApplicationContext context = new FileSystemXmlApplicationContext(

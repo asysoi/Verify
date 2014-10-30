@@ -36,7 +36,7 @@ public class FSReader extends CERTReader {
 					long cert_id;
 					long counter = 1l;
 
-					String[] files = new File(props.getProperty(Config.XMLPATH)
+					String[] files = new File(props.getProperty(Config.XMLPATH) + File.separator 
 							+ directory).list();
 					long otd_id = dao.getOtdIdBySynonimName(directory);
 					LOG.info("ID Отделения " + directory + " : " + otd_id);
@@ -49,7 +49,7 @@ public class FSReader extends CERTReader {
 
 							try {
 								String fullfilename = props
-										.getProperty(Config.XMLPATH)
+										.getProperty(Config.XMLPATH) + File.separator 
 										+ directory + File.separator + filename;
 								// + FileSystems.getDefault().getSeparator()
 
@@ -74,6 +74,7 @@ public class FSReader extends CERTReader {
 
 										String lfile = props
 												.getProperty(Config.REPPATH)
+												+ File.separator 
 												+ directory
 												+ File.separator
 												+ filename;
