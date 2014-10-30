@@ -83,11 +83,11 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		Certificate rcert = null;
 
 		try {
-			String sql = "select * from CERT_VIEW WHERE NOMERCERT = ? AND NBLANKA = ? AND DATACERT=? ";
+			String sql = "select * from CERT_VIEW WHERE NOMERCERT = ? AND NBLANKA = ? AND (DATACERT=? OR ISSUEDATE=TO_DATE(?,'DD.MM.YY'))";
 			rcert = template.getJdbcOperations().queryForObject(
 					sql,
 					new Object[] { cert.getNomercert(), cert.getNblanka(),
-							cert.getDatacert() },
+							cert.getDatacert(), cert.getDatacert() },
 					new BeanPropertyRowMapper<Certificate>(Certificate.class));
 			if (rcert != null) {
 				sql = "select * from C_PRODUCT WHERE cert_id = ?  ORDER BY product_id";

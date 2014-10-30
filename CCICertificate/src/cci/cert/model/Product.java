@@ -14,6 +14,7 @@ public class Product {
 	private String kriter;
 	private String ves;
 	private String schet;
+	private String fobvalue;
 	
 	public Long getProduct_id() {
 		return product_id;
@@ -56,5 +57,11 @@ public class Product {
 	}
 	public void setSchet(String schet) {
 		this.schet = schet;
+	}
+	public String getFobvalue() {
+		return fobvalue;
+	}
+	public void setFobvalue(String fobvalue) {
+		this.fobvalue = fobvalue;
 	}
 }

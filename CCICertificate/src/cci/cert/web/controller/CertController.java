@@ -370,7 +370,7 @@ public class CertController {
 				        "<p>¬оспроизведение бумажной версии сертификата <a href=\"javascript:viewCertificate(\'" +
 						//rcert.getCert_id() +
 						"resources/out/" + rcert.getCert_id() + ".pdf" +
-						"')\">" + rcert.getNomercert() + "</a><p>" + 
+						"')\">" + rcert.getNomercert() + "</a><p style=\"width:100%\">" + 
 			            "<p>–езультат воспроизведени€ может незначительно отличатьс€ по форме и стилю отображени€," +
 			            "но полностью воспроизводит содержание документа.</p>";
 				

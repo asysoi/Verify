@@ -8,7 +8,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.springframework.stereotype.Component;
 
-
 @XmlRootElement(name = "cert")
 @Component
 public class Certificate {
@@ -56,9 +55,8 @@ public class Certificate {
 	private String codestranav;
 	private String codestranapr;
 	private String codestranap;
-	
-	// private String denorm;
-	// список продукции
+	private String category;
+
 	private List<Product> products;
 	private String childnumber = "";
 	private Integer child_id = 0;
@@ -66,8 +64,6 @@ public class Certificate {
 	private ProductIterator iterator;
 	private int cursor;
 	private int currentlist;
-	
-	
 
 	public int getCurrentlist() {
 		return currentlist;
@@ -822,7 +818,7 @@ public class Certificate {
 	public void setParent_id(Long parent_id) {
 		this.parent_id = parent_id;
 	}
-	
+
 	public String getCodestranav() {
 		return codestranav;
 	}
@@ -846,16 +842,15 @@ public class Certificate {
 	public void setCodestranap(String codestranap) {
 		this.codestranap = codestranap;
 	}
-	
-	//public String getDenorm() {
-	//	return denorm;
-	//}
 
-	//public void setDenorm(String denorm) {
-	//	this.denorm = denorm;
-	//}
+	public String getCategory() {
+		return category;
+	}
 
-	
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
 	public ProductIterator getIterator() {
 		if (iterator == null) {
 			iterator = new ProductIteratorImpl();
@@ -908,7 +903,5 @@ public class Certificate {
 		}
 
 	}
-	
-	
-	
+
 }
