@@ -17,7 +17,7 @@
     
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
-        <property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
+        <property name="url" value="jdbc:oracle:thin:@//localhost:1521/pdborcl.cci.by"/>
         <property name="username" value="BELTPP"/>
         <property name="password" value="123456"/>
     </bean>

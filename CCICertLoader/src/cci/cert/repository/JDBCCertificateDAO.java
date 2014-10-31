@@ -1,5 +1,9 @@
 package cci.cert.repository;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -154,8 +158,16 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	// сохранить сертификат
 	// ---------------------------------------------------------------
 	public long save(Certificate cert) {
-		String sql_cert = "insert into c_cert values "
-				+ "(beltpp.cert_id_seq.nextval, "
+		String sql_cert = "insert into c_cert "
+				+ "(cert_id, "
+				+ "forms, unn, kontrp, kontrs, adress, poluchat, adresspol, datacert, "
+				+ "nomercert, expert, nblanka, rukovod, transport, marshrut, otmetka, "
+				+ "stranav, stranapr, status, koldoplist, flexp, unnexp, expp, "
+				+ "exps, expadress, flimp, importer, adressimp, flsez, sez, "
+				+ "flsezrez, stranap, otd_id, parentnumber, parentstatus, issuedate,  "
+				+ "codestranav, codestranapr, codestranap,  category) "
+				//+ "values (beltpp.cert_id_seq.nextval, "
+				+ "values (:cert_id, "
 				+ "TRIM(:forms), :unn, :kontrp, :kontrs, :adress, :poluchat, :adresspol, :datacert, "
 				+ ":nomercert, :expert, :nblanka, :rukovod, :transport, :marshrut, :otmetka, "
 				+ ":stranav, :stranapr, :status, :koldoplist, :flexp, :unnexp, :expp, "
@@ -163,40 +175,50 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				+ ":flsezrez, :stranap, :otd_id, :parentnumber, :parentstatus, TO_DATE(:datacert,'DD.MM.YY'),  "
 				+ ":codestranav, :codestranapr, :codestranap,  :category )";
 
-		SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);
-		GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 		long cert_id = 0;
-
+		
 		try {
-			int row = template.update(sql_cert, parameters, keyHolder,
-					new String[] { "CERT_ID" });
-			cert_id = keyHolder.getKey().longValue();
-
-			String sql_product = "insert into c_PRODUCT values ("
-					+ " beltpp.product_id_seq.nextval, " + cert_id
-					+ ", "
-					+ " :numerator, :tovar, :vidup, :kriter, :ves, :schet, :fobvalue)";
-
-			if (cert.getProducts() != null && cert.getProducts().size() > 0) {
-				SqlParameterSource[] batch = SqlParameterSourceUtils
-						.createBatch(cert.getProducts().toArray());
-				int[] updateCounts = template.batchUpdate(sql_product, batch);
-				
-				// create product  denorm record
-				String tovar = "";
-				for (Product product: cert.getProducts()) {
-					tovar += product.getTovar() +  ", " + product.getKriter() + ", " + product.getVes() + "; "; 
-				}
-				
-				sql_product = "insert into C_PRODUCT_DENORM values (:cert_id, :tovar)";
-				parameters = new MapSqlParameterSource().addValue("cert_id", cert_id).addValue("tovar",tovar);
-				template.update(sql_product, parameters);
-			}
+			cert.setCert_id(SequenceGenerator.getNextValue("cert_id", this));
+			SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);
+			// auto generation return -> GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 			
+			// auto generation return -> int row = template.update(sql_cert, parameters, keyHolder,
+			// auto generation return -> 		new String[] { "CERT_ID" });
+			// auto generation return -> cert_id = keyHolder.getKey().longValue();
+			
+			int row = template.update(sql_cert, parameters);
+			
+			if (row > 0) {
+				cert_id = cert.getCert_id();
+				//// sql_cert = "select beltpp.cert_id_seq.currval from dual";
+				//// cert_id = template.getJdbcOperations().queryForInt(sql_cert);	
+				
+				if (cert_id > 0) { 
+					String sql_product = "insert into c_PRODUCT values ("
+							+ " beltpp.product_id_seq.nextval, " + cert_id
+							+ ", "
+							+ " :numerator, :tovar, :vidup, :kriter, :ves, :schet, :fobvalue)";
 
+					if (cert.getProducts() != null && cert.getProducts().size() > 0) {
+						SqlParameterSource[] batch = SqlParameterSourceUtils
+								.createBatch(cert.getProducts().toArray());
+						int[] updateCounts = template.batchUpdate(sql_product, batch);
+				
+						// 	create product  denorm record
+						String tovar = "";
+						for (Product product: cert.getProducts()) {
+							tovar += product.getTovar() +  ", " + product.getKriter() + ", " + product.getVes() + "; "; 
+						}
+				
+						sql_product = "insert into C_PRODUCT_DENORM values (:cert_id, :tovar)";
+						parameters = new MapSqlParameterSource().addValue("cert_id", cert_id).addValue("tovar",tovar);
+						template.update(sql_product, parameters);
+					}
+				}
+			}
 		} catch (Exception ex) {
 			LOG.error("Ошибка добавления сертификата " + cert.getNomercert() + ": " + ex.getMessage());
-			//ex.printStackTrace();
+			ex.printStackTrace();
 		}
 		return cert_id;
 	}
@@ -340,4 +362,61 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	// --------------------------------------------------- 
+	// autogeneration returning test
+	// ---------------------------------------------------
+	private void testkey() {
+		String QUERY = "INSERT INTO test_students "
+				+ "  VALUES (student_seq.NEXTVAL,"
+				+ "         'Harry', 'harry@hogwarts.edu', '31-July-1980')";
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+
+			Connection connection = DriverManager
+					.getConnection("jdbc:oracle:thin:@//localhost:1521/pdborcl.cci.by",
+							"beltpp", "123456");
+
+			PreparedStatement ps = connection.prepareStatement(QUERY,
+					new String[] { "student_id" });
+
+			Long studentId = null;
+
+			if (ps.executeUpdate() > 0) {
+
+				ResultSet generatedKeys = ps.getGeneratedKeys();
+				
+				if (generatedKeys != null && generatedKeys.next()) {
+					
+					studentId = generatedKeys.getLong(1);
+					LOG.info("Student ID: " + studentId );
+				}
+
+			}
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+	}
+	
+	
+	// ---------------------------------------------------------------
+	// get pool. return start pooling
+	// ---------------------------------------------------------------
+	public long getNextValuePool(String seq_name, int poolsize) throws Exception {
+
+		String sql = "select value from c_sequence WHERE name = '" + seq_name + "'";
+		long vl = template.getJdbcOperations().queryForInt(sql);
+		
+		sql = "update c_sequence SET "
+				+ " value = value + :poolsize"
+				+ " WHERE name = :seq_name";
+		
+		SqlParameterSource parameters = new MapSqlParameterSource().addValue("poolsize", Integer.valueOf(poolsize)).addValue("seq_name",seq_name);
+	    template.update(sql, parameters);
+	
+	    return vl;
+	}
+
 }

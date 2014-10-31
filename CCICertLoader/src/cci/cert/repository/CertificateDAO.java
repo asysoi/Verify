@@ -28,4 +28,6 @@ public interface CertificateDAO {
 
 	public int saveFile(long cert_id, String lfile);
 	
+	public long getNextValuePool(String seq_name, int poolsize) throws Exception; 
+	
 }
