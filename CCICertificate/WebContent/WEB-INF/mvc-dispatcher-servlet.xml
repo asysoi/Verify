@@ -40,11 +40,11 @@ http://www.springframework.org/schema/mvc/spring-mvc.xsd">
     <bean id="purchaseDAO" class="cci.purchase.repository.JDBCPurchaseDAO">
         <property name="dataSource" ref="dataSource"/>
     </bean>
-        
+   
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
-        <property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"/>
-        <property name="username" value="BelTPP"/>
+        <property name="url" value="jdbc:oracle:thin:@//localhost:1521/pdborcl.cci.by"/>
+        <property name="username" value="BELTPP"/>
         <property name="password" value="123456"/>
     </bean>
 

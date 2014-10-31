@@ -16,9 +16,10 @@ public class CountryConverter  {
 	public static String getCountryNameByCode(String code) {
     	   String name = code;
     	   
-		   if (code.trim().length() == 2 && countrymap != null) {
+    	   // System.out.println("Country Code:" + code + "  CountryMap: " + countrymap);
+		   if (code != null && code.trim().length() == 2 && countrymap != null) {
 			   name = countrymap.get(code);
 		   }
-    	   return name;   
+    	   return name;     
     }
 } 
