@@ -1,8 +1,11 @@
+--------------------------------------------------------
+--  File created - понедельник-Ноябрь-03-2014   
+--------------------------------------------------------
 REM INSERTING into BELTPP.C_OTD
 SET DEFINE OFF;
-Insert into BELTPP.C_OTD (ID,NAME,NAME_SYN,ADDR_INDEX,ADDR_CITY,ADDR_LINE,ADDR_BUILDING,ADDR_OFFICE,WORK_PHONE,CELL_PHONE) values (1,'РњРёРЅСЃРєРѕРµ РѕС‚РґРµР»РµРЅРёРµ Р‘РµР»РўРџРџ','minsk','220011','РњРёРЅСЃРє','РЇ.РљРѕР»РѕСЃР°','62','22','1 23 45 67',null);
-Insert into BELTPP.C_OTD (ID,NAME,NAME_SYN,ADDR_INDEX,ADDR_CITY,ADDR_LINE,ADDR_BUILDING,ADDR_OFFICE,WORK_PHONE,CELL_PHONE) values (2,'Р‘СЂРµСЃС‚РєРѕРµ РѕС‚РґРµР»РµРЅРёРµ Р‘РµР»РўРџРџ','brest','220011','Р‘СЂРµСЃС‚','РЈР»РёС†Р°','1','22','1 23 45 67',null);
-Insert into BELTPP.C_OTD (ID,NAME,NAME_SYN,ADDR_INDEX,ADDR_CITY,ADDR_LINE,ADDR_BUILDING,ADDR_OFFICE,WORK_PHONE,CELL_PHONE) values (3,'Р’РёС‚РµР±СЃРєРѕРµ РѕС‚РґРµР»РµРЅРёРµ Р‘РµР»РўРџРџ','vitebsk','220011','Р’РёС‚РµР±СЃРє','РЈР»РёС†Р°','1','22','1 23 45 67',null);
-Insert into BELTPP.C_OTD (ID,NAME,NAME_SYN,ADDR_INDEX,ADDR_CITY,ADDR_LINE,ADDR_BUILDING,ADDR_OFFICE,WORK_PHONE,CELL_PHONE) values (4,'Р“РѕРјРµР»СЊСЃРєРѕРµ РѕС‚РґРµР»РµРЅРёРµ Р‘РµР»РўРџРџ','gomel','220011','Р“РѕРјРµР»СЊ','РЈР»РёС†Р°','1','22','1 23 45 67',null);
-Insert into BELTPP.C_OTD (ID,NAME,NAME_SYN,ADDR_INDEX,ADDR_CITY,ADDR_LINE,ADDR_BUILDING,ADDR_OFFICE,WORK_PHONE,CELL_PHONE) values (5,'Р“СЂРѕРґРЅРµРЅСЃРєРѕРµ РѕС‚РґРµР»РµРЅРёРµ Р‘РµР»РўРџРџ','grodno','220011','Р“СЂРѕРґРЅРѕ','РЈР»РёС†Р°','1','22','1 23 45 67',null);
-Insert into BELTPP.C_OTD (ID,NAME,NAME_SYN,ADDR_INDEX,ADDR_CITY,ADDR_LINE,ADDR_BUILDING,ADDR_OFFICE,WORK_PHONE,CELL_PHONE) values (6,'РњРѕРіРёР»РµРІСЃРєРѕРµ РѕС‚РґРµР»РµРЅРёРµ Р‘РµР»РўРџРџ','mogilev','220011','РњРѕРіРёР»РµРІ','РЈР»РёС†Р°','1','22','1 23 45 67',null);
+Insert into BELTPP.C_OTD (ID,NAME,NAME_SYN,ADDR_INDEX,ADDR_CITY,ADDR_LINE,ADDR_BUILDING,ADDR_OFFICE,WORK_PHONE,CELL_PHONE) values (1,'Минское отделение БелТПП','minsk','220113','Минск','Я.Колоса','65',null,'+375 17 2884922',null);
+Insert into BELTPP.C_OTD (ID,NAME,NAME_SYN,ADDR_INDEX,ADDR_CITY,ADDR_LINE,ADDR_BUILDING,ADDR_OFFICE,WORK_PHONE,CELL_PHONE) values (2,'Бресткое отделение БелТПП','brest','224030','Брест','ул. Гоголя','13',null,null,null);
+Insert into BELTPP.C_OTD (ID,NAME,NAME_SYN,ADDR_INDEX,ADDR_CITY,ADDR_LINE,ADDR_BUILDING,ADDR_OFFICE,WORK_PHONE,CELL_PHONE) values (3,'Витебское отделение БелТПП','vitebsk','210001','Витебск','ул. Космонавтов','4',null,null,null);
+Insert into BELTPP.C_OTD (ID,NAME,NAME_SYN,ADDR_INDEX,ADDR_CITY,ADDR_LINE,ADDR_BUILDING,ADDR_OFFICE,WORK_PHONE,CELL_PHONE) values (4,'Гомельское отделение БелТПП','gomel','246017','Гомель','ул. Ирининская','21',null,null,null);
+Insert into BELTPP.C_OTD (ID,NAME,NAME_SYN,ADDR_INDEX,ADDR_CITY,ADDR_LINE,ADDR_BUILDING,ADDR_OFFICE,WORK_PHONE,CELL_PHONE) values (5,'Гродненское отделение БелТПП','grodno','230023','Гродно','ул. Советская','23а',null,null,null);
+Insert into BELTPP.C_OTD (ID,NAME,NAME_SYN,ADDR_INDEX,ADDR_CITY,ADDR_LINE,ADDR_BUILDING,ADDR_OFFICE,WORK_PHONE,CELL_PHONE) values (6,'Могилевское отделение БелТПП','mogilev','212030','Могилев','улю Первомайская','71','802','+375 222 32 68 50',null);

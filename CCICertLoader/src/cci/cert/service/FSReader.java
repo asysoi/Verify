@@ -73,6 +73,7 @@ public class FSReader extends CERTReader {
 								}
 
 								if (cert != null) {
+									validate(cert);
 									try {
 										cert.setOtd_id((int) otd_id);
 										checkcert = dao.check(cert);
@@ -193,6 +194,10 @@ public class FSReader extends CERTReader {
 
 		setStopped(true);
 		LOG.info("FTPReader finished");
+	}
+
+	private boolean validate(Certificate cert) {
+		return true;
 	}
 
 	// -------------------------------------------------------
