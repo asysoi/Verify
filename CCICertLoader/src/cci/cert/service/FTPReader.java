@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.SocketException;
 
+import org.apache.commons.net.ProtocolCommandEvent;
+import org.apache.commons.net.ProtocolCommandListener;
+import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.log4j.Logger;
@@ -29,16 +32,14 @@ public class FTPReader extends CERTReader {
 
 	public void load(CertificateDAO dao) {
 		FTPClient ftp = new FTPClient();
+		//ftp.addProtocolCommandListener(new PrintCommandListener());
 		setStopped(false);
 
 		while (!isExitflag()) {
 
 			for (String directory : Config.ftpdirs) {
 				try {
-					ftp.connect(props.getProperty(Config.URL));
-					ftp.login(props.getProperty(Config.LOGIN),
-							props.getProperty(Config.PSW));
-
+					ftpConnect(ftp);
 					FTPFile[] files = ftp.listFiles(directory);
 					InputStream input;
 					Certificate cert = null, checkcert = null;
@@ -98,6 +99,7 @@ public class FTPReader extends CERTReader {
 
 												String lfile = props
 														.getProperty(Config.REPPATH)
+														+ File.separator
 														+ directory
 														+ File.separator
 														+ file.getName();
@@ -186,10 +188,19 @@ public class FTPReader extends CERTReader {
 									} else {
 										LOG.info("FTP Input не был открыт");
 									}
+								} catch (SocketException e) {
+									LOG.error("Ошибка на уровне работы сокета" + e.getMessage());
+									LOG.info("Try reconnect to restore normal work... ");
+									ftpConnect(ftp);
+								
 								} catch (Exception ex) {
 									LOG.error("Сертификат не загружен из-за ошибки: "
 											+ ex.toString());
-									ex.printStackTrace();
+									if (!ftp.isConnected()) {
+										LOG.info("Lost connection... Try restor it, ");
+										ftpConnect(ftp);
+									}
+									//ex.printStackTrace();
 								}
 								LOG.info("Время загрузки сертификата из файла "
 										+ directory
@@ -203,15 +214,23 @@ public class FTPReader extends CERTReader {
 							}
 						}
 					}
-					ftp.logout();
-					ftp.disconnect();
+					// ftp.logout();
+					// ftp.disconnect();
 
 				} catch (SocketException e) {
-					LOG.error("Ошибка на уровне работы сокета");
-					e.printStackTrace();
+					LOG.error("Ошибка на уровне работы сокета" + e.getMessage());
+				    //e.printStackTrace();
 				} catch (IOException e) {
-					LOG.error("Ошибка ввода-вывода");
-					e.printStackTrace();
+					LOG.error("Ошибка ввода-вывода" + e.getMessage());
+					//e.printStackTrace();
+				} finally {
+					try {
+					  ftp.logout();						
+					  ftp.disconnect();
+					  LOG.info("FTP connection closed normaly ...");
+					} catch (Exception ex) { 
+						LOG.info("FTP connection already closed ...");
+					}
 				}
 
 				if (isExitflag()) {
@@ -235,4 +254,30 @@ public class FTPReader extends CERTReader {
 		LOG.info("FTPReader finished");
 	}
 
+	
+	private void ftpConnect(FTPClient ftp) {
+		try {
+			ftp.disconnect();
+			ftp.connect(props.getProperty(Config.URL));
+			ftp.login(props.getProperty(Config.LOGIN),
+				props.getProperty(Config.PSW));
+			// ftp.setFileType(FTP.BINARY_FILE_TYPE);  ???
+			// ftp.enterLocalPassiveMode(); 
+		} catch(Exception ex) {
+			LOG.info("Не удалось установить соединение с FTP: " + ex.getMessage());
+		}
+	}
+
+
+	private class PrintCommandListener implements ProtocolCommandListener {
+
+		public void protocolCommandSent(ProtocolCommandEvent evnt) {
+			LOG.info("Sent command: " + evnt.getCommand() + " Message: " + evnt.getMessage() + " Replay code: " + evnt.getReplyCode());
+		}
+
+		public void protocolReplyReceived(ProtocolCommandEvent evnt) {
+			LOG.info("Recvd command: " + evnt.getCommand() + " Message: " + evnt.getMessage() + " Replay code: " + evnt.getReplyCode());			
+		}
+		
+	}
 }

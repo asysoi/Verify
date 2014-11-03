@@ -58,11 +58,18 @@ public class FSReader extends CERTReader {
 								try {
 									cert = xmlreader
 											.loadCertificate(fullfilename);
+											//.loadCertificateFromUTF8BOOM(fullfilename);
 									LOG.info("    Время загрузки и парсинга файла составило: " + 
 											+ (System.currentTimeMillis() - start));
-									
+								} catch(javax.xml.bind.UnmarshalException ex) {
+									try {
+										LOG.error("XML BOM удаление: " + ex.getMessage());	
+									   cert = xmlreader.loadCertificateFromUTF8BOOM(fullfilename);
+									} catch (Exception exx) {
+										LOG.error("Ошибка парсинга файла: " + exx.getMessage());
+									} 
 								} catch (Exception ex) {
-									ex.printStackTrace();
+									LOG.error("Ошибка парсинга файла: " + ex.getMessage());
 								}
 
 								if (cert != null) {

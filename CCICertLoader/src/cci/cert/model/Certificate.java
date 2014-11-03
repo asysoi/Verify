@@ -685,7 +685,7 @@ public class Certificate {
 				LOG.info(" Compare FALSE :  " + 27);
 				return false;
 			}
-		} else if (!forms.equals(other.forms)) {
+		} else if (!forms.trim().equals(other.forms != null ? other.forms.trim() : other.forms)) {
 			LOG.info(" Compare FALSE :  " + 28);
 			return false;
 		}
