@@ -164,7 +164,7 @@ DROP SEQUENCE "PRODUCT_ID_SEQ";
 
 
   CREATE TABLE "C_SEQUENCE"  ("VALUE" NUMBER NOT NULL ENABLE,	"NAME" VARCHAR2(20 BYTE));
-  INSERT "C_SEQUENCE" VALUE (1, "cert_id");
+  INSERT INTO "C_SEQUENCE" VALUES (1, "cert_id");
   
 --------------------------------------------------------
 --  VIEW --  VIEW --  VIEW --  VIEW --  VIEW --  VIEW --   
