@@ -51,23 +51,16 @@ public class FSReader extends CERTReader {
 								String fullfilename = props
 										.getProperty(Config.XMLPATH) + File.separator 
 										+ directory + File.separator + filename;
-								// + FileSystems.getDefault().getSeparator()
 
 								LOG.info(counter + ". " + "Найден файл: " + fullfilename);
 
 								try {
 									cert = xmlreader
 											.loadCertificate(fullfilename);
-											//.loadCertificateFromUTF8BOOM(fullfilename);
 									LOG.info("    Время загрузки и парсинга файла составило: " + 
 											+ (System.currentTimeMillis() - start));
 								} catch(javax.xml.bind.UnmarshalException ex) {
-									try {
-										LOG.error("XML BOM удаление: " + ex.getMessage());	
-									   cert = xmlreader.loadCertificateFromUTF8BOOM(fullfilename);
-									} catch (Exception exx) {
-										LOG.error("Ошибка парсинга файла: " + exx.getMessage());
-									} 
+									LOG.error("Ошибка парсинга файла UnmarshalException : " + ex.getMessage());
 								} catch (Exception ex) {
 									LOG.error("Ошибка парсинга файла: " + ex.getMessage());
 								}

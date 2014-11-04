@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.net.SocketException;
 
 import org.apache.commons.net.ProtocolCommandEvent;
@@ -50,7 +51,7 @@ public class FTPReader extends CERTReader {
 
 					long otd_id = dao.getOtdIdBySynonimName(directory);
 					LOG.info("ID Отделения: " + otd_id);
-
+  
 					// если есть такой отделение
 					if (otd_id > 0) {
 
@@ -60,34 +61,35 @@ public class FTPReader extends CERTReader {
 								start = System.currentTimeMillis();
 
 								try {
-									LOG.info("Найден FTP файл: "
-											+ directory
+									String rfile =directory
 											+ props.getProperty(Config.FTPSEPARATOR)
-											+ file.getName());
-									input = ftp
-											.retrieveFileStream(directory
-													+ props.getProperty(Config.FTPSEPARATOR)
-													+ file.getName());
+											+ file.getName();
+									
+									LOG.info("Найден FTP файл -------------------------------- >  " + rfile);
+									
+									input = ftp. 
+											retrieveFileStream(rfile);
 
 									if (input != null) {
 										xmltext = getStringFromInputStream(input);
-
-										try {
-											cert = xmlreader
-													.loadCertificate(new ByteArrayInputStream(
-															xmltext.getBytes()));
-										} catch (Exception ex) {
-											LOG.error("Ошибка загрузки сертификата: "
-													+ ex.toString());
-											ex.printStackTrace();
-											cert = null;
-										}
 										input.close();
-
+										
 										if (!ftp.completePendingCommand()) {
 											ftp.logout();
 											ftp.disconnect();
 											LOG.error("File transfer failed.");
+										}
+										
+										try {
+											cert = xmlreader
+													//.loadCertificate(new ByteArrayInputStream(
+													//		xmltext.getBytes()));
+													.loadCertificate(new StringReader(xmltext));
+											
+										} catch (Exception ex) {
+											LOG.error("Ошибка загрузки сертификата: "
+													+ ex.toString());
+											cert = null;
 										}
 
 										if (cert != null) {

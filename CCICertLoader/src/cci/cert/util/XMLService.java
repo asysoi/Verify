@@ -24,53 +24,82 @@ import cci.cert.model.Certificate;
 public class XMLService {
 	static final Logger LOG = Logger.getLogger(XMLService.class);
 	private final String UTF8_BOM = "\uFEFF";
+	private final String UTF8 = "UTF8";
 
 	public Certificate loadCertificate(String file_path) throws Exception {
+		Certificate cert = null;
 		JAXBContext context = JAXBContext.newInstance(Certificate.class);
 		Unmarshaller um = context.createUnmarshaller();
-		Certificate cert = (Certificate) um
-				.unmarshal(new FileReader(file_path));
+		Reader reader = getReader(file_path);
+
+		if (reader != null) {
+			cert = (Certificate) um.unmarshal(reader);
+		}
 		return cert;
 	}
 
-	public Certificate loadCertificateFromUTF8BOOM(String file_path)
-			throws Exception {
-		JAXBContext context = JAXBContext.newInstance(Certificate.class);
-		Unmarshaller um = context.createUnmarshaller();
-		Certificate cert = (Certificate) um
-				.unmarshal(convertFromUTF8BOOM(file_path));
-		return cert;
-	}
-
-	private Reader convertFromUTF8BOOM(String file_path) {
+	private Reader getReader(String file_path) {
 		boolean firstLine = true;
-		Reader ret = null;
+		Reader reader = null;
+
 		try {
-			FileInputStream fis = new FileInputStream(file_path);
-			BufferedReader r = new BufferedReader(new InputStreamReader(fis,
-					"UTF8"));
-			Writer wr = new StringWriter();
-			for (String s = ""; (s = r.readLine()) != null;) {
-				if (firstLine) {
-					s = removeUTF8BOM(s);
-					firstLine = false;
+			if (checkUTF8Charset(file_path)) {
+				LOG.info("UTF-8 found");
+
+				FileInputStream fis = new FileInputStream(file_path);
+				BufferedReader r = new BufferedReader(new InputStreamReader(
+						fis, UTF8));
+				Writer wr = new StringWriter();
+				for (String s = ""; (s = r.readLine()) != null;) {
+					if (firstLine) {
+						s = removeUTF8BOM(s);
+						firstLine = false;
+					}
+					wr.write(s + System.getProperty("line.separator"));
+					wr.flush();
 				}
-				wr.write(s + System.getProperty("line.separator"));
-				wr.flush();
+				r.close();
+				reader = new StringReader(wr.toString());
+				wr.close();
+			} else {
+				LOG.info("UTF-8 NOT found");
+				reader = new FileReader(file_path);
+				LOG.info("Reader charset of " + file_path + ": "
+						+ ((FileReader) reader).getEncoding());
 			}
-			r.close();
-			ret = new StringReader(wr.toString());
-			wr.close();
 		} catch (Exception ex) {
 			LOG.info("Ошибка чтения файла с конвертацией " + ex.getMessage());
+		}
+
+		return reader;
+	}
+
+	private boolean checkUTF8Charset(String filename) {
+		boolean ret = false;
+		BufferedReader r;
+
+		try {
+			r = new BufferedReader(new FileReader(filename));
+
+			for (String s = ""; (s = r.readLine()) != null;) {
+				if (s.toUpperCase().indexOf("UTF-8") != -1) {
+					ret = true;
+					break;
+				}
+			}
+			r.close();
+		} catch (Exception ex) {
+			LOG.error(ex.getMessage());
 		}
 		return ret;
 	}
 
 	private String removeUTF8BOM(String s) {
+
 		if (s.startsWith(UTF8_BOM)) {
+			LOG.info("UTF8 BOM found...");
 			s = s.substring(1);
-			LOG.info("UTF8 BOM deleted");
+			LOG.info("UTF8 BOM deleted...");
 
 			if (!(s.indexOf("<?") != -1 && s.indexOf("xml") != -1 && s
 					.indexOf("encoding") != -1)) {
@@ -79,10 +108,11 @@ public class XMLService {
 				LOG.info("Converted string: " + s);
 			}
 		} else {
-			LOG.info("UTF8 BOM  NOT deleted");
+			LOG.info("UTF8 BOM  NOT found...");
 		}
 		return s;
 	}
+
 
 	public Certificate loadCertificate(InputStream input) throws Exception {
 		JAXBContext context = JAXBContext.newInstance(Certificate.class);
@@ -106,8 +136,18 @@ public class XMLService {
 		Marshaller m = context.createMarshaller();
 		m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 		m.marshal(cert, outstr);
-
 		return outstr.toString();
+	}
+
+	public Certificate loadCertificate(Reader reader) throws Exception {
+		Certificate cert = null;
+		JAXBContext context = JAXBContext.newInstance(Certificate.class);
+		Unmarshaller um = context.createUnmarshaller();
+
+		if (reader != null) {
+			cert = (Certificate) um.unmarshal(reader);
+		}
+		return cert;
 	}
 
 }

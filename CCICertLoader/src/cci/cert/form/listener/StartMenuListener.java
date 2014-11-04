@@ -34,8 +34,8 @@ public class StartMenuListener implements ActionListener {
             	CERTReader reader = context.getBean("FSReader",
             			FSReader.class);
             	
-            	//reader = context.getBean("FTPReader",
-            	//		FTPReader.class);
+            	reader = context.getBean("FTPReader",
+            			FTPReader.class);
 
             	service.setReader(reader);
             	FormRepository.getInstance().setService(service);
