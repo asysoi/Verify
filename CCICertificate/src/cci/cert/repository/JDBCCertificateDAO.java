@@ -293,7 +293,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	// Get list of departments
 	// ---------------------------------------------------------------
 	public List<String> getDepartmentsList() {
-		String sql = "SELECT name from C_OTD";
+		String sql = "SELECT otd_name from C_OTD";
 
 		System.out.println("Got department list");
 		return (List<String>) template.getJdbcOperations().queryForList(sql,

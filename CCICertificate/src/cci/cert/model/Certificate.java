@@ -45,10 +45,10 @@ public class Certificate {
 	private String stranap;
 	private int otd_id;
 	private String otd_name;
-	private String otd_address_index;
-	private String otd_address_city;
-	private String otd_address_line;
-	private String otd_address_home;
+	private String otd_addr_index;
+	private String otd_addr_city;
+	private String otd_addr_line;
+	private String otd_addr_building;
 	private String parentnumber = "";
 	private String parentstatus = "";
 	private String tovar;
@@ -56,7 +56,9 @@ public class Certificate {
 	private String codestranapr;
 	private String codestranap;
 	private String category;
-
+	private String eotd_name;
+	private String eotd_addr_city;
+	private String eotd_addr_line;
 	private List<Product> products;
 	private String childnumber = "";
 	private Integer child_id = 0;
@@ -64,6 +66,8 @@ public class Certificate {
 	private ProductIterator iterator;
 	private int cursor;
 	private int currentlist;
+	
+	
 
 	public int getCurrentlist() {
 		return currentlist;
@@ -379,36 +383,36 @@ public class Certificate {
 		this.products = products;
 	}
 
-	public String getOtd_address_index() {
-		return otd_address_index;
+	public String getOtd_addr_index() {
+		return otd_addr_index;
 	}
 
-	public void setOtd_address_index(String otd_address_index) {
-		this.otd_address_index = otd_address_index;
+	public void setOtd_addr_index(String otd_addr_index) {
+		this.otd_addr_index = otd_addr_index;
 	}
 
-	public String getOtd_address_city() {
-		return otd_address_city;
+	public String getOtd_addr_city() {
+		return otd_addr_city;
 	}
 
-	public void setOtd_address_city(String otd_address_city) {
-		this.otd_address_city = otd_address_city;
+	public void setOtd_addr_city(String otd_addr_city) {
+		this.otd_addr_city = otd_addr_city;
 	}
 
-	public String getOtd_address_line() {
-		return otd_address_line;
+	public String getOtd_addr_line() {
+		return otd_addr_line;
 	}
 
-	public void setOtd_address_line(String otd_address_line) {
-		this.otd_address_line = otd_address_line;
+	public void setOtd_addr_line(String otd_addr_line) {
+		this.otd_addr_line = otd_addr_line;
 	}
 
-	public String getOtd_address_home() {
-		return otd_address_home;
+	public String getOtd_addr_building() {
+		return otd_addr_building;
 	}
 
-	public void setOtd_address_home(String otd_address_home) {
-		this.otd_address_home = otd_address_home;
+	public void setOtd_addr_building(String otd_addr_building) {
+		this.otd_addr_building = otd_addr_building;
 	}
 
 	public String getOtd_name() {
@@ -425,6 +429,32 @@ public class Certificate {
 		// kontrp;
 		return (kontrp != null && kontrp.length() > 100) ? kontrp.substring(1,
 				100) + " ..." : kontrp;
+	}
+	
+	
+
+	public String getEotd_name() {
+		return eotd_name;
+	}
+
+	public void setEotd_name(String eotd_name) {
+		this.eotd_name = eotd_name;
+	}
+
+	public String getEotd_addr_city() {
+		return eotd_addr_city;
+	}
+
+	public void setEotd_addr_city(String eotd_addr_city) {
+		this.eotd_addr_city = eotd_addr_city;
+	}
+
+	public String getEotd_addr_line() {
+		return eotd_addr_line;
+	}
+
+	public void setEotd_addr_line(String eotd_addr_line) {
+		this.eotd_addr_line = eotd_addr_line;
 	}
 
 	public String toString() {
@@ -445,10 +475,10 @@ public class Certificate {
 				+ ", importer=" + importer + ", adressimp=" + adressimp
 				+ ", flsez=" + flsez + ", sez=" + sez + ", flsezrez="
 				+ flsezrez + ", stranap=" + stranap + ", otd_id=" + otd_id
-				+ ", otd_name=" + otd_name + ", otd_address_index="
-				+ otd_address_index + ", otd_address_city=" + otd_address_city
-				+ ", otd_address_line=" + otd_address_line
-				+ ", otd_address_home=" + otd_address_home + "]";
+				+ ", otd_name=" + otd_name + ", otd_addr_index="
+				+ otd_addr_index + ", otd_addr_city=" + otd_addr_city
+				+ ", otd_addr_line=" + otd_addr_line
+				+ ", otd_addr_building=" + otd_addr_building + "]";
 	}
 
 	@Override

@@ -2,7 +2,6 @@ package cci.cert.service;
 
 import java.lang.reflect.Method;
 
-import org.apache.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -14,7 +13,6 @@ import cci.purchase.service.FilterCondition;
 @Component
 @Scope("session")
 public class FilterCertificate extends Filter {
-	static final Logger LOG = Logger.getLogger(FilterCertificate.class);
 	
 	public FilterCertificate() {
 		String[] fields = new String[] { "CERT_ID", "FORMS", "UNN", "KONTRP",
@@ -66,7 +64,7 @@ public class FilterCertificate extends Filter {
 			 }
 			 
 		} catch (Exception ex) {
-			LOG.info("Error get nethod: " + ex.getMessage());
+			//LOG.info("Error get nethod: " + ex.getMessage());
 		}
          
 		//if (m != null) {
@@ -90,7 +88,7 @@ public class FilterCertificate extends Filter {
 					    m.invoke(cert, new Object[]{fcond.getValue()});
 					}
 				} catch (Exception ex) {
-					LOG.info("Error get certificate." + ex.getMessage());
+					//LOG.info("Error get certificate." + ex.getMessage());
 				}
 			}
 		}
@@ -113,7 +111,7 @@ public class FilterCertificate extends Filter {
 					    m.invoke(cond, new Object[]{fcond.getOperator()});
 					}
 				} catch (Exception ex) {
-    				LOG.info("Error get condition." + ex.getMessage());
+    				//LOG.info("Error get condition." + ex.getMessage());
 				}
 			}
 		}
@@ -135,7 +133,7 @@ public class FilterCertificate extends Filter {
 						fcond.setValue((String) m.invoke(cert, new Object[]{}));
 					}
 				} catch (Exception ex) {
-					LOG.info("Error certificate load." + ex.getMessage());
+					//LOG.info("Error certificate load." + ex.getMessage());
 				}
 			}
 		}
@@ -154,7 +152,7 @@ public class FilterCertificate extends Filter {
 						fcond.setOperator((String) m.invoke(cond, new Object[]{}));
 					}
 				} catch (Exception ex) {
-					LOG.info("Error condition load." + ex.getMessage());
+					//LOG.info("Error condition load." + ex.getMessage());
 				}
 			}
 		}

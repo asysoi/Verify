@@ -9,6 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+
+
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,7 +42,9 @@ import cci.cert.service.XSLWriter;
 @Controller
 @SessionAttributes({ "certfilter", "vmanager" })
 public class CertController {
-
+	
+	public static Logger LOG=LogManager.getLogger(CertController.class);
+	
 	@Autowired
 	private CERTService certService;
 
@@ -45,7 +52,7 @@ public class CertController {
 
 	@RequestMapping(value = "/main.do", method = RequestMethod.GET)
 	public String mainpage(ModelMap model) {
-
+        LOG.info("Main Page Loaded..."); 
 		return "welcome";
 	}
 
@@ -133,7 +140,7 @@ public class CertController {
 			HttpServletResponse response, ModelMap model) {
 		try {
 			
-            System.out.println("Download started...");   
+            LOG.info("Download started...");   
 			ViewManager vmanager = (ViewManager) model.get("vmanager");
 
 			Filter filter = vmanager.getFilter();
@@ -156,7 +163,7 @@ public class CertController {
 			List<Certificate> certs = certService.readCertificates(
 					vmanager.getOrderby(), vmanager.getOrder(), builder);
 			
-			System.out.println("Download. Certificates loaded from database..."); 
+			LOG.info("Download. Certificates loaded from database..."); 
 			response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 			//response.setContentType("application/octet-stream");
 			response.setHeader("Content-Disposition",
@@ -166,7 +173,7 @@ public class CertController {
 					vmanager.getDownloadconfig().getFields()).write(
 					response.getOutputStream());
 			response.flushBuffer();
-			System.out.println("Download finished...");
+			LOG.info("Download finished...");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -261,7 +268,7 @@ public class CertController {
 		vmanager.setHnames(new String[] { "Номер Сертификата", "Отделение",
 				"Грузоотправитель/Экспортер", "Номер бланка", "Дата",
 				"Доп. лист", "Замена для." });
-		vmanager.setOrdnames(new String[] { "nomercert", "name", "kontrp",
+		vmanager.setOrdnames(new String[] { "nomercert", "otd_name", "kontrp",
 				"nblanka", "issuedate", "koldoplist", "parentnumber" });
 		vmanager.setWidths(new int[] { 10, 20, 40, 8, 8, 6, 8 });
 		model.addAttribute("vmanager", vmanager);
@@ -276,10 +283,10 @@ public class CertController {
 
 		if (fc == null) {
 			fc = new FilterCertificate();
-			System.out.println("New filterCertificate created in GET method");
+			LOG.info("New filterCertificate created in GET method");
 			model.addAttribute("certfilter", fc);
 		} else {
-			System.out.println("Found FilterCertificate in GET : ");
+			LOG.info("Found FilterCertificate in GET : ");
 		}
 
 		ViewFilter vf = new ViewFilter(
@@ -300,7 +307,7 @@ public class CertController {
 			System.out
 					.println("New filterCertificate created in the POST method");
 		} else {
-			System.out.println("Found FilterCertificate in POST");
+			LOG.info("Found FilterCertificate in POST");
 		}
 
 		fc.loadViewcertificate(viewfilter.getViewcertificate());
@@ -316,7 +323,7 @@ public class CertController {
 			ModelMap model) {
 		String relativeWebPath = "/resources";
 		String  absoluteDiskPath= request.getSession().getServletContext().getRealPath(relativeWebPath);
-		System.out.println("Absolute path: " + absoluteDiskPath);
+		LOG.info("Absolute path: " + absoluteDiskPath);
 		
 		Certificate cert = certService.readCertificate(certid);
 		makepdffile(absoluteDiskPath, cert);

@@ -7136,7 +7136,7 @@
 
 
 <box>
-<map>departmenenglish</map>
+<map>departmentenglish</map>
 <text></text>
 <xl>25</xl>
 <yl>25</yl>
@@ -7182,7 +7182,7 @@
 <xl>35</xl>
 <yl>18</yl>
 <xr>75</xr>
-<yr>25</yr>
+<yr>27</yr>
 <font>ARIAL</font>
 <fontsize>10</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -7222,7 +7222,7 @@
 <xl>125</xl>
 <yl>18</yl>
 <xr>165</xr>
-<yr>25</yr>
+<yr>27</yr>
 <font>ARIAL</font>
 <fontsize>10</fontsize>
 <widthtextline>0.1</widthtextline>

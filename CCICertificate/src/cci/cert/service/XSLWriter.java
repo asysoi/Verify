@@ -4,7 +4,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
+//import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -16,7 +16,7 @@ import cci.cert.web.controller.ViewCertificate;
 import cci.purchase.service.FilterCondition;
 
 public class XSLWriter {
-	static final Logger LOG = Logger.getLogger(FilterCertificate.class);
+	//static final Logger LOG = Logger.getLogger(FilterCertificate.class);
 
 	public Workbook getWorkbook(List<Certificate> certs, String[] headers, String[] dbfields) {
 		long start = System.currentTimeMillis();
@@ -66,7 +66,7 @@ public class XSLWriter {
 					data.add((String) m.invoke(cert, new Object[] {}));
 				}
 			} catch (Exception ex) {
-				LOG.info("Error certificate load." + ex.getMessage());
+				//LOG.info("Error certificate load." + ex.getMessage());
 			}
 		}
 
@@ -83,7 +83,7 @@ public class XSLWriter {
 			}
 
 		} catch (Exception ex) {
-			LOG.info("Error get nethod: " + ex.getMessage());
+			//LOG.info("Error get nethod: " + ex.getMessage());
 		}
 
 		return m;

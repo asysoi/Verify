@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.log4j.Logger;
-
 import cci.cert.config.PDFPageConfig;
 import cci.cert.model.Certificate;
 import cci.cert.model.Product;
@@ -496,19 +494,18 @@ public abstract class PDFBuilder {
 		}else if ("note".equals(map)) {
 			str = certificate.getOtmetka() == null ? "" : certificate.getOtmetka();
 		} else if ("department".equals(map)) {
-			str = "Унитарное предприятие по оказанию услуг "
-					+ '"' + certificate.getOtd_name() + '"' + " "
-					+ certificate.getOtd_address_index() + ", "
-					+ certificate.getOtd_address_city() + ", "
-					+ certificate.getOtd_address_line() + ", "
-					+ certificate.getOtd_address_home() + "";
+			str = "Унитарное предприятие по оказанию услуг \""
+					+ certificate.getOtd_name() + "\", "
+					+ certificate.getOtd_addr_index() + ", "
+					+ certificate.getOtd_addr_city() + ", "
+					+ certificate.getOtd_addr_line() + ", "
+					+ certificate.getOtd_addr_building();
 		} else if ("departmentenglish".equals(map)) {
-			str = "Unitary service enterprise "
-					+ '"' + certificate.getOtd_name() + '"' + " "
-					+ certificate.getOtd_address_index() + ", "
-					+ certificate.getOtd_address_city() + ", "
-					+ certificate.getOtd_address_line() + ", "
-					+ certificate.getOtd_address_home() + "";
+			str = 	certificate.getEotd_name() + ", "
+					+ certificate.getOtd_addr_building() + ", "
+					+ certificate.getEotd_addr_line() + ", "
+					+ certificate.getOtd_addr_index() + ", "
+					+ certificate.getEotd_addr_city();
 		}else if ("expert".equals(map)) {
 			str = renderString(certificate.getExpert(), "");;
 		} else if ("customer".equals(map)) {
@@ -521,7 +518,11 @@ public abstract class PDFBuilder {
 			str = (certificate.getStranap() == null ? "Республике Беларусь" : CountryConverter.getCountryNameByCode(certificate.getStranap()));
 		} else if ("listnumber".equals(map)) {
 			str = "" + certificate.getCurrentlist();  
-		}
+		} else if ("place".equals(map)) {
+			str = "" + certificate.getEotd_addr_city();  
+		} else if ("exporterplace".equals(map)) {
+			str = "" + certificate.getRukovod();  
+		} 
 
 		return str;
 	}
