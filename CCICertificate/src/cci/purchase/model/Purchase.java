@@ -33,6 +33,9 @@ public class Purchase {
 	public void setId_otd(long id_otd) {
 		this.id_otd = id_otd;
 	}
+	
+	
+	
 	@Override
 	public String toString() {
 		return "Purchase [id=" + id + ", id_product=" + id_product

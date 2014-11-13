@@ -2,12 +2,12 @@ package cci.purchase.model;
 
 public class Company {
 	private long id;		
-	private String name;		
-	private String addr_city;		
-	private String addr_line;		
-	private String addr_index;
-	private String addr_office;
-	private String addr_building;
+	private String otd_name;		
+	private String otd_addr_city;		
+	private String otd_addr_line;		
+	private String otd_addr_index;
+	private String otd_addr_office;
+	private String otd_addr_building;
 	private String work_phone;	
 	private String cell_phone;
 	public long getId() {
@@ -16,41 +16,41 @@ public class Company {
 	public void setId(long id) {
 		this.id = id;
 	}
-	public String getName() {
-		return name;
+	public String getOtd_name() {
+		return otd_name;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setOtd_name(String otd_name) {
+		this.otd_name = otd_name;
 	}
-	public String getAddr_city() {
-		return addr_city;
+	public String getOtd_addr_city() {
+		return otd_addr_city;
 	}
-	public void setAddr_city(String addr_city) {
-		this.addr_city = addr_city;
+	public void setOtd_addr_city(String otd_addr_city) {
+		this.otd_addr_city = otd_addr_city;
 	}
-	public String getAddr_line() {
-		return addr_line;
+	public String getOtd_addr_line() {
+		return otd_addr_line;
 	}
-	public void setAddr_line(String addr_line) {
-		this.addr_line = addr_line;
+	public void setOtd_addr_line(String otd_addr_line) {
+		this.otd_addr_line = otd_addr_line;
 	}
-	public String getAddr_index() {
-		return addr_index;
+	public String getOtd_addr_index() {
+		return otd_addr_index;
 	}
-	public void setAddr_index(String addr_index) {
-		this.addr_index = addr_index;
+	public void setOtd_addr_index(String otd_addr_index) {
+		this.otd_addr_index = otd_addr_index;
 	}
-	public String getAddr_office() {
-		return addr_office;
+	public String getOtd_addr_office() {
+		return otd_addr_office;
 	}
-	public void setAddr_office(String addr_office) {
-		this.addr_office = addr_office;
+	public void setOtd_addr_office(String otd_addr_office) {
+		this.otd_addr_office = otd_addr_office;
 	}
-	public String getAddr_building() {
-		return addr_building;
+	public String getOtd_addr_building() {
+		return otd_addr_building;
 	}
-	public void setAddr_building(String addr_building) {
-		this.addr_building = addr_building;
+	public void setOtd_addr_building(String otd_addr_building) {
+		this.otd_addr_building = otd_addr_building;
 	}
 	public String getWork_phone() {
 		return work_phone;
@@ -64,7 +64,6 @@ public class Company {
 	public void setCell_phone(String cell_phone) {
 		this.cell_phone = cell_phone;
 	}
-	
 
 	
 }

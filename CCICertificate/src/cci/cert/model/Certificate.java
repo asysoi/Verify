@@ -30,7 +30,7 @@ public class Certificate {
 	private String stranav;
 	private String stranapr;
 	private String status;
-	private String koldoplist;
+	private Integer koldoplist;
 	private String flexp;
 	private String unnexp;
 	private String expp;
@@ -269,11 +269,11 @@ public class Certificate {
 		this.status = status;
 	}
 
-	public String getKoldoplist() {
+	public Integer getKoldoplist() {
 		return koldoplist;
 	}
 
-	public void setKoldoplist(String koldoplist) {
+	public void setKoldoplist(int koldoplist) {
 		this.koldoplist = koldoplist;
 	}
 
@@ -672,7 +672,7 @@ public class Certificate {
 			return false;
 		}
 		if (koldoplist == null) {
-			if (other.koldoplist != null && other.koldoplist.length() > 0) {
+			if (other.koldoplist != null /*&& other.koldoplist.length() > 0*/) {
 				System.out.print(" |  " + 31);
 				return false;
 			}

@@ -116,6 +116,8 @@ cci.loginbox {
     border: 1px solid;
 }
 
+.ccielement 
+{margin: 4px; font-size:100%;vertical-align:middle}
 
 .body {
   min-height: 2000px;

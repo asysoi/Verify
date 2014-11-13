@@ -3,11 +3,7 @@ package cci.cert.repository;
 import cci.purchase.service.FilterCondition;
 
 public class SQLBuilderCertificate extends SQLBuilder {
-	private String[] activefields = new String[] { "KONTRP", "KONTRS",
-			"ADRESS", "POLUCHAT", "ADRESSPOL", "DATACERT", "DATEFROM", "DATETO", "NOMERCERT",
-			"EXPERT", "NBLANKA", "RUKOVOD", "TRANSPORT", "MARSHRUT", "OTMETKA",
-			"STRANAV", "STRANAPR", "OTD_NAME", "NAME" };
-
+	
 	public String getWhereClause() {
 		String where = "";
 

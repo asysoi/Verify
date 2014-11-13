@@ -48,6 +48,9 @@ public class ViewCondition {
 	private String schet= "like";
 	private String datefrom= ">=";
 	private String dateto= "<=";
+	private String codestranav= "=";
+	private String codestranapr= "=";
+	
 	
 	public String getTovar() {
 		return tovar;
@@ -349,6 +352,19 @@ public class ViewCondition {
 	}
 	public void setDateto(String dateto) {
 		this.dateto = dateto;
+	}
+	
+	public String getCodestranav() {
+		return codestranav;
+	}
+	public void setCodestranav(String codestranav) {
+		this.codestranav = codestranav;
+	}
+	public String getCodestranapr() {
+		return codestranapr;
+	}
+	public void setCodestranapr(String codestranapr) {
+		this.codestranapr = codestranapr;
 	}
 	
 }

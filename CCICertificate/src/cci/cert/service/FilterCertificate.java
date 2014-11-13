@@ -4,8 +4,6 @@ import java.lang.reflect.Method;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import cci.cert.model.Certificate;
 import cci.cert.web.controller.ViewCertificate;
 import cci.cert.web.controller.ViewCondition;
 import cci.purchase.service.FilterCondition;
@@ -18,7 +16,7 @@ public class FilterCertificate extends Filter {
 		String[] fields = new String[] { "CERT_ID", "FORMS", "UNN", "KONTRP",
 				"KONTRS", "ADRESS", "POLUCHAT", "ADRESSPOL", "DATACERT",
 				"ISSUEDATE", "NOMERCERT", "EXPERT", "NBLANKA", "RUKOVOD",
-				"TRANSPORT", "MARSHRUT", "OTMETKA", "STRANAV", "STRANAPR",
+				"TRANSPORT", "MARSHRUT", "OTMETKA", "CODESTRANAV", "CODESTRANAPR",
 				"STATUS", "KOLDOPLIST", "FLEXP", "UNNEXP", "EXPP", "EXPS",
 				"EXPADRESS", "FLIMP", "IMPORTER", "ADRESSIMP", "FLSEZ", "SEZ",
 				"FLSEZREZ", "STRANAP", "OTD_ID", "OTD_NAME", "PARENTNUMBER",
@@ -27,9 +25,9 @@ public class FilterCertificate extends Filter {
 		String[] dbfields = new String[] { "CERT_ID", "FORMS", "UNN", "KONTRP",
 				"KONTRS", "ADRESS", "POLUCHAT", "ADRESSPOL", "DATACERT",
 				"ISSUEDATE", "NOMERCERT", "EXPERT", "NBLANKA", "RUKOVOD",
-				"TRANSPORT", "MARSHRUT", "OTMETKA", "STRANAV", "STRANAPR",
-				"STATUS", "KOLDOPLIST", "FLEXP", "UNNEXP", "EXPP", "EXPS",
-				"EXPADRESS", "FLIMP", "IMPORTER", "ADRESSIMP", "FLSEZ", "SEZ",
+				"TRANSPORT", "MARSHRUT", "OTMETKA", "CODESTRANAV", "CODESTRANAPR",
+				"STATUS", "KOLDOPLIST", "FLEXP", "UNNEXP", "EXPORTER", "EXPS",
+				"EXPADRESS", "FLIMP", "IMPORTERFULL", "ADRESSIMP", "FLSEZ", "SEZ",
 				"FLSEZREZ", "STRANAP", "OTD_ID", "OTD_NAME", "PARENTNUMBER",
 				"PARENTSTATUS", "TOVAR", "DENORM", "KRITER", "SCHET", "ISSUEDATE", "ISSUEDATE" };
 		
@@ -37,7 +35,7 @@ public class FilterCertificate extends Filter {
 				FieldType.ID, FieldType.STRING, FieldType.STRING,FieldType.STRING,FieldType.STRING,FieldType.STRING,FieldType.STRING,
 				FieldType.STRING,FieldType.DATE,FieldType.DATE, FieldType.STRING, FieldType.STRING, FieldType.STRING, 
 				FieldType.STRING, FieldType.STRING, FieldType.STRING,FieldType.STRING, FieldType.STRING, FieldType.STRING,
-				FieldType.STRING, FieldType.STRING, FieldType.STRING,FieldType.STRING, FieldType.STRING, FieldType.STRING,
+				FieldType.STRING, FieldType.NUMBER, FieldType.STRING,FieldType.STRING, FieldType.STRING, FieldType.STRING,
 				FieldType.STRING, FieldType.STRING, FieldType.STRING,FieldType.STRING, FieldType.STRING, FieldType.STRING,
 				FieldType.STRING, FieldType.STRING, FieldType.STRING,FieldType.STRING, FieldType.STRING, FieldType.STRING,
 				FieldType.STRING, FieldType.STRING, FieldType.STRING,FieldType.STRING, FieldType.DATE, FieldType.DATE};

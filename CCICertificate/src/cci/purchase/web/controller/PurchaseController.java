@@ -267,7 +267,7 @@ public class PurchaseController {
 	public Map<Long, String>  populateDepartmentList() {
 		
 		for(Company company : purchaseService.readDepartments()) {
-			departmentList.put(new Long((long) company.getId()), company.getName());	
+			departmentList.put(new Long((long) company.getId()), company.getOtd_name());	
 		}
 		return departmentList;
 	}
@@ -286,7 +286,7 @@ public class PurchaseController {
 	public Map<Long, String> populateCompanyList() {
 
 		for(Company company : purchaseService.readCompanies()) {
-			companyList.put(new Long((long) company.getId()), company.getName());	
+			companyList.put(new Long((long) company.getId()), company.getOtd_name());	
 		}	
 
 		return companyList;

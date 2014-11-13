@@ -116,21 +116,21 @@ public class JDBCPurchaseDAO implements PurchaseDAO {
 	
 	public void savePurchase(Purchase purchase) {
 		String sql = "insert into pch_purchase (id,id_product,id_otd,id_company,price,volume,unit, pchdate, productproperty) values "
-				+ "(beltpp.id_purchase_seq.nextval, "
+				+ "(id_purchase_seq.nextval, "
 				+ ":id_product, :id_otd, :id_company, :price, :volume, "
 				+ ":unit, :pchDate, :productProperty)";
 		
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(purchase);
-		GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-		int idpurchase = 0;
+		//GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+		//int idpurchase = 0;
 
 		try {
-			int row = template.update(sql, parameters, keyHolder,
-					new String[] { "ID" });
-			idpurchase = keyHolder.getKey().intValue();
+			template.update(sql, parameters);
+			        //   , keyHolder,new String[] { "ID" });
+			//idpurchase = keyHolder.getKey().intValue();
 			
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			System.out.println("Error - save purchase: " + ex.toString());
 		}
 	}
       

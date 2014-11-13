@@ -58,6 +58,8 @@ public class FilterCondition {
 		return dbfield;
 	}
 
+	
+	  
 	public String makeWhereFilter() {
 		String wherefilter = "";
 
@@ -73,7 +75,8 @@ public class FilterCondition {
 		}
 		return wherefilter;
 	}
-
+	
+	
 	public String getWhereClause() {
 		String wherefilter = "";
 
@@ -82,6 +85,10 @@ public class FilterCondition {
 				wherefilter = " " + dbfield + " "
 						+ operator
 						+ " TO_DATE('" + value + "', 'DD.MM.YY')";
+			} else if (type == FieldType.NUMBER) {
+				wherefilter = " " + dbfield + " "
+						+ operator
+						+ " " + value + " ";
 			} else {
 				wherefilter = " UPPER("
 						+ dbfield

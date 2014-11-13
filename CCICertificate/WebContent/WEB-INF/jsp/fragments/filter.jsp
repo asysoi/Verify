@@ -21,8 +21,8 @@
 							"${viewfilter.viewcertificate.datefrom}");
 					$("#dateto").datepicker("setDate",
 							"${viewfilter.viewcertificate.dateto}");
-					$("#stranapr")
-							.val('${viewfilter.viewcertificate.stranapr}');
+					$("#codestranapr")
+							.val('${viewfilter.viewcertificate.codestranapr}');
 					$("#otd_name")
 							.val('${viewfilter.viewcertificate.otd_name}');
 					$("#forms").val('${viewfilter.viewcertificate.forms}');
@@ -65,8 +65,8 @@
 			<tr>
 				<td>Дата сертификата</td>
 				<td><form:input path="viewcertificate.datefrom" id="datefrom"
-						class="datepicker" size="8" placeholder="с" />&nbsp;-&nbsp; <form:input
-						path="viewcertificate.dateto" id="dateto" class="datepicker"
+						class="datepicker" size="8" placeholder="с" />&nbsp;-&nbsp; 
+						<form:input	path="viewcertificate.dateto" id="dateto" class="datepicker"
 						size="8" placeholder="по" /> <a
 					href="javascript:clearelement($('.datepicker'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
@@ -80,8 +80,8 @@
 		<table class="filter">
 			<tr>
 				<td>Экспортер</td>
-				<td><form:input path="viewcertificate.kontrp" id="kontrp" /><a
-					href="javascript:clearelement($('#kontrp'));"> <img
+				<td><form:input path="viewcertificate.expp" id="expp" /><a
+					href="javascript:clearelement($('#expp'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 				<td>Адрес экспортера</td>
@@ -92,8 +92,8 @@
 			</tr>
 			<tr>
 				<td>Грузоотправитель</td>
-				<td><form:input path="viewcertificate.expp" id="expp" /><a
-					href="javascript:clearelement($('#expp'));"> <img
+				<td><form:input path="viewcertificate.kontrp" id="kontrp" /><a
+					href="javascript:clearelement($('#kontrp'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 				<td>Адрес грузоотправителя</td>
@@ -104,8 +104,8 @@
 			</tr>
 			<tr>
 				<td>Иимпортер</td>
-				<td><form:input path="viewcertificate.poluchat" id="poluchat" /><a
-					href="javascript:clearelement($('#poluchat'));"> <img
+				<td><form:input path="viewcertificate.importer" id="importer" /><a
+					href="javascript:clearelement($('#importer'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 				<td>Адрес импортера</td>
@@ -116,8 +116,8 @@
 			</tr>
 			<tr>
 				<td>Грузопролучатель</td>
-				<td><form:input path="viewcertificate.importer" id="importer" /><a
-					href="javascript:clearelement($('#importer'));"> <img
+				<td><form:input path="viewcertificate.poluchat" id="poluchat" /><a
+					href="javascript:clearelement($('#poluchat'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 				<td>Адрес грузополучателя</td>
@@ -150,9 +150,9 @@
 			</tr>
 			<tr>
 				<td>Страна предоставления</td>
-				<td><form:select path="viewcertificate.stranapr"
-						items="${countries}" id="stranapr" /><a
-					href="javascript:clearelement($('#stranapr'));"> <img
+				<td><form:select path="viewcertificate.codestranapr"
+						items="${countries}" id="codestranapr" /><a
+					href="javascript:clearelement($('#codestranapr'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 			</tr>

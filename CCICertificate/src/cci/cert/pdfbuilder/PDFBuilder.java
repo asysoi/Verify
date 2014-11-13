@@ -448,38 +448,40 @@ public abstract class PDFBuilder {
 
 		if ("exporter".equals(map)) {
 			str = 
-					renderString(certificate.getExpp(), " ") + 
-					renderString(certificate.getExpadress(),  " ") +
+					renderString(certificate.getKontrp(), ", ") + 
+					renderString(certificate.getAdress(), " ") +
 					((certificate.getExpp() != null && certificate.getExpp().trim() != "" ) || 
-					(certificate.getExpadress() != null && certificate.getExpadress().trim() != "") ? "  по поручению  " : "") + 
-					renderString(certificate.getKontrp(), " ") + 
-					renderString(certificate.getAdress(), "");
-
+					(certificate.getExpadress() != null && certificate.getExpadress().trim() != "") ? "  по поручению  " : "") +
+					renderString(certificate.getExpp(), ", ") + 
+					renderString(certificate.getExpadress(),  ""); 
+					
 		} else if  ("exporterenglish".equals(map)) {
 			str = 
-					renderString(certificate.getExpp(), " ") + 
-					renderString(certificate.getExpadress(),  " ") +
-					((certificate.getExpp() != null && certificate.getExpp().trim() != "" ) || 
-					(certificate.getExpadress() != null && certificate.getExpadress().trim() != "") ? "  by order  " : "") + 
 					renderString(certificate.getKontrp(), " ") + 
-					renderString(certificate.getAdress(), "");
+					renderString(certificate.getAdress(), " ") +
+					((certificate.getExpp() != null && certificate.getExpp().trim() != "" ) || 
+					(certificate.getExpadress() != null && certificate.getExpadress().trim() != "") ? "  by order  " : "") +
+					renderString(certificate.getExpp(), ", ") + 
+					renderString(certificate.getExpadress(),  "");
 
 		} else if ("importer".equals(map)) {
-			str = 
-					renderString(certificate.getImporter(), " ")   + 
-					renderString(certificate.getAdressimp(), " ") +
+			str =
+					renderString(certificate.getPoluchat(), ",  ") + 
+					renderString(certificate.getAdresspol(), " ") +
 					((certificate.getImporter() != null && certificate.getImporter().trim() != "" ) || 
-					(certificate.getAdressimp() != null && certificate.getAdressimp().trim() != "") ? "  по поручению  " : "") + 
-					renderString(certificate.getPoluchat(), " ") + 
-					renderString(certificate.getAdresspol(), "");
+					(certificate.getAdressimp() != null && certificate.getAdressimp().trim() != "") ? "  по поручению  " : "") +
+					renderString(certificate.getImporter(), ",")   + 
+					renderString(certificate.getAdressimp(), "");
+			
 		} else if ("importerenglish".equals(map)) {
 			str = 
-					renderString(certificate.getImporter(), " ")   + 
-					renderString(certificate.getAdressimp(), " ") +
+					renderString(certificate.getPoluchat(), ", ") + 
+					renderString(certificate.getAdresspol(), " ") +
 					((certificate.getImporter() != null && certificate.getImporter().trim() != "" ) || 
-					(certificate.getAdressimp() != null && certificate.getAdressimp().trim() != "") ? "  by order  " : "") + 
-					renderString(certificate.getPoluchat(), " ") + 
-					renderString(certificate.getAdresspol(), "");
+					(certificate.getAdressimp() != null && certificate.getAdressimp().trim() != "") ? "  by order  " : "") +
+					renderString(certificate.getImporter(), ", ")   + 
+					renderString(certificate.getAdressimp(), "");
+					
 		}else if ("drive".equals(map)) {
 			str = renderString(certificate.getTransport(), "\n") + 
 				  renderString(certificate.getMarshrut(), "");
