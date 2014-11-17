@@ -4,6 +4,7 @@
 	xmlns:p="http://www.springframework.org/schema/p"
 	xmlns:mvc="http://www.springframework.org/schema/mvc"
 	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:security="http://www.springframework.org/schema/security"
 	xsi:schemaLocation="
 		http://www.springframework.org/schema/beans 
 		http://www.springframework.org/schema/beans/spring-beans.xsd 
@@ -49,20 +50,20 @@
         <property name="password" value="123456"/>
     </bean>
     
- <http auto-config='true'> 
+ <security:http auto-config='true'> 
     <!-- intercept-url pattern="/login.jsp*" access="IS_AUTHENTICATED_ANONYMOUSLY"/ -->
-    <intercept-url pattern="/**" access="ROLE_USER" />
-    <form-login />
-    <http-basic />
- </http>
+    <security:intercept-url pattern="/**" access="ROLE_USER" />
+    <security:form-login />
+    <security:http-basic />
+ </security:http>
  
- <authentication-manager>
-    <authentication-provider>
-      <user-service>
-        <user name="admin" password="124567" authorities="ROLE_USER, ROLE_ADMIN" />
-        <user name="alex" password="123456" authorities="ROLE_USER" />
-      </user-service>
-    </authentication-provider>
- </authentication-manager>
+ <security:authentication-manager>
+    <security:authentication-provider>
+      <security:user-service>
+        <security:user name="admin" password="124567" authorities="ROLE_USER, ROLE_ADMIN" />
+        <security:user name="alex" password="123456" authorities="ROLE_USER" />
+      </security:user-service>
+    </security:authentication-provider>
+ </security:authentication-manager>
     
 </beans>
