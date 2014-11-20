@@ -49,21 +49,24 @@
         <property name="username" value="BELTPP"/>
         <property name="password" value="123456"/>
     </bean>
+ 
     
- <security:http auto-config='true'> 
-    <!-- intercept-url pattern="/login.jsp*" access="IS_AUTHENTICATED_ANONYMOUSLY"/ -->
+ <!--  security:http auto-config='true'>
+    <security:intercept-url pattern="/css/**" access="IS_AUTHENTICATED_ANONYMOUSLY"/> 
+    <security:intercept-url pattern="/login*.**" access="IS_AUTHENTICATED_ANONYMOUSLY"/>
     <security:intercept-url pattern="/**" access="ROLE_USER" />
-    <security:form-login />
-    <security:http-basic />
+    <security:form-login login-page="/login.do"/>
+    <security:logout logout-url="/logout.do" logout-success-url="/main.do"/> 
+    <security:remember-me/> 
  </security:http>
  
  <security:authentication-manager>
     <security:authentication-provider>
       <security:user-service>
-        <security:user name="admin" password="124567" authorities="ROLE_USER, ROLE_ADMIN" />
-        <security:user name="alex" password="123456" authorities="ROLE_USER" />
+        <security:user name="admin" password="123456" authorities="ROLE_USER, ROLE_ADMIN" />
+        <security:user name="alex" password="alex" authorities="ROLE_USER" />
       </security:user-service>
     </security:authentication-provider>
- </security:authentication-manager>
+ </security:authentication-manager -->
     
 </beans>

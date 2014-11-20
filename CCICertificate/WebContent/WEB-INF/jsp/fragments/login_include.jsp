@@ -13,7 +13,7 @@
     
 	<div class="container">
 			<form:form method="POST" commandName="user" class="form-signin" role="form">
-					<form:input path="userName" class="form-control" placeholder="Имя пользователя" />
+					<form:input path="username" class="form-control" placeholder="Имя пользователя" />
  				    <form:password path="password" class="form-control" placeholder="Пароль" />
  				    <label class="checkbox"> <input type="checkbox" value="remember-me"> Запомнить </label>
  				    <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>

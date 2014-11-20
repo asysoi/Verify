@@ -2,7 +2,7 @@ package cci.cert.web.controller;
 
 public class User {
 	private long id;
-	private String userName;
+	private String username;
 	private String password;
 	
 	
@@ -18,10 +18,10 @@ public class User {
 	public void setId(long id) {
 		this.id = id;
 	}
-	public String getUserName() {
-		return userName;
+	public String getUsername() {
+		return username;
 	}
-	public void setUserName(String userName) {
-		this.userName = userName;
+	public void setUsermame(String username) {
+		this.username = username;
 	}
 }
