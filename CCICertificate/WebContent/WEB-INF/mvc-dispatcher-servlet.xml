@@ -34,12 +34,12 @@
 	</bean>
  	     
     <!--  database configuration -->     
-    <bean id="certificateDAO" class="cci.cert.repository.JDBCCertificateDAO">
+    <bean id="certificateDAO" class="cci.repository.cert.JDBCCertificateDAO">
         <property name="dataSource" ref="dataSource"/>
     </bean>
     
      <!--  database configuration -->     
-    <bean id="purchaseDAO" class="cci.purchase.repository.JDBCPurchaseDAO">
+    <bean id="purchaseDAO" class="cci.repository.purchase.JDBCPurchaseDAO">
         <property name="dataSource" ref="dataSource"/>
     </bean>
    
