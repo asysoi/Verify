@@ -72,6 +72,24 @@
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 			</tr>
+			<tr>
+				<td>Кол. доплистов</td>
+				<td><form:input path="viewcertificate.doplistfrom" id="doplistfrom" class="doplist" 
+						size="8" placeholder="от" />&nbsp;-&nbsp; 
+						<form:input	path="viewcertificate.doplistto" id="doplistto" class="doplist" 
+						size="8" placeholder="до" /> <a
+					href="javascript:clearelement($('.doplist'));"> <img
+						src="resources/images/delete-16.png" alt="удл." />
+				</a></td>
+			</tr>
+			<tr>
+				<td>Эксперт</td>
+				<td><form:input path="viewcertificate.expert" id="expert" /><a
+					href="javascript:clearelement($('#expert'));"> <img
+						src="resources/images/delete-16.png" alt="удл." />
+				</a></td>
+			</tr>
+			
 		</table>
 	</fieldset>
 

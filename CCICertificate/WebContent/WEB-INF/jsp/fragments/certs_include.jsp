@@ -19,8 +19,10 @@
 	function submit() {
 		url = $("#ffilter").attr("action");
 		$.post(url, $("#ffilter").serialize());
-		goToList('certs.do?page=1&pagesize=${vmanager.pagesize}&orderby=${vmanager.orderby}&order=${vmanager.order}');		
-		$("#pview").dialog("close");
+		$( document ).ajaxComplete(function(event,request, settings ) {
+			  goToList('certs.do?page=1&pagesize=${vmanager.pagesize}&orderby=${vmanager.orderby}&order=${vmanager.order}');
+			  $("#pview").dialog("close");
+		});
 	}
 
 	function close() {
@@ -34,7 +36,7 @@
 		$("#pdfview").dialog({
 			autoOpen : false
 		});
-                                 document.getElementById("filter").checked=${vmanager.onfilter};
+        document.getElementById("filter").checked=${vmanager.onfilter};
 
 		if (document.getElementById("filter").checked) {
 			$("#filterlink").html('<a  href="javascript: loadWindow();">&nbsp;Фильтр</a>');
@@ -54,12 +56,13 @@
 	}
 
 	function swithFilter() {
+		goToList('certs.do?page=1&pagesize=${vmanager.pagesize}&orderby=${vmanager.orderby}&order=${vmanager.order}');
+		
 		if (document.getElementById("filter").checked) {
 			$("#filterlink").html('<a href="javascript: loadWindow();">&nbsp;Фильтр</a>');
 		} else {
 			$("#filterlink").html('&nbsp;Фильтр');
 		}
-		goToList('certs.do?page=1&pagesize=${vmanager.pagesize}&orderby=${vmanager.orderby}&order=${vmanager.order}');		
 	}
 
 	function loadWindow(link) {
@@ -67,7 +70,7 @@
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Фильтр поиска');
 		$("#pview").dialog("option", "width", 740);
-		$("#pview").dialog("option", "height", 610);
+		$("#pview").dialog("option", "height", 660);
 		$("#pview").dialog("option", "modal", true);
 		$("#pview").dialog("option", "resizable", false );
 		$("#pview").dialog({ buttons: [ { text: "Применить",  click : function() { submit(); } },  
@@ -107,10 +110,19 @@
         $('#pdf').attr('scrolling', 'yes');
 		$('#pdf').attr('src', link);
 
-
 		$("#pdfview").dialog("open");
 	}
 
+	function openCertificate(certid) {
+		memo = "Воспроизведение бумажной версиисертификата. <p>" + 
+		       "Результат воспроизведения может незначительно отличаться по форме и стилю отображения," +
+		       "но полностью воспроизводит содержание документа.</p>"
+        //$('#pdf').contents().find("body").html("<div style='color:black; text-align:center; font-size:16pt;'>" + memo + "</div> ");
+        //                           $('#pdf').contents().find('body').attr('style', 'background-color: white'); 
+		url = "gocert.do?certid=" + certid;
+		var win=window.open(url,'_blank');
+		win.focus();
+	}
 	
 
 	function downloadCertificates() {
@@ -211,7 +223,7 @@ ${vmanager.order}');">${item}</a>
 
 		<c:forEach items="${certs}" var="cert">
 			<tr>
-				<td><a href="javascript:viewCertificate('${cert.cert_id}')">${cert.nomercert}</a></td>
+				<td><a href="javascript:openCertificate('${cert.cert_id}')">${cert.nomercert}</a></td>
 				<td>${cert.otd_name}</td>
 				<td>${cert.kontrp}</td>
 				<td>${cert.nblanka}</td>
@@ -225,9 +237,17 @@ ${vmanager.order}');">${item}</a>
 	        </td>  
 	        -->
 
-				<td><c:if test="${cert.parent_id > 0}">
-						<a href="gocert.do?certid=${cert.parent_id}">${cert.parentnumber}</a>
-					</c:if></td>
+				<td>
+					<c:choose>
+    					<c:when test="${cert.parent_id > 0}"> 
+						    <a href="javascript:openCertificate('${cert.parent_id}')">${cert.parentnumber}</a>
+    					</c:when>
+					    <c:when test="${cert.parentnumber != null}">
+							${cert.parentnumber}
+	   					</c:when>
+					</c:choose>
+				</td>
+					
 			</tr>
 		</c:forEach>
 	</table>
@@ -253,7 +273,7 @@ ${vmanager.orderby}
 
 1px;"</c:if>>
 						${item} </a>
-				</c:forEach> &nbsp; (количество сертификатов - ${vmanager.pagecount})</td>
+				</c:forEach> &nbsp; [Сертификатов:&nbsp;${vmanager.pagecount}]</td>
 			<td style="width: 20%; text-align: right"><a
 				href="javascript: goToList('${next_page}');"><img
 					src="resources/images/next_page_24.png" alt="След."></a> <a
@@ -267,10 +287,10 @@ ${vmanager.orderby}
 	</div>
 
 	<div id="pdfview" name="pdfview" style="text-align:center;">
-                  <iframe class="pdf" id="pdf"></iframe>
+                  <!--  iframe class="pdf" id="pdf"></iframe -->
 	</div>
 
-    <p>Время загрузки страницы в милисек.: ${timeduration}</p> 
+    <p >Время загрузки: ${timeduration}</p> 
 </div>
 
 

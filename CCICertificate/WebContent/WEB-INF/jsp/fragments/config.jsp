@@ -9,7 +9,7 @@
 <script>
     $(document).ready(function(){
 	      $( "#content li" ).each(function(index, element) {
-	        if (index < 18) {
+	        if (index < 17) {
 	           $("#col1").append("<li>" + $(element).html() + "</li>");
 	        } else {
 	           $("#col2").append("<li>" + $(element).html() + "</li>");
@@ -32,8 +32,8 @@
 	
 <table style="width:100%">
 <tr>
-<td><div id="col1" style="display: none"> </div></td> 
-<td><div id="col2" style="display: none"> </div></td> 
+<td><div id="col1" style="display: none;  vertical-align:top"> </div></td> 
+<td><div id="col2" style="display: none;  vertical-align:top"> </div></td> 
 </tr>
 	
 </form:form>

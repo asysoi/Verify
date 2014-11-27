@@ -6602,6 +6602,16 @@
 
 
 <boxes>
+
+<box>
+<xl>20</xl>
+<yl>276</yl>
+<xr>201</xr>
+<yr>287</yr>
+<border>15</border>
+<widthborderline>1</widthborderline>
+<colorfill></colorfill>
+</box>
 	  
 <box>
 <xl>20</xl>
@@ -6680,7 +6690,7 @@
 
 <box>
 <text>ADDITTIONAL SHEET OF CERTIFICATE OF ORIGIN  №</text>
-<xl>55</xl>
+<xl>35</xl>
 <yl>273</yl>
 <xr>130</xr>
 <yr>283</yr>
@@ -6938,7 +6948,7 @@
 <xl>20</xl>
 <yl>102</yl>
 <xr>201</xr>
-<yr>207</yr>
+<yr>276</yr>
 <colnumber>6</colnumber>
 <colwidth>
 	<col number="0">12</col>
