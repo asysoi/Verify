@@ -1,4 +1,4 @@
-package cci.service.cert;
+package cci.service;
 
 import java.util.Map;
 

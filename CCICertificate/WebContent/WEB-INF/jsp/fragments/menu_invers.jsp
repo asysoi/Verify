@@ -26,10 +26,10 @@
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">Клиенты<b class="caret"></b></a>
 					<ul class="dropdown-menu">
-						<li><a href="customer.do">Члены БелТПП</a></li>
-						<li><a href="#">Контрагенты</a></li>
+						<li><a href="members.do">Члены БелТПП</a></li>
+						<li><a href="clients.do">Контрагенты</a></li>
 						<li class="divider"></li>
-						<li><a href="upload.do">Загрузить</a></li>
+						<li><a href="upload.do">Импорт данных</a></li>
 					</ul>
 				</li>
 				
@@ -41,7 +41,7 @@
 						<li><a href="#">Выствыки</a></li>
 						<li><a href="#">Ярмарки</a></li>
 						<li class="divider"></li>
-						<li><a href="upload.do">Загрузить</a></li>
+						<li><a href="upload.do">Импорт данных</a></li>
 
 					</ul>
 				</li>
@@ -54,7 +54,7 @@
 						<li><a href="#">Приказы</a></li>
 						<li><a href="#">Документы</a></li>
 						<li class="divider"></li>
-						<li><a href="upload.do">Загрузить</a></li>
+						<li><a href="upload.do">Импорт данных</a></li>
 
 					</ul>
 				</li>
@@ -66,9 +66,8 @@
 						<li><a href="cert.do">Добавить Сертификат</a></li>
 						<li><a href="certs.do">Список Сертификатов</a></li>
 						<li><a href="check.do">Верификация</a></li>
-						<li><a href="config.do">Конфигурация</a></li>
+						<!--  li><a href="config.do">Конфигурация</a></li -->
 						<li><a href="#">Акты экспертиз</a></li>
-						<li><a href="find.do">Найти</a></li>
 						<li class="divider"></li>
 						<li><a href="upload.do">Импорт сертификатов</a></li>
 

@@ -16,7 +16,7 @@ import cci.model.cert.Certificate;
 import cci.model.purchase.Company;
 import cci.model.purchase.Product;
 import cci.model.purchase.Purchase;
-import cci.service.purchase.FilterCondition;
+import cci.service.FilterCondition;
 import cci.web.controller.purchase.PurchaseView;
 
 public class JDBCPurchaseDAO implements PurchaseDAO { 

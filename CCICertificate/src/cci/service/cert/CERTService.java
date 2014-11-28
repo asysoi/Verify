@@ -11,9 +11,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import cci.model.cert.Certificate;
+import cci.repository.SQLBuilder;
 import cci.repository.cert.CertificateDAO;
-import cci.repository.cert.SQLBuilder;
-import cci.service.purchase.FilterCondition;
+import cci.service.FilterCondition;
 import cci.util.cert.XMLService;
 
 @Component

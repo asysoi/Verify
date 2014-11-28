@@ -1,6 +1,5 @@
-package cci.service.purchase;
+package cci.service;
 
-import cci.service.cert.FieldType;
 
 public class FilterCondition {
 	private String field;

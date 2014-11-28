@@ -8,6 +8,7 @@ import java.util.List;
 
 
 
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 //import org.apache.log4j.Logger;
@@ -18,7 +19,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
 import cci.model.cert.Certificate;
-import cci.service.purchase.FilterCondition;
+import cci.service.FilterCondition;
 import cci.web.controller.cert.CertController;
 import cci.web.controller.cert.ViewCertificate;
 

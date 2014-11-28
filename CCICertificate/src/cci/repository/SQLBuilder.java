@@ -1,6 +1,6 @@
-package cci.repository.cert;
+package cci.repository;
 
-import cci.service.cert.Filter;
+import cci.service.Filter;
 
 public abstract class SQLBuilder {
 	   private Filter filter = null;

@@ -1,9 +1,9 @@
-package cci.repository.cert;
+package cci.repository.client;
 
 import cci.repository.SQLBuilder;
 import cci.service.FilterCondition;
 
-public class SQLBuilderCertificate extends SQLBuilder {
+public class SQLBuilderClient extends SQLBuilder {
 	
 	public String getWhereClause() {
 		String where = "";
@@ -31,5 +31,6 @@ public class SQLBuilderCertificate extends SQLBuilder {
 		}
 		return where;
 	}
+
 
 }

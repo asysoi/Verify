@@ -1,29 +1,15 @@
-package cci.model.purchase;
+package cci.web.controller.client;
 
-public class Company {
-	private long id;		
-	private String otd_name;		
-	private String otd_addr_city;		
-	private String otd_addr_line;		
-	private String otd_addr_index;
-	private String otd_addr_office;
-	private String otd_addr_building;
-	private String work_phone;	
-	private String cell_phone;
-	private String unp;
+public class ViewClientCondition {
+	private String otd_name = "like";		
+	private String otd_addr_city = "like";		
+	private String otd_addr_line = "like";		
+	private String otd_addr_index = "like";
+	private String otd_addr_office = "like";
+	private String otd_addr_building = "like";
+	private String work_phone = "like";	
+	private String cell_phone = "like";
 	
-	public String getUnp() {
-		return unp;
-	}
-	public void setUnp(String unp) {
-		this.unp = unp;
-	}
-	public long getId() {
-		return id;
-	}
-	public void setId(long id) {
-		this.id = id;
-	}
 	public String getOtd_name() {
 		return otd_name;
 	}
@@ -72,6 +58,5 @@ public class Company {
 	public void setCell_phone(String cell_phone) {
 		this.cell_phone = cell_phone;
 	}
-
 	
 }

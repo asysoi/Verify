@@ -1,6 +1,6 @@
 package cci.web.controller.cert;
 
-public class ViewCondition {
+public class ViewCertCondition {
 
 	private String cert_id = "like";
 	private String forms = "=";

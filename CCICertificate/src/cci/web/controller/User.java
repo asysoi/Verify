@@ -1,4 +1,4 @@
-package cci.web.controller.cert;
+package cci.web.controller;
 
 public class User {
 	private long id;

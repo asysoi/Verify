@@ -8,7 +8,7 @@ import cci.config.cert.TableConfig;
 import cci.model.cert.Certificate;
 import cci.model.cert.Product;
 import cci.model.cert.ProductIterator;
-import cci.service.cert.CountryConverter;
+import cci.service.CountryConverter;
 
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;

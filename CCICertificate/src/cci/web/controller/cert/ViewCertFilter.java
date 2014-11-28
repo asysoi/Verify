@@ -5,14 +5,14 @@ import java.util.Map;
 
 import cci.model.cert.Certificate;
 
-public class ViewFilter {
-   	private ViewCondition condition = new ViewCondition();
+public class ViewCertFilter {
+   	private ViewCertCondition condition = new ViewCertCondition();
    	private ViewCertificate viewcertificate = new ViewCertificate();;
    
-	public ViewCondition getCondition() {
+	public ViewCertCondition getCondition() {
 		return condition;
 	}
-	public void setCondition(ViewCondition condition) {
+	public void setCondition(ViewCertCondition condition) {
 		this.condition = condition;
 	}
 
@@ -23,11 +23,11 @@ public class ViewFilter {
 		this.viewcertificate = viewcertificate;
 	}
 		
-	public ViewFilter() {
+	public ViewCertFilter() {
 		super();		
 	}
 
-	public ViewFilter(ViewCertificate viewcertificate, ViewCondition condition) {
+	public ViewCertFilter(ViewCertificate viewcertificate, ViewCertCondition condition) {
 		super();
 		this.condition = condition;
 		this.viewcertificate = viewcertificate;

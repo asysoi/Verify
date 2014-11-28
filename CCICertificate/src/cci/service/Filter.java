@@ -1,15 +1,12 @@
-package cci.service.cert;
+package cci.service;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import cci.service.purchase.FilterCondition;
-
 public abstract class Filter {
 	private Map<String, FilterCondition> conditions;
-	private String fullsearchvalue;
 	private Boolean onfilter;
-
 
 	public Map<String, FilterCondition> getConditions() {
 		return conditions;
@@ -17,14 +14,6 @@ public abstract class Filter {
 
 	public void setFilters(Map<String, FilterCondition> conditions) {
 		this.conditions = conditions;
-	}
-
-	public String getFullsearchvalue() {
-		return fullsearchvalue;
-	}
-
-	public void setFullsearchvalue(String fullsearchvalue) {
-		this.fullsearchvalue = fullsearchvalue;
 	}
 
 	public Boolean getOnfilter() {
@@ -73,6 +62,31 @@ public abstract class Filter {
 		return ret;
 	}
 
+    protected Method getMethod(Object obj, String name, Class[] params) {
+		Method m = null;
+		try {
+			 try {
+			    m = obj.getClass().getMethod(name, params);
+			 } catch (Exception ex) {
+				m = obj.getClass().getSuperclass().getMethod(name, params); 
+			 }
+			 
+		} catch (Exception ex) {
+			// LOG.info("Error get nethod: " + ex.getMessage());
+		}
+         
+		return m;
+	}
+
+    
+    protected String convertFieldNameToGetter(String field) {
+		return "get" + field.substring(0, 1).toUpperCase() + field.substring(1).toLowerCase();
+	}
+
+
+    protected String convertFieldNameToSetter(String field) {
+		return "set" + field.substring(0, 1).toUpperCase() + field.substring(1).toLowerCase();
+	}
 	
 	
 	

@@ -23,7 +23,8 @@ import org.springframework.stereotype.Repository;
 import cci.model.cert.Certificate;
 import cci.model.cert.Country;
 import cci.model.cert.Product;
-import cci.service.purchase.FilterCondition;
+import cci.repository.SQLBuilder;
+import cci.service.FilterCondition;
 import cci.web.controller.purchase.PurchaseView;
 
 @Repository

@@ -1,4 +1,4 @@
-package cci.service.cert;
+package cci.service;
 
 public enum FieldType {
      STRING,ID, NUMBER, DATE

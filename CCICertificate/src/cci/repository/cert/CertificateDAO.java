@@ -4,7 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import cci.model.cert.Certificate;
-import cci.service.purchase.FilterCondition;
+import cci.repository.SQLBuilder;
+import cci.service.FilterCondition;
 
 public interface CertificateDAO {
 

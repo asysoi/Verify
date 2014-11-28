@@ -10,6 +10,7 @@ import cci.model.purchase.Company;
 import cci.model.purchase.Product;
 import cci.model.purchase.Purchase;
 import cci.repository.purchase.PurchaseDAO;
+import cci.service.FilterCondition;
 import cci.web.controller.purchase.PurchaseView;
 
 

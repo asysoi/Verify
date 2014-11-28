@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,13 +26,15 @@ import org.springframework.web.bind.support.SessionStatus;
 import cci.config.cert.DownloadConfig;
 import cci.model.cert.Certificate;
 import cci.pdfbuilder.cert.CertificatePDFBuilder;
-import cci.repository.cert.SQLBuilder;
+import cci.repository.SQLBuilder;
 import cci.repository.cert.SQLBuilderCertificate;
+import cci.service.CountryConverter;
+import cci.service.Filter;
 import cci.service.cert.CERTService;
-import cci.service.cert.CountryConverter;
-import cci.service.cert.Filter;
 import cci.service.cert.FilterCertificate;
 import cci.service.cert.XSLWriter;
+import cci.web.controller.User;
+import cci.web.controller.ViewManager;
 
 @Controller
 @SessionAttributes({ "certfilter", "vmanager" })
@@ -41,8 +44,6 @@ public class CertController {
 	
 	@Autowired
 	private CERTService certService;
-
-	private Map<String, String> operators = new LinkedHashMap<String, String>();
 
 	@RequestMapping(value = "/main.do", method = RequestMethod.GET)
 	public String mainpage(ModelMap model) {
@@ -70,18 +71,16 @@ public class CertController {
 		return "login";
 	}
 
-	/*
+	
 	@RequestMapping(value = "/login.do", method = RequestMethod.POST)
 	public String login(@ModelAttribute("user") User user,
 			BindingResult result, SessionStatus status) {
-
-		if (user.getUserName().equals(user.getPassword())) {
+		if (user.getUsername().equals(user.getPassword())) {
 			return "welcome";
 		} else {
 			return "login";
 		}
 	}
-	*/
 
 	@RequestMapping(value = "/print.do")
 	@ResponseBody
@@ -285,7 +284,7 @@ public class CertController {
 			LOG.info("Found FilterCertificate in GET : ");
 		}
 
-		ViewFilter vf = new ViewFilter(
+		ViewCertFilter vf = new ViewCertFilter(
 				((FilterCertificate) fc).getViewcertificate(),
 				((FilterCertificate) fc).getCondition());
 		model.addAttribute("viewfilter", vf);
@@ -294,7 +293,7 @@ public class CertController {
 
 	@RequestMapping(value = "/filter.do", method = RequestMethod.POST)
 	public String submitFilter(
-			@ModelAttribute("viewfilter") ViewFilter viewfilter,
+			@ModelAttribute("viewfilter") ViewCertFilter viewfilter,
 			@ModelAttribute("certfilter") FilterCertificate fc,
 			BindingResult result, SessionStatus status, ModelMap model) {
 
@@ -396,16 +395,6 @@ public class CertController {
 	public String uploadFromFTP(ModelMap model) {
 		certService.uploadCertificateFromFTP();
 		return "window";
-	}
-
-	@ModelAttribute("operators")
-	public Map<String, String> populateOperatorsList() {
-		operators.put("", "");
-		operators.put(">", "больше");
-		operators.put("<", "меньше");
-		operators.put("=", "равно");
-		operators.put("like", "включает");
-		return operators;
 	}
 
 	@ModelAttribute("countries")

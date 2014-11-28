@@ -2,16 +2,23 @@ package cci.service.cert;
 
 import java.lang.reflect.Method;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import cci.service.purchase.FilterCondition;
+import cci.service.FieldType;
+import cci.service.Filter;
+import cci.service.FilterCondition;
 import cci.web.controller.cert.ViewCertificate;
-import cci.web.controller.cert.ViewCondition;
+import cci.web.controller.cert.ViewCertCondition;
+import cci.web.controller.client.ClientController;
 
 @Component
 @Scope("session")
 public class FilterCertificate extends Filter {
+	
+	public static Logger LOG=LogManager.getLogger(FilterCertificate.class);
 	
 	public FilterCertificate() {
 		String[] fields = new String[] { "CERT_ID", "FORMS", "UNN", "KONTRP",
@@ -47,34 +54,7 @@ public class FilterCertificate extends Filter {
 		
 		this.init(fields, dbfields, types);
 	}
-	
-	public void setFullsearchvalue(String fullsearchvalue) {
-		super.setFullsearchvalue(fullsearchvalue);
 		
-		getConditions().get("DENORM").setOperator("like");
-		getConditions().get("DENORM").setValue(fullsearchvalue);
-		
-	}
-	
-	private Method getMethod(Object obj, String name, Class[] params) {
-		Method m = null;
-		try {
-			 try {
-			    m = obj.getClass().getMethod(name, params);
-			 } catch (Exception ex) {
-				m = obj.getClass().getSuperclass().getMethod(name, params); 
-			 }
-			 
-		} catch (Exception ex) {
-			//LOG.info("Error get nethod: " + ex.getMessage());
-		}
-         
-		//if (m != null) {
-		//	System.out.println("Метод: " + m.getName());
-		//}
-		return m;
-	}
-
 	
 	public ViewCertificate getViewcertificate() {
 		ViewCertificate cert = new ViewCertificate();
@@ -90,7 +70,7 @@ public class FilterCertificate extends Filter {
 					    m.invoke(cert, new Object[]{fcond.getValue()});
 					}
 				} catch (Exception ex) {
-					//LOG.info("Error get certificate." + ex.getMessage());
+					LOG.info("Error get certificate." + ex.getMessage());
 				}
 			}
 		}
@@ -99,8 +79,8 @@ public class FilterCertificate extends Filter {
 	
 
 	
-	public ViewCondition getCondition() {
-		ViewCondition cond = new ViewCondition();
+	public ViewCertCondition getCondition() {
+		ViewCertCondition cond = new ViewCertCondition();
 		
 		for (String field : getConditions().keySet()) {
 			FilterCondition fcond = getConditions().get(field);
@@ -113,7 +93,7 @@ public class FilterCertificate extends Filter {
 					    m.invoke(cond, new Object[]{fcond.getOperator()});
 					}
 				} catch (Exception ex) {
-    				//LOG.info("Error get condition." + ex.getMessage());
+    				LOG.info("Error get condition." + ex.getMessage());
 				}
 			}
 		}
@@ -135,13 +115,13 @@ public class FilterCertificate extends Filter {
 						fcond.setValue((String) m.invoke(cert, new Object[]{}));
 					}
 				} catch (Exception ex) {
-					//LOG.info("Error certificate load." + ex.getMessage());
+					LOG.info("Error certificate load." + ex.getMessage());
 				}
 			}
 		}
 	}
 
-    public void loadCondition (ViewCondition cond) {
+    public void loadCondition (ViewCertCondition cond) {
     	
 		for (String field : getConditions().keySet()) {
 			FilterCondition fcond = getConditions().get(field);
@@ -154,20 +134,10 @@ public class FilterCertificate extends Filter {
 						fcond.setOperator((String) m.invoke(cond, new Object[]{}));
 					}
 				} catch (Exception ex) {
-					//LOG.info("Error condition load." + ex.getMessage());
+					LOG.info("Error condition load." + ex.getMessage());
 				}
 			}
 		}
 		
-	}
- 
-
-    private String convertFieldNameToGetter(String field) {
-		return "get" + field.substring(0, 1).toUpperCase() + field.substring(1).toLowerCase();
-	}
-
-
-	private String convertFieldNameToSetter(String field) {
-		return "set" + field.substring(0, 1).toUpperCase() + field.substring(1).toLowerCase();
 	}
 }

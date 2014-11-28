@@ -23,7 +23,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import cci.model.purchase.Company;
 import cci.model.purchase.Product;
 import cci.model.purchase.Purchase;
-import cci.service.purchase.FilterCondition;
+import cci.service.FilterCondition;
 import cci.service.purchase.PurchaseService;
 import cci.web.validator.purchase.PurchaseValidator;
 
