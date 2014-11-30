@@ -3,12 +3,6 @@ package cci.service.cert;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-
-
-
-
-
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 //import org.apache.log4j.Logger;
@@ -17,11 +11,7 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
-
 import cci.model.cert.Certificate;
-import cci.service.FilterCondition;
-import cci.web.controller.cert.CertController;
-import cci.web.controller.cert.ViewCertificate;
 
 public class XSLWriter {
 	public static Logger LOG=LogManager.getLogger(XSLWriter.class);

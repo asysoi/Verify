@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
-import cci.config.cert.DownloadConfig;
+import cci.config.cert.ExportCertConfig;
 import cci.model.cert.Certificate;
 import cci.pdfbuilder.cert.CertificatePDFBuilder;
 import cci.repository.SQLBuilder;
@@ -110,7 +110,7 @@ public class CertController {
 		}
        
 		if (vmanager.getDownloadconfig() == null) {
-			vmanager.setDownloadconfig(new DownloadConfig());
+			vmanager.setDownloadconfig(new ExportCertConfig());
 		}
 		
 		model.addAttribute("downloadconfig", vmanager.getDownloadconfig());
@@ -119,7 +119,7 @@ public class CertController {
 	}
 
 	@RequestMapping(value = "/config.do", method = RequestMethod.POST)
-	public String submitConfig(@ModelAttribute("downloadconfig") DownloadConfig config,
+	public String submitConfig(@ModelAttribute("downloadconfig") ExportCertConfig config,
 			BindingResult result, SessionStatus status, ModelMap model) {
 		
 		ViewManager vmanager = (ViewManager) model.get("vmanager");
@@ -150,7 +150,7 @@ public class CertController {
 			}
 
 			if (vmanager.getDownloadconfig() == null) {
-				vmanager.setDownloadconfig(new DownloadConfig());
+				vmanager.setDownloadconfig(new ExportCertConfig());
 			}
 
 			SQLBuilder builder = new SQLBuilderCertificate();

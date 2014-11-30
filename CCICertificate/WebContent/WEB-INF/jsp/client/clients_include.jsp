@@ -1,4 +1,4 @@
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+﻿<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -20,11 +20,35 @@
 		url = $("#ffilter").attr("action");
 		$.post(url, $("#ffilter").serialize());
 		$( document ).ajaxComplete(function(event,request, settings ) {
-			  goToList('certs.do?page=1&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}');
+			  goToList('clients.do?page=1&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}');
 			  $("#pview").dialog("close");
 		});
 	}
+	
+	function resetClient() {
+		$('#fclient')[0].reset();
+	}
 
+	function saveClient() {
+		url = $("#fclient").attr("action");
+		$.post(url, $("#fclient").serialize());
+		
+		$( document ).ajaxComplete(function(event,request, settings ) {
+			  goToList('clients.do?page=1&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}');
+			  $("#clview").dialog("close");
+		});
+	}
+	
+	function updateClient() {
+		url = $("#fclient").attr("action");
+		$.post(url, $("#fclient").serialize());
+		
+		$( document ).ajaxComplete(function(event,request, settings ) {
+			  goToList('clients.do?page=1&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}');
+			  $("#clview").dialog("close");
+		});
+	}
+	
 	function close() {
 		$("#pview").dialog("close");
 	}
@@ -33,13 +57,13 @@
 		$("#pview").dialog({
 			autoOpen : false
 		});
-		$("#pdfview").dialog({
+		$("#clview").dialog({
 			autoOpen : false
 		});
         document.getElementById("filter").checked=${cmanager.onfilter};
 
 		if (document.getElementById("filter").checked) {
-			$("#filterlink").html('<a  href="javascript: loadWindow();">&nbsp;Фильтр</a>');
+			$("#filterlink").html('<a  href="javascript: setFilter();">&nbsp;Фильтр</a>');
 		} else {
 			$("#filterlink").html('&nbsp;Фильтр');
 		}
@@ -56,21 +80,21 @@
 	}
 
 	function swithFilter() {
-		goToList('certs.do?page=1&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}');
+		goToList('clients.do?page=1&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}');
 		
 		if (document.getElementById("filter").checked) {
-			$("#filterlink").html('<a href="javascript: loadWindow();">&nbsp;Фильтр</a>');
+			$("#filterlink").html('<a href="javascript: setFilter();">&nbsp;Фильтр</a>');
 		} else {
 			$("#filterlink").html('&nbsp;Фильтр');
 		}
 	}
 
-	function loadWindow(link) {
-        link="filter.do?&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}";
+	function setFilter(link) {
+        link="cfilter.do?&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}";
 		$("#pview").load(link);
-		$("#pview").dialog("option", "title", 'Фильтр поиска');
+		$("#pview").dialog("option", "title", 'Фильтр поиска компаний');
 		$("#pview").dialog("option", "width", 740);
-		$("#pview").dialog("option", "height", 660);
+		$("#pview").dialog("option", "height", 500);
 		$("#pview").dialog("option", "modal", true);
 		$("#pview").dialog("option", "resizable", false );
 		$("#pview").dialog({ buttons: [ { text: "Применить",  click : function() { submit(); } },  
@@ -78,57 +102,72 @@
  				               { text: "Отменить изменения", click: function() { reset(); } },
 				               { text: "Отмена", click: function() { $( this ).dialog( "close" ); } }
                   	                                               ] });
-              
 		$("#pview").dialog( "option", "position", { my: "center",  at: "center", of:window} );
 		$("#pview").dialog("open");
 	}
 
-	function viewCertificate(certid) {
-		memo = "Воспроизведение бумажной версиисертификата. <p>" + 
-		       "Результат воспроизведения может незначительно отличаться по форме и стилю отображения," +
-		       "но полностью воспроизводит содержание документа.</p>"
-        $('#pdf').contents().find("body").html("<div style='color:black; text-align:center; font-size:16pt;'>" + memo + "</div> ");
-                                   $('#pdf').contents().find('body').attr('style', 'background-color: white'); 
-		link = "gocert.do?certid=" + certid;
-		$("#pdfview").dialog("option", "title", 'Сертификат');
-		$("#pdfview").dialog("option", "width", 963);
-		$("#pdfview").dialog("option", "height", 570);
-		$("#pdfview").dialog("option", "modal", true);
-		$("#pdfview").dialog("option", "resizable", false);
-		$("#pdfview").dialog({
-			buttons : [ 	{ text : "Закрыть",	click : function() {$(this).dialog("close"); $('#pdf').contents().find("body").html('');}} ]
+	function viewClient(id) {
+        link = "clientview.do?id=" + id;
+		$("#clview").load(link);        
+		$("#clview").dialog("option", "title", 'Компания');
+		$("#clview").dialog("option", "width", 650);
+		$("#clview").dialog("option", "height", 480);
+		$("#clview").dialog("option", "modal", true);
+		$("#clview").dialog("option", "resizable", false);
+		$("#clview").dialog({
+			buttons : [ 	{ text : "Закрыть",	click : function() {$(this).dialog("close");}} ]
 		});
 
-		$("#pdfview").dialog("option", "position", {
-			my : "center top",
-			at : "center",
-			of :  listwindow
-		});
-                                   
-        $('#pdf').attr('height', $("#pdfview").dialog("option", "height") - 150);
-        $('#pdf').attr('width', $("#pdfview").dialog("option", "width") - 40);
-        $('#pdf').attr('scrolling', 'yes');
-		$('#pdf').attr('src', link);
+		$("#clview").dialog("option", "position", {
+			my : "center top", at : "center", of :  listwindow });
 
-		$("#pdfview").dialog("open");
+		$("#clview").dialog("open");
 	}
+	
+	function editClient(id) {
+        link = "editclient.do?id=" + id;
+		$("#clview").load(link);        
+		$("#clview").dialog("option", "title", 'Компания');
+		$("#clview").dialog("option", "width", 820);
+		$("#clview").dialog("option", "height", 570);
+		$("#clview").dialog("option", "modal", true);
+		$("#clview").dialog("option", "resizable", false);
+		$("#clview").dialog({ buttons: [ { text: "Сохранить",  click : function() { updateClient(); } },  
+		    				               { text: "Очистить Все ", click: function() { clear(); } },
+		     				               { text: "Отмена", click: function() { $( this ).dialog( "close" ); } }
+		                      	                                               ] });
 
-	function openCertificate(certid) {
-		memo = "Воспроизведение бумажной версиисертификата. <p>" + 
-		       "Результат воспроизведения может незначительно отличаться по форме и стилю отображения," +
-		       "но полностью воспроизводит содержание документа.</p>"
-        //$('#pdf').contents().find("body").html("<div style='color:black; text-align:center; font-size:16pt;'>" + memo + "</div> ");
-        //                           $('#pdf').contents().find('body').attr('style', 'background-color: white'); 
-		url = "gocert.do?certid=" + certid;
-		var win=window.open(url,'_blank');
-		win.focus();
+		$("#clview").dialog("option", "position", {
+			my : "center top", at : "center", of :  listwindow });
+
+		$("#clview").dialog("open");
+	}
+	
+
+	function addClient(id) {
+        link = "addclient.do";
+		$("#clview").load(link);        
+		$("#clview").dialog("option", "title", 'Компания');
+		$("#clview").dialog("option", "width", 820);
+		$("#clview").dialog("option", "height", 570);
+		$("#clview").dialog("option", "modal", true);
+		$("#clview").dialog("option", "resizable", false);
+		$("#clview").dialog({ buttons: [ { text: "Сохранить",  click : function() { saveClient(); } },  
+		    				               { text: "Очистить Все ", click: function() { clear(); } },
+		     				               { text: "Отмена", click: function() { $( this ).dialog( "close" ); } }
+		                      	                                               ] });
+
+		$("#clview").dialog("option", "position", {
+			my : "center top", at : "center", of :  listwindow });
+
+		$("#clview").dialog("open");
 	}
 	
 
 	function downloadClients() {
-		link = "config.do";
+		link = "сconfig.do";
 		$("#pview").load(link);
-		$("#pview").dialog("option", "title", 'Экспорт списка сертификатов');
+		$("#pview").dialog("option", "title", 'Экспорт списка клиентов');
 		$("#pview").dialog("option", "width", 850);
 		$("#pview").dialog("option", "height", 520);
 		$("#pview").dialog("option", "modal", true);
@@ -171,7 +210,7 @@
 	    	iframe.style.display = 'none';
 	    	document.body.appendChild(iframe);
     	}
-    	iframe.src = "download.do";
+    	iframe.src = "сdownload.do";
 		
 	}
 
@@ -184,25 +223,17 @@
 		<tr>
 
 			<td style="width: 60%">
-                <input id="filter" type="checkbox"	onclick="javascript:swithFilter();" >
+                <input id="filter" type="checkbox"	onclick="javascript:swithFilter();" />
                 <span id="filterlink"></span>
-                </input></td>
+                </td>
 
 			<td style="width: 40%; text-align: right">
-				<a href="javascript:downloadClients();"><img src="resources/images/exp_excel.png" 
-
-alt="Загрузить"/></a>
-				   &nbsp;			        
-			       Строк в списке: <c:forEach items="${sizes}" var="item">
+				<a href="javascript:addClient();"><img src="resources/images/addclient.png" alt="Добавить"/></a>
+				<a href="javascript:downloadClients();"><img src="resources/images/exp_excel.png" alt="Загрузить"/></a>
+				   &nbsp; Строк в списке: 
+				   <c:forEach items="${sizes}" var="item"> 
 	           	   &nbsp;	
-	               <a
-						href="javascript: goToList('certs.do?page=1&pagesize=${item}&orderby=
-
-${cmanager.orderby}
-
-&order=
-
-${cmanager.order}');">${item}</a>
+	               <a  href="javascript: goToList('clients.do?page=1&pagesize=${item}&orderby=${cmanager.orderby}&order=${cmanager.order}');">${item}</a>
 				</c:forEach>
 			</td>
 
@@ -223,10 +254,11 @@ ${cmanager.order}');">${item}</a>
 
 		<c:forEach items="${clients}" var="client">
 			<tr>
-				<td><a href="javascript:openClient('${client.id}')">${client.otd_name}</a></td>
-				<td>${client.otd_city},	${client.otd_line}, ${client.otd_building}, ${client.otd_office}</td>
+				<td><a href="javascript:editClient('${client.id}')">${client.name}</a></td>
+				<td>${client.address}</td>
                 <td>${client.unp}</td>
-                 <td>Bank</td>
+                <td>${client.bname}</td>
+                <td>${client.work_phone}</td>
 			</tr>
 		</c:forEach>
 	</table>
@@ -241,7 +273,7 @@ ${cmanager.order}');">${item}</a>
 					items="${pages}" var="item">
 	           	   &nbsp;	
 	               <a
-						href="javascript: goToList('certs.do?page=${item}&pagesize=${cmanager.pagesize}
+						href="javascript: goToList('clients.do?page=${item}&pagesize=${cmanager.pagesize}
 
 &orderby=
 
@@ -265,8 +297,7 @@ ${cmanager.orderby}
 	<div id="pview" name="pview">
 	</div>
 
-	<div id="pdfview" name="pdfview" style="text-align:center;">
-                  <!--  iframe class="pdf" id="pdf"></iframe -->
+	<div id="clview" name="clview" style="text-align:center;">
 	</div>
    
 </div>

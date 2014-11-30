@@ -290,7 +290,7 @@ asyncTest( "handle keyboard navigation on menu without scroll and with submenus"
 	}
 
 	function menukeyboard3() {
-		log( "keydown", trueÂ);
+		log( "keydown", true);
 		element.simulate( "keydown", { keyCode: $.ui.keyCode.PAGE_DOWN } );
 		equal( logOutput(), "keydown,2", "Keydown PAGE_DOWN" );
 

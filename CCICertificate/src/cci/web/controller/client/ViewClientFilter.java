@@ -2,7 +2,7 @@ package cci.web.controller.client;
 
 public class ViewClientFilter {
  	private ViewClientCondition condition = new ViewClientCondition();
-   	private ViewCompany viewcompany = new ViewCompany();
+   	private ViewClient viewclient = new ViewClient();
    
 	public ViewClientCondition getCondition() {
 		return condition;
@@ -11,26 +11,26 @@ public class ViewClientFilter {
 		this.condition = condition;
 	}
 
-	public ViewCompany getViewcompany() {
-		return viewcompany;
+	public ViewClient getViewclient() {
+		return viewclient;
 	}
-	public void setViewcompany(ViewCompany viewcompany) {
-		this.viewcompany = viewcompany;
+	public void setViewclient(ViewClient viewclient) {
+		this.viewclient = viewclient;
 	}
 		
 	public ViewClientFilter() {
 		super();		
 	}
 
-	public ViewClientFilter(ViewCompany viewcompany, ViewClientCondition condition) {
+	public ViewClientFilter(ViewClient viewclient, ViewClientCondition condition) {
 		super();
 		this.condition = condition;
-		this.viewcompany = viewcompany;
+		this.viewclient = viewclient;
 	}
 	
 	@Override
 	public String toString() {
-		return "ViewFilter [viewcertificate=" + viewcompany + "] \n [condition="
+		return "ViewFilter [viewcertificate=" + viewclient + "] \n [condition="
 				+ condition + "]";
 	}
 

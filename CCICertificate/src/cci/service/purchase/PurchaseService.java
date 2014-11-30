@@ -6,7 +6,8 @@ import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import cci.model.purchase.Company;
+import cci.model.Client;
+import cci.model.cert.Company;
 import cci.model.purchase.Product;
 import cci.model.purchase.Purchase;
 import cci.repository.purchase.PurchaseDAO;
@@ -64,10 +65,10 @@ public class PurchaseService {
 		return departments;
 	}
 		
-	public List<Company> readCompanies() {
+	public List<Client> readCompanies() {
 		Locale.setDefault(new Locale("en", "en"));
 
-		List<Company> companies = null;
+		List<Client> companies = null;
 		
 		try {
 			companies = purchaseDAO.findCompanies();

@@ -1,38 +1,44 @@
-package cci.web.controller.client;
+package cci.model;
 
-public class ViewClientCondition {
-	private String name="like";
-	private String codecountry="=";
-	private String city="like";		
-	private String line="like";		
-	private String cindex="like";
-	private String office="like";
-	private String building="like";
-	private String work_phone="like";	
-	private String cell_phone="like";
-	private String email="like";
-	private String unp="like";
-	private String okpo="like";
-	private String account="like";
-	private String bname="like";
-	private String bcodecountry="=";
-	private String bcity="like";		
-	private String bline="like";		
-	private String bindex="like";
-	private String boffice="like";
-	private String bbuilding="like";
-	private String bwork_phone="like";	
-	private String bcell_phone="like";
-	private String bemail="like";
-	private String bunp="like";
+public class Client {
+	private long id;		
+	private String name;
+	private String codecountry;
+	private String city;		
+	private String line;		
+	private String cindex;
+	private String office;
+	private String building;
+	private String work_phone;	
+	private String cell_phone;
+	private String email;
+	private String unp;
+	private String okpo;
+	private String account;
+	private String bname;
+	private String bcodecountry;
+	private String bcity;		
+	private String bline;		
+	private String bindex;
+	private String boffice;
+	private String bbuilding;
+	private String bwork_phone;	
+	private String bcell_phone;
+	private String bemail;
+	private String bunp;
 	
+	public long getId() {
+		return id;
+	}
+	public void setId(long id) {
+		this.id = id;
+	}
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-	
 	public String getCity() {
 		return city;
 	}
@@ -170,7 +176,5 @@ public class ViewClientCondition {
 	}
 	public void setBcodecountry(String bcodecountry) {
 		this.bcodecountry = bcodecountry;
-	}
-	
-	
+	}	
 }

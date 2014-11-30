@@ -20,7 +20,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.support.SessionStatus;
 
-import cci.model.purchase.Company;
+import cci.model.Client;
+import cci.model.cert.Company;
 import cci.model.purchase.Product;
 import cci.model.purchase.Purchase;
 import cci.service.FilterCondition;
@@ -285,8 +286,8 @@ public class PurchaseController {
 	@ModelAttribute("companyList")
 	public Map<Long, String> populateCompanyList() {
 
-		for(Company company : purchaseService.readCompanies()) {
-			companyList.put(new Long((long) company.getId()), company.getOtd_name());	
+		for(Client client : purchaseService.readCompanies()) {
+			companyList.put(new Long((long) client.getId()), client.getName());	
 		}	
 
 		return companyList;

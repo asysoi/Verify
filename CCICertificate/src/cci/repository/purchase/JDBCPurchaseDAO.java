@@ -9,11 +9,9 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
 
-import cci.model.cert.Certificate;
-import cci.model.purchase.Company;
+import cci.model.Client;
+import cci.model.cert.Company;
 import cci.model.purchase.Product;
 import cci.model.purchase.Purchase;
 import cci.service.FilterCondition;
@@ -43,11 +41,11 @@ public class JDBCPurchaseDAO implements PurchaseDAO {
 				new BeanPropertyRowMapper<Company>(Company.class));
 	}
 
-	public List<Company> findCompanies() {
-		String sql = "select * from PCH_COMPANY ORDER BY id";
+	public List<Client> findCompanies() {
+		String sql = "select * from CCI_CLIENT ORDER BY id";
 
 		return this.template.getJdbcOperations().query(sql,
-				new BeanPropertyRowMapper<Company>(Company.class));
+				new BeanPropertyRowMapper<Client>(Client.class));
 	}
 
 	public List<Purchase> findNextPage(int page, int pagesize) {

@@ -1,4 +1,4 @@
-package cci.model.purchase;
+package cci.model.cert;
 
 public class Company {
 	private long id;		

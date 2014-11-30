@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import cci.config.cert.DownloadConfig;
+import cci.config.cert.ExportCertConfig;
 import cci.service.Filter;
 import cci.service.FilterCondition;
 import cci.web.controller.purchase.HeaderTableView;
@@ -32,7 +32,7 @@ public class ViewManager {
 	private Boolean onfilter;
 	private String url;
 	private String fullsearchvalue;
-	private DownloadConfig downloadconfig;
+	private ExportCertConfig downloadconfig;
 		
 	public String getFullsearchvalue() {
 		return fullsearchvalue;
@@ -256,11 +256,11 @@ public class ViewManager {
 		this.filter = filter;
 	}
 
-	public DownloadConfig getDownloadconfig() {
+	public ExportCertConfig getDownloadconfig() {
 		return downloadconfig;
 	}
 
-	public void setDownloadconfig(DownloadConfig downloadconfig) {
+	public void setDownloadconfig(ExportCertConfig downloadconfig) {
 		this.downloadconfig = downloadconfig;
 	}
 	

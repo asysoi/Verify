@@ -29,6 +29,7 @@ font-size: 90%;
 table.filter {
 width: 100%;
 font-size: 90%;
+text-align: left;
 }
 
 table.filter td {
@@ -38,6 +39,7 @@ padding-top: 2px;
 padding-bottom: 2px;
 vertical-align: top;
 font-size: 90%;
+text-align: left;
 }
 
 table.verification {
@@ -131,6 +133,7 @@ cci.loginbox {
 	font-size: 14px;
 	font-weight: bold;
 	margin-bottom: 8px;
+	text-align: left;
 }
 
 

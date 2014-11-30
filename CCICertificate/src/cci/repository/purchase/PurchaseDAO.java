@@ -3,7 +3,8 @@ package cci.repository.purchase;
 import java.util.List;
 import java.util.Map;
 
-import cci.model.purchase.Company;
+import cci.model.Client;
+import cci.model.cert.Company;
 import cci.model.purchase.Product;
 import cci.model.purchase.Purchase;
 import cci.service.FilterCondition;
@@ -17,7 +18,7 @@ public interface PurchaseDAO {
 
 	public List<Company> findDepartments();
 
-	public List<Company> findCompanies();
+	public List<Client> findCompanies();
 
 	public Purchase findPurchaseByID(long id);
 
