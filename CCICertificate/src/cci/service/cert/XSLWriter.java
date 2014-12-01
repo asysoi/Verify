@@ -16,19 +16,17 @@ import cci.model.cert.Certificate;
 public class XSLWriter {
 	public static Logger LOG=LogManager.getLogger(XSLWriter.class);
 	
-	public Workbook getWorkbook(List<Certificate> certs, String[] headers, String[] dbfields) {
+	public Workbook makeWorkbook(List<Object> certs, String[] headers, String[] dbfields, String title) {
 		long start = System.currentTimeMillis();
 		
 		Workbook workbook = new SXSSFWorkbook();
 		// Workbook workbook = new HSSFWorkbook();
 
-		// Create a blank sheet
-		Sheet sheet = workbook.createSheet("Лист Сертификатов");
+		Sheet sheet = workbook.createSheet(title);
 		createRow(sheet, 0, headers);
 		
-
 		int i = 1;
-		for (Certificate cert : certs) {
+		for (Object cert : certs) {
 			createRow(sheet, i++, getData(cert, dbfields));
 		}
 		long end = System.currentTimeMillis();
@@ -51,7 +49,7 @@ public class XSLWriter {
 		}
 	}
 	
-	private Object[] getData(Certificate cert, String[] dbfields) {
+	private Object[] getData(Object cert, String[] dbfields) {
 		List<Object> data = new ArrayList<Object>();
 
 		for (String field : dbfields) {

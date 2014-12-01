@@ -9,8 +9,6 @@
 	$(function() {
 		$("document").ready(
 				function() {
-					$(".datepicker").datepicker("option", "dateFormat",
-							'dd.mm.yy');
 					$("#codecountry")
 							.val('${viewfilter.viewclient.codecountry}');
 				});

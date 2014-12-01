@@ -6,16 +6,16 @@ import java.util.List;
 import java.util.Map;
 
 public class ExportClientConfig {
-	private String[] headernames = new String[] { "Наименование компании", "Город", "Улица"
-			, "Индекс", "Номер офиса", "Номер дома", "Телефон", "Мобильный телефон", "УНП"
-			, "ОКПО", "Наименование банка", "Город Банка", "Улица Банка", "Номер офиса Банка"
-			, "Номер дома Банка", "Расчетный счет", "УНП Банка", "Email", "Email Банка", 
-			"Код страны", "Код страны банка"};
+	private String[] headernames = new String[] { "Наименование компании", "Cтрана", "Город", "Улица"
+			, "Индекс", "Номер офиса", "Номер дома", "Телефон", "Мобильный телефон", "Email", "УНП"
+			, "ОКПО", "Наименование банка", "Страна банка", "Город Банка", "Улица Банка", "Индекс Банка"
+			, "Номер офиса Банка", "Номер дома Банка", "Расчетный счет", "УНП Банка"
+			, "Email Банка" };
 
-	private String[] fieldnames = new String[] { "name", "city", "line", "cindex",
-			"office","building","work_phone","cell_phone","unp", "okpo", "bname", "bcity", 
-			"bline","bindex","boffice","bbuilding", "account","bunp", "email", "bemail", 
-			"codecountry","bcodecountry" };
+	private String[] fieldnames = new String[] { "name", "country", "city", "line", "cindex",
+			"office","building","work_phone","cell_phone","email","unp", "okpo", "bname", "bcountry", 
+			"bcity","bline","bindex","boffice","bbuilding", "account","bunp", "bemail" 
+			};
 	
 	private Map<String, String> headermap = new LinkedHashMap<String, String>();
 	private String[] headers = new String[]{};
@@ -26,6 +26,9 @@ public class ExportClientConfig {
 		for(int i = 0; i < fieldnames.length; i++) {
 			headermap.put(fieldnames[i], headernames[i]);
 		}
+		
+		headers = headernames;
+		fields = fieldnames;			
 	}
 
 	public String[] getHeadernames() {

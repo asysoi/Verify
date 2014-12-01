@@ -40,13 +40,18 @@
 	}
 	
 	function updateClient() {
-		url = $("#fclient").attr("action");
-		$.post(url, $("#fclient").serialize());
+        var x;
+		if (confirm("Сохранить сделанные изменения?") == true) {
 		
-		$( document ).ajaxComplete(function(event,request, settings ) {
-			  goToList('clients.do?page=1&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}');
-			  $("#clview").dialog("close");
-		});
+			url = $("#fclient").attr("action");
+			$.post(url, $("#fclient").serialize());
+		
+			$( document ).ajaxComplete(function(event,request, settings ) {
+				  goToList('clients.do?page=1&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}');
+				  $("#clview").dialog("close");
+			});
+		} 
+			
 	}
 	
 	function close() {
@@ -198,8 +203,6 @@
 	}
 
 	function download() {
-		url = $("#config").attr("action");
-		$.post(url, $("#config").serialize());
 		
    		var hiddenIFrameID = 'hiddenDownloader';
         var iframe = document.getElementById(hiddenIFrameID);
@@ -210,7 +213,7 @@
 	    	iframe.style.display = 'none';
 	    	document.body.appendChild(iframe);
     	}
-    	iframe.src = "сdownload.do";
+    	iframe.src = "exportclients.do";
 		
 	}
 
@@ -229,7 +232,7 @@
 
 			<td style="width: 40%; text-align: right">
 				<a href="javascript:addClient();"><img src="resources/images/addclient.png" alt="Добавить"/></a>
-				<a href="javascript:downloadClients();"><img src="resources/images/exp_excel.png" alt="Загрузить"/></a>
+				<a href="javascript:download();"><img src="resources/images/exp_excel.png" alt="Загрузить"/></a>
 				   &nbsp; Строк в списке: 
 				   <c:forEach items="${sizes}" var="item"> 
 	           	   &nbsp;	
@@ -246,7 +249,7 @@
 			<c:forEach items="${cmanager.headers}" var="item">
 				<td
 					style="width:${item.width}%;background-color: gray; color: black"><a
-					href="javascript: goToList('${item.link}');" style="color: white">${item.name}${item.selection}
+					href="javascript: goToList('${item.link}');" style="color: white; font-size: 120%">${item.name}${item.selection}
 
 </a></td>
 			</c:forEach>

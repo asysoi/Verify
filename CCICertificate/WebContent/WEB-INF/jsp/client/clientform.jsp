@@ -10,9 +10,9 @@
 		$("document").ready(
 				function() {
 					$("#codecountry")
-						.val('${codecountry}');
+						.val('${client.codecountry}');
 					$("#bcodecountry")
-						.val('${bcodecountry}');
+						.val('${client.bcodecountry}');
 
 				});
 

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import cci.config.cert.ExportCertConfig;
+import cci.config.client.ExportClientConfig;
 import cci.model.Client;
 import cci.model.cert.Certificate;
 import cci.model.cert.Company;
@@ -205,7 +206,7 @@ public class ClientController {
 		
 		// clientValidator.validate(client, result);
 		
-		status.setComplete();
+		//status.setComplete();
 		clientService.saveClient(client);
 		return "client/clientform";
 	}
@@ -228,7 +229,7 @@ public class ClientController {
 	public String updateClient(@ModelAttribute("client") Client client,
 		BindingResult result, SessionStatus status, ModelMap model) {
 	
-		status.setComplete();
+		//status.setComplete();
 		clientService.updateClient(client);
 		return "client/clientform";
 	}
@@ -280,9 +281,11 @@ public class ClientController {
 				vmanager.setFilter(filter);
 			}
 			
+			ExportClientConfig dconfig = new ExportClientConfig();
+			
 			SQLBuilder builder = new SQLBuilderClient();
 			builder.setFilter(filter);
-			List<Client> clients = clientService.readClients(
+			List clients = clientService.readClients(
 					vmanager.getOrderby(), vmanager.getOrder(), builder);
 			
 			LOG.info("Download. Clients loaded from database..."); 
@@ -290,10 +293,10 @@ public class ClientController {
 			response.setHeader("Content-Disposition",
 					"attachment; filename=certificates.xlsx");
 			
-			//(new XSLWriter()).getWorkbook(clients,
-			//		vmanager.getDownloadconfig().getHeaders(),
-			//		vmanager.getDownloadconfig().getFields()).write(
-			//		response.getOutputStream());
+			(new XSLWriter()).makeWorkbook(clients,
+					dconfig.getHeaders(),
+					dconfig.getFields(), "Список контрагентов").write(
+					response.getOutputStream());
 			
 			response.flushBuffer();
 			LOG.info("Download finished...");

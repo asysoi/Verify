@@ -17,6 +17,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.stereotype.Repository;
 
 import cci.model.Client;
+import cci.model.cert.Certificate;
 import cci.model.cert.Company;
 import cci.model.cert.Country;
 import cci.repository.SQLBuilder;
@@ -150,16 +151,16 @@ public class JDBCClientDAO implements ClientDAO {
 	}
 
 	// ---------------------------------------------------------------
-	// Update Client
+	// Update Client  
 	// ---------------------------------------------------------------
 	public void updateClient(Client client) {
 		String sql = "update cci_client set "
-				+ "name = :name, city =:city, line =:line,cindex=:cindex,office=:office,"
-				+ "building=:building,work_phone=:work_phone,cell_phone:=cell_phone,"
-				+ "unp=:unp, okpo=:okopo, bname:=bname,bcity=:bcity,bline=:bline,"
-				+ "bindex=:bindex,boffice=:boffice,bbuilding:=bbuilding,account=:account,"
-				+ "bunp=:bunp, email=:email, bemail=:bemail,codecountry=:codecountry,"
-				+ "bcodecountry=:bcodecountry) WHERE id = :id";
+				+ "name = :name, city =:city, line =:line, cindex=:cindex, office=:office,"
+				+ "building=:building, work_phone=:work_phone, cell_phone=:cell_phone,"
+				+ "unp=:unp, okpo=:okpo, bname=:bname, bcity=:bcity, bline=:bline,"
+				+ "bindex=:bindex, boffice=:boffice, bbuilding=:bbuilding, account=:account,"
+				+ "bunp=:bunp, email=:email, bemail=:bemail, codecountry=:codecountry,"
+				+ "bcodecountry=:bcodecountry  WHERE id = :id";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(client);
 
@@ -168,5 +169,17 @@ public class JDBCClientDAO implements ClientDAO {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	// ---------------------------------------------------------------
+	// Get filtered Clients list  
+	// ---------------------------------------------------------------
+	public List<ViewClient> getClients(String orderby, String order,
+			SQLBuilder builder) {
+		String sql = " SELECT * FROM CLIENT_VIEW " 
+				+ builder.getWhereClause() + " ORDER BY " +  orderby + " " + order;
+
+		return this.template.getJdbcOperations().query(sql,
+				new BeanPropertyRowMapper<ViewClient>(ViewClient.class));
 	}
 }

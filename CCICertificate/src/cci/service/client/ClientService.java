@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import cci.model.Client;
+import cci.model.cert.Certificate;
 import cci.repository.SQLBuilder;
 import cci.repository.client.ClientDAO;
 import cci.web.controller.client.ViewClient;
@@ -133,9 +134,18 @@ public class ClientService {
 	// ---------------------------------------------------------------
 	// Get CLients List
 	// ---------------------------------------------------------------
-	public List<Client> readClients(String orderby, String order,
+	public List<ViewClient> readClients(String orderby, String order,
 			SQLBuilder builder) {
+		Locale.setDefault(new Locale("en", "en"));
 
-		return null;
+		List<ViewClient> clients = null;
+
+		try {
+			clients = clientDAO.getClients(orderby,order, builder);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return clients;
 	}
 }

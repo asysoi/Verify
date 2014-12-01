@@ -16,4 +16,5 @@ public interface ClientDAO {
 	public void saveClient(Client client);
 	public Client findClientByID(Long id);
 	public void updateClient(Client client);
+	public List<ViewClient> getClients(String orderby, String order, SQLBuilder builder);
 }

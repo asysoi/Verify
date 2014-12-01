@@ -215,7 +215,7 @@ ${vmanager.order}');">${item}</a>
 			<c:forEach items="${vmanager.headers}" var="item">
 				<td
 					style="width:${item.width}%;background-color: gray; color: black"><a
-					href="javascript: goToList('${item.link}');" style="color: white">${item.name}${item.selection}
+					href="javascript: goToList('${item.link}');" style="color: white; font-size: 120%;">${item.name}${item.selection}
 
 </a></td>
 			</c:forEach>

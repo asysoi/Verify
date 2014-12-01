@@ -155,7 +155,7 @@ public class CertController {
 
 			SQLBuilder builder = new SQLBuilderCertificate();
 			builder.setFilter(filter);
-			List<Certificate> certs = certService.readCertificates(
+			List certs = certService.readCertificates(
 					vmanager.getOrderby(), vmanager.getOrder(), builder);
 			
 			LOG.info("Download. Certificates loaded from database..."); 
@@ -163,9 +163,9 @@ public class CertController {
 			//response.setContentType("application/octet-stream");
 			response.setHeader("Content-Disposition",
 					"attachment; filename=certificates.xlsx");
-			(new XSLWriter()).getWorkbook(certs,
+			(new XSLWriter()).makeWorkbook(certs,
 					vmanager.getDownloadconfig().getHeaders(),
-					vmanager.getDownloadconfig().getFields()).write(
+					vmanager.getDownloadconfig().getFields(), "Лист Сертификатов").write(
 					response.getOutputStream());
 			response.flushBuffer();
 			LOG.info("Download finished...");
