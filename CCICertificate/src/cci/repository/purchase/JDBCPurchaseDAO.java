@@ -15,7 +15,7 @@ import cci.model.cert.Company;
 import cci.model.purchase.Product;
 import cci.model.purchase.Purchase;
 import cci.service.FilterCondition;
-import cci.web.controller.purchase.PurchaseView;
+import cci.web.controller.purchase.ViewPurchase;
 
 public class JDBCPurchaseDAO implements PurchaseDAO { 
    
@@ -59,7 +59,7 @@ public class JDBCPurchaseDAO implements PurchaseDAO {
 				new BeanPropertyRowMapper<Purchase>(Purchase.class));
 	}
 	
-	public List<PurchaseView> findViewNextPage(int page, int pagesize, String orderby, String order, FilterCondition filter) {
+	public List<ViewPurchase> findViewNextPage(int page, int pagesize, String orderby, String order, FilterCondition filter) {
 		
 		String sql = " SELECT purchase.* " + 
 			         " FROM (SELECT t.*, ROW_NUMBER() OVER " +
@@ -71,7 +71,7 @@ public class JDBCPurchaseDAO implements PurchaseDAO {
 	
 		System.out.println("SQL get next    page : " + sql);
 		return this.template.getJdbcOperations().query(sql,
-				new BeanPropertyRowMapper<PurchaseView>(PurchaseView.class));
+				new BeanPropertyRowMapper<ViewPurchase>(ViewPurchase.class));
 	}
 	
 	public int getViewPageCount(FilterCondition filter) {
@@ -96,14 +96,14 @@ public class JDBCPurchaseDAO implements PurchaseDAO {
 		return item;
 	}
 
-	public PurchaseView findPurchaseViewByID(long id) {
-		PurchaseView item = null;
+	public ViewPurchase findPurchaseViewByID(long id) {
+		ViewPurchase item = null;
 
 		try {
 			String sql = "select * from PCH_PURCHASE_VIEW WHERE id = ?";
 			item = template.getJdbcOperations().queryForObject(sql,
 					new Object[] { id },
-					new BeanPropertyRowMapper<PurchaseView>(PurchaseView.class));
+					new BeanPropertyRowMapper<ViewPurchase>(ViewPurchase.class));
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();

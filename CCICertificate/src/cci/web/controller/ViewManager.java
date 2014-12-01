@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 import cci.config.cert.ExportCertConfig;
 import cci.service.Filter;
 import cci.service.FilterCondition;
-import cci.web.controller.purchase.HeaderTableView;
 
 @Component
 @Scope("session")

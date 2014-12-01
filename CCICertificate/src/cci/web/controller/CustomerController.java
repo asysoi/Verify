@@ -1,4 +1,4 @@
-package cci.web.controller.cert;
+package cci.web.controller;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;

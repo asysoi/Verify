@@ -8,7 +8,7 @@ import cci.model.cert.Company;
 import cci.model.purchase.Product;
 import cci.model.purchase.Purchase;
 import cci.service.FilterCondition;
-import cci.web.controller.purchase.PurchaseView;
+import cci.web.controller.purchase.ViewPurchase;
 
 public interface PurchaseDAO {
     
@@ -30,9 +30,9 @@ public interface PurchaseDAO {
 
 	public void saveCompany(Company company);
 	
-	public PurchaseView findPurchaseViewByID(long id);
+	public ViewPurchase findPurchaseViewByID(long id);
 	
-	public List<PurchaseView> findViewNextPage(int page, int pagesize, String orderby, String order, FilterCondition filter);
+	public List<ViewPurchase> findViewNextPage(int page, int pagesize, String orderby, String order, FilterCondition filter);
 
 	public int  getViewPageCount(FilterCondition filter);   
 }  

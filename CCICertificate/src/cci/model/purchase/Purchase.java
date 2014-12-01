@@ -34,8 +34,7 @@ public class Purchase {
 		this.id_otd = id_otd;
 	}
 	
-	
-	
+		
 	@Override
 	public String toString() {
 		return "Purchase [id=" + id + ", id_product=" + id_product
@@ -68,10 +67,10 @@ public class Purchase {
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
-	public String getProductProperty() {
+	public String getProductproperty() {
 		return productProperty;
 	}
-	public void setProductProperty(String productProperty) {
+	public void setProductproperty(String productProperty) {
 		this.productProperty = productProperty;
 	}
 	
@@ -81,10 +80,10 @@ public class Purchase {
 	public void setId(long id) {
 		this.id = id;
 	}
-	public Date getPchDate() {
+	public Date getPchdate() {
 		return pchDate;
 	}
-	public void setPchDate(Date pchDate) {
+	public void setPchdate(Date pchDate) {
 		this.pchDate = pchDate;
 	}
 }

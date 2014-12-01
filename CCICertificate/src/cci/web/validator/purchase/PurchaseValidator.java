@@ -7,7 +7,7 @@ import org.springframework.validation.Validator;
 
 import cci.model.cert.Customer;
 import cci.model.purchase.Purchase;
-import cci.web.controller.purchase.PurchaseView;
+import cci.web.controller.purchase.ViewPurchase;
 
 @Component
 public class PurchaseValidator implements Validator{
@@ -23,7 +23,7 @@ public class PurchaseValidator implements Validator{
 		ValidationUtils.rejectIfEmptyOrWhitespace(errors, "price",
 				"required.price", "Field name is required.");
 		
-		PurchaseView purchase = (PurchaseView) target;
+		ViewPurchase purchase = (ViewPurchase) target;
 		
 
 		//if(purchase.getProduct() > 0){

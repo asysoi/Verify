@@ -10,9 +10,10 @@ import cci.model.Client;
 import cci.model.cert.Company;
 import cci.model.purchase.Product;
 import cci.model.purchase.Purchase;
+import cci.repository.SQLBuilder;
 import cci.repository.purchase.PurchaseDAO;
 import cci.service.FilterCondition;
-import cci.web.controller.purchase.PurchaseView;
+import cci.web.controller.purchase.ViewPurchase;
 
 
 @Component
@@ -130,10 +131,10 @@ public class PurchaseService {
 	}
 
 
-	public List<PurchaseView> readPurchaseViewPage(int page, int pagesize, String sortby, String order, FilterCondition filter) {
+	public List<ViewPurchase> readPurchaseViewPage(int page, int pagesize, String sortby, String order, FilterCondition filter) {
 		Locale.setDefault(new Locale("en", "en"));
 
-		List<PurchaseView> purchases = null;
+		List<ViewPurchase> purchases = null;
 		
 		try {
 			purchases = purchaseDAO.findViewNextPage(page, pagesize, sortby, order, filter);
@@ -156,10 +157,10 @@ public class PurchaseService {
 	}
 	
 	 
-	public PurchaseView readPurchaseView(Long id) {
+	public ViewPurchase readPurchaseView(Long id) {
 		Locale.setDefault(new Locale("en", "en"));
 		
-		PurchaseView purchase = null;
+		ViewPurchase purchase = null;
 		try {
 			purchase= purchaseDAO.findPurchaseViewByID(id);
 		} catch (Exception ex) {
@@ -167,6 +168,19 @@ public class PurchaseService {
 		}
 		
 		return purchase;
+	}
+
+
+	public int getViewPageCount(SQLBuilder builder) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	public List<ViewPurchase> readClientsPage(int page, int pagesize,
+			String orderby, String order, SQLBuilder builder) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

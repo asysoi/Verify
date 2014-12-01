@@ -1,4 +1,4 @@
-package cci.web.controller.purchase;
+package cci.web.controller;
 
 public class HeaderTableView {
 	private int position; 
@@ -40,11 +40,6 @@ public class HeaderTableView {
 		this.link = link;
 	}
 	
-	@Override
-	public String toString() {
-		return "HeaderTableView [width=" + width + ", name=" + name + ", link="
-				+ link + "]";
-	}
 	public boolean isSelected() {
 		return selected;
 	}
@@ -56,5 +51,11 @@ public class HeaderTableView {
 	}
 	public void setSelection(String selection) {
 		this.selection = selection;
+	}
+	
+	@Override
+	public String toString() {
+		return "HeaderTableView [width=" + width + ", name=" + name + ", link="
+				+ link + "]";
 	}
 }

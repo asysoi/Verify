@@ -25,7 +25,7 @@ import cci.model.cert.Country;
 import cci.model.cert.Product;
 import cci.repository.SQLBuilder;
 import cci.service.FilterCondition;
-import cci.web.controller.purchase.PurchaseView;
+import cci.web.controller.purchase.ViewPurchase;
 
 @Repository
 public class JDBCCertificateDAO implements CertificateDAO {

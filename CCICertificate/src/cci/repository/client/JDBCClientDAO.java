@@ -23,7 +23,7 @@ import cci.model.cert.Country;
 import cci.repository.SQLBuilder;
 import cci.service.client.ClientService;
 import cci.web.controller.client.ViewClient;
-import cci.web.controller.purchase.PurchaseView;
+import cci.web.controller.purchase.ViewPurchase;
 
 @Repository
 public class JDBCClientDAO implements ClientDAO {

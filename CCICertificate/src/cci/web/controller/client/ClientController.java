@@ -19,48 +19,38 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
-import cci.config.cert.ExportCertConfig;
 import cci.config.client.ExportClientConfig;
 import cci.model.Client;
-import cci.model.cert.Certificate;
-import cci.model.cert.Company;
 import cci.repository.SQLBuilder;
-import cci.repository.cert.SQLBuilderCertificate;
 import cci.repository.client.SQLBuilderClient;
 import cci.service.Filter;
-import cci.service.cert.CERTService;
 import cci.service.cert.FilterCertificate;
 import cci.service.cert.XSLWriter;
 import cci.service.client.ClientService;
 import cci.service.client.FilterClient;
 import cci.web.controller.ViewManager;
-import cci.web.controller.cert.CertController;
-import cci.web.controller.cert.ViewCertFilter;
-import cci.web.controller.purchase.PurchaseView;
 import cci.web.validator.ClientValidator;
-import cci.web.validator.purchase.PurchaseValidator;
-
 
 @Controller
 @SessionAttributes({ "clientfilter", "cmanager" })
 public class ClientController {
-	
-	public static Logger LOG=LogManager.getLogger(ClientController.class);
+
+	public static Logger LOG = LogManager.getLogger(ClientController.class);
 	private ClientValidator clientValidator;
-	
+
 	@Autowired
 	private ClientService clientService;
-	
+
 	@Autowired
 	public ClientController(ClientValidator clientValidator) {
 		this.clientValidator = clientValidator;
 	}
-	
+
 	// ---------------------------------------------------------------
 	// Get Clients List
-	// ---------------------------------------------------------------	
+	// ---------------------------------------------------------------
 	@RequestMapping(value = "/clients.do", method = RequestMethod.GET)
-	public String listcerts(
+	public String listclients(
 			@RequestParam(value = "page", required = false) Integer page,
 			@RequestParam(value = "pagesize", required = false) Integer pagesize,
 			@RequestParam(value = "orderby", required = false) String orderby,
@@ -122,29 +112,28 @@ public class ClientController {
 		model.addAttribute("first_page", cmanager.getFirstPageLink());
 		model.addAttribute("pages", cmanager.getPagesList());
 		model.addAttribute("sizes", cmanager.getSizesList());
-		
+
 		model.addAttribute("jspName", "client/clients_include.jsp");
 		return "window";
 	}
 
-	
 	private ViewManager initViewManager(ModelMap model) {
 		ViewManager cmanager = new ViewManager();
 		cmanager.setHnames(new String[] { "Наименование компании", "Адрес",
-				"УНП", "Банк", "Контактный телефон"});
-		cmanager.setOrdnames(new String[] { "name", "address",
-				"unp", "bname", "work_phone" });
+				"УНП", "Банк", "Контактный телефон" });
+		cmanager.setOrdnames(new String[] { "name", "address", "unp", "bname",
+				"work_phone" });
 		cmanager.setWidths(new int[] { 25, 20, 15, 20, 20 });
-		model.addAttribute("cmanager",cmanager);
+		model.addAttribute("cmanager", cmanager);
 		return cmanager;
 	}
 
 	// ---------------------------------------------------------------
 	// Get Client Filter Window
-	// ---------------------------------------------------------------	
+	// ---------------------------------------------------------------
 	@RequestMapping(value = "/cfilter.do", method = RequestMethod.GET)
-	public String openFilter(
-			@ModelAttribute("clientfilter") FilterClient fc, ModelMap model) {
+	public String openFilter(@ModelAttribute("clientfilter") FilterClient fc,
+			ModelMap model) {
 
 		if (fc == null) {
 			fc = new FilterClient();
@@ -163,7 +152,7 @@ public class ClientController {
 
 	// ---------------------------------------------------------------
 	// Set Client Filter properties
-	// ---------------------------------------------------------------	
+	// ---------------------------------------------------------------
 	@RequestMapping(value = "/cfilter.do", method = RequestMethod.POST)
 	public String submitFilter(
 			@ModelAttribute("viewfilter") ViewClientFilter viewfilter,
@@ -172,8 +161,7 @@ public class ClientController {
 
 		if (fc == null) {
 			fc = new FilterClient();
-			System.out
-					.println("New filterClient created in the POST method");
+			System.out.println("New filterClient created in the POST method");
 		} else {
 			LOG.info("Found FilterClient in POST");
 		}
@@ -184,90 +172,78 @@ public class ClientController {
 		model.addAttribute("clientfilter", fc);
 		return "client/cfilter";
 	}
-	
+
 	// ---------------------------------------------------------------
-	// View Client 
+	// View Client
 	// ---------------------------------------------------------------
-	@RequestMapping(value="clientview.do")
-	public String clientView(@RequestParam(value = "id", required = true) Long id,
-	                          ModelMap model) {
-        Client client = clientService.readClientView(id);
-        model.addAttribute("client", client);
-        
-       	return "client/clientview";
+	@RequestMapping(value = "clientview.do")
+	public String clientView(
+			@RequestParam(value = "id", required = true) Long id, ModelMap model) {
+		Client client = clientService.readClientView(id);
+		model.addAttribute("client", client);
+
+		return "client/clientview";
 	}
-	
+
 	// ---------------------------------------------------------------
-    // Add Client POST 
+	// Add Client POST
 	// ---------------------------------------------------------------
-	@RequestMapping(value="addclient.do", method = RequestMethod.POST)
+	@RequestMapping(value = "addclient.do", method = RequestMethod.POST)
 	public String addClient(@ModelAttribute("client") Client client,
-		BindingResult result, SessionStatus status, ModelMap model) {
-		
+			BindingResult result, SessionStatus status, ModelMap model) {
+
 		// clientValidator.validate(client, result);
-		
-		//status.setComplete();
+
+		// status.setComplete();
 		clientService.saveClient(client);
 		return "client/clientform";
 	}
 
 	// ---------------------------------------------------------------
-    // Add Client GET 
+	// Add Client GET
 	// ---------------------------------------------------------------
-	@RequestMapping(value="addclient.do", method = RequestMethod.GET)
+	@RequestMapping(value = "addclient.do", method = RequestMethod.GET)
 	public String addClientInit(ModelMap model) {
 
 		Client client = new Client();
 		model.addAttribute("client", client);
 		return "client/clientform";
 	}
-	
+
 	// ---------------------------------------------------------------
-    // Update Client POST 
+	// Update Client POST
 	// ---------------------------------------------------------------
-	@RequestMapping(value="editclient.do", method = RequestMethod.POST)
+	@RequestMapping(value = "editclient.do", method = RequestMethod.POST)
 	public String updateClient(@ModelAttribute("client") Client client,
-		BindingResult result, SessionStatus status, ModelMap model) {
-	
-		//status.setComplete();
+			BindingResult result, SessionStatus status, ModelMap model) {
+
+		// status.setComplete();
 		clientService.updateClient(client);
 		return "client/clientform";
 	}
 
 	// ---------------------------------------------------------------
-    // Update Client GET
+	// Update Client GET
 	// ---------------------------------------------------------------
-	@RequestMapping(value="editclient.do", method = RequestMethod.GET)
-	public String updateClientInit(@RequestParam(value = "id", required = true) Long id,
-					ModelMap model) {
+	@RequestMapping(value = "editclient.do", method = RequestMethod.GET)
+	public String updateClientInit(
+			@RequestParam(value = "id", required = true) Long id, ModelMap model) {
 
 		Client client = clientService.readClient(id);
-		
+
 		model.addAttribute("client", client);
 		return "client/clientform";
 	}
-		
-	
-		
-	
-	// ---------------------------------------------------------------
-	// Get Countries List 
-	// ---------------------------------------------------------------	
-	@ModelAttribute("countries")
-	public Map<String, String> populateCompanyList() {
-		return clientService.getCountriesList();
-	}
 
-	
 	// ---------------------------------------------------------------
-	// Export Client List to XSL 
-	// ---------------------------------------------------------------	
+	// Export Client List to XSL
+	// ---------------------------------------------------------------
 	@RequestMapping(value = "/exportclients.do", method = RequestMethod.GET)
 	public void exportClientsToExcel(HttpSession session,
 			HttpServletResponse response, ModelMap model) {
 		try {
-			
-            LOG.info("Download started...");   
+
+			LOG.info("Download started...");
 			ViewManager vmanager = (ViewManager) model.get("cmanager");
 
 			Filter filter = vmanager.getFilter();
@@ -280,24 +256,23 @@ public class ClientController {
 				}
 				vmanager.setFilter(filter);
 			}
-			
+
 			ExportClientConfig dconfig = new ExportClientConfig();
-			
+
 			SQLBuilder builder = new SQLBuilderClient();
 			builder.setFilter(filter);
-			List clients = clientService.readClients(
-					vmanager.getOrderby(), vmanager.getOrder(), builder);
-			
-			LOG.info("Download. Clients loaded from database..."); 
+			List clients = clientService.readClients(vmanager.getOrderby(),
+					vmanager.getOrder(), builder);
+
+			LOG.info("Download. Clients loaded from database...");
 			response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 			response.setHeader("Content-Disposition",
 					"attachment; filename=certificates.xlsx");
-			
-			(new XSLWriter()).makeWorkbook(clients,
-					dconfig.getHeaders(),
+
+			(new XSLWriter()).makeWorkbook(clients, dconfig.getHeaders(),
 					dconfig.getFields(), "Список контрагентов").write(
 					response.getOutputStream());
-			
+
 			response.flushBuffer();
 			LOG.info("Download finished...");
 
@@ -305,6 +280,12 @@ public class ClientController {
 			e.printStackTrace();
 		}
 	}
-	
-	
+
+	// ---------------------------------------------------------------
+	// Get Countries List
+	// ---------------------------------------------------------------
+	@ModelAttribute("countries")
+	public Map<String, String> populateCompanyList() {
+		return clientService.getCountriesList();
+	}
 }
