@@ -22,9 +22,10 @@
 
 	function submit() {
 		url = $("#ffilter").attr("action");
+		alert($("#ffilter").serialize());
 		$.post(url, $("#ffilter").serialize());
 		$( document ).ajaxComplete(function(event,request, settings ) {
-			  goToList('purchases.do?page=1&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}');
+			  goToList('purchases.do?page=1&pagesize=${pmanager.pagesize}&orderby=${pmanager.orderby}&order=${pmanager.order}');
 			  $("#pview").dialog("close");
 		});
 	}
@@ -93,7 +94,7 @@
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Фильтр поиска Сделок');
 		$("#pview").dialog("option", "width", 620);
-		$("#pview").dialog("option", "height", 380);
+		$("#pview").dialog("option", "height", 320);
 		$("#pview").dialog("option", "modal", true);
 		$("#pview").dialog("option", "resizable", false );
 		$("#pview").dialog({ buttons: [ { text: "Применить",  click : function() { submit(); } },  
@@ -110,7 +111,7 @@
 		$("#pview").load(link);        
 		$("#pview").dialog("option", "title", 'Сделка');
 		$("#pview").dialog("option", "width", 450);
-		$("#pview").dialog("option", "height", 300);
+		$("#pview").dialog("option", "height", 280);
 		$("#pview").dialog("option", "modal", true);
 		$("#pview").dialog("option", "resizable", false);
 		$("#pview").dialog({

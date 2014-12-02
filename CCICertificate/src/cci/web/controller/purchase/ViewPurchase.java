@@ -42,7 +42,7 @@ public class ViewPurchase extends Purchase {
 	public String getPriceto() {
 		return priceto;
 	}
-	public void setPricefto(String priceto) {
+	public void setPriceto(String priceto) {
 		this.priceto = priceto;
 	}
 	public String getVolumefrom() {
@@ -69,6 +69,20 @@ public class ViewPurchase extends Purchase {
 	public void setPchdateto(String pchdateto) {
 		this.pchdateto = pchdateto;
 	}
+	@Override
+	public String toString() {
+		return "ViewPurchase [product=" + product + ", department="
+				+ department + ", company=" + company + ", pricefrom="
+				+ pricefrom + ", priceto=" + priceto + ", volumefrom="
+				+ volumefrom + ", volumeto=" + volumeto + ", pchdatefrom="
+				+ pchdatefrom + ", pchdateto=" + pchdateto
+				+ ", Id_product=" + getId_product() + ", Id_otd="
+				+ getId_otd() + ", Id_company=" + getId_company()
+				+ ", Unit=" + getUnit() + ", Productproperty="
+				+ getProductproperty() + "]";
+	}
+	
+	
 
 }
 

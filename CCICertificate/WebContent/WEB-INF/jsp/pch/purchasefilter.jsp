@@ -22,10 +22,10 @@
 					$("#pchdateto").datepicker("setDate",
 							"${viewfilter.viewpurchase.pchdateto}");
 					$("#product")
-							.val('${viewfilter.viewpurchase.product}');
+							.val('${viewfilter.viewpurchase.id_product}');
 					$("#department")
-							.val('${viewfilter.viewpurchase.department}');
-					$("#company").val('${viewfilter.viewpurchase.company}');
+							.val('${viewfilter.viewpurchase.id_otd}');
+					$("#company").val('${viewfilter.viewpurchase.id_company}');
 				});
 
 	});
@@ -68,7 +68,7 @@
 
 			<tr>
 				<td>Характеристика товара</td>
-				<td><form:input path="viewpurchase.productproperty" id="productproperty"  size="35" /><a
+				<td><form:input path="viewpurchase.productproperty" id="productproperty"  size="42" /><a
 					href="javascript:clearelement($('#productproperty'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>

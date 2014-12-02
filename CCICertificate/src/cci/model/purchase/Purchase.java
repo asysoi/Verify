@@ -7,79 +7,88 @@ import java.util.Date;
 
 public class Purchase {
 	
-	private long id;	
-	private long id_product;
-	private long id_otd;	
-	private long id_company;	
-	private long price;	
-	private long volume;	
+	private Long id;	
+	private Long id_product;
+	private Long id_otd;	
+	private Long id_company;	
+	private Long price;	
+	private Long volume;	
 	private String unit;
 	private Date pchdate;
 	private String productproperty;
 		
-	public long getID() {
+	public Long getId() {
 		return id;
 	}
-	public void setID(long id) {
+
+	public void setId(Long id) {
 		this.id = id;
 	}
-	public long getId_product() {
+
+	public Long getId_product() {
 		return id_product;
 	}
-	public void setId_product(long id_product) {
+
+	public void setId_product(Long id_product) {
 		this.id_product = id_product;
 	}
-	public long getId_otd() {
+
+	public Long getId_otd() {
 		return id_otd;
 	}
-	public void setId_otd(long id_otd) {
+
+	public void setId_otd(Long id_otd) {
 		this.id_otd = id_otd;
 	}
-		
-	public long getId_company() {
+
+	public Long getId_company() {
 		return id_company;
 	}
-	public void setId_company(long id_company) {
+
+	public void setId_company(Long id_company) {
 		this.id_company = id_company;
 	}
-	public long getPrice() {
+
+	public Long getPrice() {
 		return price;
 	}
-	public void setPrice(long price) {
+
+	public void setPrice(Long price) {
 		this.price = price;
 	}
-	public long getVolume() {
+
+	public Long getVolume() {
 		return volume;
 	}
-	public void setVolume(long volume) {
+
+	public void setVolume(Long volume) {
 		this.volume = volume;
 	}
+
 	public String getUnit() {
 		return unit;
 	}
+
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
-	public String getProductproperty() {
-		return productproperty;
-	}
-	public void setProductproperty(String productproperty) {
-		this.productproperty = productproperty;
-	}
-	
-	public long getId() {
-		return id;
-	}
-	public void setId(long id) {
-		this.id = id;
-	}
+
 	public Date getPchdate() {
 		return pchdate;
 	}
+
 	public void setPchdate(Date pchdate) {
 		this.pchdate = pchdate;
 	}
-	
+
+	public String getProductproperty() {
+		return productproperty;
+	}
+
+	public void setProductproperty(String productproperty) {
+		this.productproperty = productproperty;
+	}
+
 	public String getPchdatestring() {
 		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 		return df.format(pchdate);

@@ -87,7 +87,7 @@ public class PurchaseFilter extends Filter {
 						fcond.setValue((String) m.invoke(obj, new Object[] {}));
 					}
 				} catch (Exception ex) {
-					LOG.info("Error certificate load." + ex.getMessage());
+					System.out.println("Error certificate load." + ex.getMessage());
 				}
 			}
 		}
@@ -107,7 +107,7 @@ public class PurchaseFilter extends Filter {
 								new Object[] {}));
 					}
 				} catch (Exception ex) {
-					LOG.info("Error condition load." + ex.getMessage());
+					System.out.println("Error condition load." + ex.getMessage());
 				}
 			}
 		}

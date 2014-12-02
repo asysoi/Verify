@@ -170,10 +170,11 @@ public class PurchaseController {
 		} else {
 			LOG.info("Found FilterPurchase in POST");
 		}
-
+		System.out.println(viewfilter.getViewpurchase().toString());
 		fc.loadViewpurchase(viewfilter.getViewpurchase());
 		fc.loadCondition(viewfilter.getCondition());
-
+		System.out.println(fc.getViewpurchase().toString());
+		
 		model.addAttribute("purchasefilter", fc);
 		return "pch/purchasefilter";
 	}
