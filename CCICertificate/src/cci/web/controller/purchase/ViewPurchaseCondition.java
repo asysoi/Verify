@@ -14,6 +14,7 @@ public class ViewPurchaseCondition {
 	private String product = "like";
 	private String department = "like";	
 	private String company = "like";
+	
 	public String getPricefrom() {
 		return pricefrom;
 	}

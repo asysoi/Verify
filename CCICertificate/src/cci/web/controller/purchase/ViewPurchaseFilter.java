@@ -13,10 +13,10 @@ public class ViewPurchaseFilter {
 		this.condition = condition;
 	}
 
-	public ViewPurchase getViewclient() {
+	public ViewPurchase getViewpurchase() {
 		return object;
 	}
-	public void setViewclient(ViewPurchase object) {
+	public void setViewpurchase(ViewPurchase object) {
 		this.object = object;
 	}
 		

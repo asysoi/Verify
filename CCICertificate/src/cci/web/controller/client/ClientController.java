@@ -24,10 +24,10 @@ import cci.model.Client;
 import cci.repository.SQLBuilder;
 import cci.repository.client.SQLBuilderClient;
 import cci.service.Filter;
-import cci.service.cert.FilterCertificate;
+import cci.service.cert.CertFilter;
 import cci.service.cert.XSLWriter;
 import cci.service.client.ClientService;
-import cci.service.client.FilterClient;
+import cci.service.client.ClientFilter;
 import cci.web.controller.ViewManager;
 import cci.web.validator.ClientValidator;
 
@@ -89,7 +89,7 @@ public class ClientController {
 				if (model.get("clientfilter") != null) {
 					filter = (Filter) model.get("clientfilter");
 				} else {
-					filter = new FilterClient();
+					filter = new ClientFilter();
 					model.addAttribute("clientfilter", filter);
 				}
 				cmanager.setFilter(filter);
@@ -132,11 +132,11 @@ public class ClientController {
 	// Get Client Filter Window
 	// ---------------------------------------------------------------
 	@RequestMapping(value = "/cfilter.do", method = RequestMethod.GET)
-	public String openFilter(@ModelAttribute("clientfilter") FilterClient fc,
+	public String openFilter(@ModelAttribute("clientfilter") ClientFilter fc,
 			ModelMap model) {
 
 		if (fc == null) {
-			fc = new FilterClient();
+			fc = new ClientFilter();
 			LOG.info("New filterClient created in GET method");
 			model.addAttribute("clientfilter", fc);
 		} else {
@@ -144,8 +144,8 @@ public class ClientController {
 		}
 
 		ViewClientFilter vf = new ViewClientFilter(
-				((FilterClient) fc).getViewclient(),
-				((FilterClient) fc).getCondition());
+				((ClientFilter) fc).getViewclient(),
+				((ClientFilter) fc).getCondition());
 		model.addAttribute("viewfilter", vf);
 		return "client/cfilter";
 	}
@@ -156,11 +156,11 @@ public class ClientController {
 	@RequestMapping(value = "/cfilter.do", method = RequestMethod.POST)
 	public String submitFilter(
 			@ModelAttribute("viewfilter") ViewClientFilter viewfilter,
-			@ModelAttribute("clientfilter") FilterClient fc,
+			@ModelAttribute("clientfilter") ClientFilter fc,
 			BindingResult result, SessionStatus status, ModelMap model) {
 
 		if (fc == null) {
-			fc = new FilterClient();
+			fc = new ClientFilter();
 			System.out.println("New filterClient created in the POST method");
 		} else {
 			LOG.info("Found FilterClient in POST");
@@ -251,7 +251,7 @@ public class ClientController {
 				if (model.get("clientfilter") != null) {
 					filter = (Filter) model.get("clientfilter");
 				} else {
-					filter = new FilterCertificate();
+					filter = new CertFilter();
 					model.addAttribute("clientfilter", filter);
 				}
 				vmanager.setFilter(filter);

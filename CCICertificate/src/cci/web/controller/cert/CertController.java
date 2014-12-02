@@ -31,7 +31,7 @@ import cci.repository.cert.SQLBuilderCertificate;
 import cci.service.CountryConverter;
 import cci.service.Filter;
 import cci.service.cert.CERTService;
-import cci.service.cert.FilterCertificate;
+import cci.service.cert.CertFilter;
 import cci.service.cert.XSLWriter;
 import cci.web.controller.User;
 import cci.web.controller.ViewManager;
@@ -143,7 +143,7 @@ public class CertController {
 				if (model.get("certfilter") != null) {
 					filter = (Filter) model.get("certfilter");
 				} else {
-					filter = new FilterCertificate();
+					filter = new CertFilter();
 					model.addAttribute("certfilter", filter);
 				}
 				vmanager.setFilter(filter);
@@ -220,7 +220,7 @@ public class CertController {
 				if (model.get("certfilter") != null) {
 					filter = (Filter) model.get("certfilter");
 				} else {
-					filter = new FilterCertificate();
+					filter = new CertFilter();
 					model.addAttribute("certfilter", filter);
 				}
 				vmanager.setFilter(filter);
@@ -274,10 +274,10 @@ public class CertController {
 
 	@RequestMapping(value = "/filter.do", method = RequestMethod.GET)
 	public String openFilter(
-			@ModelAttribute("certfilter") FilterCertificate fc, ModelMap model) {
+			@ModelAttribute("certfilter") CertFilter fc, ModelMap model) {
 
 		if (fc == null) {
-			fc = new FilterCertificate();
+			fc = new CertFilter();
 			LOG.info("New filterCertificate created in GET method");
 			model.addAttribute("certfilter", fc);
 		} else {
@@ -285,8 +285,8 @@ public class CertController {
 		}
 
 		ViewCertFilter vf = new ViewCertFilter(
-				((FilterCertificate) fc).getViewcertificate(),
-				((FilterCertificate) fc).getCondition());
+				((CertFilter) fc).getViewcertificate(),
+				((CertFilter) fc).getCondition());
 		model.addAttribute("viewfilter", vf);
 		return "fragments/filter";
 	}
@@ -294,11 +294,11 @@ public class CertController {
 	@RequestMapping(value = "/filter.do", method = RequestMethod.POST)
 	public String submitFilter(
 			@ModelAttribute("viewfilter") ViewCertFilter viewfilter,
-			@ModelAttribute("certfilter") FilterCertificate fc,
+			@ModelAttribute("certfilter") CertFilter fc,
 			BindingResult result, SessionStatus status, ModelMap model) {
 
 		if (fc == null) {
-			fc = new FilterCertificate();
+			fc = new CertFilter();
 			System.out
 					.println("New filterCertificate created in the POST method");
 		} else {

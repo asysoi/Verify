@@ -17,3 +17,5 @@ encoding//WebContent/WEB-INF/jsp/welcome.jsp=UTF-8
 encoding//WebContent/WEB-INF/jsp/window.jsp=UTF-8
 encoding//src/cci/cert/web/controller/ViewManager.java=UTF-8
 encoding//src/cci/purchase/web/controller/PurchaseController.java=UTF-8
+encoding//src/cci/web/controller/ViewManager.java=UTF-8
+encoding//src/cci/web/controller/purchase/PurchaseController.java=UTF-8

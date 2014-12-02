@@ -16,11 +16,11 @@ import cci.web.controller.client.ClientController;
 
 @Component
 @Scope("session")
-public class FilterCertificate extends Filter {
+public class CertFilter extends Filter {
 	
-	public static Logger LOG=LogManager.getLogger(FilterCertificate.class);
+	public static Logger LOG=LogManager.getLogger(CertFilter.class);
 	
-	public FilterCertificate() {
+	public CertFilter() {
 		String[] fields = new String[] { "CERT_ID", "FORMS", "UNN", "KONTRP",
 				"KONTRS", "ADRESS", "POLUCHAT", "ADRESSPOL", "DATACERT",
 				"ISSUEDATE", "NOMERCERT", "EXPERT", "NBLANKA", "RUKOVOD",

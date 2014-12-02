@@ -7,6 +7,7 @@ import cci.model.Client;
 import cci.model.cert.Company;
 import cci.model.purchase.Product;
 import cci.model.purchase.Purchase;
+import cci.repository.SQLBuilder;
 import cci.service.FilterCondition;
 import cci.web.controller.purchase.ViewPurchase;
 
@@ -14,11 +15,11 @@ public interface PurchaseDAO {
     
 	public List<Purchase> findNextPage(int page, int pagesize);
 
-	public List<Product> findProducts();
+	public Map<Long, String> findProducts();
 
-	public List<Company> findDepartments();
+	public Map<Long, String> findDepartments();
 
-	public List<Client> findCompanies();
+	public Map<Long, String> findCompanies();
 
 	public Purchase findPurchaseByID(long id);
 
@@ -32,8 +33,13 @@ public interface PurchaseDAO {
 	
 	public ViewPurchase findPurchaseViewByID(long id);
 	
-	public List<ViewPurchase> findViewNextPage(int page, int pagesize, String orderby, String order, FilterCondition filter);
+	public List<ViewPurchase> findViewNextPage(int page, int pagesize, String orderby, String order, SQLBuilder builder);
 
-	public int  getViewPageCount(FilterCondition filter);   
+	public int  getViewPageCount(SQLBuilder builder);
+
+	public void updateClient(Purchase purchase);
+
+	public List<ViewPurchase> readViewPurchases(String orderby, String order,
+			SQLBuilder builder);   
 }  
 

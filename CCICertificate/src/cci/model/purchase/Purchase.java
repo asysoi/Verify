@@ -12,8 +12,8 @@ public class Purchase {
 	private long price;	
 	private long volume;	
 	private String unit;
-	private Date pchDate;
-	private String productProperty;
+	private Date pchdate;
+	private String productproperty;
 		
 	public long getID() {
 		return id;
@@ -33,16 +33,7 @@ public class Purchase {
 	public void setId_otd(long id_otd) {
 		this.id_otd = id_otd;
 	}
-	
 		
-	@Override
-	public String toString() {
-		return "Purchase [id=" + id + ", id_product=" + id_product
-				+ ", id_otd=" + id_otd + ", id_company=" + id_company
-				+ ", price=" + price + ", volume=" + volume + ", unit=" + unit
-				+ ", pchDate=" + pchDate + ", productProperty="
-				+ productProperty + "]";
-	}
 	public long getId_company() {
 		return id_company;
 	}
@@ -68,10 +59,10 @@ public class Purchase {
 		this.unit = unit;
 	}
 	public String getProductproperty() {
-		return productProperty;
+		return productproperty;
 	}
-	public void setProductproperty(String productProperty) {
-		this.productProperty = productProperty;
+	public void setProductproperty(String productproperty) {
+		this.productproperty = productproperty;
 	}
 	
 	public long getId() {
@@ -81,9 +72,19 @@ public class Purchase {
 		this.id = id;
 	}
 	public Date getPchdate() {
-		return pchDate;
+		return pchdate;
 	}
-	public void setPchdate(Date pchDate) {
-		this.pchDate = pchDate;
+	public void setPchdate(Date pchdate) {
+		this.pchdate = pchdate;
 	}
+	
+	@Override
+	public String toString() {
+		return "Purchase [id=" + id + ", id_product=" + id_product
+				+ ", id_otd=" + id_otd + ", id_company=" + id_company
+				+ ", price=" + price + ", volume=" + volume + ", unit=" + unit
+				+ ", pchDate=" + pchdate + ", productProperty="
+				+ productproperty + "]";
+	}
+	
 }

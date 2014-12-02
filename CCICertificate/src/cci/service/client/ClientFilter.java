@@ -1,4 +1,4 @@
-package cci.service.purchase;
+package cci.service.client;
 
 import java.lang.reflect.Method;
 
@@ -8,25 +8,38 @@ import org.apache.logging.log4j.Logger;
 import cci.service.FieldType;
 import cci.service.Filter;
 import cci.service.FilterCondition;
-import cci.web.controller.purchase.ViewPurchase;
-import cci.web.controller.purchase.ViewPurchaseCondition;
+import cci.web.controller.client.ViewClientCondition;
+import cci.web.controller.client.ViewClient;
 
-public class FilterPurchase extends Filter {
-	public static Logger LOG = LogManager.getLogger(FilterPurchase.class);
+public class ClientFilter extends Filter {
 
-	public FilterPurchase() {
-		String[] fields = new String[] { "ID",  };
+	public static Logger LOG = LogManager.getLogger(ClientFilter.class);
 
-		String[] dbfields = new String[] {"ID", };
+	public ClientFilter() {
+		String[] fields = new String[] { "ID", "NAME", "CITY", "LINE",
+				"CINDEX", "OFFICE", "BUILDING", "WORK_PHONE", "CELL_PHONE",
+				"UNP", "OKPO", "BNAME", "BCITY", "BLINE", "BINDEX", "BOFFICE",
+				"BBUILDING", "ACCOUNT", "BUNP", "EMAIL", "BEMAIL", "CODECOUNTRY", "BCODECOUNTRY" };
+
+		String[] dbfields = new String[] {"ID", "NAME", "CITY", "LINE",
+				"CINDEX", "OFFICE", "BUILDING", "WORK_PHONE", "CELL_PHONE",
+				"UNP", "OKPO", "BNAME", "BCITY", "BLINE", "BINDEX", "BOFFICE",
+				"BBUILDING", "ACCOUNT", "BUNP", "EMAIL", "BEMAIL", "CODECOUNTRY", "BCODECOUNTRY" };
 
 		FieldType[] types = new FieldType[] { FieldType.ID, FieldType.STRING,
-				};
+				FieldType.STRING, FieldType.STRING, FieldType.STRING,
+				FieldType.STRING, FieldType.STRING, FieldType.STRING,
+				FieldType.STRING, FieldType.STRING, FieldType.STRING,
+				FieldType.STRING, FieldType.STRING, FieldType.STRING,
+				FieldType.STRING, FieldType.STRING, FieldType.STRING,
+				FieldType.STRING, FieldType.STRING, FieldType.STRING,
+				FieldType.STRING, FieldType.STRING, FieldType.STRING};
 
 		this.init(fields, dbfields, types);
 	}
 
-	public ViewPurchase getViewpurchase() {
-		ViewPurchase obj = new ViewPurchase();
+	public ViewClient getViewclient() {
+		ViewClient obj = new ViewClient();
 
 		for (String field : getConditions().keySet()) {
 			FilterCondition fcond = getConditions().get(field);
@@ -47,8 +60,8 @@ public class FilterPurchase extends Filter {
 		return obj;
 	}
 
-	public ViewPurchaseCondition getCondition() {
-		ViewPurchaseCondition obj = new ViewPurchaseCondition();
+	public ViewClientCondition getCondition() {
+		ViewClientCondition obj = new ViewClientCondition();
 
 		for (String field : getConditions().keySet()) {
 			FilterCondition fcond = getConditions().get(field);
@@ -69,7 +82,7 @@ public class FilterPurchase extends Filter {
 		return obj;
 	}
 
-	public void loadViewpurchase(ViewPurchase obj) {
+	public void loadViewclient(ViewClient obj) {
 
 		for (String field : getConditions().keySet()) {
 			FilterCondition fcond = getConditions().get(field);
@@ -89,7 +102,7 @@ public class FilterPurchase extends Filter {
 		}
 	}
 
-	public void loadCondition(ViewPurchaseCondition obj) {
+	public void loadCondition(ViewClientCondition obj) {
 
 		for (String field : getConditions().keySet()) {
 			FilterCondition fcond = getConditions().get(field);
