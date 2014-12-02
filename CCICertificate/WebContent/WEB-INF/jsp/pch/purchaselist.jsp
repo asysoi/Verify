@@ -20,6 +20,15 @@
 		$("#pview").dialog("close");
 	}
 
+	function submit() {
+		url = $("#ffilter").attr("action");
+		$.post(url, $("#ffilter").serialize());
+		$( document ).ajaxComplete(function(event,request, settings ) {
+			  goToList('purchases.do?page=1&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}');
+			  $("#pview").dialog("close");
+		});
+	}
+	
 	function save(action) {
 		
 		url = $("#fitem").attr("action");
@@ -80,11 +89,11 @@
 	}
 
 	function setFilter() {
-        link="pfilter.do?&pagesize=${pmanager.pagesize}&orderby=${pmanager.orderby}&order=${pmanager.order}";
+        link="filterpurchase.do?&pagesize=${pmanager.pagesize}&orderby=${pmanager.orderby}&order=${pmanager.order}";
 		$("#pview").load(link);
-		$("#pview").dialog("option", "title", 'Фильтр поиска cltkrb');
-		$("#pview").dialog("option", "width", 740);
-		$("#pview").dialog("option", "height", 500);
+		$("#pview").dialog("option", "title", 'Фильтр поиска Сделок');
+		$("#pview").dialog("option", "width", 620);
+		$("#pview").dialog("option", "height", 380);
 		$("#pview").dialog("option", "modal", true);
 		$("#pview").dialog("option", "resizable", false );
 		$("#pview").dialog({ buttons: [ { text: "Применить",  click : function() { submit(); } },  
@@ -100,8 +109,8 @@
         link = "viewpurchase.do?id=" + id;
 		$("#pview").load(link);        
 		$("#pview").dialog("option", "title", 'Сделка');
-		$("#pview").dialog("option", "width", 650);
-		$("#pview").dialog("option", "height", 480);
+		$("#pview").dialog("option", "width", 450);
+		$("#pview").dialog("option", "height", 300);
 		$("#pview").dialog("option", "modal", true);
 		$("#pview").dialog("option", "resizable", false);
 		$("#pview").dialog({
@@ -142,7 +151,7 @@
 		$("#pview").dialog("option", "height", 570);
 		$("#pview").dialog("option", "modal", true);
 		$("#pview").dialog("option", "resizable", false);
-		$("#pview").dialog({ buttons: [ { text: "Сохранить",  click : function() { saveClient(); } },  
+		$("#pview").dialog({ buttons: [ { text: "Сохранить",  click : function() { save(); } },  
 		    				               { text: "Очистить Все ", click: function() { clear(); } },
 		     				               { text: "Отмена", click: function() { $( this ).dialog( "close" ); } }
 		                      	                                               ] });
@@ -208,11 +217,12 @@
 
 		<c:forEach items="${purchases}" var="item">
 			<tr>
-				<td><a href="javascript:viewItem('${item.id}')">${item.pchdate}</a></td>
+				<td><a href="javascript:viewItem('${item.id}')">${item.pchdatestring}</a></td>
 				<td>${item.product}</td>
 				<td>${item.company}</td>
 				<td>${item.price}</td>
 				<td>${item.volume}</td>
+				<td>${item.unit}</td>
 				<td>${item.department}</td>
 			</tr>
 		</c:forEach>

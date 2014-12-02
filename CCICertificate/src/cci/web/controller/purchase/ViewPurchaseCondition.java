@@ -1,16 +1,14 @@
 package cci.web.controller.purchase;
 
-import java.util.Date;
-
 public class ViewPurchaseCondition {
 	private String pricefrom = ">";
 	private String pricefto = "<";
 	private String volumefrom = ">" ;
 	private String volumeto = "<" ;
 	private String unit = "like";
-	private String pchDatefrom = ">";
-	private String pchDateto = "<";
-	private String productProperty = "like";
+	private String pchdatefrom = ">";
+	private String pchdateto = "<";
+	private String productproperty = "like";
 	private String product = "like";
 	private String department = "like";	
 	private String company = "like";
@@ -45,23 +43,23 @@ public class ViewPurchaseCondition {
 	public void setUnit(String unit) {
 		this.unit = unit;
 	}
-	public String getPchDatefrom() {
-		return pchDatefrom;
+	public String getPchdatefrom() {
+		return pchdatefrom;
 	}
-	public void setPchDatefrom(String pchDatefrom) {
-		this.pchDatefrom = pchDatefrom;
+	public void setPchdatefrom(String pchdatefrom) {
+		this.pchdatefrom = pchdatefrom;
 	}
-	public String getPchDateto() {
-		return pchDateto;
+	public String getPchdateto() {
+		return pchdateto;
 	}
-	public void setPchDateto(String pchDateto) {
-		this.pchDateto = pchDateto;
+	public void setPchdateto(String pchdateto) {
+		this.pchdateto = pchdateto;
 	}
-	public String getProductProperty() {
-		return productProperty;
+	public String getProductproperty() {
+		return productproperty;
 	}
-	public void setProductProperty(String productProperty) {
-		this.productProperty = productProperty;
+	public void setProductproperty(String productproperty) {
+		this.productproperty = productproperty;
 	}
 	public String getProduct() {
 		return product;

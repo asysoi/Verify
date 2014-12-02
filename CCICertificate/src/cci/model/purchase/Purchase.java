@@ -1,5 +1,7 @@
 package cci.model.purchase;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 
@@ -76,6 +78,11 @@ public class Purchase {
 	}
 	public void setPchdate(Date pchdate) {
 		this.pchdate = pchdate;
+	}
+	
+	public String getPchdatestring() {
+		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+		return df.format(pchdate);
 	}
 	
 	@Override

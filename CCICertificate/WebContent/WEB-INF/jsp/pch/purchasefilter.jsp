@@ -17,10 +17,10 @@
 				function() {
 					$(".datepicker").datepicker("option", "dateFormat",
 							'dd.mm.yy');
-					$("#datepchfrom").datepicker("setDate",
-							"${viewfilter.viewpurchase.datefrom}");
-					$("#datepchto").datepicker("setDate",
-							"${viewfilter.viewpurchase.dateto}");
+					$("#pchdatefrom").datepicker("setDate",
+							"${viewfilter.viewpurchase.pchdatefrom}");
+					$("#pchdateto").datepicker("setDate",
+							"${viewfilter.viewpurchase.pchdateto}");
 					$("#product")
 							.val('${viewfilter.viewpurchase.product}');
 					$("#department")
@@ -52,7 +52,7 @@
 				<td>Товар</td>
 				<td><form:select path="viewpurchase.id_product"
 						items="${productList}" id="product" /><a
-					href="javascript:clearelement($('#department'));"> <img
+					href="javascript:clearelement($('#product'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 			</tr>
@@ -68,7 +68,7 @@
 
 			<tr>
 				<td>Характеристика товара</td>
-				<td><form:input path="viewpurchase.productproperty" id="productproperty" /><a
+				<td><form:input path="viewpurchase.productproperty" id="productproperty"  size="35" /><a
 					href="javascript:clearelement($('#productproperty'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
@@ -97,16 +97,16 @@
 			<tr>
 				<td>Единица измерения</td>
 				<td><form:input path="viewpurchase.unit" id="unit" /><a
-					href="javascript:clearelement($('#price'));"> <img
+					href="javascript:clearelement($('#unit'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 			</tr>
 			
 			<tr>
 				<td>Дата сделки</td>
-				<td><form:input path="viewpurchase.datepchfrom" id="datepchfrom"
+				<td><form:input path="viewpurchase.pchdatefrom" id="pchdatefrom"
 						class="datepicker" size="8" placeholder="с" />&nbsp;-&nbsp; 
-						<form:input	path="viewpurchase.datepchto" id="datepchto" class="datepicker"
+						<form:input	path="viewpurchase.pchdateto" id="pchdateto" class="datepicker"
 						size="8" placeholder="по" /> <a
 					href="javascript:clearelement($('.datepicker'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />

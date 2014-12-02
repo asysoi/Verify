@@ -16,10 +16,10 @@ public class PurchaseFilter extends Filter {
 
 	public PurchaseFilter() {
 		String[] fields = new String[] { "ID", "product", "company", "department", "unit", "productproperty"
-				  , "datepchfrom", "datepchto", "pricefrom", "priceto", "volumefrom", "volumeto"};
+				  , "pchdatefrom", "pchdateto", "pricefrom", "priceto", "volumefrom", "volumeto"};
 
 		String[] dbfields = new String[] {"ID", "product", "company", "department", "unit", "productproperty"
-				  , "datepch", "datepch", "price", "price", "volume", "volume"};
+				  , "pchdate", "pchdate", "price", "price", "volume", "volume"};
 
 		FieldType[] types = new FieldType[] { FieldType.ID, FieldType.STRING, FieldType.STRING, FieldType.STRING,
 				FieldType.STRING, FieldType.STRING, FieldType.DATE, FieldType.DATE, FieldType.NUMBER, FieldType.NUMBER,

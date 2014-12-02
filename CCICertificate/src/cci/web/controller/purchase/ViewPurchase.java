@@ -8,7 +8,7 @@ public class ViewPurchase extends Purchase {
 	private String department;	
 	private String company;	
 	private String pricefrom;
-	private String pricefto;
+	private String priceto;
 	private String volumefrom;
 	private String volumeto;
 	private String pchdatefrom;
@@ -39,11 +39,11 @@ public class ViewPurchase extends Purchase {
 	public void setPricefrom(String pricefrom) {
 		this.pricefrom = pricefrom;
 	}
-	public String getPricefto() {
-		return pricefto;
+	public String getPriceto() {
+		return priceto;
 	}
-	public void setPricefto(String pricefto) {
-		this.pricefto = pricefto;
+	public void setPricefto(String priceto) {
+		this.priceto = priceto;
 	}
 	public String getVolumefrom() {
 		return volumefrom;

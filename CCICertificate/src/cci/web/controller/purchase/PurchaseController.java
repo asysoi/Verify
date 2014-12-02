@@ -204,7 +204,7 @@ public class PurchaseController {
 		// purchaseValidator.validate(purchaseView, result);
 
 		purchaseService.savePurchase(purchaseView);
-		return "purchaseview";
+		return "pch/purchaseform";
 	}
 
 	// ----------------------------------------------------------------------------
