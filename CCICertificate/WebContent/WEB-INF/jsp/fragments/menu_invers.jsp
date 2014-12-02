@@ -83,10 +83,10 @@
 				</li>
 
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
-					data-toggle="dropdown">Бухгалтерия<b class="caret"></b></a>
+					data-toggle="dropdown">Логистика<b class="caret"></b></a>
 					<ul class="dropdown-menu">
-                        <li><a href="purchaselist.do">Сделки</a></li>
-                        <li><a href="purchaseadd.do">Добавить сделку</a></li>					
+                        <li><a href="purchases.do">Сделки</a></li>
+                        <li><a href="addpurchase.do">Добавить сделку</a></li>					
 						<li><a href="#">Договора</a></li>					
 					</ul>
 				</li>

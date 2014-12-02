@@ -300,7 +300,7 @@ ${cmanager.orderby}
 	<div id="pview" name="pview">
 	</div>
 
-	<div id="clview" name="clview" style="text-align:center;">
+	<div id="clview" name="clview">
 	</div>
    
 </div>

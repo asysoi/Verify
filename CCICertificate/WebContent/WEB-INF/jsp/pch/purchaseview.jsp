@@ -11,7 +11,6 @@
 				<tr>
 					<td>Покупатель :</td>
 					<td>${purchase.department}</td>
-					
 				</tr>
 				<tr>
 					<td>Товар :</td>
@@ -19,7 +18,7 @@
 				</tr>
 				<tr>
 					<td>Характеристики товара :</td>
-					<td>${purchase.productProperty}</td>
+					<td>${purchase.productproperty}</td>
 				</tr>
 				<tr>
 					<td>Цена :</td>
@@ -36,12 +35,11 @@
 				
 				<tr>
     	            <td>Дата :</td>
-    	            <td>${purchase.pchDate}</td>
+    	            <td>${purchase.pchdate}</td>
 	            </tr>
 	            <tr>
 					<td>Продавец :</td>
 					<td>${purchase.company}</td>
 				</tr>
-	            
-			</table>
+		</table>
 </div>

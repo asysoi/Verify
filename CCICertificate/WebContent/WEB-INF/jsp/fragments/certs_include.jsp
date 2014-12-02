@@ -286,7 +286,7 @@ ${vmanager.orderby}
 	<div id="pview" name="pview">
 	</div>
 
-	<div id="pdfview" name="pdfview" style="text-align:center;">
+	<div id="pdfview" name="pdfview">
                   <!--  iframe class="pdf" id="pdf"></iframe -->
 	</div>
 
