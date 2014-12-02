@@ -16,14 +16,15 @@ public class PurchaseFilter extends Filter {
 
 	public PurchaseFilter() {
 		String[] fields = new String[] { "ID", "product", "company", "department", "unit", "productproperty"
-				  , "pchdatefrom", "pchdateto", "pricefrom", "priceto", "volumefrom", "volumeto"};
+				  , "pchdatefrom", "pchdateto", "pricefrom", "priceto", "volumefrom", "volumeto", 
+					"id_product","id_otd", "id_company"};
 
 		String[] dbfields = new String[] {"ID", "product", "company", "department", "unit", "productproperty"
-				  , "pchdate", "pchdate", "price", "price", "volume", "volume"};
+				  , "pchdate", "pchdate", "price", "price", "volume", "volume", "id_product","id_otd", "id_company"};
 
 		FieldType[] types = new FieldType[] { FieldType.ID, FieldType.STRING, FieldType.STRING, FieldType.STRING,
 				FieldType.STRING, FieldType.STRING, FieldType.DATE, FieldType.DATE, FieldType.NUMBER, FieldType.NUMBER,
-				FieldType.NUMBER, FieldType.NUMBER};
+				FieldType.NUMBER, FieldType.NUMBER, FieldType.NUMBER, FieldType.NUMBER, FieldType.NUMBER };
 
 		this.init(fields, dbfields, types);
 	}

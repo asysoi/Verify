@@ -2,7 +2,7 @@ package cci.web.controller.purchase;
 
 public class ViewPurchaseCondition {
 	private String pricefrom = ">";
-	private String pricefto = "<";
+	private String priceto = "<";
 	private String volumefrom = ">" ;
 	private String volumeto = "<" ;
 	private String unit = "like";
@@ -12,6 +12,9 @@ public class ViewPurchaseCondition {
 	private String product = "like";
 	private String department = "like";	
 	private String company = "like";
+	private String id_product = "=";
+	private String id_otd= "=";	
+	private String id_company = "=";
 	
 	public String getPricefrom() {
 		return pricefrom;
@@ -19,11 +22,11 @@ public class ViewPurchaseCondition {
 	public void setPricefrom(String pricefrom) {
 		this.pricefrom = pricefrom;
 	}
-	public String getPricefto() {
-		return pricefto;
+	public String getPriceto() {
+		return priceto;
 	}
-	public void setPricefto(String pricefto) {
-		this.pricefto = pricefto;
+	public void setPriceto(String priceto) {
+		this.priceto = priceto;
 	}
 	public String getVolumefrom() {
 		return volumefrom;
@@ -79,5 +82,22 @@ public class ViewPurchaseCondition {
 	public void setCompany(String company) {
 		this.company = company;
 	}	
-
+	public String getId_product() {
+		return id_product;
+	}
+	public void setId_product(String id_product) {
+		this.id_product = id_product;
+	}
+	public String getId_otd() {
+		return id_otd;
+	}
+	public void setId_otd(String id_otd) {
+		this.id_otd = id_otd;
+	}
+	public String getId_company() {
+		return id_company;
+	}
+	public void setId_company(String id_company) {
+		this.id_company = id_company;
+	}
 }
