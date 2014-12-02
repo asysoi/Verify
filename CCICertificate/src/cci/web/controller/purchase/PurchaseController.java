@@ -2,8 +2,6 @@ package cci.web.controller.purchase;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,26 +24,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
-import cci.config.client.ExportClientConfig;
-import cci.model.Client;
-import cci.model.cert.Company;
-import cci.model.purchase.Product;
+import cci.config.purchase.ExportPurchaseConfig;
 import cci.model.purchase.Purchase;
 import cci.repository.SQLBuilder;
-import cci.repository.client.SQLBuilderClient;
 import cci.repository.purchase.SQLBuilderPurchase;
 import cci.service.Filter;
-import cci.service.FilterCondition;
 import cci.service.cert.CertFilter;
 import cci.service.cert.XSLWriter;
-import cci.service.client.ClientFilter;
 import cci.service.purchase.PurchaseFilter;
 import cci.service.purchase.PurchaseService;
-import cci.web.controller.HeaderTableView;
 import cci.web.controller.ViewManager;
-import cci.web.controller.client.ClientController;
-import cci.web.controller.client.ViewClient;
-import cci.web.controller.client.ViewClientFilter;
 import cci.web.validator.purchase.PurchaseValidator;
 
 @Controller
@@ -137,10 +125,10 @@ public class PurchaseController {
 	private ViewManager initViewManager(ModelMap model) {
 		ViewManager vmanager = new ViewManager();
 		vmanager.setHnames(new String[] { "Дата закупки", "Товар", "Продавец",
-				"Цена", "Объем", "Покупатель" });
+				"Цена", "Объем", "Ед. измер", "Покупатель" });
 		vmanager.setOrdnames(new String[] { "pchdate", "product", "company",
-				"price", "volume", "department" });
-		vmanager.setWidths(new int[] { 15, 15, 20, 10, 10, 30 });
+				"price", "volume", "unit", "department" });
+		vmanager.setWidths(new int[] { 15, 15, 20, 10, 10, 5, 25 });
 		model.addAttribute("pmanager", vmanager);
 		return vmanager;
 	}
@@ -154,7 +142,7 @@ public class PurchaseController {
 
 		if (fc == null) {
 			fc = new PurchaseFilter();
-			LOG.info("New filterClient created in GET method");
+			LOG.info("New filterPurchase created in GET method");
 			model.addAttribute("purchasefilter", fc);
 		} else {
 			LOG.info("Found FilterClient in GET : ");
@@ -234,7 +222,7 @@ public class PurchaseController {
 	// Update Purchase POST
 	// ---------------------------------------------------------------
 	@RequestMapping(value = "editpurchase.do", method = RequestMethod.POST)
-	public String updateClient(@ModelAttribute("purchase") Purchase purchase,
+	public String updatePurchase(@ModelAttribute("purchase") Purchase purchase,
 			BindingResult result, SessionStatus status, ModelMap model) {
 
 		// status.setComplete();
@@ -243,10 +231,10 @@ public class PurchaseController {
 	}
 
 	// ---------------------------------------------------------------
-	// Update Client GET
+	// Update Purchase GET
 	// ---------------------------------------------------------------
 	@RequestMapping(value = "editpurchase.do", method = RequestMethod.GET)
-	public String updateClientInit(
+	public String updatePurchaseInit(
 			@RequestParam(value = "id", required = true) Long id, ModelMap model) {
 
 		Purchase purchase = purchaseService.readPurchase(id);
@@ -256,10 +244,10 @@ public class PurchaseController {
 	}
 
 	// ---------------------------------------------------------------
-	// Export Client List to XSL
+	// Export Purchase List to XSL
 	// ---------------------------------------------------------------
 	@RequestMapping(value = "/exportpurchases.do", method = RequestMethod.GET)
-	public void exportClientsToExcel(HttpSession session,
+	public void exportPurchasesToExcel(HttpSession session,
 			HttpServletResponse response, ModelMap model) {
 		try {
 
@@ -277,20 +265,20 @@ public class PurchaseController {
 				vmanager.setFilter(filter);
 			}
 
-			ExportClientConfig dconfig = new ExportClientConfig();
+			ExportPurchaseConfig dconfig = new ExportPurchaseConfig();
 
-			SQLBuilder builder = new SQLBuilderClient();
+			SQLBuilder builder = new SQLBuilderPurchase();
 			builder.setFilter(filter);
 			List purchases = purchaseService.readPurchases(vmanager.getOrderby(),
 					vmanager.getOrder(), builder);
 
-			LOG.info("Download. Clients loaded from database...");
+			LOG.info("Download. Purchases loaded from database...");
 			response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 			response.setHeader("Content-Disposition",
 					"attachment; filename=certificates.xlsx");
 
 			(new XSLWriter()).makeWorkbook(purchases, dconfig.getHeaders(),
-					dconfig.getFields(), "Список контрагентов").write(
+					dconfig.getFields(), "Список сделок").write(
 					response.getOutputStream());
 
 			response.flushBuffer();

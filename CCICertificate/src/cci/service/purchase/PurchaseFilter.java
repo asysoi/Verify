@@ -15,12 +15,15 @@ public class PurchaseFilter extends Filter {
 	public static Logger LOG = LogManager.getLogger(PurchaseFilter.class);
 
 	public PurchaseFilter() {
-		String[] fields = new String[] { "ID",  };
+		String[] fields = new String[] { "ID", "product", "company", "department", "unit", "productproperty"
+				  , "datepchfrom", "datepchto", "pricefrom", "priceto", "volumefrom", "volumeto"};
 
-		String[] dbfields = new String[] {"ID", };
+		String[] dbfields = new String[] {"ID", "product", "company", "department", "unit", "productproperty"
+				  , "datepch", "datepch", "price", "price", "volume", "volume"};
 
-		FieldType[] types = new FieldType[] { FieldType.ID, FieldType.STRING,
-				};
+		FieldType[] types = new FieldType[] { FieldType.ID, FieldType.STRING, FieldType.STRING, FieldType.STRING,
+				FieldType.STRING, FieldType.STRING, FieldType.DATE, FieldType.DATE, FieldType.NUMBER, FieldType.NUMBER,
+				FieldType.NUMBER, FieldType.NUMBER};
 
 		this.init(fields, dbfields, types);
 	}
