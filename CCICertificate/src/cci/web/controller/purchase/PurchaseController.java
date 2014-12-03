@@ -297,17 +297,17 @@ public class PurchaseController {
 	// ----------------------------------------------------------------------------
 	// Initial Process
 	// ----------------------------------------------------------------------------
-	@InitBinder
-	private void dateBinder(WebDataBinder binder) {
-	    // SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+	//@InitBinder
+	//private void dateBinder(WebDataBinder binder) {
+	    // SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
 	    // CustomDateEditor editor = new CustomDateEditor(dateFormat, true);
 	    // binder.registerCustomEditor(Date.class, editor);
 		
-		binder.registerCustomEditor(Date.class, new PropertyEditorSupport() {
+		/*binder.registerCustomEditor(Date.class, new PropertyEditorSupport() {
 		    public void setAsText(String value) {
 		        try {
 		        	System.out.println("setAsText: " + value);
-		            setValue(new SimpleDateFormat("dd/MM/yyyy").parse(value));
+		            setValue(new SimpleDateFormat("dd/mm/yyyy").parse(value));
 		        } catch(ParseException e) {
 		        	e.printStackTrace();
 		            setValue(null);
@@ -316,12 +316,12 @@ public class PurchaseController {
 
 		    public String getAsText() {
 		    	System.out.println("getAsText: " + getValue());
-		        return new SimpleDateFormat("dd/MM/yyyy").format((Date) getValue());
+		        return new SimpleDateFormat("dd/mm/yyyy").format((Date) getValue());
 		    }        
 
-		});
+		}); */
 		
-	}
+	//}
 
 	// ----------------------------------------------------------------------------
 	// Get Department List

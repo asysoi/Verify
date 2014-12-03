@@ -6,16 +6,18 @@ import java.util.List;
 import java.util.Map;
 
 public class ExportPurchaseConfig {
-	private String[] headernames = new String[] {};
-
-	private String[] fieldnames = new String[] {};
-
-	private Map<String, String> headermap = new LinkedHashMap<String, String>();
-	private String[] headers = new String[] { "Дата совершения сделки",
+	
+	private String[] headernames = new String[] { "Дата совершения сделки",
 			"Товар", "Продавец", "Покупатель", "Характеристика товара", "Цена",
 			"Количество", "Единица измерения" };
-	private String[] fields = new String[] { "PCHDATE", "PRODUCT", "COMPANY",
+
+	private String[] fieldnames = new String[] { "PCHDATE", "PRODUCT", "COMPANY",
 			"DEPARTMENT", "PRODUCTPROPERTY", "PRICE", "VOLUME", "UNIT" };
+	
+	private Map<String, String> headermap = new LinkedHashMap<String, String>();
+	
+	private String[] headers = new String[] {};
+	private String[] fields = new String[] {};
 
 	public ExportPurchaseConfig() {
 

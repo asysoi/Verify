@@ -4,6 +4,8 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 
 public class Purchase {
 	
@@ -14,6 +16,8 @@ public class Purchase {
 	private Long price;	
 	private Long volume;	
 	private String unit;
+	
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date pchdate;
 	private String productproperty;
 		

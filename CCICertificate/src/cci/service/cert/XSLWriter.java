@@ -16,7 +16,7 @@ import cci.model.cert.Certificate;
 public class XSLWriter {
 	public static Logger LOG=LogManager.getLogger(XSLWriter.class);
 	
-	public Workbook makeWorkbook(List<Object> certs, String[] headers, String[] dbfields, String title) {
+	public Workbook makeWorkbook(List<Object> items, String[] headers, String[] dbfields, String title) {
 		long start = System.currentTimeMillis();
 		
 		Workbook workbook = new SXSSFWorkbook();
@@ -26,8 +26,9 @@ public class XSLWriter {
 		createRow(sheet, 0, headers);
 		
 		int i = 1;
-		for (Object cert : certs) {
-			createRow(sheet, i++, getData(cert, dbfields));
+		for (Object item : items) {
+			System.out.println("Item " + i + " =====> " + item);
+			createRow(sheet, i++, getData(item, dbfields));
 		}
 		long end = System.currentTimeMillis();
 		System.out.println("Duration: " + (end - start));
@@ -42,10 +43,13 @@ public class XSLWriter {
 
 		for (Object obj : data) {
 			cell = row.createCell(cellnum++);
+			System.out.println(obj);
 			if (obj instanceof String)
 				cell.setCellValue((String) obj);
 			else if (obj instanceof Integer)
 				cell.setCellValue((Integer) obj);
+			else if (obj instanceof Long)
+				cell.setCellValue((Long) obj);			
 		}
 	}
 	

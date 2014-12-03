@@ -74,7 +74,7 @@
 			<tr>
 				<td>Цена</td>
 				<td><form:input path="price" id="price" class="price" 
-						size="8" />&nbsp;-&nbsp; 
+						size="8" />; 
 					<a href="javascript:clearelement($('#price'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
@@ -83,7 +83,7 @@
 			<tr>
 				<td>Количество</td>
 				<td><form:input path="volume" id="volume" class="volume" 
-						size="8" />&nbsp;-&nbsp; <a
+						size="8" /><a
 					href="javascript:clearelement($('#volume'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
