@@ -16,16 +16,16 @@
 		$("document").ready(
 				function() {
 					$(".datepicker").datepicker("option", "dateFormat",
-							'dd.mm.yy');
+							'dd/mm/yy');
 					$("#pchdatefrom").datepicker("setDate",
 							"${viewfilter.viewpurchase.pchdatefrom}");
 					$("#pchdateto").datepicker("setDate",
 							"${viewfilter.viewpurchase.pchdateto}");
-					$("#product")
+					$("#id_product")
 							.val('${viewfilter.viewpurchase.id_product}');
 					$("#department")
 							.val('${viewfilter.viewpurchase.id_otd}');
-					$("#company").val('${viewfilter.viewpurchase.id_company}');
+					$("#id_company").val('${viewfilter.viewpurchase.id_company}');
 				});
 
 	});
@@ -50,8 +50,7 @@
 
 			<tr>
 				<td>Товар</td>
-				<td><form:select path="viewpurchase.id_product"
-						items="${productList}" id="product" /><a
+				<td><form:input path="viewpurchase.product" id="product" size="25"/><a
 					href="javascript:clearelement($('#product'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
@@ -59,8 +58,7 @@
 
 			<tr>
 				<td>Продавец</td>
-				<td><form:select path="viewpurchase.id_company"
-						items="${companyList}" id="company" /><a
+				<td><form:input path="viewpurchase.company" id="company" size="25"/><a
 					href="javascript:clearelement($('#company'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>

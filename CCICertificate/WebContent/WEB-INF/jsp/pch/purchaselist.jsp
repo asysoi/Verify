@@ -18,25 +18,25 @@
 	
 	function close() {
 		$("#pview").dialog("close");
+		$("#pview").html = "";
 	}
 
 	function submit() {
 		url = $("#ffilter").attr("action");
-		alert($("#ffilter").serialize());
 		$.post(url, $("#ffilter").serialize());
 		$( document ).ajaxComplete(function(event,request, settings ) {
 			  goToList('purchases.do?page=1&pagesize=${pmanager.pagesize}&orderby=${pmanager.orderby}&order=${pmanager.order}');
-			  $("#pview").dialog("close");
+			  close();
 		});
 	}
 	
-	function save(action) {
+	function save() {
 		
 		url = $("#fitem").attr("action");
 		$.post(url, $("#fitem").serialize());
 		
 		$( document ).ajaxComplete(function(event,request, settings ) {
-			  goToList(action + '?page=1&pagesize=${pmanager.pagesize}&orderby=${pmanager.orderby}&order=${pmanager.order}');
+			  goToList('purchases.do?page=1&pagesize=${pmanager.pagesize}&orderby=${pmanager.orderby}&order=${pmanager.order}');
 			  close();
 		});
 	}
@@ -94,13 +94,13 @@
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Фильтр поиска Сделок');
 		$("#pview").dialog("option", "width", 620);
-		$("#pview").dialog("option", "height", 320);
+		$("#pview").dialog("option", "height", 340);
 		$("#pview").dialog("option", "modal", true);
 		$("#pview").dialog("option", "resizable", false );
 		$("#pview").dialog({ buttons: [ { text: "Применить",  click : function() { submit(); } },  
 				               { text: "Очистить Все ", click: function() { clear(); } },
  				               { text: "Отменить изменения", click: function() { reset(); } },
-				               { text: "Отмена", click: function() { $( this ).dialog( "close" ); } }
+				               { text: "Отмена", click: function() { close();} }
                   	                                               ] });
 		$("#pview").dialog( "option", "position", { my: "center",  at: "center", of:window} );
 		$("#pview").dialog("open");
@@ -111,11 +111,11 @@
 		$("#pview").load(link);        
 		$("#pview").dialog("option", "title", 'Сделка');
 		$("#pview").dialog("option", "width", 450);
-		$("#pview").dialog("option", "height", 280);
+		$("#pview").dialog("option", "height", 300);
 		$("#pview").dialog("option", "modal", true);
 		$("#pview").dialog("option", "resizable", false);
 		$("#pview").dialog({
-			buttons : [ 	{ text : "Закрыть",	click : function() {$(this).dialog("close");}} ]
+			buttons : [ 	{ text : "Закрыть",	click : function() {close();}} ]  //$(this).dialog("close");
 		});
 
 		$("#pview").dialog("option", "position", {
@@ -128,13 +128,13 @@
         link = "editpurchase.do?id=" + id;
 		$("#pview").load(link);        
 		$("#pview").dialog("option", "title", 'Сделка');
-		$("#pview").dialog("option", "width", 820);
-		$("#pview").dialog("option", "height", 570);
+		$("#pview").dialog("option", "width", 620);
+		$("#pview").dialog("option", "height", 340);
 		$("#pview").dialog("option", "modal", true);
 		$("#pview").dialog("option", "resizable", false);
 		$("#pview").dialog({ buttons: [ { text: "Сохранить",  click : function() { updateClient(); } },  
 		    				               { text: "Очистить Все ", click: function() { clear(); } },
-		     				               { text: "Отмена", click: function() { $( this ).dialog( "close" ); } }
+		     				               { text: "Отмена", click: function() { close();} }  //$(this).dialog("close");
 		                      	                                               ] });
 
 		$("#pview").dialog("option", "position", {
@@ -148,13 +148,13 @@
         link = "addpurchase.do";
 		$("#pview").load(link);        
 		$("#pview").dialog("option", "title", 'Сделка');
-		$("#pview").dialog("option", "width", 820);
-		$("#pview").dialog("option", "height", 570);
+		$("#pview").dialog("option", "width", 620);
+		$("#pview").dialog("option", "height", 340);
 		$("#pview").dialog("option", "modal", true);
 		$("#pview").dialog("option", "resizable", false);
 		$("#pview").dialog({ buttons: [ { text: "Сохранить",  click : function() { save(); } },  
 		    				               { text: "Очистить Все ", click: function() { clear(); } },
-		     				               { text: "Отмена", click: function() { $( this ).dialog( "close" ); } }
+		     				               { text: "Отмена", click: function() { close(); } }   //$( this ).dialog( "close" );
 		                      	                                               ] });
 
 		$("#pview").dialog("option", "position", {

@@ -170,7 +170,7 @@ public class JDBCPurchaseDAO implements PurchaseDAO {
 		String sql = "insert into pch_purchase (id,id_product,id_otd,id_company,price,volume,unit, pchdate, productproperty) "
 				+ "values (id_purchase_seq.nextval, "
 				+ ":id_product, :id_otd, :id_company, :price, :volume, "
-				+ ":unit, :pchdate, :productproperty)";
+				+ ":unit, :pchdate, :productproperty)";   //TO_DATE(:pchdate,'DD/MM/YY')     
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(
 				purchase);
@@ -188,7 +188,7 @@ public class JDBCPurchaseDAO implements PurchaseDAO {
 	public void updateClient(Purchase purchase) {
 		String sql = "update pch_purchase set "
 				+ " id_product = :id_product, id_otd = :id_otd, id_company = :id_company, price = :price, "
-				+ " volume = :volume, unit=:unit, pchdate =:pchdate, productproperty:=productproperty " 
+				+ " volume = :volume, unit=:unit, pchdate = :pchdate, productproperty:=productproperty "    // TO_DATE(:pchdate,'DD/MM/YY') 
 				+ " where id = :id";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(

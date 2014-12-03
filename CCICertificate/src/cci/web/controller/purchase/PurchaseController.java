@@ -1,6 +1,8 @@
 package cci.web.controller.purchase;
 
+import java.beans.PropertyEditorSupport;
 import java.sql.Date;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +38,7 @@ import cci.service.purchase.PurchaseService;
 import cci.web.controller.ViewManager;
 import cci.web.validator.purchase.PurchaseValidator;
 
+
 @Controller
 @SessionAttributes({ "purchasefilter", "pmanager" })
 public class PurchaseController {
@@ -45,7 +48,7 @@ public class PurchaseController {
 
 	@Autowired
 	private PurchaseService purchaseService;
-
+	
 	@Autowired
 	public PurchaseController(PurchaseValidator purchaseValidator) {
 		this.purchaseValidator = purchaseValidator;
@@ -149,7 +152,7 @@ public class PurchaseController {
 		}
 
 		ViewPurchaseFilter vf = new ViewPurchaseFilter(
-				((PurchaseFilter) fc).getViewpurchase(),
+				(ViewPurchase)((PurchaseFilter) fc).getViewElement(),
 				((PurchaseFilter) fc).getCondition());
 		model.addAttribute("viewfilter", vf);
 		return "pch/purchasefilter";
@@ -173,7 +176,7 @@ public class PurchaseController {
 		System.out.println(viewfilter.getViewpurchase().toString());
 		fc.loadViewpurchase(viewfilter.getViewpurchase());
 		fc.loadCondition(viewfilter.getCondition());
-		System.out.println(fc.getViewpurchase().toString());
+		System.out.println(fc.getViewElement().toString());
 		
 		model.addAttribute("purchasefilter", fc);
 		return "pch/purchasefilter";
@@ -199,12 +202,12 @@ public class PurchaseController {
 	// ----------------------------------------------------------------------------
 	@RequestMapping(value = "addpurchase.do", method = RequestMethod.POST)
 	public String addPurchesSubmit(
-			@ModelAttribute("purchase") ViewPurchase purchaseView,
+			@ModelAttribute("purchase") Purchase purchase,
 			BindingResult result, SessionStatus status, ModelMap model) {
 
 		// purchaseValidator.validate(purchaseView, result);
-
-		purchaseService.savePurchase(purchaseView);
+		System.out.println(purchase);
+		purchaseService.savePurchase(purchase);
 		return "pch/purchaseform";
 	}
 
@@ -227,6 +230,7 @@ public class PurchaseController {
 			BindingResult result, SessionStatus status, ModelMap model) {
 
 		// status.setComplete();
+		System.out.println(purchase);
 		purchaseService.updatePurchase(purchase);
 		return "pch/purchaseform";
 	}
@@ -294,10 +298,29 @@ public class PurchaseController {
 	// Initial Process
 	// ----------------------------------------------------------------------------
 	@InitBinder
-	public void initBinder(WebDataBinder binder) {
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		binder.registerCustomEditor(Date.class, new CustomDateEditor(
-				dateFormat, true));
+	private void dateBinder(WebDataBinder binder) {
+	    // SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+	    // CustomDateEditor editor = new CustomDateEditor(dateFormat, true);
+	    // binder.registerCustomEditor(Date.class, editor);
+		
+		binder.registerCustomEditor(Date.class, new PropertyEditorSupport() {
+		    public void setAsText(String value) {
+		        try {
+		        	System.out.println("setAsText: " + value);
+		            setValue(new SimpleDateFormat("dd/MM/yyyy").parse(value));
+		        } catch(ParseException e) {
+		        	e.printStackTrace();
+		            setValue(null);
+		        }
+		    }
+
+		    public String getAsText() {
+		    	System.out.println("getAsText: " + getValue());
+		        return new SimpleDateFormat("dd/MM/yyyy").format((Date) getValue());
+		    }        
+
+		});
+		
 	}
 
 	// ----------------------------------------------------------------------------

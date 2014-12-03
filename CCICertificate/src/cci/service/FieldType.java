@@ -1,5 +1,5 @@
 package cci.service;
 
 public enum FieldType {
-     STRING,ID, NUMBER, DATE
+     STRING, ID, NUMBER, DATE, LONG, INTEGER
 }

@@ -6,8 +6,8 @@ public class ViewPurchaseCondition {
 	private String volumefrom = ">" ;
 	private String volumeto = "<" ;
 	private String unit = "like";
-	private String pchdatefrom = ">";
-	private String pchdateto = "<";
+	private String pchdatefrom = ">=";
+	private String pchdateto = "<=";
 	private String productproperty = "like";
 	private String product = "like";
 	private String department = "like";	
