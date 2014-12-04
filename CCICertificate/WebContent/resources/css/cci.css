@@ -136,4 +136,14 @@ cci.loginbox {
 	text-align: left;
 }
 
+#dialog .ui-button-text {
+    font-size: 12px;
+    padding: 1px 1px 1px 1px;
+}
+
+.ui-widget { 
+	font-size:14px;
+}
+
+
 

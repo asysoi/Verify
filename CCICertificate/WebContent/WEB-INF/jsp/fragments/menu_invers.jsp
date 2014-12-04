@@ -34,9 +34,10 @@
 				</li>
 				
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
-					data-toggle="dropdown">Мероприятия<b class="caret"></b></a>
+					data-toggle="dropdown">ВЭС<b class="caret"></b></a>
 					<ul class="dropdown-menu">
-                        <li><a href="#">Весь список</a></li>					
+					    <li><a href="#">Все Мероприятия</a></li>
+                        <li><a href="#">Деловые советы</a></li>					
 						<li><a href="#">Форумы</a></li>					
 						<li><a href="#">Выствыки</a></li>
 						<li><a href="#">Ярмарки</a></li>
@@ -63,10 +64,8 @@
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">Сертификаты<b class="caret"></b></a>
 					<ul class="dropdown-menu">
-						<li><a href="cert.do">Добавить Сертификат</a></li>
 						<li><a href="certs.do">Список Сертификатов</a></li>
 						<li><a href="check.do">Верификация</a></li>
-						<!--  li><a href="config.do">Конфигурация</a></li -->
 						<li><a href="#">Акты экспертиз</a></li>
 						<li class="divider"></li>
 						<li><a href="upload.do">Импорт сертификатов</a></li>
@@ -86,7 +85,6 @@
 					data-toggle="dropdown">Логистика<b class="caret"></b></a>
 					<ul class="dropdown-menu">
                         <li><a href="purchases.do">Сделки</a></li>
-                        <li><a href="addpurchase.do">Добавить сделку</a></li>					
 						<li><a href="#">Договора</a></li>					
 					</ul>
 				</li>
