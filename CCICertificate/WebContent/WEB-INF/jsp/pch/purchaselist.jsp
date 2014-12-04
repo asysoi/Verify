@@ -193,7 +193,7 @@
 			buttons : [ {
 				text : "Сохранить",
 				click : function() {
-					updateClient();
+					update();
 				}
 			}, {
 				text : "Очистить Все ",
@@ -373,6 +373,6 @@
 
 
 	<div id="pview"></div>
-	<div id="jalert"></div>
+	<div id="jalert" style="text-align: center;"></div>
 
 </div>

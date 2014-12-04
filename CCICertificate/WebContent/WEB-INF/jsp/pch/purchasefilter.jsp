@@ -6,6 +6,9 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <script>
+
+	
+	
 	$(function() {
 
 		$(".datepicker").datepicker({
@@ -33,6 +36,9 @@
 	function clearelement(element) {
 		element.val('');
 	}
+	
+	
+	
 </script>
 
 <form:form id="ffilter" method="POST" commandName="viewfilter">
@@ -50,10 +56,13 @@
 
 			<tr>
 				<td>Товар</td>
-				<td><form:input path="viewpurchase.product" id="product" size="25"/><a
-					href="javascript:clearelement($('#product'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+				<td><form:input path="viewpurchase.product" id="product" size="25"/>
+				<a href="javascript:clearelement($('#product'));"> 
+					<img src="resources/images/delete-16.png" alt="удл."/></a>
+				<a href="javascript:addproduct($('#product'));"> 
+					<img src="resources/images/search-add-icon.png" alt="доб."/></a>					
+				
+				</td>
 			</tr>
 
 			<tr>
@@ -112,3 +121,4 @@
 			</tr>
 	</table>
 </form:form>
+

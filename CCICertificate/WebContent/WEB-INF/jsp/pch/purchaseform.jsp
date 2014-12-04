@@ -7,7 +7,14 @@
 
 <script>
 	$(function() {
-
+		
+		$(document).ready(
+				function() {
+					$("#ewin").dialog({
+						autoOpen : false
+					});
+		});
+		
 		$(".datepicker").datepicker({
 			changeMonth : true,
 			changeYear : true
@@ -26,6 +33,37 @@
 	function clearelement(element) {
 		element.val('');
 	}
+	
+	function ewin() {
+        $( "#newproduct").val('');		
+		$( "#ewin" ).dialog("option", "title", "Добавить продукт");
+		$( "#ewin" ).dialog("option", "modal", true);
+		$( "#ewin" ).dialog("option", "resizable", false);
+		
+	    $( "#ewin" ).dialog({
+			buttons : [ {
+				text : "Добавить",
+				click : function() {
+					url = $("#fadd").attr("action");
+					alert($("#fadd").serialize()); 
+					var ret = $.post(url, $("#fadd").serialize());
+					$(document).ajaxComplete(
+								function(event, request, settings) {
+									alert(ret);
+								});
+  				    $( this ).dialog( "close" );
+				}
+			},{  
+			text : "Отмена",
+			click : function() {
+				 $( this ).dialog( "close" );
+				}
+			}
+			]
+		});
+		$( "#ewin" ).dialog("open");
+	}
+	
 </script>
 
 <form:form id="fitem" method="POST" commandName="purchase">
@@ -97,3 +135,9 @@
 		</tr>
 	</table>
 </form:form>
+
+<div id="ewin">
+<form id="fadd" action="addproduct.do" method="POST"> 
+<label>Продукт</label><input id="newproduct" name="newproduct" class="newproduct" type="text"/>
+</form>
+</div>
