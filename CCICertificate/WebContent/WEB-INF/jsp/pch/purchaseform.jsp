@@ -34,7 +34,7 @@
 		element.val('');
 	}
 	
-	function ewin() {
+	function addproduct() {
         $( "#newproduct").val('');		
 		$( "#ewin" ).dialog("option", "title", "Добавить продукт");
 		$( "#ewin" ).dialog("option", "modal", true);
@@ -83,8 +83,10 @@
 			<td>Товар</td>
 			<td><form:select path="id_product" items="${productList}"
 					id="product" /><a href="javascript:clearelement($('#product'));">
-					<img src="resources/images/delete-16.png" alt="удл." />
-			</a></td>
+					<img src="resources/images/delete-16.png" alt="удл." /></a>
+					<a href="javascript:addproduct($('#product'));"> 
+					<img src="resources/images/search-add-icon.png" alt="доб."/></a>
+			</td>
 		</tr>
 
 		<tr>

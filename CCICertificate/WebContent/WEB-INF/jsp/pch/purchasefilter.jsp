@@ -59,9 +59,6 @@
 				<td><form:input path="viewpurchase.product" id="product" size="25"/>
 				<a href="javascript:clearelement($('#product'));"> 
 					<img src="resources/images/delete-16.png" alt="удл."/></a>
-				<a href="javascript:addproduct($('#product'));"> 
-					<img src="resources/images/search-add-icon.png" alt="доб."/></a>					
-				
 				</td>
 			</tr>
 
