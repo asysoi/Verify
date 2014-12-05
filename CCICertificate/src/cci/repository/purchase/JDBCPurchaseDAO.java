@@ -185,7 +185,7 @@ public class JDBCPurchaseDAO implements PurchaseDAO {
 	// ---------------------------------------------------------------
 	// Update purchase in database
 	// ---------------------------------------------------------------
-	public void updateClient(Purchase purchase) {
+	public void updatePurchase(Purchase purchase) {
 		String sql = "update pch_purchase set "
 				+ " id_product = :id_product, id_otd = :id_otd, id_company = :id_company, price = :price, "
 				+ " volume = :volume, unit=:unit, pchdate = :pchdate, productproperty:=productproperty "    // TO_DATE(:pchdate,'DD/MM/YY') 
@@ -214,23 +214,30 @@ public class JDBCPurchaseDAO implements PurchaseDAO {
 				new BeanPropertyRowMapper<ViewPurchase>(ViewPurchase.class));
 	}
 
-	
-	
-	
-	@Override
-	public void updatePurchase(Purchase purchase) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
+	// ---------------------------------------------------------------
+	//  
+	// ---------------------------------------------------------------
 	public void saveProduct(Product product) {
-		// TODO Auto-generated method stub
+		String sql = "insert into pch_purchase (id,id_product,id_otd,id_company,price,volume,unit, pchdate, productproperty) "
+				+ "values (id_purchase_seq.nextval, "
+				+ ":id_product, :id_otd, :id_company, :price, :volume, "
+				+ ":unit, :pchdate, :productproperty)";   //TO_DATE(:pchdate,'DD/MM/YY')     
+
+		SqlParameterSource parameters = new BeanPropertySqlParameterSource(
+				product);
+
+		try {
+			template.update(sql, parameters);
+		} catch (Exception ex) {
+			System.out.println("Error - save purchase: " + ex.toString());
+		}
 	}
 
 	@Override
 	public void saveCompany(Company company) {
 		// TODO Auto-generated method stub
+		
 	}
-
-
+	
+	
 }

@@ -37,8 +37,6 @@ public interface PurchaseDAO {
 
 	public int  getViewPageCount(SQLBuilder builder);
 
-	public void updateClient(Purchase purchase);
-
 	public List<ViewPurchase> readViewPurchases(String orderby, String order,
 			SQLBuilder builder);   
 }  

@@ -126,7 +126,7 @@ public class PurchaseService {
 		Locale.setDefault(new Locale("en", "en"));
 
 		try {
-			purchaseDAO.updateClient(purchase);
+			purchaseDAO.updatePurchase(purchase);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -227,6 +227,20 @@ public class PurchaseService {
 		}
 
 		return items;
+	}
+
+	// ---------------------------------------------------------------
+	// Add product
+	// ---------------------------------------------------------------
+	public void addProduct(Product product) {
+		Locale.setDefault(new Locale("en", "en"));
+
+		try {
+			purchaseDAO.saveProduct(product);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
 	}
 
 }

@@ -45,11 +45,12 @@
 				text : "Добавить",
 				click : function() {
 					url = $("#fadd").attr("action");
-					alert($("#fadd").serialize()); 
+					alert("Form: " + $("#fadd").serialize()); 
 					var ret = $.post(url, $("#fadd").serialize());
 					$(document).ajaxComplete(
 								function(event, request, settings) {
-									alert(ret);
+									alert("Return: " + request.result);
+									$(document).off('ajaxComplete');
 								});
   				    $( this ).dialog( "close" );
 				}
@@ -85,7 +86,7 @@
 					id="product" /><a href="javascript:clearelement($('#product'));">
 					<img src="resources/images/delete-16.png" alt="удл." /></a>
 					<a href="javascript:addproduct($('#product'));"> 
-					<img src="resources/images/search-add-icon.png" alt="доб."/></a>
+					<img src="resources/images/addproduct.png" alt="доб."/></a>
 			</td>
 		</tr>
 
@@ -140,6 +141,6 @@
 
 <div id="ewin">
 <form id="fadd" action="addproduct.do" method="POST"> 
-<label>Продукт</label><input id="newproduct" name="newproduct" class="newproduct" type="text"/>
+Продукт&nbsp<input id="productname" name="productname" class="productname" type="text"/>
 </form>
 </div>

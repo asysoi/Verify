@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import cci.config.purchase.ExportPurchaseConfig;
+import cci.model.purchase.Product;
 import cci.model.purchase.Purchase;
 import cci.repository.SQLBuilder;
 import cci.repository.purchase.SQLBuilderPurchase;
@@ -38,7 +39,6 @@ import cci.service.purchase.PurchaseService;
 import cci.web.controller.ViewManager;
 import cci.web.validator.purchase.PurchaseValidator;
 
-
 @Controller
 @SessionAttributes({ "purchasefilter", "pmanager" })
 public class PurchaseController {
@@ -48,7 +48,7 @@ public class PurchaseController {
 
 	@Autowired
 	private PurchaseService purchaseService;
-	
+
 	@Autowired
 	public PurchaseController(PurchaseValidator purchaseValidator) {
 		this.purchaseValidator = purchaseValidator;
@@ -152,7 +152,7 @@ public class PurchaseController {
 		}
 
 		ViewPurchaseFilter vf = new ViewPurchaseFilter(
-				(ViewPurchase)((PurchaseFilter) fc).getViewElement(),
+				(ViewPurchase) ((PurchaseFilter) fc).getViewElement(),
 				((PurchaseFilter) fc).getCondition());
 		model.addAttribute("viewfilter", vf);
 		return "pch/purchasefilter";
@@ -177,7 +177,7 @@ public class PurchaseController {
 		fc.loadViewpurchase(viewfilter.getViewpurchase());
 		fc.loadCondition(viewfilter.getCondition());
 		System.out.println(fc.getViewElement().toString());
-		
+
 		model.addAttribute("purchasefilter", fc);
 		return "pch/purchasefilter";
 	}
@@ -274,8 +274,8 @@ public class PurchaseController {
 
 			SQLBuilder builder = new SQLBuilderPurchase();
 			builder.setFilter(filter);
-			List purchases = purchaseService.readPurchases(vmanager.getOrderby(),
-					vmanager.getOrder(), builder);
+			List purchases = purchaseService.readPurchases(
+					vmanager.getOrderby(), vmanager.getOrder(), builder);
 
 			LOG.info("Download. Purchases loaded from database...");
 			response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -297,31 +297,27 @@ public class PurchaseController {
 	// ----------------------------------------------------------------------------
 	// Initial Process
 	// ----------------------------------------------------------------------------
-	//@InitBinder
-	//private void dateBinder(WebDataBinder binder) {
-	    // SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
-	    // CustomDateEditor editor = new CustomDateEditor(dateFormat, true);
-	    // binder.registerCustomEditor(Date.class, editor);
-		
-		/*binder.registerCustomEditor(Date.class, new PropertyEditorSupport() {
-		    public void setAsText(String value) {
-		        try {
-		        	System.out.println("setAsText: " + value);
-		            setValue(new SimpleDateFormat("dd/mm/yyyy").parse(value));
-		        } catch(ParseException e) {
-		        	e.printStackTrace();
-		            setValue(null);
-		        }
-		    }
+	// @InitBinder
+	// private void dateBinder(WebDataBinder binder) {
+	// SimpleDateFormat dateFormat = new SimpleDateFormat("dd/mm/yyyy");
+	// CustomDateEditor editor = new CustomDateEditor(dateFormat, true);
+	// binder.registerCustomEditor(Date.class, editor);
 
-		    public String getAsText() {
-		    	System.out.println("getAsText: " + getValue());
-		        return new SimpleDateFormat("dd/mm/yyyy").format((Date) getValue());
-		    }        
+	/*
+	 * binder.registerCustomEditor(Date.class, new PropertyEditorSupport() {
+	 * public void setAsText(String value) { try {
+	 * System.out.println("setAsText: " + value); setValue(new
+	 * SimpleDateFormat("dd/mm/yyyy").parse(value)); } catch(ParseException e) {
+	 * e.printStackTrace(); setValue(null); } }
+	 * 
+	 * public String getAsText() { System.out.println("getAsText: " +
+	 * getValue()); return new SimpleDateFormat("dd/mm/yyyy").format((Date)
+	 * getValue()); }
+	 * 
+	 * });
+	 */
 
-		}); */
-		
-	//}
+	// }
 
 	// ----------------------------------------------------------------------------
 	// Get Department List
@@ -348,6 +344,20 @@ public class PurchaseController {
 	public Map<Long, String> populateCompanyList() {
 
 		return purchaseService.readCompanies();
+	}
+
+	// ---------------------------------------------------------------
+	// Update Purchase GET
+	// ---------------------------------------------------------------
+	@RequestMapping(value = "addproduct.do", method = RequestMethod.POST)
+	public String addProduct(
+			@RequestParam(value = "productname", required = true) String productname, ModelMap model) {
+
+		Product product = new Product();
+		product.setName(productname);
+		purchaseService.addProduct(product);
+
+		return "";
 	}
 
 }

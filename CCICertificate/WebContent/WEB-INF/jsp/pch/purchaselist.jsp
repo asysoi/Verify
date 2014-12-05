@@ -42,6 +42,8 @@
 	function close() {
 		$("#pview").dialog("close");
 		$("#pview").text('');
+		//$(document).ajaxComplete(undefined);
+		$(document).off('ajaxComplete');
 	}
 	
 	
