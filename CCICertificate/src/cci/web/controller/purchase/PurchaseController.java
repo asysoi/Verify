@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
@@ -347,17 +349,20 @@ public class PurchaseController {
 	}
 
 	// ---------------------------------------------------------------
-	// Update Purchase GET
+	// Add Purchase Product
 	// ---------------------------------------------------------------
 	@RequestMapping(value = "addproduct.do", method = RequestMethod.POST)
+	@ResponseBody
 	public String addProduct(
 			@RequestParam(value = "productname", required = true) String productname, ModelMap model) {
 
 		Product product = new Product();
 		product.setName(productname);
-		purchaseService.addProduct(product);
+		
+		long id =
+				purchaseService.addProduct(product);
 
-		return "";
+		return "" + id;
 	}
 
 }

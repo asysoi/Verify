@@ -27,7 +27,7 @@ public interface PurchaseDAO {
 	
 	public void updatePurchase(Purchase purchase);
 
-	public void saveProduct(Product product);
+	public long saveProduct(Product product);
 
 	public void saveCompany(Company company);
 	

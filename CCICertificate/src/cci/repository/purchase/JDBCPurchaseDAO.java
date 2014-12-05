@@ -9,18 +9,21 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 
 import cci.model.Client;
 import cci.model.cert.Company;
 import cci.model.purchase.Product;
 import cci.model.purchase.Purchase;
 import cci.repository.SQLBuilder;
+import cci.repository.SequenceDAO;
 import cci.web.controller.client.ViewClient;
 import cci.web.controller.purchase.ViewPurchase;
 
-public class JDBCPurchaseDAO implements PurchaseDAO {
+public class JDBCPurchaseDAO extends SequenceDAO implements PurchaseDAO {
 
 	private NamedParameterJdbcTemplate template;
 
@@ -33,7 +36,7 @@ public class JDBCPurchaseDAO implements PurchaseDAO {
 	// Get map of products
 	// ---------------------------------------------------------------
 	public Map<Long, String> findProducts() {
-		String sql = "select * from PCH_PRODUCT ORDER BY id";
+		String sql = "select * from PCH_PRODUCT ORDER BY name";
 
 		Map<Long, String> items = new LinkedHashMap<Long, String>();
 
@@ -50,7 +53,7 @@ public class JDBCPurchaseDAO implements PurchaseDAO {
 	// Get map of departments
 	// ---------------------------------------------------------------
 	public Map<Long, String> findDepartments() {
-		String sql = "select * from C_OTD ORDER BY id";
+		String sql = "select * from C_OTD ORDER BY otd_name";
 
 		Map<Long, String> items = new LinkedHashMap<Long, String>();
 
@@ -67,7 +70,7 @@ public class JDBCPurchaseDAO implements PurchaseDAO {
 	// Get map of clients
 	// ---------------------------------------------------------------
 	public Map<Long, String> findCompanies() {
-		String sql = "select * from CCI_CLIENT ORDER BY id";
+		String sql = "select * from CCI_CLIENT ORDER BY name";
 
 		Map<Long, String> items = new LinkedHashMap<Long, String>();
 
@@ -121,7 +124,7 @@ public class JDBCPurchaseDAO implements PurchaseDAO {
 		String sql = "SELECT count(*) FROM PCH_PURCHASE_VIEW "
 				+ builder.getWhereClause();
 
-		return this.template.getJdbcOperations().queryForInt(sql);
+		return this.template.getJdbcOperations().queryForObject(sql, Integer.class);
 	}
 
 	// ---------------------------------------------------------------
@@ -170,7 +173,7 @@ public class JDBCPurchaseDAO implements PurchaseDAO {
 		String sql = "insert into pch_purchase (id,id_product,id_otd,id_company,price,volume,unit, pchdate, productproperty) "
 				+ "values (id_purchase_seq.nextval, "
 				+ ":id_product, :id_otd, :id_company, :price, :volume, "
-				+ ":unit, :pchdate, :productproperty)";   //TO_DATE(:pchdate,'DD/MM/YY')     
+				+ ":unit, :pchdate, :productproperty)"; // TO_DATE(:pchdate,'DD/MM/YY')
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(
 				purchase);
@@ -181,63 +184,70 @@ public class JDBCPurchaseDAO implements PurchaseDAO {
 			System.out.println("Error - save purchase: " + ex.toString());
 		}
 	}
-	
+
 	// ---------------------------------------------------------------
 	// Update purchase in database
 	// ---------------------------------------------------------------
 	public void updatePurchase(Purchase purchase) {
 		String sql = "update pch_purchase set "
 				+ " id_product = :id_product, id_otd = :id_otd, id_company = :id_company, price = :price, "
-				+ " volume = :volume, unit=:unit, pchdate = :pchdate, productproperty:=productproperty "    // TO_DATE(:pchdate,'DD/MM/YY') 
+				+ " volume = :volume, unit=:unit, pchdate = :pchdate, productproperty=:productproperty " 
 				+ " where id = :id";
 
-		SqlParameterSource parameters = new BeanPropertySqlParameterSource(
+		SqlParameterSource parameters = new BeanPropertySqlParameterSource (
 				purchase);
 
 		try {
 			template.update(sql, parameters);
 		} catch (Exception ex) {
-			System.out.println("Error - save purchase: " + ex.toString());
+			System.out.println("Error - update purchase: " + ex.toString());
 		}
 	}
 
 	// ---------------------------------------------------------------
-	// Get list of all filtered purchases 
+	// Get list of all filtered purchases
 	// ---------------------------------------------------------------
 	public List<ViewPurchase> readViewPurchases(String orderby, String order,
 			SQLBuilder builder) {
-		
-		String sql = " SELECT * FROM PCH_PURCHASE_VIEW " 
-				+ builder.getWhereClause() + " ORDER BY " +  orderby + " " + order;
+
+		String sql = " SELECT * FROM PCH_PURCHASE_VIEW "
+				+ builder.getWhereClause() + " ORDER BY " + orderby + " "
+				+ order;
 
 		return this.template.getJdbcOperations().query(sql,
 				new BeanPropertyRowMapper<ViewPurchase>(ViewPurchase.class));
 	}
 
 	// ---------------------------------------------------------------
-	//  
+	// Add new product
 	// ---------------------------------------------------------------
-	public void saveProduct(Product product) {
-		String sql = "insert into pch_purchase (id,id_product,id_otd,id_company,price,volume,unit, pchdate, productproperty) "
-				+ "values (id_purchase_seq.nextval, "
-				+ ":id_product, :id_otd, :id_company, :price, :volume, "
-				+ ":unit, :pchdate, :productproperty)";   //TO_DATE(:pchdate,'DD/MM/YY')     
+	public long saveProduct(Product product) {
+		String sql = "insert into pch_product (id,name) "
+				+ "values (id_purchase_seq.nextval, :name)";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(
 				product);
+		long id = 0;
 
 		try {
 			template.update(sql, parameters);
+			
+			sql = "SELECT id FROM PCH_PRODUCT where name = ? ";
+			id = (long) template.getJdbcOperations().queryForObject(sql, new Object[] { product.getName() }, Long.class);
+			product.setId(id);
 		} catch (Exception ex) {
-			System.out.println("Error - save purchase: " + ex.toString());
+			System.out.println("Error - save purchase product: "
+					+ ex.toString());
+			ex.printStackTrace();
 		}
+		System.out.println("ID product: " + id);
+		return id;
 	}
 
 	@Override
 	public void saveCompany(Company company) {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
-	
+
 }

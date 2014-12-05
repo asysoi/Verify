@@ -232,15 +232,17 @@ public class PurchaseService {
 	// ---------------------------------------------------------------
 	// Add product
 	// ---------------------------------------------------------------
-	public void addProduct(Product product) {
+	public long addProduct(Product product) {
 		Locale.setDefault(new Locale("en", "en"));
-
+        long id = 0;
+        
 		try {
-			purchaseDAO.saveProduct(product);
+			id = purchaseDAO.saveProduct(product);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
+		
+		return id;
 	}
 
 }

@@ -22,7 +22,7 @@
 
 		$("document").ready(function() {
 			$(".datepicker").datepicker("option", "dateFormat", 'dd/mm/yy');
-			$("#pchdate").datepicker("setDate", "${purchase.pchdate}");
+			$("#pchdate").datepicker("setDate", "${purchase.pchdatestring}");
 			$("#product").val('${purchase.id_product}');
 			$("#department").val('${purchase.id_otd}');
 			$("#company").val('${purchase.id_company}');
@@ -35,7 +35,7 @@
 	}
 	
 	function addproduct() {
-        $( "#newproduct").val('');		
+        $( "#productname").val('');		
 		$( "#ewin" ).dialog("option", "title", "Добавить продукт");
 		$( "#ewin" ).dialog("option", "modal", true);
 		$( "#ewin" ).dialog("option", "resizable", false);
@@ -44,14 +44,25 @@
 			buttons : [ {
 				text : "Добавить",
 				click : function() {
+					
 					url = $("#fadd").attr("action");
-					alert("Form: " + $("#fadd").serialize()); 
-					var ret = $.post(url, $("#fadd").serialize());
-					$(document).ajaxComplete(
-								function(event, request, settings) {
-									alert("Return: " + request.result);
-									$(document).off('ajaxComplete');
-								});
+					$.post(url, $("#fadd").serialize(), function(result) {
+											   if (result != 0) {	
+												   var txt = $("#productname").val();
+						                           $("#product").append('<option value="' 
+						                        		   			+ result +'">' 
+						                        		   			+ txt 
+						                        		   			+'</option>');
+						                           $("#product").val(result);
+						                           
+											   }
+					    					}
+					);
+					
+					//$(document).ajaxComplete(
+					//			function(event, request, settings) {
+					//				$(document).off('ajaxComplete');
+					//			});
   				    $( this ).dialog( "close" );
 				}
 			},{  
@@ -139,8 +150,8 @@
 	</table>
 </form:form>
 
-<div id="ewin">
+<div id="ewin" >
 <form id="fadd" action="addproduct.do" method="POST"> 
-Продукт&nbsp<input id="productname" name="productname" class="productname" type="text"/>
+  <input id="productname" name="productname" class="productname" type="text"/>
 </form>
 </div>

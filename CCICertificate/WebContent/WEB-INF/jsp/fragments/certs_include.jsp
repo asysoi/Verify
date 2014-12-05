@@ -69,7 +69,7 @@
         link="filter.do?&pagesize=${vmanager.pagesize}&orderby=${vmanager.orderby}&order=${vmanager.order}";
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Фильтр поиска');
-		$("#pview").dialog("option", "width", 740);
+		$("#pview").dialog("option", "width", 760);
 		$("#pview").dialog("option", "height", 660);
 		$("#pview").dialog("option", "modal", true);
 		$("#pview").dialog("option", "resizable", false );

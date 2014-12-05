@@ -95,7 +95,7 @@ public class Purchase {
 
 	public String getPchdatestring() {
 		DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-		return df.format(pchdate);
+		return pchdate == null ? "" : df.format(pchdate);
 	}
 	
 	@Override

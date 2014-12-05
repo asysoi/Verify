@@ -42,7 +42,6 @@
 	function close() {
 		$("#pview").dialog("close");
 		$("#pview").text('');
-		//$(document).ajaxComplete(undefined);
 		$(document).off('ajaxComplete');
 	}
 	
@@ -72,27 +71,35 @@
 								close();
 							});
 			} else {
-				jalert ("Сообщение", "Введите цифровые значения в поля Цена и Количество ");
+				jalert ("Сообщение", "Поля Цена и Количество должны иметь цифровое значение");
 			}
 		} else {
-			jalert ("Сообщение", "Введите дату сделки!");
+			jalert ("Сообщение", "Введите корректную дату сделки");
 		}
 	}
 
 	function update(action) {
-		var x;
-		if (confirm("Сохранить сделанные изменения?") == true) {
+		if ( is_date($('#pchdate').val()) ) {
+			
+			if ($.isNumeric($('#price').val()) && $.isNumeric($('#volume').val())) {
+				var x;
+				if (confirm("Сохранить сделанные изменения?") == true) {
 
-			url = $("#fitem").attr("action");
-			$.post(url, $("#fitem").serialize());
+					url = $("#fitem").attr("action");
+					$.post(url, $("#fitem").serialize());
 
-			$(document)
-					.ajaxComplete(
+					$(document)
+						.ajaxComplete(
 							function(event, request, settings) {
-								goToList(action
-										+ '?page=1&pagesize=${pmanager.pagesize}&orderby=${pmanager.orderby}&order=${pmanager.order}');
+								goToList('purchases.do?page=1&pagesize=${pmanager.pagesize}&orderby=${pmanager.orderby}&order=${pmanager.order}');
 								close();
 							});
+				}
+			} else {
+				jalert ("Сообщение", "Поля Цена и Количество должны иметь цифровое значение");
+			}
+		} else {
+			jalert ("Сообщение", "Введите корректную дату сделки");
 		}
 	}
 
@@ -160,7 +167,7 @@
 		link = "viewpurchase.do?id=" + id;
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Сделка');
-		$("#pview").dialog("option", "width", 450);
+		$("#pview").dialog("option", "width", 490);
 		$("#pview").dialog("option", "height", 300);
 		$("#pview").dialog("option", "modal", true);
 		$("#pview").dialog("option", "resizable", false);
@@ -340,7 +347,7 @@
 
 		<c:forEach items="${purchases}" var="item">
 			<tr>
-				<td><a href="javascript:viewItem('${item.id}')">${item.pchdatestring}</a></td>
+				<td><a href="javascript:editItem('${item.id}')">${item.pchdatestring}</a></td>
 				<td>${item.product}</td>
 				<td>${item.company}</td>
 				<td>${item.price}</td>

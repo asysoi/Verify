@@ -1,5 +1,6 @@
 eclipse.preferences.version=1
 encoding//WebContent/WEB-INF/jsp/404.jsp=UTF-8
+encoding//WebContent/WEB-INF/jsp/client/clients_include.jsp=UTF-8
 encoding//WebContent/WEB-INF/jsp/fragments/bodyHeader.jsp=UTF-8
 encoding//WebContent/WEB-INF/jsp/fragments/certs_include.jsp=UTF-8
 encoding//WebContent/WEB-INF/jsp/fragments/certs_include_post.jsp=UTF-8
@@ -15,7 +16,5 @@ encoding//WebContent/WEB-INF/jsp/pch/purchaseform.jsp=UTF-8
 encoding//WebContent/WEB-INF/jsp/pch/purchaselist.jsp=UTF-8
 encoding//WebContent/WEB-INF/jsp/welcome.jsp=UTF-8
 encoding//WebContent/WEB-INF/jsp/window.jsp=UTF-8
-encoding//src/cci/cert/web/controller/ViewManager.java=UTF-8
-encoding//src/cci/purchase/web/controller/PurchaseController.java=UTF-8
 encoding//src/cci/web/controller/ViewManager.java=UTF-8
 encoding//src/cci/web/controller/purchase/PurchaseController.java=UTF-8

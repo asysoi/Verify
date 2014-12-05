@@ -98,7 +98,7 @@
         link="cfilter.do?&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}";
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Фильтр поиска компаний');
-		$("#pview").dialog("option", "width", 740);
+		$("#pview").dialog("option", "width", 770);
 		$("#pview").dialog("option", "height", 500);
 		$("#pview").dialog("option", "modal", true);
 		$("#pview").dialog("option", "resizable", false );
