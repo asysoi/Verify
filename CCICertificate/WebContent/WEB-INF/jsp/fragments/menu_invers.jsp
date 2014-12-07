@@ -61,7 +61,7 @@
 					</ul>
 				</li>
 
-				<security:authorize ifAnyGranted="hasRole('ROLE_EXPERT')">				
+				<security:authorize ifAnyGranted="ROLE_EXPERT">				
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">Сертификаты<b class="caret"></b></a>
 					<ul class="dropdown-menu">
@@ -84,7 +84,7 @@
 					</ul>
 				</li>
 
-				<security:authorize ifAnyGranted="hasRole('ROLE_ACCOUNT')">
+				<security:authorize ifAnyGranted="ROLE_ACCOUNT">
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">Логистика<b class="caret"></b></a>
 					<ul class="dropdown-menu">
