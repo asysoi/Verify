@@ -8,6 +8,7 @@ encoding//WebContent/WEB-INF/jsp/fragments/footer.jsp=UTF-8
 encoding//WebContent/WEB-INF/jsp/fragments/headTag.jsp=UTF-8
 encoding//WebContent/WEB-INF/jsp/fragments/login_include.jsp=UTF-8
 encoding//WebContent/WEB-INF/jsp/fragments/menu_invers.jsp=UTF-8
+encoding//WebContent/WEB-INF/jsp/fragments/menu_login.jsp=UTF-8
 encoding//WebContent/WEB-INF/jsp/fragments/sidebar.jsp=UTF-8
 encoding//WebContent/WEB-INF/jsp/fragments/welcome_include.jsp=UTF-8
 encoding//WebContent/WEB-INF/jsp/help.jsp=UTF-8

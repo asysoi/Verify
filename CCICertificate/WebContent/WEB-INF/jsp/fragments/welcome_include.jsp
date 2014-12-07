@@ -7,7 +7,7 @@
 	<h1 class="page-header"><img src="resources/images/main/title.png" alt="Интранет портал БелТПП"/></h1>
 	<div class="well-lrg">
 	
-	<table class="certificate" style="width: 100%">
+	<table class="main" style="width: 100%">
 		<tr>
 		<td><img src="resources/images/main/графики работы.jpg"/></td>
 		<td><img src="resources/images/main/комплексные планы.jpg"/></td>
@@ -15,14 +15,15 @@
 		</tr>
 
         <tr>
-		<td><img src="resources/images/main/графики работы.jpg"/></td>
-		<td><img src="resources/images/main/комплексные планы.jpg"/></td>
-		<td><img src="resources/images/main/Планы ВЭД.jpg"/></td>
+		<td><img src="resources/images/main/президиум.jpg"/></td>
+		<td><img src="resources/images/main/протоколы рабоч. совещ.jpg"/></td>
+		<td><img src="resources/images/main/Совет Белтпп.jpg"/></td>
 		</tr>
+		
 		<tr>
-		<td><img src="resources/images/main/графики работы.jpg"/></td>
-		<td><img src="resources/images/main/комплексные планы.jpg"/></td>
-		<td><img src="resources/images/main/Планы ВЭД.jpg"/></td>
+		<td><img src="resources/images/main/справочники.jpg"/></td>
+		<td><img src="resources/images/main/прочее.jpg"/></td>
+		<td><img src="resources/images/main/инструкции.jpg"/></td>
 		</tr>
 	</table> 
 	 

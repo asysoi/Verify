@@ -11,6 +11,21 @@ padding-bottom: 7px;
 vertical-align: top;
 }
 
+table.main {
+width: 100%;
+font-size: 100%;
+}
+
+table.main td {
+padding: 20px;
+padding-top: 25px;
+padding-bottom: 25px;
+vertical-align: center;
+text-align: center;
+font-size: 100%;
+}
+
+
 table.certificate {
 border-collapse: collapse;
 width: 100%;

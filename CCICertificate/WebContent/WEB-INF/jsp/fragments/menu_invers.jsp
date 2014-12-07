@@ -1,6 +1,7 @@
-﻿
+﻿<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 
+				
    <div class="container-fluid">
       
         <div class="navbar-header">
@@ -29,7 +30,7 @@
 						<li><a href="members.do">Члены БелТПП</a></li>
 						<li><a href="clients.do">Контрагенты</a></li>
 						<li class="divider"></li>
-						<li><a href="upload.do">Импорт данных</a></li>
+						<li><a href="#">Импорт данных</a></li>
 					</ul>
 				</li>
 				
@@ -42,7 +43,7 @@
 						<li><a href="#">Выствыки</a></li>
 						<li><a href="#">Ярмарки</a></li>
 						<li class="divider"></li>
-						<li><a href="upload.do">Импорт данных</a></li>
+						<li><a href="#">Импорт данных</a></li>
 
 					</ul>
 				</li>
@@ -55,12 +56,12 @@
 						<li><a href="#">Приказы</a></li>
 						<li><a href="#">Документы</a></li>
 						<li class="divider"></li>
-						<li><a href="upload.do">Импорт данных</a></li>
+						<li><a href="#">Импорт данных</a></li>
 
 					</ul>
 				</li>
-				
-				
+
+				<security:authorize ifAnyGranted="hasRole('ROLE_EXPERT')">				
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">Сертификаты<b class="caret"></b></a>
 					<ul class="dropdown-menu">
@@ -68,11 +69,13 @@
 						<li><a href="check.do">Верификация</a></li>
 						<li><a href="#">Акты экспертиз</a></li>
 						<li class="divider"></li>
-						<li><a href="upload.do">Импорт сертификатов</a></li>
+						<li><a href="#">Импорт сертификатов</a></li>
 
 					</ul>
 				</li>
+			    </security:authorize>				
 
+                
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">Справочники<b class="caret"></b></a>
 					<ul class="dropdown-menu">
@@ -81,6 +84,7 @@
 					</ul>
 				</li>
 
+				<security:authorize ifAnyGranted="hasRole('ROLE_ACCOUNT')">
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">Логистика<b class="caret"></b></a>
 					<ul class="dropdown-menu">
@@ -88,7 +92,14 @@
 						<li><a href="#">Договора</a></li>					
 					</ul>
 				</li>
-				<li><a href="login.do">Войти</a></li>
+			    </security:authorize>
+				
+				
+				<li><a href="logout.do">
+				<security:authorize access="isAuthenticated()">
+    			Выйти <security:authentication property="principal.username" /> 
+				</security:authorize>
+				</a></li>
 				<li><a href="help.do">Помощь</a></li>
 			</ul>
 		</div>

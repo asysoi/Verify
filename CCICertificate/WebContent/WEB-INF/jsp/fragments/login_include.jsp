@@ -12,12 +12,12 @@
 	<div class="row placeholders">
     
 	<div class="container">
-			<form:form method="POST" commandName="user" class="form-signin" role="form">
-					<form:input path="username" class="form-control" placeholder="Имя пользователя" />
- 				    <form:password path="password" class="form-control" placeholder="Пароль" />
- 				    <label class="checkbox"> <input type="checkbox" value="remember-me"> Запомнить </label>
- 				    <button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
-			</form:form>
+			<form class="form-signin" action="/CCICertificate/j_spring_security_check" method="POST">
+   				<input id="username" name="j_username" placeholder="Имя пользователя" class="form-control" type="text">
+ 				<input id="password" name="j_password" placeholder="Пароль" class="form-control" type="password">
+				<br>
+ 				<button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
+			</form>			
 	</div>
 	
 	</div>

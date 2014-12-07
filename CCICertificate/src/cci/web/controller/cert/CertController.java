@@ -1,6 +1,5 @@
 package cci.web.controller.cert;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +11,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -33,7 +31,6 @@ import cci.service.Filter;
 import cci.service.cert.CERTService;
 import cci.service.cert.CertFilter;
 import cci.service.cert.XSLWriter;
-import cci.web.controller.User;
 import cci.web.controller.ViewManager;
 
 @Controller
@@ -44,53 +41,7 @@ public class CertController {
 	
 	@Autowired
 	private CERTService certService;
-
-	@RequestMapping(value = "/main.do", method = RequestMethod.GET)
-	public String mainpage(ModelMap model) {
-        LOG.info("Main Page Loaded..."); 
-		return "welcome";
-	}
-
-	@RequestMapping(value = "/window.do", method = RequestMethod.GET)
-	public String dasboard(ModelMap model) {
-
-		return "window";
-	}
-
-	@RequestMapping(value = "/help.do", method = RequestMethod.GET)
-	public String help(ModelMap model) {
-
-		model.addAttribute("jspName", "help.jsp");
-		return "window";
-	}
-
-	@RequestMapping(value = "/login.do", method = RequestMethod.GET)
-	public String loginInit(ModelMap model) {
-		User user = new User();
-		model.addAttribute("user", user);
-		return "login";
-	}
-
 	
-	@RequestMapping(value = "/login.do", method = RequestMethod.POST)
-	public String login(@ModelAttribute("user") User user,
-			BindingResult result, SessionStatus status) {
-		if (user.getUsername().equals(user.getPassword())) {
-			return "welcome";
-		} else {
-			return "login";
-		}
-	}
-
-	@RequestMapping(value = "/print.do")
-	@ResponseBody
-	public String print(
-			@RequestParam(value = "name", required = false) String name,
-			Model model) {
-
-		return "<html>Hello <p> Name: " + name + "</p></html>";
-	}
-
 	@RequestMapping(value = "/cert.do")
 	@ResponseBody
 	public Certificate printcert() {
