@@ -41,7 +41,11 @@ public class CertController {
 	
 	@Autowired
 	private CERTService certService;
+
 	
+	// ---------------------------------------------------------------------------------------
+	//
+	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "/cert.do")
 	@ResponseBody
 	public Certificate printcert() {
@@ -51,7 +55,9 @@ public class CertController {
 		return certificate;
 	}
 
-	
+	// ---------------------------------------------------------------------------------------
+	//
+	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "/config.do", method = RequestMethod.GET)
 	public String openConfig(ModelMap model) {
 		ViewManager vmanager = (ViewManager) model.get("vmanager");
@@ -69,6 +75,9 @@ public class CertController {
 		return "fragments/config";
 	}
 
+	// ---------------------------------------------------------------------------------------
+	//
+	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "/config.do", method = RequestMethod.POST)
 	public String submitConfig(@ModelAttribute("downloadconfig") ExportCertConfig config,
 			BindingResult result, SessionStatus status, ModelMap model) {
@@ -81,6 +90,9 @@ public class CertController {
 		return "fragments/config";
 	}
 	
+	// ---------------------------------------------------------------------------------------
+	//
+	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "/download.do", method = RequestMethod.GET)
 	public void XSLFileDownload(HttpSession session,
 			HttpServletResponse response, ModelMap model) {
@@ -126,6 +138,9 @@ public class CertController {
 		}
 	}
 
+	// ---------------------------------------------------------------------------------------
+	//
+	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "/certs.do", method = RequestMethod.GET)
 	public String listcerts(
 			// HttpServletRequest request,
@@ -223,6 +238,10 @@ public class CertController {
 		return vmanager;
 	}
 
+	
+	// ---------------------------------------------------------------------------------------
+	//
+	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "/filter.do", method = RequestMethod.GET)
 	public String openFilter(
 			@ModelAttribute("certfilter") CertFilter fc, ModelMap model) {
@@ -242,6 +261,11 @@ public class CertController {
 		return "fragments/filter";
 	}
 
+	
+	
+	// ---------------------------------------------------------------------------------------
+	//
+	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "/filter.do", method = RequestMethod.POST)
 	public String submitFilter(
 			@ModelAttribute("viewfilter") ViewCertFilter viewfilter,
@@ -263,6 +287,9 @@ public class CertController {
 		return "fragments/filter";
 	}
 
+	// ---------------------------------------------------------------------------------------
+	//
+	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "/gocert.do")
 	public String gocert(HttpServletRequest request, 
 			@RequestParam(value = "certid", required = true) Integer certid,
@@ -277,6 +304,10 @@ public class CertController {
 		return "redirect:" + "/resources/out/" + cert.getCert_id() + ".pdf";
 	}
 
+	
+	// ---------------------------------------------------------------------------------------
+	//
+	// ---------------------------------------------------------------------------------------
 	private void makepdffile(String absoluteDiskPath, Certificate cert) {
 		CertificatePDFBuilder builder = new CertificatePDFBuilder();
 		String fout = absoluteDiskPath + "/out/" + cert.getCert_id() + ".pdf";
@@ -291,6 +322,10 @@ public class CertController {
 		}
 	}
 
+	
+	// ---------------------------------------------------------------------------------------
+	//
+	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "/check.do", method = RequestMethod.GET)
 	public String check(ModelMap model) {
 		String retpage = "check";
@@ -299,6 +334,10 @@ public class CertController {
 		return retpage;
 	}
 
+	
+	// ---------------------------------------------------------------------------------------
+	//
+	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "/check.do", method = RequestMethod.POST)
 	public String check(@ModelAttribute("cert") Certificate cert,
 			BindingResult result, SessionStatus status, ModelMap model, HttpServletRequest request) {
@@ -342,12 +381,65 @@ public class CertController {
 		return retpage;
 	}
 
-	@RequestMapping(value = "/upload.do", method = RequestMethod.GET)
-	public String uploadFromFTP(ModelMap model) {
-		certService.uploadCertificateFromFTP();
-		return "window";
+	// ---------------------------------------------------------------------------------------
+	//  Report Page making
+	// ---------------------------------------------------------------------------------------
+	@RequestMapping(value = "/configreport.do", method = RequestMethod.GET)
+	public String openPreprt(ModelMap model) {
+
+		ExportCertConfig reportconfig = new ExportCertConfig();
+		
+		model.addAttribute("reportconfig", reportconfig);
+		model.addAttribute("headermap", reportconfig.getHeadermap());
+		return "fragments/configreport";
 	}
 
+	// ---------------------------------------------------------------------------------------
+	// Generate report
+	// ---------------------------------------------------------------------------------------
+	@RequestMapping(value = "/makereport.do", method = RequestMethod.POST)
+	public String submitReport(
+			@ModelAttribute("reportconfig") ExportCertConfig reportconfig,
+			BindingResult result, SessionStatus status, ModelMap model) {
+
+		List reports = null;
+		System.out.println("Report generation started...");
+		ViewManager vmanager = (ViewManager) model.get("vmanager");
+
+		try {
+
+			Filter filter = vmanager.getFilter();
+			if (filter == null) {
+				if (model.get("certfilter") != null) {
+					filter = (Filter) model.get("certfilter");
+				} else {
+					filter = new CertFilter();
+					model.addAttribute("certfilter", filter);
+				}
+				vmanager.setFilter(filter);
+			}
+
+			SQLBuilder builder = new SQLBuilderCertificate();
+			builder.setFilter(filter);
+
+			reports = certService.makeReports(reportconfig.getHeaders(), reportconfig.getFields(),
+					builder);
+
+			System.out.println("Reporting finished...");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		model.addAttribute("reports", reports);
+		model.addAttribute("headers", vmanager.getDownloadconfig().getHeaders());
+		return "fragments/viewreport";
+	}		
+
+
+	// ---------------------------------------------------------------------------------------
+	// Fillin lists 
+	// ---------------------------------------------------------------------------------------
 	@ModelAttribute("countries")
 	public Map<String, String> populateCompanyList() {
 		return certService.getCountriesList();

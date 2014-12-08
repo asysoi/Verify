@@ -11,7 +11,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">БелТПП</a>
+          <a class="navbar-brand" href="main.do" style="font-size: 180%">БелТПП</a>
         </div>
 
 		<div class="navbar-collapse collapse">

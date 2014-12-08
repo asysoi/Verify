@@ -1,19 +1,18 @@
 package cci.service.cert;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import cci.model.cert.Certificate;
+import cci.model.cert.Report;
 import cci.repository.SQLBuilder;
 import cci.repository.cert.CertificateDAO;
-import cci.service.FilterCondition;
 import cci.util.cert.XMLService;
 
 @Component
@@ -206,5 +205,25 @@ public class CERTService {
 		}
 
 		return certs;
+	}
+
+	
+	// ------------------------------------------------------------------------------
+	//
+	// ------------------------------------------------------------------------------
+	public List<Report> makeReports(String[] headers, String[] fields,
+			SQLBuilder builder) {
+
+		List<Report> reports = new ArrayList<Report>();
+		int i=0;
+		
+		for (String item: headers) {
+			Report report = new Report();
+			report.setField(item);
+			report.setValue(fields[i]);
+			reports.add(report);	
+		}
+		
+		return reports;
 	}
 }

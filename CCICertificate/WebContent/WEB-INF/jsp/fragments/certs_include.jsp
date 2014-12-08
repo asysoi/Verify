@@ -124,7 +124,9 @@
 		win.focus();
 	}
 	
-
+    // ---------------------------------------------------------------------------------
+    // Download list to Excel файл 
+    // ---------------------------------------------------------------------------------
 	function downloadCertificates() {
 		link = "config.do";
 		$("#pview").load(link);
@@ -172,8 +174,33 @@
 	    	document.body.appendChild(iframe);
     	}
     	iframe.src = "download.do";
-		
 	}
+	
+	
+	// ---------------------------------------------------------------------------------
+    // Open Report Window  
+    // ---------------------------------------------------------------------------------
+	function reportWindow() {
+		link = "configreport.do";
+		$("#pview").load(link);
+		$("#pview").dialog("option", "title", 'Отчет');
+		$("#pview").dialog("option", "width", 850);
+		$("#pview").dialog("option", "height", 520);
+		$("#pview").dialog("option", "modal", true);
+		$("#pview").dialog("option", "resizable", false);
+		$("#pview").dialog({
+			buttons : [ { text : "Закрыть",	click : function() {$(this).dialog("close");} } ]
+		});
+
+		$("#pview").dialog("option", "position", {
+			my : "center",
+			at : "center",
+			of : window
+		});
+		$("#pview").dialog("open");
+	}
+
+
 
 </script>
 
@@ -189,9 +216,9 @@
                 </input></td>
 
 			<td style="width: 40%; text-align: right">
-				<a href="javascript:downloadCertificates();"><img src="resources/images/exp_excel.png" 
-
-alt="Загрузить"/></a>
+			       <a href="javascript:reportWindow();"><img src="resources/images/report_24.png" alt="Отчет"/></a>
+				   &nbsp;
+				   <a href="javascript:downloadCertificates();"><img src="resources/images/exp_excel.png"alt="Загрузить"/></a>
 				   &nbsp;			        
 			       Строк в списке: <c:forEach items="${sizes}" var="item">
 	           	   &nbsp;	
