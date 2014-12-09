@@ -211,17 +211,16 @@ public class CERTService {
 	// ------------------------------------------------------------------------------
 	//
 	// ------------------------------------------------------------------------------
-	public List<Report> makeReports(String[] headers, String[] fields,
+	public List<Report> makeReports(String[] fields,
 			SQLBuilder builder) {
-
-		List<Report> reports = new ArrayList<Report>();
-		int i=0;
 		
-		for (String item: headers) {
-			Report report = new Report();
-			report.setField(item);
-			report.setValue(fields[i]);
-			reports.add(report);	
+		Locale.setDefault(new Locale("en", "en"));
+		List<Report> reports = null;
+		
+		try {
+			reports = certificateDAO.getReport(fields, builder);
+		} catch (Exception ex) {
+			ex.printStackTrace();
 		}
 		
 		return reports;

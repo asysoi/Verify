@@ -27,6 +27,7 @@
 
 	function close() {
 		$("#pview").dialog("close");
+		$("#pview").html('');
 	}
 	
 	$(document).ready(function() {
@@ -189,7 +190,7 @@
 		$("#pview").dialog("option", "modal", true);
 		$("#pview").dialog("option", "resizable", false);
 		$("#pview").dialog({
-			buttons : [ { text : "Закрыть",	click : function() {$(this).dialog("close");} } ]
+			buttons : [ { text : "Закрыть",	click : function() {close();} } ]
 		});
 
 		$("#pview").dialog("option", "position", {

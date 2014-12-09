@@ -7,24 +7,29 @@
 
 
 <script>
-	function submit() {
+	$(document).ready(function() {
+		$("#fields").removeAttr("multiple");
+	});
+
+	function submitreport() {
 		url = $("#configreport").attr("action");
-        alert($("#configreport").serialize());
 		$.post(url, $("#configreport").serialize(), function(result) {
-			$("#viewreport").val(result);
+			$("#viewreport").html(result);
 		});
 
 	}
 </script>
 
 <div id="content">
-	<form:form id="configreport" action="makereport.do" method="POST" 	commandName="reportconfig">
+	<form:form id="configreport" action="makereport.do" method="POST" commandName="reportconfig">
 
 		Сгруппировать сертификаты по:
-		<form:select path="fields" items="${reportconfig.headermap}" />
-		<a href="javascript:submit()"><img src="resources/images/refresh_32.png" alt="Отчет" /></a>
-		
+		<form:select path="fields" items="${reportconfig.headermap}" style="width: 450px;" />
+		<a href="javascript:submitreport()"><img src="resources/images/refresh_32.png" alt="Отчет"/></a>
 	</form:form>
+	
 </div>
 
-<div id="viewreport" name="viewreport"></div>
+<fieldset>
+<span id="viewreport"></span>
+</fieldset>

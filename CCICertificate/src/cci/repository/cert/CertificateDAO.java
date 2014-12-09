@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import cci.model.cert.Certificate;
+import cci.model.cert.Report;
 import cci.repository.SQLBuilder;
 import cci.service.FilterCondition;
 
@@ -37,5 +38,7 @@ public interface CertificateDAO {
 
 	public List<Certificate> getCertificates(String orderby, String order,
 			SQLBuilder builder);
+
+	public List<Report> getReport(String[] fields, SQLBuilder builder);
 	
 }

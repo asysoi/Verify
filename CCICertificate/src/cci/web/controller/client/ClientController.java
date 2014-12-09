@@ -267,7 +267,7 @@ public class ClientController {
 			LOG.info("Download. Clients loaded from database...");
 			response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 			response.setHeader("Content-Disposition",
-					"attachment; filename=certificates.xlsx");
+					"attachment; filename=companies.xlsx");
 
 			(new XSLWriter()).makeWorkbook(clients, dconfig.getHeaders(),
 					dconfig.getFields(), "Список контрагентов").write(

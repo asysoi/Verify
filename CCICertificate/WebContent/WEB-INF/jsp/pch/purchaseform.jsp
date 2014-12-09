@@ -37,6 +37,8 @@
 	function addproduct() {
         $( "#productname").val('');		
 		$( "#ewin" ).dialog("option", "title", "Добавить продукт");
+		$( "#ewin" ).dialog("option", "width", 460);
+		$( "#ewin" ).dialog("option", "height", 190);
 		$( "#ewin" ).dialog("option", "modal", true);
 		$( "#ewin" ).dialog("option", "resizable", false);
 		
@@ -150,8 +152,8 @@
 	</table>
 </form:form>
 
-<div id="ewin" >
-<form id="fadd" action="addproduct.do" method="POST"> 
-  <input id="productname" name="productname" class="productname" type="text"/>
+<div id="ewin" style="padding-top: 25px; text-align: center;">
+<form id="fadd" action="addproduct.do" method="POST" > 
+  <input id="productname" name="productname" class="productname" type="text" size=45 style="height: 26px;" placeholder="Наименование продукта"/>
 </form>
 </div>

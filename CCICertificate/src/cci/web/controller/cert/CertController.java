@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import cci.config.cert.ExportCertConfig;
+import cci.config.cert.ReportCertConfig;
 import cci.model.cert.Certificate;
 import cci.pdfbuilder.cert.CertificatePDFBuilder;
 import cci.repository.SQLBuilder;
@@ -387,7 +388,7 @@ public class CertController {
 	@RequestMapping(value = "/configreport.do", method = RequestMethod.GET)
 	public String openPreprt(ModelMap model) {
 
-		ExportCertConfig reportconfig = new ExportCertConfig();
+		ReportCertConfig reportconfig = new ReportCertConfig();
 		
 		model.addAttribute("reportconfig", reportconfig);
 		model.addAttribute("headermap", reportconfig.getHeadermap());
@@ -399,7 +400,7 @@ public class CertController {
 	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "/makereport.do", method = RequestMethod.POST)
 	public String submitReport(
-			@ModelAttribute("reportconfig") ExportCertConfig reportconfig,
+			@ModelAttribute("reportconfig") ReportCertConfig reportconfig,
 			BindingResult result, SessionStatus status, ModelMap model) {
 
 		List reports = null;
@@ -422,8 +423,7 @@ public class CertController {
 			SQLBuilder builder = new SQLBuilderCertificate();
 			builder.setFilter(filter);
 
-			reports = certService.makeReports(reportconfig.getHeaders(), reportconfig.getFields(),
-					builder);
+			reports = certService.makeReports(reportconfig.getFields(),	builder);
 
 			System.out.println("Reporting finished...");
 
@@ -432,7 +432,7 @@ public class CertController {
 		}
 
 		model.addAttribute("reports", reports);
-		model.addAttribute("headers", vmanager.getDownloadconfig().getHeaders());
+		model.addAttribute("headers", reportconfig.getHeaders());
 		return "fragments/viewreport";
 	}		
 

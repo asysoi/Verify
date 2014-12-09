@@ -23,6 +23,7 @@ import org.springframework.stereotype.Repository;
 import cci.model.cert.Certificate;
 import cci.model.cert.Country;
 import cci.model.cert.Product;
+import cci.model.cert.Report;
 import cci.repository.SQLBuilder;
 import cci.service.FilterCondition;
 import cci.web.controller.purchase.ViewPurchase;
@@ -336,12 +337,25 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	// ---------------------------------------------------------------
 	public List<Certificate> getCertificates(String orderby, String order,
 			SQLBuilder builder) {
-		long start = System.currentTimeMillis();
 		String sql = " SELECT * FROM CERT_VIEW_TOFILE " 
 				+ builder.getWhereClause() + " ORDER BY " +  orderby + " " + order;
 
 		System.out.println("Get certificates: " + sql);
 		return this.template.getJdbcOperations().query(sql,
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));
+	}
+
+	// ---------------------------------------------------------------
+	// Get Analitic Report grouped by Fields 
+	// ---------------------------------------------------------------
+	public List<Report> getReport(String[] fields, SQLBuilder builder) {
+		String field = fields[0];   // берем только одно поле для группировки
+		
+		String sql = "SELECT " + field + " as field, COUNT(*) as value FROM (SELECT * FROM CERT_VIEW " +  
+					 builder.getWhereClause() + ") group by " + field + " ORDER BY value DESC" ;		
+
+		System.out.println("Make report: " + sql);
+		return this.template.getJdbcOperations().query(sql,
+				new BeanPropertyRowMapper<Report>(Report.class));
 	}
 }

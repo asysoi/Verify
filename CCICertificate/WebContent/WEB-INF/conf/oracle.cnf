@@ -3,3 +3,16 @@
 				</security:authorize>
 				<security:authorize ifAnyGranted="ROLE_ACCOUNT">
 				</security:authorize -->
+
+
+alter index 'SYS_C007001' unusable; 
+alter index 'CERT_NUMBER_IDX' unusable; 
+alter index 'CERT_PARENTNUMBER_IDX' unusable; 
+
+update c_cert set status='Действителен' where  UPPER(status) like 'ДЕЙСТВ%';
+
+alter index 'SYS_C007001' rebuild; 
+alter index 'CERT_NUMBER_IDX' rebuild; 
+alter index 'CERT_PARENTNUMBER_IDX' rebuild; 
+
+select status, count(*) from c_cert GROUP by STATUS; 
