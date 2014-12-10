@@ -14,14 +14,6 @@ $('.rth').click(function(){
     for (var i = 0; i < rows.length; i++){table.append(rows[i])}
 })
 
-function comparer(index) {
-    return function(a, b) {
-        var valA = getCellValue(a, index), valB = getCellValue(b, index)
-        return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.localeCompare(valB)
-    }
-}
-
-function getCellValue(row, index){ return $(row).children('td').eq(index).html() }
 
 $(".rth").hover(
       function () {
@@ -33,6 +25,16 @@ $(".rth").hover(
              $(this).css('text-decoration', '');
       }
     );
+    
+function comparer(index) {
+	    return function(a, b) {
+	        var valA = getCellValue(a, index), valB = getCellValue(b, index)
+	        return $.isNumeric(valA) && $.isNumeric(valB) ? valA - valB : valA.localeCompare(valB)
+	    }
+	}
+
+function getCellValue(row, index){ return $(row).children('td').eq(index).html() }
+
 </script>
 
 
@@ -47,7 +49,7 @@ $(".rth").hover(
 
 	<c:forEach items="${reports}" var="report">
 		<tr>
-			<td>${report.field}</td>
+			<td>${report.normalfield}</td>
 			<td>${report.value}</td>
 		</tr>
 	</c:forEach>

@@ -26,6 +26,12 @@
     
     <spring:url value="resources/jquery-ui-1.10.3/ui/jquery-ui.js" var="jQueryUiCore"/>
     <script src="${jQueryUiCore}"></script>
+    
+    <spring:url value="resources/jspin/jspin.js" var="jSpin"/>
+    <script src="${jSpin}"></script>
+    
+    <spring:url value="resources/jspin/jquery.spin.js" var="jQuerySpin"/>
+    <script src="${jQuerySpin}"></script>
 
     <spring:url value="resources/jquery-ui-1.10.3/themes/base/jquery-ui.css" var="jQueryUiCss"/>
     <link href="${jQueryUiCss}" rel="stylesheet"></link>

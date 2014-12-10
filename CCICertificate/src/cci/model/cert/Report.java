@@ -17,5 +17,16 @@ public class Report {
 	public void setValue(String value) {
 		this.value = value;
 	}
+	
+	public String getNormalfield() {
+		if (field != null) {
+			int pos = field.indexOf("00:00:00.0");
+		
+			if ( pos != -1 ) {
+				return field.substring(0, pos-1);	
+			}
+		}
+		return field; 	
+	}
 
 }

@@ -348,11 +348,11 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	// ---------------------------------------------------------------
 	// Get Analitic Report grouped by Fields 
 	// ---------------------------------------------------------------
-	public List<Report> getReport(String[] fields, SQLBuilder builder) {
+	public List<Report> getReport(String[] fields, SQLBuilder builder, Boolean onfilter) {
 		String field = fields[0];   // берем только одно поле для группировки
 		
 		String sql = "SELECT " + field + " as field, COUNT(*) as value FROM (SELECT * FROM CERT_VIEW " +  
-					 builder.getWhereClause() + ") group by " + field + " ORDER BY value DESC" ;		
+					 (onfilter ? builder.getWhereClause() : "") + ") group by " + field + " ORDER BY value DESC" ;		
 
 		System.out.println("Make report: " + sql);
 		return this.template.getJdbcOperations().query(sql,

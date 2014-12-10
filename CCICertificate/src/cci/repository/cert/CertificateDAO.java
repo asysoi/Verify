@@ -39,6 +39,6 @@ public interface CertificateDAO {
 	public List<Certificate> getCertificates(String orderby, String order,
 			SQLBuilder builder);
 
-	public List<Report> getReport(String[] fields, SQLBuilder builder);
+	public List<Report> getReport(String[] fields, SQLBuilder builder, Boolean onfilter);
 	
 }

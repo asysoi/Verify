@@ -423,7 +423,7 @@ public class CertController {
 			SQLBuilder builder = new SQLBuilderCertificate();
 			builder.setFilter(filter);
 
-			reports = certService.makeReports(reportconfig.getFields(),	builder);
+			reports = certService.makeReports(reportconfig.getFields(),	builder, vmanager.getOnfilter());
 
 			System.out.println("Reporting finished...");
 

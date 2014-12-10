@@ -212,13 +212,13 @@ public class CERTService {
 	//
 	// ------------------------------------------------------------------------------
 	public List<Report> makeReports(String[] fields,
-			SQLBuilder builder) {
+			SQLBuilder builder, Boolean onfilter) {
 		
 		Locale.setDefault(new Locale("en", "en"));
 		List<Report> reports = null;
 		
 		try {
-			reports = certificateDAO.getReport(fields, builder);
+			reports = certificateDAO.getReport(fields, builder, onfilter);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
