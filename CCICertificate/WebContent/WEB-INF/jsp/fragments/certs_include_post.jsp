@@ -15,7 +15,7 @@
           document.getElementById("filter").checked=${vmanager.onfilter};
 
 		if (document.getElementById("filter").checked) {
-			$("#filterlink").html('<a  href="javascript: loadWindow(filter.do);">&nbsp;Фильтр</a>');
+			$("#filterlink").html('<a  href="javascript: loadWindow(certfilter.do);">&nbsp;Фильтр</a>');
 		} else {
 			$("#filterlink").html('&nbsp;Фильтр');
 		}
@@ -34,7 +34,7 @@
 
 	function swithFilter() {
 		if (document.getElementById("filter").checked) {
-			$("#filterlink").html('<a href="javascript: loadWindow(filter.do);">&nbsp;Фильтр</a>');
+			$("#filterlink").html('<a href="javascript: loadWindow(certfilter.do);">&nbsp;Фильтр</a>');
 		} else {
 			$("#filterlink").html('&nbsp;Фильтр');
 			goToList('certs.do?page=1&pagesize=${pagesize}&orderby=${orderby}&order=${order}');
@@ -88,7 +88,7 @@
 
 		<c:forEach items="${certs}" var="cert">
 			<tr>
-				<td><a href="gocert.do?certid=${cert.cert_id}">${cert.nomercert}</a></td>
+				<td><a href="certgo.do?certid=${cert.cert_id}">${cert.nomercert}</a></td>
 				<td>${cert.otd_name}</td>
 				<td>${cert.kontrp}</td>
 				<td>${cert.nblanka}</td>
@@ -97,13 +97,13 @@
 				<!-- 
 	        <td>
 	        <c:if test="${cert.child_id != null}">
-	            <a href="gocert.do?certid=${cert.child_id}">child</a>
+	            <a href="certgo.do?certid=${cert.child_id}">child</a>
 	        </c:if>    
 	        </td>  
 	        -->
 
 				<td><c:if test="${cert.parentnumber != null}">
-						<a href="gocert.do?certid=${cert.parentnumber}">parent</a>
+						<a href="certgo.do?certid=${cert.parentnumber}">parent</a>
 					</c:if></td>
 			</tr>
 		</c:forEach>

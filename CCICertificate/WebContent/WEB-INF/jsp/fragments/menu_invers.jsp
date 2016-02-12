@@ -23,7 +23,8 @@
 
 			
 				<li><a href="main.do">Главная</a></li>
-								
+	
+				<security:authorize ifAnyGranted="ROLE_CLIENT">				
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">Клиенты<b class="caret"></b></a>
 					<ul class="dropdown-menu">
@@ -33,6 +34,7 @@
 						<li><a href="#">Импорт данных</a></li>
 					</ul>
 				</li>
+				</security:authorize>
 				
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">ВЭС<b class="caret"></b></a>
@@ -61,12 +63,12 @@
 					</ul>
 				</li>
 
-				<security:authorize ifAnyGranted="ROLE_EXPERT">				
+				<security:authorize ifAnyGranted="ROLE_EXPERT,ROLE_MINSK,ROLE_GOMEL,ROLE_VITEBSK">				
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">Сертификаты<b class="caret"></b></a>
 					<ul class="dropdown-menu">
 						<li><a href="certs.do">Список Сертификатов</a></li>
-						<li><a href="check.do">Верификация</a></li>
+						<li><a href="certcheck.do">Верификация</a></li>
 						<li><a href="#">Акты экспертиз</a></li>
 						<li class="divider"></li>
 						<li><a href="#">Импорт сертификатов</a></li>
@@ -79,8 +81,8 @@
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">Справочники<b class="caret"></b></a>
 					<ul class="dropdown-menu">
-						<li><a href="cert.do">Телефонный</a></li>
-						<li><a href="certs.do">Арендные помещения</a></li>
+						<li><a href="#">Телефонный</a></li>
+						<li><a href="#">Арендные помещения</a></li>
 					</ul>
 				</li>
 

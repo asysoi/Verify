@@ -11,7 +11,7 @@
     <jsp:include page="fragments/menu_invers.jsp" />
     <div class="container-fluid">
       <div class="row">
-        <jsp:include page="fragments/sidebar.jsp" />
+        <!--  jsp:include page="fragments/sidebar.jsp" / -->
         <jsp:include page="${jspName}" />
       </div>
     </div>

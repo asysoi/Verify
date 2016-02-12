@@ -16,7 +16,7 @@ import cci.repository.cert.CertificateDAO;
 import cci.util.cert.XMLService;
 
 @Component
-public class CERTService {
+public class CertService {
 
 	@Autowired
 	private CertificateDAO certificateDAO;
@@ -29,7 +29,19 @@ public class CERTService {
 	private List<String> departments = null;
 	private List<String> forms = null;
 	private Map<String, String> countries = null;
-	
+	private Map<String, String> acl = null;
+
+	public Map<String, String> getACL() {
+		if (acl == null) {
+			Locale.setDefault(new Locale("en", "en"));
+			try {
+				acl = certificateDAO.getACL();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+		return acl;
+	}
 
 	public List<Certificate> readCertificatesPage(int page, int pagesize,
 			String orderby, String order, SQLBuilder builder) {
@@ -81,8 +93,8 @@ public class CERTService {
 			for (String filename : new File("[path to file]").list()) {
 				try {
 					i++;
-					cert = xmlService
-							.loadCertificate("[path to file]" + filename);
+					cert = xmlService.loadCertificate("[path to file]"
+							+ filename);
 					printCertificate(cert);
 					certificateDAO.save(cert);
 				} catch (Exception ex) {
@@ -164,8 +176,6 @@ public class CERTService {
 		}
 		return departments;
 	}
-	
-	
 
 	public Map<String, String> getCountriesList() {
 		if (countries == null) {
@@ -198,8 +208,7 @@ public class CERTService {
 		List<Certificate> certs = null;
 
 		try {
-			certs = certificateDAO.getCertificates(orderby,
-					order, builder);
+			certs = certificateDAO.getCertificates(orderby, order, builder);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -207,22 +216,21 @@ public class CERTService {
 		return certs;
 	}
 
-	
 	// ------------------------------------------------------------------------------
 	//
 	// ------------------------------------------------------------------------------
-	public List<Report> makeReports(String[] fields,
-			SQLBuilder builder, Boolean onfilter) {
-		
+	public List<Report> makeReports(String[] fields, SQLBuilder builder,
+			Boolean onfilter) {
+
 		Locale.setDefault(new Locale("en", "en"));
 		List<Report> reports = null;
-		
+
 		try {
 			reports = certificateDAO.getReport(fields, builder, onfilter);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		
+
 		return reports;
 	}
 }

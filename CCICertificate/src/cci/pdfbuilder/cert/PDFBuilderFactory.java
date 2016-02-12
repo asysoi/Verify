@@ -40,7 +40,7 @@ public class PDFBuilderFactory {
     	  } else if (pagename.equals(PAGE_CT2_ENG_b)) {
     		  builder = new CT2PDFBuilder();    		  
     	  } else if (pagename.equals(PAGE_A)) {
-    		  builder = new ADFBuilder();    		  
+    		  builder = new APDFBuilder();    		  
     	  } else if (pagename.equals(PAGE_TEXTILE)) {
     		  builder = new TextilePDFBuilder();    		  
     	  }  

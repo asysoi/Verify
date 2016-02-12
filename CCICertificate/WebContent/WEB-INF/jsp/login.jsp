@@ -12,7 +12,7 @@
     
     <div class="container-fluid">
       <div class="row">
-        <jsp:include page="fragments/sidebar.jsp" />
+        <!--  jsp:include page="fragments/sidebar.jsp" / -->
         
         <spring:url value="fragments/login_include.jsp" var="jspName"/>
                  

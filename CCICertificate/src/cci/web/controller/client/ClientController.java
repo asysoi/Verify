@@ -49,7 +49,7 @@ public class ClientController {
 	// ---------------------------------------------------------------
 	// Get Clients List
 	// ---------------------------------------------------------------
-	@RequestMapping(value = "/clients.do", method = RequestMethod.GET)
+	@RequestMapping(value = "clients.do", method = RequestMethod.GET)
 	public String listclients(
 			@RequestParam(value = "page", required = false) Integer page,
 			@RequestParam(value = "pagesize", required = false) Integer pagesize,
@@ -117,6 +117,7 @@ public class ClientController {
 		return "window";
 	}
 
+	
 	private ViewManager initViewManager(ModelMap model) {
 		ViewManager cmanager = new ViewManager();
 		cmanager.setHnames(new String[] { "Наименование компании", "Адрес",
@@ -128,10 +129,11 @@ public class ClientController {
 		return cmanager;
 	}
 
+	
 	// ---------------------------------------------------------------
 	// Get Client Filter Window
 	// ---------------------------------------------------------------
-	@RequestMapping(value = "/cfilter.do", method = RequestMethod.GET)
+	@RequestMapping(value = "clientfilter.do", method = RequestMethod.GET)
 	public String openFilter(@ModelAttribute("clientfilter") ClientFilter fc,
 			ModelMap model) {
 
@@ -153,7 +155,7 @@ public class ClientController {
 	// ---------------------------------------------------------------
 	// Set Client Filter properties
 	// ---------------------------------------------------------------
-	@RequestMapping(value = "/cfilter.do", method = RequestMethod.POST)
+	@RequestMapping(value = "clientfilter.do", method = RequestMethod.POST)
 	public String submitFilter(
 			@ModelAttribute("viewfilter") ViewClientFilter viewfilter,
 			@ModelAttribute("clientfilter") ClientFilter fc,
@@ -188,7 +190,7 @@ public class ClientController {
 	// ---------------------------------------------------------------
 	// Add Client POST
 	// ---------------------------------------------------------------
-	@RequestMapping(value = "addclient.do", method = RequestMethod.POST)
+	@RequestMapping(value = "clientadd.do", method = RequestMethod.POST)
 	public String addClient(@ModelAttribute("client") Client client,
 			BindingResult result, SessionStatus status, ModelMap model) {
 
@@ -202,7 +204,7 @@ public class ClientController {
 	// ---------------------------------------------------------------
 	// Add Client GET
 	// ---------------------------------------------------------------
-	@RequestMapping(value = "addclient.do", method = RequestMethod.GET)
+	@RequestMapping(value = "clientadd.do", method = RequestMethod.GET)
 	public String addClientInit(ModelMap model) {
 
 		Client client = new Client();
@@ -213,7 +215,7 @@ public class ClientController {
 	// ---------------------------------------------------------------
 	// Update Client POST
 	// ---------------------------------------------------------------
-	@RequestMapping(value = "editclient.do", method = RequestMethod.POST)
+	@RequestMapping(value = "clientedit.do", method = RequestMethod.POST)
 	public String updateClient(@ModelAttribute("client") Client client,
 			BindingResult result, SessionStatus status, ModelMap model) {
 
@@ -225,7 +227,7 @@ public class ClientController {
 	// ---------------------------------------------------------------
 	// Update Client GET
 	// ---------------------------------------------------------------
-	@RequestMapping(value = "editclient.do", method = RequestMethod.GET)
+	@RequestMapping(value = "clientedit.do", method = RequestMethod.GET)
 	public String updateClientInit(
 			@RequestParam(value = "id", required = true) Long id, ModelMap model) {
 
@@ -238,7 +240,7 @@ public class ClientController {
 	// ---------------------------------------------------------------
 	// Export Client List to XSL
 	// ---------------------------------------------------------------
-	@RequestMapping(value = "/exportclients.do", method = RequestMethod.GET)
+	@RequestMapping(value = "clientsexport.do", method = RequestMethod.GET)
 	public void exportClientsToExcel(HttpSession session,
 			HttpServletResponse response, ModelMap model) {
 		try {

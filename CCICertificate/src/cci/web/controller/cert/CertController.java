@@ -1,5 +1,6 @@
 package cci.web.controller.cert;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,8 @@ import javax.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -28,8 +31,9 @@ import cci.pdfbuilder.cert.CertificatePDFBuilder;
 import cci.repository.SQLBuilder;
 import cci.repository.cert.SQLBuilderCertificate;
 import cci.service.CountryConverter;
+import cci.service.FieldType;
 import cci.service.Filter;
-import cci.service.cert.CERTService;
+import cci.service.cert.CertService;
 import cci.service.cert.CertFilter;
 import cci.service.cert.XSLWriter;
 import cci.web.controller.ViewManager;
@@ -41,13 +45,13 @@ public class CertController {
 	public static Logger LOG=LogManager.getLogger(CertController.class);
 	
 	@Autowired
-	private CERTService certService;
+	private CertService certService;
 
 	
 	// ---------------------------------------------------------------------------------------
 	//
 	// ---------------------------------------------------------------------------------------
-	@RequestMapping(value = "/cert.do")
+	@RequestMapping(value = "cert.do")
 	@ResponseBody
 	public Certificate printcert() {
 
@@ -59,7 +63,7 @@ public class CertController {
 	// ---------------------------------------------------------------------------------------
 	//
 	// ---------------------------------------------------------------------------------------
-	@RequestMapping(value = "/config.do", method = RequestMethod.GET)
+	@RequestMapping(value = "certconfig.do", method = RequestMethod.GET)
 	public String openConfig(ModelMap model) {
 		ViewManager vmanager = (ViewManager) model.get("vmanager");
 
@@ -79,7 +83,7 @@ public class CertController {
 	// ---------------------------------------------------------------------------------------
 	//
 	// ---------------------------------------------------------------------------------------
-	@RequestMapping(value = "/config.do", method = RequestMethod.POST)
+	@RequestMapping(value = "certconfig.do", method = RequestMethod.POST)
 	public String submitConfig(@ModelAttribute("downloadconfig") ExportCertConfig config,
 			BindingResult result, SessionStatus status, ModelMap model) {
 		
@@ -94,7 +98,7 @@ public class CertController {
 	// ---------------------------------------------------------------------------------------
 	//
 	// ---------------------------------------------------------------------------------------
-	@RequestMapping(value = "/download.do", method = RequestMethod.GET)
+	@RequestMapping(value = "certdownload.do", method = RequestMethod.GET)
 	public void XSLFileDownload(HttpSession session,
 			HttpServletResponse response, ModelMap model) {
 		try {
@@ -142,7 +146,7 @@ public class CertController {
 	// ---------------------------------------------------------------------------------------
 	//
 	// ---------------------------------------------------------------------------------------
-	@RequestMapping(value = "/certs.do", method = RequestMethod.GET)
+	@RequestMapping(value = "certs.do", method = RequestMethod.GET)
 	public String listcerts(
 			// HttpServletRequest request,
 			@RequestParam(value = "page", required = false) Integer page,
@@ -150,6 +154,7 @@ public class CertController {
 			@RequestParam(value = "orderby", required = false) String orderby,
 			@RequestParam(value = "order", required = false) String order,
 			@RequestParam(value = "filter", required = false) Boolean onfilter,
+			Authentication aut,
 			ModelMap model) {
 
 		long start = System.currentTimeMillis();
@@ -192,7 +197,26 @@ public class CertController {
 				}
 				vmanager.setFilter(filter);
 			}
+		} 
+		
+		// ACL needs
+		if (filter == null) {
+			filter = new CertFilter();
+			System.out
+					.println("New filterCertificate created bacause of ACL");
 		}
+		
+		Iterator iterator = aut.getAuthorities().iterator(); 
+		while (iterator.hasNext()) {
+			
+		      String roleName = ((GrantedAuthority) iterator.next()).getAuthority();
+		      
+		      if  (certService.getACL().containsKey(roleName)) {      
+			      filter.setConditionValue("OTD_NAME", "OTD_NAME", "=", certService.getACL().get(roleName), FieldType.STRING);
+		      }
+		}
+		// ACL needs
+		
 
 		long step2 = System.currentTimeMillis();
 		SQLBuilder builder = new SQLBuilderCertificate();
@@ -243,7 +267,7 @@ public class CertController {
 	// ---------------------------------------------------------------------------------------
 	//
 	// ---------------------------------------------------------------------------------------
-	@RequestMapping(value = "/filter.do", method = RequestMethod.GET)
+	@RequestMapping(value = "certfilter.do", method = RequestMethod.GET)
 	public String openFilter(
 			@ModelAttribute("certfilter") CertFilter fc, ModelMap model) {
 
@@ -267,7 +291,7 @@ public class CertController {
 	// ---------------------------------------------------------------------------------------
 	//
 	// ---------------------------------------------------------------------------------------
-	@RequestMapping(value = "/filter.do", method = RequestMethod.POST)
+	@RequestMapping(value = "certfilter.do", method = RequestMethod.POST)
 	public String submitFilter(
 			@ModelAttribute("viewfilter") ViewCertFilter viewfilter,
 			@ModelAttribute("certfilter") CertFilter fc,
@@ -291,7 +315,7 @@ public class CertController {
 	// ---------------------------------------------------------------------------------------
 	//
 	// ---------------------------------------------------------------------------------------
-	@RequestMapping(value = "/gocert.do")
+	@RequestMapping(value = "certgo.do")
 	public String gocert(HttpServletRequest request, 
 			@RequestParam(value = "certid", required = true) Integer certid,
 			ModelMap model) {
@@ -327,7 +351,7 @@ public class CertController {
 	// ---------------------------------------------------------------------------------------
 	//
 	// ---------------------------------------------------------------------------------------
-	@RequestMapping(value = "/check.do", method = RequestMethod.GET)
+	@RequestMapping(value = "certcheck.do", method = RequestMethod.GET)
 	public String check(ModelMap model) {
 		String retpage = "check";
 		Certificate cert = new Certificate();
@@ -339,7 +363,7 @@ public class CertController {
 	// ---------------------------------------------------------------------------------------
 	//
 	// ---------------------------------------------------------------------------------------
-	@RequestMapping(value = "/check.do", method = RequestMethod.POST)
+	@RequestMapping(value = "certcheck.do", method = RequestMethod.POST)
 	public String check(@ModelAttribute("cert") Certificate cert,
 			BindingResult result, SessionStatus status, ModelMap model, HttpServletRequest request) {
 		String retpage = "check";
@@ -385,7 +409,7 @@ public class CertController {
 	// ---------------------------------------------------------------------------------------
 	//  Report Page making
 	// ---------------------------------------------------------------------------------------
-	@RequestMapping(value = "/configreport.do", method = RequestMethod.GET)
+	@RequestMapping(value = "certconfigreport.do", method = RequestMethod.GET)
 	public String openPreprt(ModelMap model) {
 
 		ReportCertConfig reportconfig = new ReportCertConfig();
@@ -398,7 +422,7 @@ public class CertController {
 	// ---------------------------------------------------------------------------------------
 	// Generate report
 	// ---------------------------------------------------------------------------------------
-	@RequestMapping(value = "/makereport.do", method = RequestMethod.POST)
+	@RequestMapping(value = "certmakereport.do", method = RequestMethod.POST)
 	public String submitReport(
 			@ModelAttribute("reportconfig") ReportCertConfig reportconfig,
 			BindingResult result, SessionStatus status, ModelMap model) {

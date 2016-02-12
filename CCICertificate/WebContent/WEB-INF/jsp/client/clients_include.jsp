@@ -95,7 +95,7 @@
 	}
 
 	function setFilter(link) {
-        link="cfilter.do?&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}";
+        link="clientfilter.do?&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}";
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Фильтр поиска компаний');
 		$("#pview").dialog("option", "width", 770);
@@ -130,7 +130,7 @@
 	}
 	
 	function editClient(id) {
-        link = "editclient.do?id=" + id;
+        link = "clientedit.do?id=" + id;
 		$("#clview").load(link);        
 		$("#clview").dialog("option", "title", 'Компания');
 		$("#clview").dialog("option", "width", 820);
@@ -150,7 +150,7 @@
 	
 
 	function addClient(id) {
-        link = "addclient.do";
+        link = "clientadd.do";
 		$("#clview").load(link);        
 		$("#clview").dialog("option", "title", 'Компания');
 		$("#clview").dialog("option", "width", 820);
@@ -170,7 +170,7 @@
 	
 
 	function downloadClients() {
-		link = "сconfig.do";
+		link = "сlientconfig.do";
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Экспорт списка клиентов');
 		$("#pview").dialog("option", "width", 850);
@@ -213,7 +213,7 @@
 	    	iframe.style.display = 'none';
 	    	document.body.appendChild(iframe);
     	}
-    	iframe.src = "exportclients.do";
+    	iframe.src = "clientsecport.do";
 		
 	}
 
@@ -232,7 +232,7 @@
 
 			<td style="width: 40%; text-align: right">
 				<a href="javascript:addClient();"><img src="resources/images/addclient.png" alt="Добавить"/></a>
-				<a href="javascript:download();"><img src="resources/images/exp_excel.png" alt="Загрузить"/></a>
+				<a href="javascript:downloadClients();"><img src="resources/images/exp_excel.png" alt="Загрузить"/></a>
 				   &nbsp; Строк в списке: 
 				   <c:forEach items="${sizes}" var="item"> 
 	           	   &nbsp;	

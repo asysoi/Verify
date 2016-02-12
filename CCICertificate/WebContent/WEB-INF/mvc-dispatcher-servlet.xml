@@ -41,9 +41,10 @@
    
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
-        <property name="url" value="jdbc:oracle:thin:@//192.168.0.46:1521/pdborcl"/>
+        <!-- property name="url" value="jdbc:oracle:thin:@//192.168.0.46:1521/pdborcl"/-->
         <!-- property name="url" value="jdbc:oracle:thin:@//localhost:1521/pdborcl.cci.by"/-->
-        <!-- property name="url" value="jdbc:oracle:thin:@//192.168.1.8:1521/pdborcl"/-->        
+        <!-- property name="url" value="jdbc:oracle:thin:@//192.168.1.8:1521/pdborcl"/--> 
+        <property name="url" value="jdbc:oracle:thin:@//localhost:1521/pdborcl"/>       
         <property name="username" value="BELTPP"/>
         <property name="password" value="123456"/>
     </bean>
@@ -51,11 +52,11 @@
     
  <security:http auto-config="true" use-expressions="true">
     <security:intercept-url pattern="/resources/**" access="permitAll"/> 
-    <security:intercept-url pattern="/login*.**" access="permitAll"/>
-    <security:intercept-url pattern="/**" access="hasRole('ROLE_USER')"/>
-    <security:intercept-url pattern="/client/**" access="hasRole('ROLE_CLIENT')"/>
-    <security:intercept-url pattern="/cert/**" access="hasRole('ROLE_EXPERT')"/>
-    <security:intercept-url pattern="/pch/**" access="hasRole('ROLE_ACCOUNT')"/>
+    <security:intercept-url pattern="/login*.**" access="permitAll" requires-channel="https"/> 
+    <security:intercept-url pattern="/client*.do" access="hasRole('ROLE_CLIENT')"/>
+    <security:intercept-url pattern="/cert*.do" access="hasAnyRole('ROLE_EXPERT','ROLE_MINSK', 'ROLE_GOMEL', 'ROLE_VITEBSK')"/>
+    <security:intercept-url pattern="/pch*.do" access="hasRole('ROLE_ACCOUNT')"/>
+    <security:intercept-url pattern="/**" access="isFullyAuthenticated()" requires-channel="https"/>
     <security:form-login login-page="/login.do"/>
     <security:logout logout-url="/logout.do" logout-success-url="/main.do"/> 
     <security:remember-me/> 
@@ -64,11 +65,13 @@
  <security:authentication-manager>
     <security:authentication-provider>
       <security:user-service>
-        <security:user name="admin" password="123456" authorities="ROLE_USER, ROLE_ADMIN" />
-        <security:user name="alex" password="alex" authorities="ROLE_USER" />
-        <security:user name="client" password="client" authorities="ROLE_USER, ROLE_CLIENT"/>
-        <security:user name="expert" password="expert" authorities="ROLE_USER, ROLE_EXPERT"/>
-        <security:user name="account" password="account" authorities="ROLE_USER, ROLE_ACCOUNT"/>
+        <security:user name="admin" password="admin" authorities="ROLE_ADMIN" />
+        <security:user name="client" password="client" authorities="ROLE_CLIENT" />
+        <security:user name="accounter" password="accounter" authorities="ROLE_ACCOUNT" />
+        <security:user name="expert" password="expert" authorities="ROLE_EXPERT" />
+        <security:user name="gomel" password="gomel" authorities="ROLE_GOMEL"/>
+        <security:user name="minsk" password="minsk" authorities="ROLE_MINSK"/>
+        <security:user name="vitebsk" password="vitebsk" authorities="ROLE_VITEBSK"/>
       </security:user-service>
     </security:authentication-provider>
  </security:authentication-manager>

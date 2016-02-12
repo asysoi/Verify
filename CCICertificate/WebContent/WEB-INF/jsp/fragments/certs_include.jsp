@@ -93,7 +93,7 @@
 	}
 
 	function loadWindow(link) {
-        link="filter.do?&pagesize=${vmanager.pagesize}&orderby=${vmanager.orderby}&order=${vmanager.order}";
+        link="certfilter.do?&pagesize=${vmanager.pagesize}&orderby=${vmanager.orderby}&order=${vmanager.order}";
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Фильтр поиска');
 		$("#pview").dialog("option", "width", 760);
@@ -116,7 +116,7 @@
 		       "но полностью воспроизводит содержание документа.</p>"
         $('#pdf').contents().find("body").html("<div style='color:black; text-align:center; font-size:16pt;'>" + memo + "</div> ");
                                    $('#pdf').contents().find('body').attr('style', 'background-color: white'); 
-		link = "gocert.do?certid=" + certid;
+		link = "certgo.do?certid=" + certid;
 		$("#pdfview").dialog("option", "title", 'Сертификат');
 		$("#pdfview").dialog("option", "width", 963);
 		$("#pdfview").dialog("option", "height", 570);
@@ -146,7 +146,7 @@
 		       "но полностью воспроизводит содержание документа.</p>"
         //$('#pdf').contents().find("body").html("<div style='color:black; text-align:center; font-size:16pt;'>" + memo + "</div> ");
         //                           $('#pdf').contents().find('body').attr('style', 'background-color: white'); 
-		url = "gocert.do?certid=" + certid;
+		url = "certgo.do?certid=" + certid;
 		var win=window.open(url,'_blank');
 		win.focus();
 	}
@@ -155,7 +155,7 @@
     // Download list to Excel файл 
     // ---------------------------------------------------------------------------------
 	function downloadCertificates() {
-		link = "config.do";
+		link = "certconfig.do";
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Экспорт списка сертификатов');
 		$("#pview").dialog("option", "width", 850);
@@ -200,7 +200,7 @@
 	    	iframe.style.display = 'none';
 	    	document.body.appendChild(iframe);
     	}
-    	iframe.src = "download.do";
+    	iframe.src = "certdownload.do";
 	}
 	
 	
@@ -208,7 +208,7 @@
     // Open Report Window  
     // ---------------------------------------------------------------------------------
 	function reportWindow() {
-		link = "configreport.do";
+		link = "certconfigreport.do";
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Отчет');
 		$("#pview").dialog("option", "width", 850);
@@ -286,7 +286,7 @@ ${vmanager.order}');">${item}</a>
 				<!-- 
 	        <td>
 	        <c:if test="${cert.child_id != null}">
-	            <a href="gocert.do?certid=${cert.child_id}">child</a>
+	            <a href="certgo.do?certid=${cert.child_id}">child</a>
 	        </c:if>    
 	        </td>  
 	        -->

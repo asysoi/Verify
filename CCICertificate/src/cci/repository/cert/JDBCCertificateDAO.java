@@ -10,8 +10,10 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -302,6 +304,26 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				String.class);
 	}
 
+	// ---------------------------------------------------------------
+	// Get MAP of branch's by roles
+	// ---------------------------------------------------------------
+	public Map<String,String> getACL() {
+		String sql = "SELECT otd_name, acl_role from C_OTD";
+
+		System.out.println("Got ACL map");
+		
+		return template.query(sql, new ResultSetExtractor<Map<String, String>>(){
+			
+		    public Map<String, String> extractData(ResultSet rs) throws SQLException,DataAccessException {
+		        HashMap<String,String> mapRet= new HashMap<String,String>();
+		        while(rs.next()){
+		            mapRet.put(rs.getString("acl_role"),rs.getString("otd_name"));
+		        }
+		        return mapRet;
+		    }
+		});
+	}
+	
 	// ---------------------------------------------------------------
 	// Get list of countries
 	// ---------------------------------------------------------------

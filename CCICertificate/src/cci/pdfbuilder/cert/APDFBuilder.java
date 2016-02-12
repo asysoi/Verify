@@ -5,7 +5,7 @@ import java.util.List;
 import cci.config.cert.CTCell;
 import cci.model.cert.Product;
 
-public class ADFBuilder extends PDFBuilder {
+public class APDFBuilder extends PDFBuilder {
 	protected void fillInRow(List<CTCell> row, Product product) {
 		row.get(0).setText(product.getNumerator() == null ? "" : product.getNumerator());
 		row.get(1).setText(product.getVidup() == null ? "" : product.getVidup());

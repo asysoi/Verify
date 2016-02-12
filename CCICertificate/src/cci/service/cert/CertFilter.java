@@ -55,7 +55,9 @@ public class CertFilter extends Filter {
 		this.init(fields, dbfields, types);
 	}
 		
-	
+	// -----------------------------------------------
+	//  Return result of conversation list of conditions to ViewCertificate in order using for View goals  
+	// -----------------------------------------------
 	public ViewCertificate getViewcertificate() {
 		ViewCertificate cert = new ViewCertificate();
 		
@@ -78,7 +80,9 @@ public class CertFilter extends Filter {
 	}
 	
 
-	
+	// -----------------------------------------------
+    //  Return list of condition operators filled in ViewCertCondition   
+	// -----------------------------------------------
 	public ViewCertCondition getCondition() {
 		ViewCertCondition cond = new ViewCertCondition();
 		
@@ -101,6 +105,9 @@ public class CertFilter extends Filter {
 	}
 	
 	
+	// ------------------------------------------------------------
+	// Convert viewCertificate into list of conditions by setting FilterCondition value property 
+	// ------------------------------------------------------------
 	public void loadViewcertificate (ViewCertificate cert) {
 	
 		for (String field : getConditions().keySet()) {
@@ -121,6 +128,10 @@ public class CertFilter extends Filter {
 		}
 	}
 
+	
+	// ------------------------------------------------------------
+	// Set operators of conditions into storage variable of filter  
+	// ------------------------------------------------------------
     public void loadCondition (ViewCertCondition cond) {
     	
 		for (String field : getConditions().keySet()) {

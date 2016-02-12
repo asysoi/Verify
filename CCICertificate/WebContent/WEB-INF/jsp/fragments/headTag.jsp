@@ -8,32 +8,32 @@
     
     <title>Intranet Portal BelCCI</title>
 
-    <spring:url value="resources/bootstrap3/css/bootstrap.min.css" var="bootstrapCss"/>
+    <spring:url value="/resources/bootstrap3/css/bootstrap.min.css" var="bootstrapCss"/>
     <link href="${bootstrapCss}" rel="stylesheet"/>
     
-    <spring:url value="resources/css/cci.css" var="cciCss"/>
+    <spring:url value="/resources/css/cci.css" var="cciCss"/>
     <link href="${cciCss}" rel="stylesheet"/>
     
-    <spring:url value="resources/css/dashboard.css" var="dashCss"/>
+    <spring:url value="/resources/css/dashboard.css" var="dashCss"/>
     <link href="${dashCss}" rel="stylesheet"/>
     
 
-    <spring:url value="resources/jquery/jquery-1.11.1.js" var="jQuery"/>
+    <spring:url value="/resources/jquery/jquery-1.11.1.js" var="jQuery"/>
     <script src="${jQuery}"></script>
 
-    <spring:url value="resources/bootstrap3/js/bootstrap.min.js" var="jBootStrap"/>
+    <spring:url value="/resources/bootstrap3/js/bootstrap.min.js" var="jBootStrap"/>
     <script src="${jBootStrap}"></script>
     
-    <spring:url value="resources/jquery-ui-1.10.3/ui/jquery-ui.js" var="jQueryUiCore"/>
+    <spring:url value="/resources/jquery-ui-1.10.3/ui/jquery-ui.js" var="jQueryUiCore"/>
     <script src="${jQueryUiCore}"></script>
     
-    <spring:url value="resources/jspin/jspin.js" var="jSpin"/>
+    <spring:url value="/resources/jspin/jspin.js" var="jSpin"/>
     <script src="${jSpin}"></script>
     
-    <spring:url value="resources/jspin/jquery.spin.js" var="jQuerySpin"/>
+    <spring:url value="/resources/jspin/jquery.spin.js" var="jQuerySpin"/>
     <script src="${jQuerySpin}"></script>
 
-    <spring:url value="resources/jquery-ui-1.10.3/themes/base/jquery-ui.css" var="jQueryUiCss"/>
+    <spring:url value="/resources/jquery-ui-1.10.3/themes/base/jquery-ui.css" var="jQueryUiCss"/>
     <link href="${jQueryUiCss}" rel="stylesheet"></link>
     
     

@@ -31,6 +31,8 @@ public interface CertificateDAO {
 	public int getViewPageCount(SQLBuilder builder);
 
 	public List<String> getDepartmentsList();
+	
+	public Map<String,String> getACL();
 
 	public Map<String, String> getCountriesList();
 

@@ -49,7 +49,7 @@
 </script>
 
 <div id="content">
-	<form:form id="configreport" action="makereport.do" method="POST" commandName="reportconfig">
+	<form:form id="configreport" action="certmakereport.do" method="POST" commandName="reportconfig">
 
 		Сгруппировать сертификаты по:
 		<form:select path="fields" items="${reportconfig.headermap}" style="width: 450px;" placeholder="Выберите параметр группирования"/>
