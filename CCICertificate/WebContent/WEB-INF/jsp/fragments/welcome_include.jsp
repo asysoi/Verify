@@ -3,7 +3,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 
-<div class="col-md-10 col-md-offset-2 main">
+<div class="main">
 	<h1 class="page-header"><img src="resources/images/main/title.png" alt="Интранет портал БелТПП"/></h1>
 	<div class="well-lrg">
 	

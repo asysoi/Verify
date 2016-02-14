@@ -220,7 +220,7 @@
 </script>
 
 
-<div id="listwindow" class="col-md-10 col-md-offset-2 main">
+<div id="listwindow" class="main">
 	<h3>Список контрагентов</h3>
 	<table style="width: 100%">
 		<tr>

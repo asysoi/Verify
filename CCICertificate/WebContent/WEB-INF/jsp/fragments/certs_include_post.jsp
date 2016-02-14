@@ -50,7 +50,7 @@
 	}
 </script>
 
-<div class="col-md-10 col-md-offset-2 main">
+<div class="main">
 	<h3>Список сертификатов</h3>
 	<table style="width: 100%">
 		<tr>

@@ -7,7 +7,7 @@
 <link href="${LoginCss}" rel="stylesheet" />
 
 
-<div class="col-md-10 col-md-offset-2 main">
+<div class="main">
 
 	<div class="row placeholders">
 

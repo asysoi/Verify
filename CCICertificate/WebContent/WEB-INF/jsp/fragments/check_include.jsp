@@ -66,7 +66,7 @@
 
 </script>
 
-<div class="col-md-10 col-md-offset-2 main">
+<div class="main">
 	<h3 class="page-header">Проверка наличия сертификата</h3>
 
 	<div id="msg" class="ver_message"></div>
