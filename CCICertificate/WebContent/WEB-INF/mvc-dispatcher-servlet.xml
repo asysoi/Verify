@@ -57,7 +57,7 @@
     <security:intercept-url pattern="/cert*.do" access="hasAnyRole('ROLE_EXPERT','ROLE_MINSK', 'ROLE_GOMEL', 'ROLE_VITEBSK')"/>
     <security:intercept-url pattern="/pch*.do" access="hasRole('ROLE_ACCOUNT')"/>
     <security:intercept-url pattern="/**" access="isFullyAuthenticated()" requires-channel="https"/>
-    <security:form-login login-page="/login.do"/>
+    <security:form-login login-page="/login.do" default-target-url="/main.do"/>
     <security:logout logout-url="/logout.do" logout-success-url="/main.do"/> 
     <security:remember-me/> 
  </security:http>

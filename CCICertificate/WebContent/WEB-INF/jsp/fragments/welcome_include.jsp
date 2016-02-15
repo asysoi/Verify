@@ -4,7 +4,6 @@
 
 
 <div class="main">
-	<h1 class="page-header"><img src="resources/images/main/title.png" alt="Интранет портал БелТПП"/></h1>
 	<div class="well-lrg">
 	
 	<table class="main" style="width: 100%">

@@ -11,7 +11,10 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="main.do" style="font-size: 180%">БелТПП</a>
+          <a class="navbar-brand" href="main.do" style="font-size: 200%">
+          <!-- img src="resources/images/main/title.png" alt="Интранет портал БелТПП"/-->
+          Интранет портал БелТПП
+          </a>
         </div>
 
 		<div class="navbar-collapse collapse">
@@ -21,17 +24,16 @@
             		<input type="text" class="form-control" placeholder="Search...">
           		</form>
 
-			
+			    <!-- 
 				<li><a href="main.do">Главная</a></li>
+				 -->
 	
 				<security:authorize ifAnyGranted="ROLE_CLIENT">				
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">Клиенты<b class="caret"></b></a>
 					<ul class="dropdown-menu">
-						<li><a href="members.do">Члены БелТПП</a></li>
+						<li><a href="#">Члены БелТПП</a></li>
 						<li><a href="clients.do">Контрагенты</a></li>
-						<li class="divider"></li>
-						<li><a href="#">Импорт данных</a></li>
 					</ul>
 				</li>
 				</security:authorize>
@@ -44,8 +46,6 @@
 						<li><a href="#">Форумы</a></li>					
 						<li><a href="#">Выствыки</a></li>
 						<li><a href="#">Ярмарки</a></li>
-						<li class="divider"></li>
-						<li><a href="#">Импорт данных</a></li>
 
 					</ul>
 				</li>
@@ -57,8 +57,6 @@
 						<li><a href="#">Сотрудники</a></li>					
 						<li><a href="#">Приказы</a></li>
 						<li><a href="#">Документы</a></li>
-						<li class="divider"></li>
-						<li><a href="#">Импорт данных</a></li>
 
 					</ul>
 				</li>
@@ -67,12 +65,9 @@
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">Сертификаты<b class="caret"></b></a>
 					<ul class="dropdown-menu">
-						<li><a href="certs.do">Список Сертификатов</a></li>
-						<li><a href="certcheck.do">Верификация</a></li>
+						<li><a href="certs.do">Сертификаты происхождения</a></li>
 						<li><a href="#">Акты экспертиз</a></li>
-						<li class="divider"></li>
-						<li><a href="#">Импорт сертификатов</a></li>
-
+						<li><a href="certcheck.do">Верификация</a></li>
 					</ul>
 				</li>
 			    </security:authorize>				
@@ -102,11 +97,10 @@
     			Выйти <security:authentication property="principal.username" /> 
 				</security:authorize>
 				</a></li>
-				<li><a href="help.do">Помощь</a></li>
+				<li><a href="help.do">Справка</a></li>
 			</ul>
 		</div>
-		<!--/.nav-collapse -->
-				
+						
       </div>
     </div>
  
