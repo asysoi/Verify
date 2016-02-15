@@ -3,7 +3,7 @@
 <log4j:configuration>
 
 <appender name="FILE" class="org.apache.log4j.FileAppender">
-   <param name="file" value="${log}/log.out"/>
+   <param name="file" value="${webapp.root}/WEB-INF/logs/cci.log"/>
    <param name="immediateFlush" value="true"/>
    <param name="threshold" value="debug"/>
    <param name="append" value="false"/>
@@ -14,7 +14,7 @@
 </appender>
 
 <logger name="log4j.rootLogger" additivity="false">
-   <level value="DEBUG"/>
+   <level value="INFO"/>
    <appender-ref ref="FILE"/>
 </logger>
 

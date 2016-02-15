@@ -1,6 +1,6 @@
 package cci.web.controller;
 
-import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.LogManager; 
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,10 +18,11 @@ import cci.web.controller.User;
 @Controller
 public class MainController {
 	
-	public static Logger LOG=LogManager.getLogger(MainController.class);
+	private static final Logger LOG=LogManager.getLogger(MainController.class);
 	
 	@RequestMapping(value = "/main.do", method = RequestMethod.GET)
 	public String mainpage(ModelMap model) {
+		System.out.println("LOG = " + LOG);
         LOG.info("Main Page Loaded..."); 
 		return "welcome";
 	}

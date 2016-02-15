@@ -15,6 +15,18 @@
 
   <display-name>Spring Web MVC Application</display-name>
   
+  
+  <!-- LOG4J spring configuration -->
+  <context-param>
+        <param-name>log4jConfiguration</param-name>
+        <param-value>/WEB-INF/log4j_cci.xml</param-value>
+  </context-param>
+  
+  <listener>
+    <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+  </listener>
+  
+  <!-- Servlet configuration --> 
   <servlet>
   	<servlet-name>mvc-dispatcher</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
@@ -30,11 +42,7 @@
 	<param-name>contextConfigLocation</param-name>
 	<param-value>/WEB-INF/mvc-dispatcher-servlet.xml</param-value>
   </context-param>
-  
-  <context-param>
-        <param-name>log4jConfiguration</param-name>
-        <param-value>/WEB-INF/log4j.properties</param-value>
-    </context-param>
+    
   
   <listener>
     <listener-class>
