@@ -10,8 +10,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
+import org.apache.log4j.Logger;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -45,7 +47,8 @@ import cci.web.validator.purchase.PurchaseValidator;
 @SessionAttributes({ "purchasefilter", "pmanager" })
 public class PurchaseController {
 
-	public static Logger LOG = LogManager.getLogger(PurchaseController.class);
+	//public static Logger LOG = LogManager.getLogger(PurchaseController.class);
+	public static Logger LOG = Logger.getLogger(PurchaseController.class);
 	private PurchaseValidator purchaseValidator;
 
 	@Autowired

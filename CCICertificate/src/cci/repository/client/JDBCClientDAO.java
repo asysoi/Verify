@@ -6,8 +6,11 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
+
+
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
@@ -27,7 +30,8 @@ import cci.web.controller.purchase.ViewPurchase;
 
 @Repository
 public class JDBCClientDAO implements ClientDAO {
-	public static Logger LOG=LogManager.getLogger(JDBCClientDAO.class);
+	//public static Logger LOG=LogManager.getLogger(JDBCClientDAO.class);
+	public static Logger LOG=Logger.getLogger(JDBCClientDAO.class);
 	private NamedParameterJdbcTemplate template;
 
 	@Autowired

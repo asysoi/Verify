@@ -6,8 +6,10 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
+import org.apache.log4j.Logger;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -35,7 +37,8 @@ import cci.web.validator.ClientValidator;
 @SessionAttributes({ "clientfilter", "cmanager" })
 public class ClientController {
 
-	public static Logger LOG = LogManager.getLogger(ClientController.class);
+	//public static Logger LOG = LogManager.getLogger(ClientController.class);
+	public static Logger LOG = Logger.getLogger(ClientController.class);
 	private ClientValidator clientValidator;
 
 	@Autowired

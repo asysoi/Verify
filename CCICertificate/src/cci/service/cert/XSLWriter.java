@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
+import org.apache.log4j.Logger;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
 //import org.apache.log4j.Logger;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -18,7 +20,8 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import cci.model.cert.Certificate;
 
 public class XSLWriter {
-	public static Logger LOG=LogManager.getLogger(XSLWriter.class);
+	// public static Logger LOG=LogManager.getLogger(XSLWriter.class);
+	public static Logger LOG=Logger.getLogger(XSLWriter.class);
 	
 	public Workbook makeWorkbook(List<Object> items, String[] headers, String[] dbfields, String title) {
 		long start = System.currentTimeMillis();

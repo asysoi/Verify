@@ -1,7 +1,9 @@
 package cci.web.controller;
 
-import org.apache.logging.log4j.LogManager; 
-import org.apache.logging.log4j.Logger;
+//import org.apache.logging.log4j.LogManager; 
+//import org.apache.logging.log4j.Logger;
+import org.apache.log4j.Logger;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -18,12 +20,12 @@ import cci.web.controller.User;
 @Controller
 public class MainController {
 	
-	private static final Logger LOG=LogManager.getLogger(MainController.class);
+	//private static final Logger LOG=LogManager.getLogger(MainController.class);
+	private static final Logger LOG=Logger.getLogger(MainController.class);
 	
 	@RequestMapping(value = "/main.do", method = RequestMethod.GET)
-	public String mainpage(ModelMap model) {
-		System.out.println("LOG = " + LOG);
-        LOG.info("Main Page Loaded..."); 
+	public String mainpage(ModelMap model, Authentication aut) {
+        LOG.info("User " + aut.getName() + " logged" ); 
 		return "welcome";
 	}
 
@@ -50,8 +52,9 @@ public class MainController {
 	
 	@RequestMapping(value = "/login.do", method = RequestMethod.POST)
 	public String login(@ModelAttribute("user") User user,
-			BindingResult result, SessionStatus status) {
-	
+			BindingResult result, SessionStatus status, Authentication aut) {
+		
+		LOG.info("Login: User " + aut.getName() + " logged" ); 
 		if (user.getUsername().equals(user.getPassword())) {
 			return "welcome";
 		} else {

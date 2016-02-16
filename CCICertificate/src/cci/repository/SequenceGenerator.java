@@ -1,11 +1,14 @@
 package cci.repository;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.apache.log4j.Logger;
+
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
 
 public class SequenceGenerator {
 	
-	public static Logger LOG = LogManager.getLogger(SequenceGenerator.class);
+	//public static Logger LOG = LogManager.getLogger(SequenceGenerator.class);
+	public static Logger LOG = Logger.getLogger(SequenceGenerator.class);
 	private static long value = 1;
 	private static long maxvalue = 1;
 	private static int poolsize = 100;

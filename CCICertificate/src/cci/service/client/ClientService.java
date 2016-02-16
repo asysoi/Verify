@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
+import org.apache.log4j.Logger;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +19,8 @@ import cci.web.controller.client.ViewClient;
 
 @Component
 public class ClientService {
-	public static Logger LOG=LogManager.getLogger(ClientService.class);
+	//public static Logger LOG=LogManager.getLogger(ClientService.class);
+	public static Logger LOG=Logger.getLogger(ClientService.class);
 	
 	@Autowired
 	private ClientDAO clientDAO;

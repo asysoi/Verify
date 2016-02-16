@@ -18,6 +18,10 @@
  	<context:component-scan base-package="cci" />
   	<mvc:annotation-driven/>
 
+    <mvc:interceptors>
+      <bean class="cci.web.controller.LogInterceptor" />
+    </mvc:interceptors>
+     
 	<bean id="viewResolver"
 	      class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
           <property name="prefix">
@@ -42,9 +46,9 @@
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
         <!-- property name="url" value="jdbc:oracle:thin:@//192.168.0.46:1521/pdborcl"/-->
-        <!-- property name="url" value="jdbc:oracle:thin:@//localhost:1521/pdborcl.cci.by"/-->
+        <property name="url" value="jdbc:oracle:thin:@//localhost:1521/pdborcl"/>
         <!-- property name="url" value="jdbc:oracle:thin:@//192.168.1.8:1521/pdborcl"/--> 
-        <property name="url" value="jdbc:oracle:thin:@//192.168.1.8:1521/pdborcl"/>     
+        <!-- property name="url" value="jdbc:oracle:thin:@//192.168.1.8:1521/pdborcl"/ -->     
         <property name="username" value="BELTPP"/>
         <property name="password" value="123456"/>
     </bean>
@@ -58,6 +62,7 @@
     <security:intercept-url pattern="/pch*.do" access="hasRole('ROLE_ACCOUNT')"/>
     <security:intercept-url pattern="/**" access="isFullyAuthenticated()" requires-channel="https"/>
     <security:form-login login-page="/login.do" default-target-url="/main.do"/>
+    <security:http-basic/>
     <security:logout logout-url="/logout.do" logout-success-url="/main.do"/> 
     <security:remember-me/> 
  </security:http>

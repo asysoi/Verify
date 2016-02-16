@@ -2,8 +2,10 @@ package cci.service.cert;
 
 import java.lang.reflect.Method;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
+import org.apache.log4j.Logger;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +20,8 @@ import cci.web.controller.client.ClientController;
 @Scope("session")
 public class CertFilter extends Filter {
 	
-	public static Logger LOG=LogManager.getLogger(CertFilter.class);
+	// public static Logger LOG=LogManager.getLogger(CertFilter.class);
+	public static Logger LOG=Logger.getLogger(CertFilter.class);
 	
 	public CertFilter() {
 		String[] fields = new String[] { "CERT_ID", "FORMS", "UNN", "KONTRP",

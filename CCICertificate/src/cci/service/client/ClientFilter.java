@@ -2,8 +2,11 @@ package cci.service.client;
 
 import java.lang.reflect.Method;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
+
+
+import org.apache.log4j.Logger;
 
 import cci.service.FieldType;
 import cci.service.Filter;
@@ -13,7 +16,7 @@ import cci.web.controller.client.ViewClient;
 
 public class ClientFilter extends Filter {
 
-	public static Logger LOG = LogManager.getLogger(ClientFilter.class);
+	public static Logger LOG = Logger.getLogger(ClientFilter.class);
 
 	public ClientFilter() {
 		String[] fields = new String[] { "ID", "NAME", "CITY", "LINE",

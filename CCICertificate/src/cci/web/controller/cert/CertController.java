@@ -8,8 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
+import org.apache.log4j.Logger;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -42,7 +44,8 @@ import cci.web.controller.ViewManager;
 @SessionAttributes({ "certfilter", "vmanager" })
 public class CertController {
 	
-	public static Logger LOG=LogManager.getLogger(CertController.class);
+	//public static Logger LOG=LogManager.getLogger(CertController.class);
+	private static final Logger LOG=Logger.getLogger(CertController.class);
 	
 	@Autowired
 	private CertService certService;
@@ -54,7 +57,7 @@ public class CertController {
 	@RequestMapping(value = "cert.do")
 	@ResponseBody
 	public Certificate printcert() {
-
+         
 		Certificate certificate;
 		certificate = new Certificate();
 		return certificate;
@@ -158,8 +161,7 @@ public class CertController {
 			ModelMap model) {
 
 		long start = System.currentTimeMillis();
-		System.out
-				.println("=========================== GET CERT LIST =================================== >");
+		LOG.info("=========================== GET CERT LIST =================================== >");
 
 		// ViewManager vmanager = (ViewManager)
 		// request.getSession().getAttribute("vmanager");
@@ -202,8 +204,8 @@ public class CertController {
 		// ACL needs
 		if (filter == null) {
 			filter = new CertFilter();
-			System.out
-					.println("New filterCertificate created bacause of ACL");
+			LOG.info
+					("New filterCertificate created bacause of ACL");
 		}
 		
 		Iterator iterator = aut.getAuthorities().iterator(); 
@@ -299,8 +301,8 @@ public class CertController {
 
 		if (fc == null) {
 			fc = new CertFilter();
-			System.out
-					.println("New filterCertificate created in the POST method");
+			LOG.info
+					("New filterCertificate created in the POST method");
 		} else {
 			LOG.info("Found FilterCertificate in POST");
 		}
@@ -428,7 +430,7 @@ public class CertController {
 			BindingResult result, SessionStatus status, ModelMap model) {
 
 		List reports = null;
-		System.out.println("Report generation started...");
+		LOG.info("Report generation started...");
 		ViewManager vmanager = (ViewManager) model.get("vmanager");
 
 		try {
@@ -449,7 +451,7 @@ public class CertController {
 
 			reports = certService.makeReports(reportconfig.getFields(),	builder, vmanager.getOnfilter());
 
-			System.out.println("Reporting finished...");
+			LOG.info("Reporting finished...");
 
 		} catch (Exception e) {
 			e.printStackTrace();

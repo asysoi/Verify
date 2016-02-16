@@ -2,8 +2,10 @@ package cci.service.purchase;
 
 import java.lang.reflect.Method;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
+
+import org.apache.log4j.Logger;
 
 import cci.service.FieldType;
 import cci.service.Filter;
@@ -11,7 +13,8 @@ import cci.service.FilterCondition;
 import cci.web.controller.purchase.ViewPurchaseCondition;
 
 public class PurchaseFilter extends Filter {
-	public static Logger LOG = LogManager.getLogger(PurchaseFilter.class);
+	//public static Logger LOG = LogManager.getLogger(PurchaseFilter.class);
+	public static Logger LOG = Logger.getLogger(PurchaseFilter.class);
     private Object item;
     
 	public PurchaseFilter() {
