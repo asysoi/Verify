@@ -19,7 +19,8 @@
   	<mvc:annotation-driven/>
 
     <mvc:interceptors>
-      <bean class="cci.web.controller.LogInterceptor" />
+      <bean class="cci.web.controller.LogInterceptor"/>
+      <bean class="cci.web.controller.TimeInterceptor"/>
     </mvc:interceptors>
      
 	<bean id="viewResolver"

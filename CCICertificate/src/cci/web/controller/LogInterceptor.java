@@ -19,8 +19,8 @@ public class LogInterceptor implements HandlerInterceptor {
 			HttpServletResponse response, Object handler) throws Exception {
 		Authentication aut = SecurityContextHolder.getContext()
 				.getAuthentication();
-		LOG.info("User: " + aut.getName());
-		printRequest(request);
+		// LOG.info("User: " + aut.getName());
+		// printRequest(request);
 		return true;
 	}
 
@@ -31,7 +31,7 @@ public class LogInterceptor implements HandlerInterceptor {
 		// LOG.info(modelAndView.toString());
 		Authentication aut = SecurityContextHolder.getContext()
 				.getAuthentication();
-		LOG.info("User: " + aut.getName());
+		LOG.info("User handled request: " + aut.getName());
 	}
 
 	@Override
