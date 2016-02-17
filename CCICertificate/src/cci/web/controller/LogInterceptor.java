@@ -10,6 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.UrlPathHelper;
 
 public class LogInterceptor implements HandlerInterceptor {
 	private static final Logger LOG = Logger.getLogger(LogInterceptor.class);
@@ -19,8 +20,15 @@ public class LogInterceptor implements HandlerInterceptor {
 			HttpServletResponse response, Object handler) throws Exception {
 		Authentication aut = SecurityContextHolder.getContext()
 				.getAuthentication();
-		// LOG.info("User: " + aut.getName());
-		// printRequest(request);
+		long startTime = System.currentTimeMillis();
+		request.setAttribute("startTime", startTime);
+		String action = request.getRequestURI().substring(request.getContextPath().length()+1);
+		LOG.info("Action: [" + action + "] by [" + aut.getName() + "]");
+		//String upath = new UrlPathHelper().getPathWithinApplication(request);
+		//String newPath = request.getServletPath();
+		//LOG.info("Request action: [" + upath + "] initiated by [" + aut.getName() + "]");
+		//LOG.info("Request action: [" + newPath + "] initiated by [" + aut.getName() + "]");
+		
 		return true;
 	}
 
@@ -28,32 +36,14 @@ public class LogInterceptor implements HandlerInterceptor {
 	public void postHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler,
 			ModelAndView modelAndView) throws Exception {
-		// LOG.info(modelAndView.toString());
-		Authentication aut = SecurityContextHolder.getContext()
-				.getAuthentication();
-		LOG.info("User handled request: " + aut.getName());
+   	    long executeTime = System.currentTimeMillis() - (Long) request.getAttribute("startTime");
+		LOG.info("ExecuteTime of action: " + executeTime + "ms");
 	}
 
 	@Override
 	public void afterCompletion(HttpServletRequest request,
 			HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
-	}
-
-	private void printRequest(HttpServletRequest req) {
-		Enumeration<String> parameterNames = req.getParameterNames();
-		while (parameterNames.hasMoreElements()) {
-			String paramName = parameterNames.nextElement();
-			LOG.info("Pameter name: " + paramName);
-
-			String[] paramValues = req.getParameterValues(paramName);
-
-			for (int i = 0; i < paramValues.length; i++) {
-
-				String paramValue = paramValues[i];
-				LOG.info(paramName + ":" + paramValue);
-			}
-		}
 	}
 
 }
