@@ -150,10 +150,10 @@ public class PurchaseController {
 
 		if (fc == null) {
 			fc = new PurchaseFilter();
-			LOG.info("New filterPurchase created in GET method");
+			LOG.debug("New filterPurchase created in GET method");
 			model.addAttribute("purchasefilter", fc);
 		} else {
-			LOG.info("Found FilterClient in GET : ");
+			LOG.debug("Found FilterClient in GET : ");
 		}
 
 		ViewPurchaseFilter vf = new ViewPurchaseFilter(
@@ -176,7 +176,7 @@ public class PurchaseController {
 			fc = new PurchaseFilter();
 			System.out.println("New filterPurchase created in the POST method");
 		} else {
-			LOG.info("Found FilterPurchase in POST");
+			LOG.debug("Found FilterPurchase in POST");
 		}
 		System.out.println(viewfilter.getViewpurchase().toString());
 		fc.loadViewpurchase(viewfilter.getViewpurchase());
@@ -261,7 +261,7 @@ public class PurchaseController {
 			HttpServletResponse response, ModelMap model) {
 		try {
 
-			LOG.info("Download started...");
+			LOG.debug("Download started...");
 			ViewManager vmanager = (ViewManager) model.get("pmanager");
 
 			Filter filter = vmanager.getFilter();
@@ -282,7 +282,7 @@ public class PurchaseController {
 			List purchases = purchaseService.readPurchases(
 					vmanager.getOrderby(), vmanager.getOrder(), builder);
 
-			LOG.info("Download. Purchases loaded from database...");
+			LOG.debug("Download. Purchases loaded from database...");
 			response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 			response.setHeader("Content-Disposition",
 					"attachment; filename=purchases.xlsx");
@@ -292,7 +292,7 @@ public class PurchaseController {
 					response.getOutputStream());
 
 			response.flushBuffer();
-			LOG.info("Download finished...");
+			LOG.debug("Download finished...");
 
 		} catch (Exception e) {
 			e.printStackTrace();

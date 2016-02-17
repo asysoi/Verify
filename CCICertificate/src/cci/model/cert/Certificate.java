@@ -66,8 +66,16 @@ public class Certificate {
 	private ProductIterator iterator;
 	private int cursor;
 	private int currentlist;
+	private String dateload;
 	
 	
+	public String getDateload() {
+		return dateload;
+	}
+
+	public void setDateload(String dateload) {
+		this.dateload = dateload;
+	}
 
 	public int getCurrentlist() {
 		return currentlist;

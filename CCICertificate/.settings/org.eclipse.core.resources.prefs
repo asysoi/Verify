@@ -1,5 +1,6 @@
 eclipse.preferences.version=1
 encoding//WebContent/WEB-INF/jsp/404.jsp=UTF-8
+encoding//WebContent/WEB-INF/jsp/cert/report_include.jsp=UTF-8
 encoding//WebContent/WEB-INF/jsp/client/clients_include.jsp=UTF-8
 encoding//WebContent/WEB-INF/jsp/fragments/bodyHeader.jsp=UTF-8
 encoding//WebContent/WEB-INF/jsp/fragments/certs_include.jsp=UTF-8

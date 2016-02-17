@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,10 +15,12 @@ import cci.model.cert.Report;
 import cci.repository.SQLBuilder;
 import cci.repository.cert.CertificateDAO;
 import cci.util.cert.XMLService;
+import cci.web.controller.client.ClientController;
 
 @Component
 public class CertService {
-
+	private static final Logger LOG = Logger.getLogger(ClientController.class);
+	
 	@Autowired
 	private CertificateDAO certificateDAO;
 
@@ -63,7 +66,7 @@ public class CertService {
 		Locale.setDefault(new Locale("en", "en"));
 
 		for (Certificate cert : certificateDAO.findAll()) {
-			System.out.println("FindAll: " + cert.getCert_id());
+			LOG.debug("FindAll: " + cert.getCert_id());
 		}
 	}
 
@@ -73,7 +76,7 @@ public class CertService {
 		Certificate cert = null;
 		try {
 			cert = certificateDAO.findByID(cert_id);
-			System.out.println("FindByID: " + cert.getCert_id()
+			LOG.debug("FindByID: " + cert.getCert_id()
 					+ " Продуктов: " + cert.getProducts().size());
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -101,7 +104,7 @@ public class CertService {
 					ex.printStackTrace();
 				}
 			}
-			System.out.println("Duration: "
+			LOG.debug("Duration: "
 					+ (System.currentTimeMillis() - start));
 
 		} catch (Exception ex) {
@@ -116,7 +119,7 @@ public class CertService {
 		try {
 			Long start = System.currentTimeMillis();
 			ftpReader.load(certificateDAO);
-			System.out.println("Duration: "
+			LOG.debug("Duration: "
 					+ (System.currentTimeMillis() - start));
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -125,7 +128,7 @@ public class CertService {
 	}
 
 	public void printCertificate(Certificate cert) {
-		System.out.println(cert.getCert_id() + ": " + cert.getDatacert()
+		LOG.debug(cert.getCert_id() + ": " + cert.getDatacert()
 				+ " | " + cert.getNomercert() + "  |  " + cert.getNblanka());
 	}
 

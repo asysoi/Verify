@@ -52,7 +52,7 @@ public class CertController {
 
 	
 	// ---------------------------------------------------------------------------------------
-	//
+	//  
 	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "cert.do")
 	@ResponseBody
@@ -64,7 +64,7 @@ public class CertController {
 	}
 
 	// ---------------------------------------------------------------------------------------
-	//
+	// View certs table config 
 	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "certconfig.do", method = RequestMethod.GET)
 	public String openConfig(ModelMap model) {
@@ -106,7 +106,7 @@ public class CertController {
 			HttpServletResponse response, ModelMap model) {
 		try {
 			
-            LOG.info("Download started...");   
+            LOG.debug("Download started...");   
 			ViewManager vmanager = (ViewManager) model.get("vmanager");
 
 			Filter filter = vmanager.getFilter();
@@ -129,7 +129,7 @@ public class CertController {
 			List certs = certService.readCertificates(
 					vmanager.getOrderby(), vmanager.getOrder(), builder);
 			
-			LOG.info("Download. Certificates loaded from database..."); 
+			LOG.debug("Download. Certificates loaded from database..."); 
 			response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 			//response.setContentType("application/octet-stream");
 			response.setHeader("Content-Disposition",
@@ -139,7 +139,7 @@ public class CertController {
 					vmanager.getDownloadconfig().getFields(), "Лист Сертификатов").write(
 					response.getOutputStream());
 			response.flushBuffer();
-			LOG.info("Download finished...");
+			LOG.debug("Download finished...");
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -147,7 +147,7 @@ public class CertController {
 	}
 
 	// ---------------------------------------------------------------------------------------
-	//
+	//  Get List of Certificates
 	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "certs.do", method = RequestMethod.GET)
 	public String listcerts(
@@ -161,7 +161,7 @@ public class CertController {
 			ModelMap model) {
 
 		long start = System.currentTimeMillis();
-		LOG.info("=========================== GET CERT LIST =================================== >");
+		LOG.debug("=========================== GET CERT LIST =================================== >");
 
 		// ViewManager vmanager = (ViewManager)
 		// request.getSession().getAttribute("vmanager");
@@ -204,7 +204,7 @@ public class CertController {
 		// ACL needs
 		if (filter == null) {
 			filter = new CertFilter();
-			LOG.info
+			LOG.debug
 					("New filterCertificate created bacause of ACL");
 		}
 		
@@ -275,10 +275,10 @@ public class CertController {
 
 		if (fc == null) {
 			fc = new CertFilter();
-			LOG.info("New filterCertificate created in GET method");
+			LOG.debug("New filterCertificate created in GET method");
 			model.addAttribute("certfilter", fc);
 		} else {
-			LOG.info("Found FilterCertificate in GET : ");
+			LOG.debug("Found FilterCertificate in GET : ");
 		}
 
 		ViewCertFilter vf = new ViewCertFilter(
@@ -301,10 +301,10 @@ public class CertController {
 
 		if (fc == null) {
 			fc = new CertFilter();
-			LOG.info
+			LOG.debug
 					("New filterCertificate created in the POST method");
 		} else {
-			LOG.info("Found FilterCertificate in POST");
+			LOG.debug("Found FilterCertificate in POST");
 		}
 
 		fc.loadViewcertificate(viewfilter.getViewcertificate());
@@ -323,7 +323,7 @@ public class CertController {
 			ModelMap model) {
 		String relativeWebPath = "/resources";
 		String  absoluteDiskPath= request.getSession().getServletContext().getRealPath(relativeWebPath);
-		LOG.info("Absolute path: " + absoluteDiskPath);
+		LOG.debug("Absolute path: " + absoluteDiskPath);
 		
 		Certificate cert = certService.readCertificate(certid);
 		makepdffile(absoluteDiskPath, cert);
@@ -430,7 +430,7 @@ public class CertController {
 			BindingResult result, SessionStatus status, ModelMap model) {
 
 		List reports = null;
-		LOG.info("Report generation started...");
+		LOG.debug("Report generation started...");
 		ViewManager vmanager = (ViewManager) model.get("vmanager");
 
 		try {
@@ -451,7 +451,7 @@ public class CertController {
 
 			reports = certService.makeReports(reportconfig.getFields(),	builder, vmanager.getOnfilter());
 
-			LOG.info("Reporting finished...");
+			LOG.debug("Reporting finished...");
 
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -1,7 +1,5 @@
 package cci.web.controller;
 
-import java.util.Enumeration;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -10,7 +8,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.util.UrlPathHelper;
 
 public class LogInterceptor implements HandlerInterceptor {
 	private static final Logger LOG = Logger.getLogger(LogInterceptor.class);
@@ -24,11 +21,6 @@ public class LogInterceptor implements HandlerInterceptor {
 		request.setAttribute("startTime", startTime);
 		String action = request.getRequestURI().substring(request.getContextPath().length()+1);
 		LOG.info("Action: [" + action + "] by [" + aut.getName() + "]");
-		//String upath = new UrlPathHelper().getPathWithinApplication(request);
-		//String newPath = request.getServletPath();
-		//LOG.info("Request action: [" + upath + "] initiated by [" + aut.getName() + "]");
-		//LOG.info("Request action: [" + newPath + "] initiated by [" + aut.getName() + "]");
-		
 		return true;
 	}
 
@@ -44,6 +36,8 @@ public class LogInterceptor implements HandlerInterceptor {
 	public void afterCompletion(HttpServletRequest request,
 			HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
+		
+		// super.afterCompletion(request, response, handler, ex);
 	}
 
 }

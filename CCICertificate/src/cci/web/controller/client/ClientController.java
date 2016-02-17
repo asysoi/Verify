@@ -38,7 +38,7 @@ import cci.web.validator.ClientValidator;
 public class ClientController {
 
 	//public static Logger LOG = LogManager.getLogger(ClientController.class);
-	public static Logger LOG = Logger.getLogger(ClientController.class);
+	private static final Logger LOG = Logger.getLogger(ClientController.class);
 	private ClientValidator clientValidator;
 
 	@Autowired
@@ -142,10 +142,10 @@ public class ClientController {
 
 		if (fc == null) {
 			fc = new ClientFilter();
-			LOG.info("New filterClient created in GET method");
+			LOG.debug("New filterClient created in GET method");
 			model.addAttribute("clientfilter", fc);
 		} else {
-			LOG.info("Found FilterClient in GET : ");
+			LOG.debug("Found FilterClient in GET : ");
 		}
 
 		ViewClientFilter vf = new ViewClientFilter(
@@ -168,7 +168,7 @@ public class ClientController {
 			fc = new ClientFilter();
 			System.out.println("New filterClient created in the POST method");
 		} else {
-			LOG.info("Found FilterClient in POST");
+			LOG.debug("Found FilterClient in POST");
 		}
 
 		fc.loadViewclient(viewfilter.getViewclient());
@@ -248,7 +248,7 @@ public class ClientController {
 			HttpServletResponse response, ModelMap model) {
 		try {
 
-			LOG.info("Download started...");
+			LOG.debug("Download started...");
 			ViewManager vmanager = (ViewManager) model.get("cmanager");
 
 			Filter filter = vmanager.getFilter();
@@ -269,7 +269,7 @@ public class ClientController {
 			List clients = clientService.readClients(vmanager.getOrderby(),
 					vmanager.getOrder(), builder);
 
-			LOG.info("Download. Clients loaded from database...");
+			LOG.debug("Download. Clients loaded from database...");
 			response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 			response.setHeader("Content-Disposition",
 					"attachment; filename=companies.xlsx");
@@ -279,7 +279,7 @@ public class ClientController {
 					response.getOutputStream());
 
 			response.flushBuffer();
-			LOG.info("Download finished...");
+			LOG.debug("Download finished...");
 
 		} catch (Exception e) {
 			e.printStackTrace();

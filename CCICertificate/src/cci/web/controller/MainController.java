@@ -25,13 +25,18 @@ public class MainController {
 	
 	@RequestMapping(value = "/main.do", method = RequestMethod.GET)
 	public String mainpage(ModelMap model, Authentication aut) {
-        LOG.info("User " + aut.getName() + " logged" ); 
+        LOG.debug("User " + aut.getName() + " logged" ); 
+		return "welcome";
+	}
+
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String defaultpage(ModelMap model, Authentication aut) {
+        LOG.debug("User " + aut.getName() + " logged" ); 
 		return "welcome";
 	}
 
 	@RequestMapping(value = "/window.do", method = RequestMethod.GET)
 	public String dasboard(ModelMap model) {
-
 		return "window";
 	}
 
@@ -49,12 +54,11 @@ public class MainController {
 		return "login";
 	}
 
-	
 	@RequestMapping(value = "/login.do", method = RequestMethod.POST)
 	public String login(@ModelAttribute("user") User user,
 			BindingResult result, SessionStatus status, Authentication aut) {
 		
-		LOG.info("Login: User " + aut.getName() + " logged" ); 
+		LOG.debug("Login: User " + aut.getName() + " logged" ); 
 		if (user.getUsername().equals(user.getPassword())) {
 			return "welcome";
 		} else {
@@ -70,6 +74,4 @@ public class MainController {
 
 		return "<html>Hello <p> Name: " + name + "</p></html>";
 	}
-	
-	
 }

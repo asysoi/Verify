@@ -42,5 +42,12 @@ public interface CertificateDAO {
 			SQLBuilder builder);
 
 	public List<Report> getReport(String[] fields, SQLBuilder builder, Boolean onfilter);
+
+	public List<Certificate> findViewNextReportPage(int page, int pagesize,
+			String orderby, String order, String datefrom, String dateto,
+			String otd_name);
+
+	public int getViewPageReportCount(String datefrom, String dateto,
+			String otd_name);
 	
 }

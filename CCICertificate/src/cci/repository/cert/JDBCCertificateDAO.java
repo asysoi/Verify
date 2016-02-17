@@ -9,6 +9,7 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -28,11 +29,13 @@ import cci.model.cert.Product;
 import cci.model.cert.Report;
 import cci.repository.SQLBuilder;
 import cci.service.FilterCondition;
+import cci.web.controller.client.ClientController;
 import cci.web.controller.purchase.ViewPurchase;
 
 @Repository
 public class JDBCCertificateDAO implements CertificateDAO {
-
+	
+	private static final Logger LOG = Logger.getLogger(ClientController.class);
 	private NamedParameterJdbcTemplate template;
 
 	@Autowired
@@ -51,8 +54,8 @@ public class JDBCCertificateDAO implements CertificateDAO {
 
 		int count = this.template.getJdbcOperations().queryForInt(sql);
 
-		System.out.println(sql);
-		System.out.println("Query time: "
+		LOG.debug(sql);
+		LOG.debug("Query time: "
 				+ (System.currentTimeMillis() - start));
 
 		return count;
@@ -167,8 +170,8 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				+ " cert " + " WHERE cert.rw > " + ((page - 1) * pagesize)
 				+ " AND cert.rw <= " + (page * pagesize);
 
-		System.out.println("Next page : " + sql);
-		System.out.println("Query time: "
+		LOG.debug("Next page : " + sql);
+		LOG.debug("Query time: "
 				+ (System.currentTimeMillis() - start));
 		return this.template.getJdbcOperations().query(sql,
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));
@@ -299,7 +302,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	public List<String> getDepartmentsList() {
 		String sql = "SELECT otd_name from C_OTD";
 
-		System.out.println("Got department list");
+		LOG.debug("Got department list");
 		return (List<String>) template.getJdbcOperations().queryForList(sql,
 				String.class);
 	}
@@ -310,7 +313,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	public Map<String,String> getACL() {
 		String sql = "SELECT otd_name, acl_role from C_OTD";
 
-		System.out.println("Got ACL map");
+		LOG.debug("Got ACL map");
 		
 		return template.query(sql, new ResultSetExtractor<Map<String, String>>(){
 			
@@ -338,7 +341,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		for (Country cntry:list) {
 			countries.put(cntry.getCode(), cntry.getName());
 		}
-		System.out.println("Got country list");		
+		LOG.debug("Got country list");		
 		return countries;
 	}
 
@@ -348,7 +351,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	public List<String> getFormsList() {
 		String sql = "SELECT forms from c_cert group by forms having forms is not null ORDER BY forms ";
 
-		System.out.println("Got forms list");
+		LOG.debug("Got forms list");
 		return (List<String>) template.getJdbcOperations().queryForList(sql,
 				String.class);
 	}
@@ -362,7 +365,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		String sql = " SELECT * FROM CERT_VIEW_TOFILE " 
 				+ builder.getWhereClause() + " ORDER BY " +  orderby + " " + order;
 
-		System.out.println("Get certificates: " + sql);
+		LOG.debug("Get certificates: " + sql);
 		return this.template.getJdbcOperations().query(sql,
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));
 	}
@@ -376,8 +379,85 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		String sql = "SELECT " + field + " as field, COUNT(*) as value FROM (SELECT * FROM CERT_VIEW " +  
 					 (onfilter ? builder.getWhereClause() : "") + ") group by " + field + " ORDER BY value DESC" ;		
 
-		System.out.println("Make report: " + sql);
+		LOG.debug("Make report: " + sql);
 		return this.template.getJdbcOperations().query(sql,
 				new BeanPropertyRowMapper<Report>(Report.class));
+	}
+
+	// ---------------------------------------------------------------
+    // Get Certificates rEPORTA 
+	// ---------------------------------------------------------------
+	public List<Certificate> findViewNextReportPage(int page, int pagesize,
+			String orderby, String order, String datefrom, String dateto,
+			String otd_name) {
+		
+		long start = System.currentTimeMillis();
+		String sql = " SELECT cert.* "
+				+ " FROM (SELECT t.*, ROW_NUMBER() OVER " + " (ORDER BY t."
+				+ orderby + " " + order + ", t.CERT_ID " + order + ") rw "
+				+ " FROM CERT_REPORT t " + getWhereReport(datefrom, dateto,
+						otd_name) + " )"
+				+ " cert " + " WHERE cert.rw > " + ((page - 1) * pagesize)
+				+ " AND cert.rw <= " + (page * pagesize);
+
+		LOG.info("Next page : " + sql);
+		LOG.info("Query time: "
+				+ (System.currentTimeMillis() - start));
+		return this.template.getJdbcOperations().query(sql,
+				new BeanPropertyRowMapper<Certificate>(Certificate.class));
+
+	}
+
+	// ---------------------------------------------------------------
+    // Get Count Certificates  
+	// ---------------------------------------------------------------
+	public int getViewPageReportCount(String datefrom, String dateto,
+			String otd_name) {
+		long start = System.currentTimeMillis();
+
+		String sql = "select * from CERT_REPORT ";
+		
+		sql += getWhereReport(datefrom, dateto,
+				otd_name);
+		
+		LOG.info(sql);
+		int count = this.template.getJdbcOperations().queryForInt(sql);
+
+		return count;
+	}
+
+
+	// ---------------------------------------------------------------
+    // Get Where clause  
+	// ---------------------------------------------------------------
+	private String getWhereReport(String datefrom, String dateto,
+			String otd_name) {
+        String where = "";
+		
+		if ((datefrom != null) && (! datefrom.trim().isEmpty())) {
+			where = "dateload >= " + "TO_DATE('" + datefrom + "', 'DD.MM.YY')";
+		}
+		
+		if ((dateto != null) && (! dateto.trim().isEmpty())) {
+			if (where.trim().isEmpty()) { 
+				where = "dateload <= " + "TO_DATE('" + dateto + "', 'DD.MM.YY')";
+			} else {
+				where = where + " AND dateload <= " + "TO_DATE('" + dateto + "', 'DD.MM.YY')";
+			}
+		}
+		
+		if ((otd_name != null) && (! otd_name.trim().isEmpty())) {
+			if (where.trim().isEmpty()) { 
+				where = "OTD_NAME='" + otd_name + "'";
+			} else {
+				where = where + " AND OTD_NAME='" + otd_name + "'";
+			}
+		}
+		
+		if (! where.trim().isEmpty()) {
+			   where = " WHERE " + where;	
+		}
+			
+		return where;
 	}
 }

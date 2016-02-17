@@ -66,6 +66,7 @@
 					data-toggle="dropdown">Сертификаты<b class="caret"></b></a>
 					<ul class="dropdown-menu">
 						<li><a href="certs.do">Сертификаты происхождения</a></li>
+						<li><a href="reportcerts.do">Отчет о загрузке</a></li>
 						<li><a href="#">Акты экспертиз</a></li>
 						<li><a href="certcheck.do">Верификация</a></li>
 					</ul>
