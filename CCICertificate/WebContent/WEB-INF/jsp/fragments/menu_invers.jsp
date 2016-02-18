@@ -12,7 +12,7 @@
             <span class="icon-bar"></span>
           </button>
           <a class="navbar-brand" href="main.do" style="font-size: 200%">
-          <!-- img src="resources/images/main/title.png" alt="Интранет портал БелТПП"/-->
+          <img src="resources/images/logo_40.png" width="32" height="32"/>
           Интранет портал БелТПП
           </a>
         </div>
@@ -21,7 +21,7 @@
 			<ul class="nav navbar-nav navbar-right">
 			
 				<form class="navbar-form navbar-right">
-            		<input type="text" class="form-control" placeholder="Search...">
+            		<input type="text" class="form-control" placeholder="Поиск..." style="height: 24px"/>
           		</form>
 
 			    <!-- 

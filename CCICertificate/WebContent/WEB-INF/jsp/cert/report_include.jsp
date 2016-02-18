@@ -7,11 +7,23 @@
 <link href="${CCICss}" rel="stylesheet" />
 
 <script>
+
+    $(function() {
+	  $(".datepicker").datepicker({
+		changeMonth : true,
+		changeYear : true
+	  });
+    });
+
 	function clear() {
 		$('input').val('');
 		$('select').val('');
 	}
-
+	
+	function clearelement(element) {
+		element.val('');
+	}
+	
 	function reset() {
 		$('#ffilter')[0].reset();
 	}
@@ -20,7 +32,7 @@
 		url = $("#ffilter").attr("action");
 		$.post(url, $("#ffilter").serialize());
 		$( document ).ajaxComplete(function(event,request, settings ) {
-			  goToList('certs.do?page=1&pagesize=${rmanager.pagesize}&orderby=${rmanager.orderby}&order=${rmanager.order}');
+			  goToList('reportcerts.do?page=1&pagesize=${rmanager.pagesize}&orderby=${rmanager.orderby}&order=${rmanager.order}');
 			  $("#pview").dialog("close");
 		});
 	}
@@ -37,8 +49,7 @@
 		$("#pdfview").dialog({
 			autoOpen : false
 		});
-    
-		$(".datepicker").datepicker("option", "dateFormat",
+    	$(".datepicker").datepicker("option", "dateFormat",
 		'dd.mm.yy');
 		$("#datefrom").datepicker("setDate",
 			"${datefrom}");
@@ -47,18 +58,15 @@
 	});
 	
 	
-	
-	
-	
-	
 
 	function goToList(link) {
 		var url = link;
 		spin();
-		if (document.getElementById("filter").checked) {
-			url = url + "&filter="
-			        + document.getElementById("filter").checked;
-   	    }
+		url = url + "&datefrom="
+			        + document.getElementById("datefrom").value
+			        + "&dateto="
+			        + document.getElementById("dateto").value;
+   	    
   		document.location.href = url;
 
 	}
@@ -86,7 +94,6 @@
 	        var spinner = new Spinner(opts).spin(target);
 
 	}
-
 	
 	
 	function viewCertificate(certid) {
@@ -134,7 +141,7 @@
     // Download list to Excel файл 
     // ---------------------------------------------------------------------------------
 	function downloadCertificates() {
-		link = "certconfig.do";
+		link = "reportconfig.do";
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Экспорт списка сертификатов');
 		$("#pview").dialog("option", "width", 850);
@@ -206,13 +213,11 @@
 		$("#pview").dialog("open");
 	}
 
-
-
 </script>
 
 
 <div id="reportwindow" class="main">
-	<h3>Отчет о загрузке сертификатов</h3>
+	<h3>Список загрузки сертификатов</h3>
 	<table style="width: 100%">
 		<tr>
 
@@ -221,27 +226,22 @@
 						class="datepicker" size="8" placeholder="с" />&nbsp;-&nbsp; 
 				<input	id="dateto" class="datepicker"
 						size="8" placeholder="по" /> 
+					<a href="javascript: goToList('reportcerts.do?page=1&pagesize=${rmanager.pagesize}&orderby=${rmanager.orderby}&order=${rmanager.order}');"> 
+					<img src="resources/images/refresh_16.png" alt="удл."/>
 					<a href="javascript:clearelement($('.datepicker'));"> 
 					<img src="resources/images/delete-16.png" alt="удл."/>
+					
 				</a>    
                 
             </td>
 
 			<td style="width: 40%; text-align: right">
-			       <a href="javascript:reportWindow();"><img src="resources/images/report_24.png" alt="Отчет"/></a>
-				   &nbsp;
-				   <a href="javascript:downloadCertificates();"><img src="resources/images/exp_excel.png"alt="Загрузить"/></a>
+			       <a href="javascript:downloadCertificates();"><img src="resources/images/exp_excel.png"alt="Загрузить"/></a>
 				   &nbsp;			        
 			       Строк в списке: <c:forEach items="${sizes}" var="item">
 	           	   &nbsp;	
 	               <a
-						href="javascript: goToList('certs.do?page=1&pagesize=${item}&orderby=
-
-${rmanager.orderby}
-
-&order=
-
-${rmanager.order}');">${item}</a>
+						href="javascript: goToList('reportcerts.do?page=1&pagesize=${item}&orderby=${rmanager.orderby}&order=${rmanager.order}');">${item}</a>
 				</c:forEach>
 			</td>
 
@@ -262,31 +262,12 @@ ${rmanager.order}');">${item}</a>
 
 		<c:forEach items="${certs}" var="cert">
 			<tr>
+			    <td>${cert.dateload}</td>
 				<td><a href="javascript:openCertificate('${cert.cert_id}')">${cert.nomercert}</a></td>
 				<td>${cert.otd_name}</td>
 				<td>${cert.expert}</td>
 				<td>${cert.nblanka}</td>
-				<td>${cert.issuedate}</td>
-                <td>${cert.dateload}</td>
-				<!-- 
-	        <td>
-	        <c:if test="${cert.child_id != null}">
-	            <a href="certgo.do?certid=${cert.child_id}">child</a>
-	        </c:if>    
-	        </td>  
-	        -->
-
-				<td>
-					<c:choose>
-    					<c:when test="${cert.parent_id > 0}"> 
-						    <a href="javascript:openCertificate('${cert.parent_id}')">${cert.parentnumber}</a>
-    					</c:when>
-					    <c:when test="${cert.parentnumber != null}">
-							${cert.parentnumber}
-	   					</c:when>
-					</c:choose>
-				</td>
-					
+				<td>${cert.datacert}</td>
 			</tr>
 		</c:forEach>
 	</table>
@@ -301,13 +282,7 @@ ${rmanager.order}');">${item}</a>
 					items="${pages}" var="item">
 	           	   &nbsp;	
 	               <a
-						href="javascript: goToList('certs.do?page=${item}&pagesize=${rmanager.pagesize}
-
-&orderby=
-
-${rmanager.orderby}
-
-&order=${rmanager.order}');"
+						href="javascript: goToList('reportcerts.do?page=${item}&pagesize=${rmanager.pagesize}&orderby=${rmanager.orderby}&order=${rmanager.order}');"
 						<c:if test="${item==rmanager.page}">style="border-style: solid; border-width: 
 
 1px;"</c:if>>

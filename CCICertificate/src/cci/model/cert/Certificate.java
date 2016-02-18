@@ -70,7 +70,12 @@ public class Certificate {
 	
 	
 	public String getDateload() {
-		return dateload;
+		if (dateload != null) {
+		   int i = dateload.indexOf("00:00:00.0");
+		   return i > 0 ? dateload.substring(0, i) : dateload;
+		} else {
+		   return null;	
+		}
 	}
 
 	public void setDateload(String dateload) {

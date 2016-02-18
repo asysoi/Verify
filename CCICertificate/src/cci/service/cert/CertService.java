@@ -20,7 +20,7 @@ import cci.web.controller.client.ClientController;
 @Component
 public class CertService {
 	private static final Logger LOG = Logger.getLogger(ClientController.class);
-	
+
 	@Autowired
 	private CertificateDAO certificateDAO;
 
@@ -76,8 +76,8 @@ public class CertService {
 		Certificate cert = null;
 		try {
 			cert = certificateDAO.findByID(cert_id);
-			LOG.debug("FindByID: " + cert.getCert_id()
-					+ " Продуктов: " + cert.getProducts().size());
+			LOG.debug("FindByID: " + cert.getCert_id() + " Продуктов: "
+					+ cert.getProducts().size());
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -104,8 +104,7 @@ public class CertService {
 					ex.printStackTrace();
 				}
 			}
-			LOG.debug("Duration: "
-					+ (System.currentTimeMillis() - start));
+			LOG.debug("Duration: " + (System.currentTimeMillis() - start));
 
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -119,8 +118,7 @@ public class CertService {
 		try {
 			Long start = System.currentTimeMillis();
 			ftpReader.load(certificateDAO);
-			LOG.debug("Duration: "
-					+ (System.currentTimeMillis() - start));
+			LOG.debug("Duration: " + (System.currentTimeMillis() - start));
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -128,8 +126,8 @@ public class CertService {
 	}
 
 	public void printCertificate(Certificate cert) {
-		LOG.debug(cert.getCert_id() + ": " + cert.getDatacert()
-				+ " | " + cert.getNomercert() + "  |  " + cert.getNblanka());
+		LOG.debug(cert.getCert_id() + ": " + cert.getDatacert() + " | "
+				+ cert.getNomercert() + "  |  " + cert.getNblanka());
 	}
 
 	public Certificate checkCertificate(String certnum, String certblank,

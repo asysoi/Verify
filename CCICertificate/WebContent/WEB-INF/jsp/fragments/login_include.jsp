@@ -7,9 +7,11 @@
 
 
 <div class="main">
-	<h1 class="page-header">Вход в систему</h1>
+	
 
 	<div class="row placeholders">
+	
+    <h2 class="page-header">Вход в систему</h2>
     
 	<div class="container">
 			<form class="form-signin" action="/CCICertificate/j_spring_security_check" method="POST">

@@ -388,20 +388,18 @@ public class JDBCCertificateDAO implements CertificateDAO {
     // Get Certificates rEPORTA 
 	// ---------------------------------------------------------------
 	public List<Certificate> findViewNextReportPage(int page, int pagesize,
-			String orderby, String order, String datefrom, String dateto,
-			String otd_name) {
+			String orderby, String order, SQLBuilder builder) {
 		
 		long start = System.currentTimeMillis();
 		String sql = " SELECT cert.* "
 				+ " FROM (SELECT t.*, ROW_NUMBER() OVER " + " (ORDER BY t."
 				+ orderby + " " + order + ", t.CERT_ID " + order + ") rw "
-				+ " FROM CERT_REPORT t " + getWhereReport(datefrom, dateto,
-						otd_name) + " )"
+				+ " FROM CERT_REPORT t " +   builder.getWhereClause() + " )"
 				+ " cert " + " WHERE cert.rw > " + ((page - 1) * pagesize)
 				+ " AND cert.rw <= " + (page * pagesize);
 
-		LOG.info("Next page : " + sql);
-		LOG.info("Query time: "
+		LOG.debug("Next page : " + sql);
+		LOG.debug("Query time: "
 				+ (System.currentTimeMillis() - start));
 		return this.template.getJdbcOperations().query(sql,
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));
@@ -411,53 +409,15 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	// ---------------------------------------------------------------
     // Get Count Certificates  
 	// ---------------------------------------------------------------
-	public int getViewPageReportCount(String datefrom, String dateto,
-			String otd_name) {
+	public int getViewPageReportCount(SQLBuilder builder) {
 		long start = System.currentTimeMillis();
 
-		String sql = "select * from CERT_REPORT ";
+		String sql = "select count(*) from CERT_REPORT " + builder.getWhereClause();
 		
-		sql += getWhereReport(datefrom, dateto,
-				otd_name);
-		
-		LOG.info(sql);
+		LOG.debug(sql);
 		int count = this.template.getJdbcOperations().queryForInt(sql);
 
 		return count;
 	}
 
-
-	// ---------------------------------------------------------------
-    // Get Where clause  
-	// ---------------------------------------------------------------
-	private String getWhereReport(String datefrom, String dateto,
-			String otd_name) {
-        String where = "";
-		
-		if ((datefrom != null) && (! datefrom.trim().isEmpty())) {
-			where = "dateload >= " + "TO_DATE('" + datefrom + "', 'DD.MM.YY')";
-		}
-		
-		if ((dateto != null) && (! dateto.trim().isEmpty())) {
-			if (where.trim().isEmpty()) { 
-				where = "dateload <= " + "TO_DATE('" + dateto + "', 'DD.MM.YY')";
-			} else {
-				where = where + " AND dateload <= " + "TO_DATE('" + dateto + "', 'DD.MM.YY')";
-			}
-		}
-		
-		if ((otd_name != null) && (! otd_name.trim().isEmpty())) {
-			if (where.trim().isEmpty()) { 
-				where = "OTD_NAME='" + otd_name + "'";
-			} else {
-				where = where + " AND OTD_NAME='" + otd_name + "'";
-			}
-		}
-		
-		if (! where.trim().isEmpty()) {
-			   where = " WHERE " + where;	
-		}
-			
-		return where;
-	}
 }

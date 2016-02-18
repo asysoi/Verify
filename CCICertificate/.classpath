@@ -41,7 +41,6 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="D:/Java/jars/apache-log4j-2.5-bin/log4j-api-2.5.jar"/>
-	<classpathentry kind="lib" path="D:/Java/jars/apache-log4j-2.5-bin/log4j-core-2.5.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/log4j-1.2.17.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

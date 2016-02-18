@@ -67,12 +67,13 @@
 </script>
 
 <div class="main">
-	<h3 class="page-header">Проверка наличия сертификата</h3>
+	
 
 	<div id="msg" class="ver_message"></div>
 
-	<form:form id="form" method="POST" commandName="cert"
-		class="form-signin" role="form">
+        <h3 class="page-header" style="text-align: center;">Проверка наличия сертификата</h3>
+
+	<form:form id="form" method="POST" commandName="cert" role="form">
 		<table class="verification">
 			<tr>
 				<td style="text-align: right;">Номер сертификата&nbsp;</td>
@@ -91,7 +92,7 @@
 				<td>
 					<div align="left">
 						<!-- button class="" type="submit">Отправить запрос</button -->
-						<a href="javascript:submit()">Отправить запрос</a>
+						<a href="javascript:submit()">Проверить</a>
 					</div>
 				</td>
 			</tr>

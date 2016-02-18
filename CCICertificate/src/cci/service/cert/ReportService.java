@@ -4,11 +4,15 @@ import java.util.List;
 import java.util.Locale;
 
 
+
+
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import cci.model.cert.Certificate;
+import cci.repository.SQLBuilder;
 import cci.repository.cert.CertificateDAO;
 
 @Component
@@ -22,14 +26,14 @@ public class ReportService {
 	// Get list of Certificates 
 	// --------------------------
 	public List<Certificate> readCertificatesPage(int page, int pagesize,
-			String orderby, String order, String datefrom, String dateto, String otd_name) {
+			String orderby, String order, SQLBuilder builder) {
 		Locale.setDefault(new Locale("en", "en"));
 
 		List<Certificate> certs = null;
-		LOG.info("List");
+		LOG.debug("List");
 		try {
 			certs = certificateDAO.findViewNextReportPage(page, pagesize, orderby,
-					order, datefrom, dateto, otd_name);
+					order, builder);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -40,15 +44,34 @@ public class ReportService {
 	// --------------------------
 	//  Get count of Certificates
 	// --------------------------
-	public int getViewPageCount(String datefrom, String dateto, String otd_name) {
+	public int getViewPageCount(SQLBuilder builder) {
 		Locale.setDefault(new Locale("en", "en"));
 		int counter = 0;
 		try {
-			LOG.info("Counter");
-			counter = certificateDAO.getViewPageReportCount(datefrom, dateto, otd_name);
+			LOG.debug("Counter");
+			counter = certificateDAO.getViewPageReportCount(builder);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		return counter;
+	}
+
+	// --------------------------
+	//  Get Certificates for download
+	// --------------------------
+	public List readCertificates(String orderby, String order,
+			SQLBuilder builder) {
+		
+		Locale.setDefault(new Locale("en", "en"));
+
+		List<Certificate> certs = null;
+
+		try {
+			certs = certificateDAO.getCertificates(orderby, order, builder);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		return certs;
 	}
 }
