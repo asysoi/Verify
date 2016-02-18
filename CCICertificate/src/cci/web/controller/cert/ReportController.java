@@ -162,7 +162,7 @@ public class ReportController {
 			onfilter = false;
 
 		rmanager.setPage(page == null ? 1 : page);
-		rmanager.setPagesize(pagesize == null ? 10 : pagesize);
+		rmanager.setPagesize(pagesize == null ? 15 : pagesize);
 		rmanager.setOrderby(orderby);
 		rmanager.setOrder(order);
 		rmanager.setUrl("reportcerts.do");
@@ -230,7 +230,7 @@ public class ReportController {
 				"Эксперт", "Номер бланка", "Дата серт." });
 		rmanager.setOrdnames(new String[] {"dateload", "nomercert", "otd_name", "expert",
 				"nblanka", "issuedate" });
-		rmanager.setWidths(new int[] { 10, 12, 20, 40, 8, 12});
+		rmanager.setWidths(new int[] { 18, 12, 22, 26, 10, 14});
 		model.addAttribute("rmanager", rmanager);
 
 		return rmanager;

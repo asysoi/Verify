@@ -76,16 +76,15 @@
 	<form:form id="form" method="POST" commandName="cert" role="form">
 		<table class="verification">
 			<tr>
-				<td style="text-align: right;">Номер сертификата&nbsp;</td>
-				<td><form:input path="nomercert" class="" placeholder="" /></td>
+				<td style="text-align: right; height: 24px;">Номер сертификата&nbsp;</td>
+				<td><form:input path="nomercert" class="" placeholder="" style="height: 24px;"/></td>
 			</tr>
 			<tr>
-				<td style="text-align: right;">Номер бланка&nbsp;</td>
-				<td><form:input path="nblanka" class="" placeholder="" /></td>
+				<td style="text-align: right; height: 24px;">Номер бланка&nbsp;</td>
+				<td><form:input path="nblanka" class="" placeholder="" style="height: 24px;"/></td>
 			<tr>
-				<td style="text-align: right;">Дата выпуска&nbsp;</td>
-				<td><form:input path="datacert" class="" placeholder=""
-						id="datepicker" /></td>
+				<td style="text-align: right; height: 24px;">Дата выпуска&nbsp;</td>
+				<td><form:input path="datacert" class="" placeholder="" id="datepicker" style="height: 24px;"/></td>
 			</tr>
 			<tr>
 				<td />
