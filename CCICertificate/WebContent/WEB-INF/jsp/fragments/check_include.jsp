@@ -75,14 +75,14 @@
 
 	<form:form id="form" method="POST" commandName="cert" role="form">
 		<table class="verification">
-			<tr>
+			<tr style="height: 40px;">
 				<td style="text-align: right; height: 24px;">Номер сертификата&nbsp;</td>
 				<td><form:input path="nomercert" class="" placeholder="" style="height: 24px;"/></td>
 			</tr>
-			<tr>
+			<tr style="height: 40px;">
 				<td style="text-align: right; height: 24px;">Номер бланка&nbsp;</td>
 				<td><form:input path="nblanka" class="" placeholder="" style="height: 24px;"/></td>
-			<tr>
+			<tr style="height: 40px;">
 				<td style="text-align: right; height: 24px;">Дата выпуска&nbsp;</td>
 				<td><form:input path="datacert" class="" placeholder="" id="datepicker" style="height: 24px;"/></td>
 			</tr>

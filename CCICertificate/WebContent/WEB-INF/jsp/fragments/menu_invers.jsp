@@ -61,7 +61,7 @@
 					</ul>
 				</li>
 
-				<security:authorize ifAnyGranted="ROLE_EXPERT,ROLE_MINSK,ROLE_GOMEL,ROLE_VITEBSK">				
+				<security:authorize ifAnyGranted="ROLE_EXPERT,ROLE_MINSK,ROLE_GOMEL,ROLE_VITEBSK,ROLE_BREST,ROLE_GRODNO,ROLE_MOGILEV">				
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">Сертификаты<b class="caret"></b></a>
 					<ul class="dropdown-menu">

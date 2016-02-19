@@ -58,7 +58,7 @@
     <security:intercept-url pattern="/resources/**" access="permitAll"/> 
     <security:intercept-url pattern="/login*.**" access="permitAll" requires-channel="https"/> 
     <security:intercept-url pattern="/client*.do" access="hasRole('ROLE_CLIENT')"/>
-    <security:intercept-url pattern="/cert*.do" access="hasAnyRole('ROLE_EXPERT','ROLE_MINSK', 'ROLE_GOMEL', 'ROLE_VITEBSK')"/>
+    <security:intercept-url pattern="/cert*.do" access="hasAnyRole('ROLE_EXPERT','ROLE_MINSK', 'ROLE_GOMEL', 'ROLE_VITEBSK', 'ROLE_GRODNO', 'ROLE_MOGILEV', 'ROLE_BREST')"/>
     <security:intercept-url pattern="/pch*.do" access="hasRole('ROLE_ACCOUNT')"/>
     <security:intercept-url pattern="/**" access="isFullyAuthenticated()" requires-channel="https"/>
     <security:form-login login-page="/login.do" default-target-url="/main.do"/>
@@ -77,7 +77,28 @@
         <security:user name="gomel" password="gomel" authorities="ROLE_GOMEL"/>
         <security:user name="minsk" password="minsk" authorities="ROLE_MINSK"/>
         <security:user name="vitebsk" password="vitebsk" authorities="ROLE_VITEBSK"/>
-      </security:user-service>
+        <security:user name="brest" password="brest" authorities="ROLE_BREST"/>
+        <security:user name="grodno" password="grodno" authorities="ROLE_GRODNO"/>
+        <security:user name="mogilev" password="mogilev" authorities="ROLE_MOGILEV"/>
+        <security:user name="fil" password="if5750" authorities="ROLE_VITEBSK"/>        
+        <security:user name="butkevich" password="ub1256" authorities="ROLE_VITEBSK"/>
+        <security:user name="halansky" password="ah4284" authorities="ROLE_VITEBSK"/>
+        <security:user name="nadilu" password="ni7755" authorities="ROLE_MOGILEV"/>
+        <security:user name="hlimankov" password="mh3946" authorities="ROLE_MOGILEV"/>
+        <security:user name="stopchik" password="ns8367" authorities="ROLE_MOGILEV"/>
+        <security:user name="budko" password="ub2845" authorities="ROLE_GRODNO"/>
+        <security:user name="koritco" password="ak9935" authorities="ROLE_GRODNO"/>
+        <security:user name="salei" password="ns1907" authorities="ROLE_GRODNO"/>
+        <security:user name="mishuk" password="um2145" authorities="ROLE_MINSK"/>
+        <security:user name="vojtovich" password="av8329" authorities="ROLE_MINSK"/>
+        <security:user name="brest_gen" password="vl2413" authorities="ROLE_BREST"/>
+        <security:user name="brest_zam" password="db7821" authorities="ROLE_BREST"/>
+        <security:user name="palenova" password="np3734" authorities="ROLE_BREST"/>
+        <security:user name="manzhos" password="om2904" authorities="ROLE_BREST"/>
+        <security:user name="drozdova" password="nd3645" authorities="ROLE_GOMEL"/>
+        <security:user name="studenkov" password="as8937" authorities="ROLE_GOMEL"/>
+        <security:user name="tachiliva" password="tt4834" authorities="ROLE_EXPERT"/>
+     </security:user-service>
     </security:authentication-provider>
  </security:authentication-manager>
     
