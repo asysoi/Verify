@@ -22,7 +22,7 @@ public interface CertificateDAO {
 		
 	public List<Certificate> findByCertificate(Certificate cert);
 	
-	public List<Certificate> findViewNextPage(int page, int pagesize, String orderby, String order, SQLBuilder builder);
+	public List<Certificate> findViewNextPage(String[] dbfields, int page, int pagesize, String orderby, String order, SQLBuilder builder);
 
 	public int save(Certificate cert);
 
@@ -38,14 +38,17 @@ public interface CertificateDAO {
 
 	public List<String> getFormsList();
 
-	public List<Certificate> getCertificates(String orderby, String order,
+	public List<Certificate> getCertificates(String[] dbfields, String orderby, String order,
 			SQLBuilder builder);
 
 	public List<Report> getReport(String[] fields, SQLBuilder builder, Boolean onfilter);
 
-	public List<Certificate> findViewNextReportPage(int page, int pagesize,
+	public List<Certificate> findViewNextReportPage(String[] dbfields, int page, int pagesize,
 			String orderby, String order, SQLBuilder builder);
 
 	public int getViewPageReportCount(SQLBuilder builder);
+
+	public List<Certificate> getReportCertificates(String[] dbfields, String orderby,
+			String order, SQLBuilder builder);
 	
 }

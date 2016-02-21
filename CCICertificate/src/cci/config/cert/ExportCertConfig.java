@@ -5,6 +5,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.ArrayUtils;
+
 public class ExportCertConfig {
 	
 	private String[] headernames = new String[] { "Форма сертификата", "УНП",
@@ -19,7 +21,7 @@ public class ExportCertConfig {
 			"Адрес экспортера", "Импортер",
 			"Адрес импортера", "Флаг СЭЗ", "СЭЗ", "Флаг резидента СЭЗ", "Страна происхождения",
 			"Отделение БелТПП", "Номер замененного сертификата",
-			"Статус замененного сертификата", "Свод товарных позиций" };
+			"Статус замененного сертификата", "Свод товарных позиций"};
 
 	private String[] fieldnames = new String[] { "FORMS", "UNN", "KONTRP",
 			"KONTRS", "ADRESS", "POLUCHAT", "ADRESSPOL", "DATACERT",
@@ -27,7 +29,7 @@ public class ExportCertConfig {
 			"MARSHRUT", "OTMETKA", "STRANAV", "STRANAPR", "STATUS",
 			"KOLDOPLIST", "UNNEXP", "EXPP", "EXPS", "EXPADRESS",
 			"IMPORTER", "ADRESSIMP", "FLSEZ", "SEZ", "FLSEZREZ",
-			"STRANAP", "OTD_NAME", "PARENTNUMBER", "PARENTSTATUS", "TOVAR" };
+			"STRANAP", "OTD_NAME", "PARENTNUMBER", "PARENTSTATUS", "TOVAR"};
 	
 	private Map<String, String> headermap = new LinkedHashMap<String, String>();
 	private String[] headers = new String[]{};
@@ -94,5 +96,34 @@ public class ExportCertConfig {
 		}
 		
 		this.setHeaders((String[]) list.toArray(new String[list.size()]));
+	}
+
+	public String[] addField(String field) {
+	      if (! ArrayUtils.contains(fields, field)) {
+	    	  fields = (String[]) ArrayUtils.add(fields, field);
+	      }
+	      return fields;
+	}
+
+	public String[] addHeader(String header) {
+	      if (! ArrayUtils.contains(headers, header)) {
+	    	  headers = (String[]) ArrayUtils.add(headers, header);
+	      }
+	      return headers;
+	}
+
+	public String[] removeField(String field) {
+	      if (ArrayUtils.contains(fields, field)) {
+	    	  fields = (String[]) ArrayUtils.removeElement(fields, field);
+	      }
+	      return fields;
+		
+	}
+
+	public String[] removeHeader(String header) {
+	      if (ArrayUtils.contains(headers, header)) {
+	    	  headers = (String[]) ArrayUtils.removeElement(headers, header);
+	      }
+	      return headers;
 	}
 }

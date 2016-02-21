@@ -19,7 +19,7 @@ import cci.web.controller.client.ClientController;
 
 @Component
 public class CertService {
-	private static final Logger LOG = Logger.getLogger(ClientController.class);
+	private static final Logger LOG = Logger.getLogger(CertService.class);
 
 	@Autowired
 	private CertificateDAO certificateDAO;
@@ -34,6 +34,9 @@ public class CertService {
 	private Map<String, String> countries = null;
 	private Map<String, String> acl = null;
 
+	// ------------------------------------------------------------------------------
+	//
+	// ------------------------------------------------------------------------------
 	public Map<String, String> getACL() {
 		if (acl == null) {
 			Locale.setDefault(new Locale("en", "en"));
@@ -46,14 +49,17 @@ public class CertService {
 		return acl;
 	}
 
-	public List<Certificate> readCertificatesPage(int page, int pagesize,
+	// ------------------------------------------------------------------------------
+	//
+	// ------------------------------------------------------------------------------
+	public List<Certificate> readCertificatesPage(String[] fields, int page, int pagesize,
 			String orderby, String order, SQLBuilder builder) {
 		Locale.setDefault(new Locale("en", "en"));
 
 		List<Certificate> certs = null;
 
 		try {
-			certs = certificateDAO.findViewNextPage(page, pagesize, orderby,
+			certs = certificateDAO.findViewNextPage(fields, page, pagesize, orderby,
 					order, builder);
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -62,6 +68,9 @@ public class CertService {
 		return certs;
 	}
 
+	// ------------------------------------------------------------------------------
+	//
+	// ------------------------------------------------------------------------------
 	public void readAllCertificates() {
 		Locale.setDefault(new Locale("en", "en"));
 
@@ -70,6 +79,9 @@ public class CertService {
 		}
 	}
 
+	// ------------------------------------------------------------------------------
+	//
+	// ------------------------------------------------------------------------------
 	public Certificate readCertificate(long cert_id) {
 		Locale.setDefault(new Locale("en", "en"));
 
@@ -85,6 +97,9 @@ public class CertService {
 		return cert;
 	}
 
+	// ------------------------------------------------------------------------------
+	//
+	// ------------------------------------------------------------------------------
 	public void uploadCertificate() {
 		Locale.setDefault(new Locale("en", "en"));
 
@@ -112,6 +127,9 @@ public class CertService {
 
 	}
 
+	// ------------------------------------------------------------------------------
+	//
+	// ------------------------------------------------------------------------------
 	public void uploadCertificateFromFTP() {
 		Locale.setDefault(new Locale("en", "en"));
 
@@ -125,11 +143,17 @@ public class CertService {
 
 	}
 
+	// ------------------------------------------------------------------------------
+	//
+	// ------------------------------------------------------------------------------
 	public void printCertificate(Certificate cert) {
 		LOG.debug(cert.getCert_id() + ": " + cert.getDatacert() + " | "
 				+ cert.getNomercert() + "  |  " + cert.getNblanka());
 	}
 
+	// ------------------------------------------------------------------------------
+	//
+	// ------------------------------------------------------------------------------
 	public Certificate checkCertificate(String certnum, String certblank,
 			String certdate) {
 		Locale.setDefault(new Locale("en", "en"));
@@ -143,6 +167,9 @@ public class CertService {
 		return cert;
 	}
 
+	// ------------------------------------------------------------------------------
+	//
+	// ------------------------------------------------------------------------------
 	public Certificate checkCertificate(Certificate cert) {
 		Locale.setDefault(new Locale("en", "en"));
 
@@ -155,6 +182,9 @@ public class CertService {
 		return rcert;
 	}
 
+	// ------------------------------------------------------------------------------
+	//
+	// ------------------------------------------------------------------------------
 	public int getViewPageCount(SQLBuilder builder) {
 		Locale.setDefault(new Locale("en", "en"));
 		int counter = 0;
@@ -166,6 +196,9 @@ public class CertService {
 		return counter;
 	}
 
+	// ------------------------------------------------------------------------------
+	//
+	// ------------------------------------------------------------------------------
 	public List<String> getDepartmentsList() {
 		if (departments == null) {
 			Locale.setDefault(new Locale("en", "en"));
@@ -178,6 +211,9 @@ public class CertService {
 		return departments;
 	}
 
+	// ------------------------------------------------------------------------------
+	//
+	// ------------------------------------------------------------------------------
 	public Map<String, String> getCountriesList() {
 		if (countries == null) {
 			Locale.setDefault(new Locale("en", "en"));
@@ -190,6 +226,9 @@ public class CertService {
 		return countries;
 	}
 
+	// ------------------------------------------------------------------------------
+	//
+	// ------------------------------------------------------------------------------
 	public List<String> getFormsList() {
 		if (forms == null) {
 			Locale.setDefault(new Locale("en", "en"));
@@ -202,14 +241,17 @@ public class CertService {
 		return forms;
 	}
 
-	public List<Certificate> readCertificates(String orderby, String order,
+	// ------------------------------------------------------------------------------
+	//
+	// ------------------------------------------------------------------------------
+	public List<Certificate> readCertificates(String[] fields, String orderby, String order,
 			SQLBuilder builder) {
 		Locale.setDefault(new Locale("en", "en"));
 
 		List<Certificate> certs = null;
 
 		try {
-			certs = certificateDAO.getCertificates(orderby, order, builder);
+			certs = certificateDAO.getCertificates(fields, orderby, order, builder);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

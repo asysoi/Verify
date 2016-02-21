@@ -22,7 +22,7 @@
 	});
 </script>
 
-<h5>Список отображаемых полей сертификата</h5>
+<h4>Список отображаемых полей сертификата</h4>
 <form:form id="config" method="POST" commandName="downloadconfig">
 <div id="content" style="display: none">
 	<ul>

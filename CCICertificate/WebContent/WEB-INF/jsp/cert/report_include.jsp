@@ -262,7 +262,7 @@
 
 		<c:forEach items="${certs}" var="cert">
 			<tr>
-			    <td>${cert.dateload}</td>
+			    <td>${cert.date_load}</td>
 				<td><a href="javascript:openCertificate('${cert.cert_id}')">${cert.nomercert}</a></td>
 				<td>${cert.otd_name}</td>
 				<td>${cert.expert}</td>

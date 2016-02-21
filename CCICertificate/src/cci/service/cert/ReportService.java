@@ -25,14 +25,14 @@ public class ReportService {
 	// --------------------------
 	// Get list of Certificates 
 	// --------------------------
-	public List<Certificate> readCertificatesPage(int page, int pagesize,
+	public List<Certificate> readCertificatesPage(String[] fields, int page, int pagesize,
 			String orderby, String order, SQLBuilder builder) {
 		Locale.setDefault(new Locale("en", "en"));
 
 		List<Certificate> certs = null;
 		LOG.debug("List");
 		try {
-			certs = certificateDAO.findViewNextReportPage(page, pagesize, orderby,
+			certs = certificateDAO.findViewNextReportPage(fields, page, pagesize, orderby,
 					order, builder);
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -59,7 +59,7 @@ public class ReportService {
 	// --------------------------
 	//  Get Certificates for download
 	// --------------------------
-	public List readCertificates(String orderby, String order,
+	public List readCertificates(String[] dbfields, String orderby, String order,
 			SQLBuilder builder) {
 		
 		Locale.setDefault(new Locale("en", "en"));
@@ -67,9 +67,9 @@ public class ReportService {
 		List<Certificate> certs = null;
 
 		try {
-			certs = certificateDAO.getCertificates(orderby, order, builder);
+			certs = certificateDAO.getReportCertificates(dbfields, orderby, order, builder);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			LOG.info("Ошибка загрузки списка сертификатов для выгрузки: " + ex.toString());
 		}
 
 		return certs;

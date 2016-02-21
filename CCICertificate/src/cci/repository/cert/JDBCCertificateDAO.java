@@ -35,7 +35,7 @@ import cci.web.controller.purchase.ViewPurchase;
 @Repository
 public class JDBCCertificateDAO implements CertificateDAO {
 	
-	private static final Logger LOG = Logger.getLogger(ClientController.class);
+	private static final Logger LOG = Logger.getLogger(JDBCCertificateDAO.class);
 	private NamedParameterJdbcTemplate template;
 
 	@Autowired
@@ -54,8 +54,8 @@ public class JDBCCertificateDAO implements CertificateDAO {
 
 		int count = this.template.getJdbcOperations().queryForInt(sql);
 
-		LOG.debug(sql);
-		LOG.debug("Query time: "
+		LOG.info(sql);
+		LOG.info("Query time: "
 				+ (System.currentTimeMillis() - start));
 
 		return count;
@@ -160,20 +160,51 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	// ---------------------------------------------------------------
 	// вернуть очередную страницу списка сертификатов
 	// ---------------------------------------------------------------
-	public List<Certificate> findViewNextPage(int page, int pagesize,
+	public List<Certificate> findViewNextPage(String[] dbfields, int page, int pagesize,
 			String orderby, String order, SQLBuilder builder) {
 		long start = System.currentTimeMillis();
-		String sql = " SELECT cert.* "
+
+		/* 
+		String flist = "cert.cert_id, cert.datacert";
+		
+		for (String field : dbfields) {
+		    flist += ", cert." + field;  	
+		}
+		
+		String sql = " SELECT " + flist
 				+ " FROM (SELECT t.*, ROW_NUMBER() OVER " + " (ORDER BY t."
 				+ orderby + " " + order + ", t.CERT_ID " + order + ") rw "
 				+ " FROM CERT_VIEW t " + builder.getWhereClause() + " )"
 				+ " cert " + " WHERE cert.rw > " + ((page - 1) * pagesize)
 				+ " AND cert.rw <= " + (page * pagesize);
+		*/
 
-		LOG.debug("Next page : " + sql);
-		LOG.debug("Query time: "
+		String flist = "cert_id, datacert";
+		
+		for (String field : dbfields) {
+		    flist += ", " + field;  	
+		}
+
+		String sql = "select " + flist 
+				+ " from cert_view where cert_id in "
+				+ " (select  a.cert_id "
+				+ " from (SELECT cert_id FROM (select cert_id from cert_view "
+				+  builder.getWhereClause()
+				+ " ORDER by " +  orderby + " " + order + ", cert_id " + order  
+				+ ") where rownum <= ? "    
+				+ ") a left join (SELECT cert_id FROM (select cert_id from cert_view "
+				+  builder.getWhereClause()
+				+ " ORDER by " +  orderby + " " + order + ", cert_id " + order
+				+ ") where rownum <= ? "   
+				+ ") b on a.cert_id = b.cert_id where b.cert_id is null)" 
+				+ " ORDER by " +  orderby + " " + order + ", cert_id " + order;
+		
+		
+		LOG.info("Next page : " + sql);
+		LOG.info("Query time: "
 				+ (System.currentTimeMillis() - start));
 		return this.template.getJdbcOperations().query(sql,
+				new Object[] {page * pagesize, (page - 1) * pagesize}, 
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));
 	}
 
@@ -360,12 +391,19 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	// ---------------------------------------------------------------
 	// Get full list of certificates by filter with tovar 
 	// ---------------------------------------------------------------
-	public List<Certificate> getCertificates(String orderby, String order,
+	public List<Certificate> getCertificates(String[] dbfields, String orderby, String order,
 			SQLBuilder builder) {
-		String sql = " SELECT * FROM CERT_VIEW_TOFILE " 
+		
+		String flist = "cert_id";
+		
+		for (String field : dbfields) {
+		    flist += ", " + field;  	
+		}
+		
+		String sql = " SELECT " + flist + " FROM CERT_VIEW_TOFILE " 
 				+ builder.getWhereClause() + " ORDER BY " +  orderby + " " + order;
 
-		LOG.debug("Get certificates: " + sql);
+		LOG.info("Get certificates: " + sql);
 		return this.template.getJdbcOperations().query(sql,
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));
 	}
@@ -385,23 +423,49 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	}
 
 	// ---------------------------------------------------------------
-    // Get Certificates rEPORTA 
+    // Get Pagination of Certificates rEPORT
 	// ---------------------------------------------------------------
-	public List<Certificate> findViewNextReportPage(int page, int pagesize,
+	public List<Certificate> findViewNextReportPage(String[] dbfields, int page, int pagesize,
 			String orderby, String order, SQLBuilder builder) {
 		
-		long start = System.currentTimeMillis();
-		String sql = " SELECT cert.* "
+		/*
+		String flist = "cert.cert_id, cert.datacert";
+
+		for (String field : dbfields) {
+		    flist += ", cert." + field;  	
+		}
+		
+		String sql = " SELECT " + flist
 				+ " FROM (SELECT t.*, ROW_NUMBER() OVER " + " (ORDER BY t."
-				+ orderby + " " + order + ", t.CERT_ID " + order + ") rw "
+				+ orderby + " " + order + ", t.FILE_IN_ID " + order + ") rw "
 				+ " FROM CERT_REPORT t " +   builder.getWhereClause() + " )"
 				+ " cert " + " WHERE cert.rw > " + ((page - 1) * pagesize)
 				+ " AND cert.rw <= " + (page * pagesize);
+		*/		
 
-		LOG.debug("Next page : " + sql);
-		LOG.debug("Query time: "
-				+ (System.currentTimeMillis() - start));
+		String flist = "file_in_id, cert_id, datacert";
+		
+		for (String field : dbfields) {
+		    flist += ", " + field;  	
+		}
+
+		String sql = "select " + flist 
+				+ " from cert_report where file_in_id in "
+				+ " (select  /*+ materialize  no_merge */ a.file_in_id "
+				+ " from (SELECT file_in_id FROM (select file_in_id from cert_report "
+				+  builder.getWhereClause()
+				+ " ORDER by " +  orderby + " " + order + ", file_in_id " + order  
+				+ ") where rownum <= ? "  
+				+ ") a left join (SELECT file_in_id FROM (select file_in_id from cert_report "
+				+  builder.getWhereClause()
+				+ " ORDER by " +  orderby + " " + order + ", file_in_id " + order
+				+ ") where rownum <= ? "  
+				+ ") b on a.file_in_id = b.file_in_id where b.file_in_id is null)" 
+				+ " ORDER by " +  orderby + " " + order + ", file_in_id " + order;
+
+		LOG.info("Next page : " + sql);
 		return this.template.getJdbcOperations().query(sql,
+				new Object[] {page * pagesize, (page - 1) * pagesize},
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));
 
 	}
@@ -414,10 +478,29 @@ public class JDBCCertificateDAO implements CertificateDAO {
 
 		String sql = "select count(*) from CERT_REPORT " + builder.getWhereClause();
 		
-		LOG.debug(sql);
+		LOG.info(sql);
 		int count = this.template.getJdbcOperations().queryForInt(sql);
 
 		return count;
+	}
+
+	// ---------------------------------------------------------------
+	// Get full list of certificates by filter with tovar for Load Report 
+	// ---------------------------------------------------------------
+	public List<Certificate> getReportCertificates(String[] dbfields, String orderby,
+			String order, SQLBuilder builder) {
+		String flist = "cert_id";
+		
+		for (String field : dbfields) {
+		    flist += ", " + field;  	
+		}
+		
+		String sql = " SELECT " + flist + " FROM CERT_VIEW_LOAD_REPORT " 
+				+ builder.getWhereClause() + " ORDER BY " +  orderby + " " + order;
+
+		LOG.info("Get certificates for Report: " + sql);
+		return this.template.getJdbcOperations().query(sql,
+				new BeanPropertyRowMapper<Certificate>(Certificate.class));
 	}
 
 }

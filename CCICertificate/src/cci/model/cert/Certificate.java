@@ -66,20 +66,20 @@ public class Certificate {
 	private ProductIterator iterator;
 	private int cursor;
 	private int currentlist;
-	private String dateload;
+	private String date_load;
 	
 	
-	public String getDateload() {
-		if (dateload != null) {
-		   int i = dateload.indexOf("00:00:00.0");
-		   return i > 0 ? dateload.substring(0, i) : dateload;
+	public String getDate_load() {
+		if (date_load != null) {
+		   int i = date_load.indexOf("00:00:00.0");
+		   return i > 0 ? date_load.substring(0, i) : date_load;
 		} else {
 		   return null;	
 		}
 	}
 
-	public void setDateload(String dateload) {
-		this.dateload = dateload;
+	public void setDate_load(String date_load) {
+		this.date_load = date_load;
 	}
 
 	public int getCurrentlist() {

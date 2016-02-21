@@ -20,7 +20,6 @@ import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import cci.model.cert.Certificate;
 
 public class XSLWriter {
-	// public static Logger LOG=LogManager.getLogger(XSLWriter.class);
 	public static Logger LOG=Logger.getLogger(XSLWriter.class);
 	
 	public Workbook makeWorkbook(List<Object> items, String[] headers, String[] dbfields, String title) {
@@ -34,11 +33,10 @@ public class XSLWriter {
 		
 		int i = 1;
 		for (Object item : items) {
-			System.out.println("Item " + i + " =====> " + item);
 			createRow(sheet, i++, getData(item, dbfields));
 		}
 		long end = System.currentTimeMillis();
-		System.out.println("Duration: " + (end - start));
+		LOG.info("File creation duration: " + (end - start));
 
 		return workbook;
 	}
@@ -76,7 +74,6 @@ public class XSLWriter {
 				}
 			} catch (Exception ex) {
 				LOG.info("Error getData: " + ex.getMessage());
-				System.out.println("Error getData: " + ex.getMessage());
 			}
 		}
 
@@ -94,7 +91,6 @@ public class XSLWriter {
 
 		} catch (Exception ex) {
 			LOG.info("Error get method: " + ex.getMessage());
-			System.out.println("Error get method: " + ex.getMessage());
 		}
 
 		return m;

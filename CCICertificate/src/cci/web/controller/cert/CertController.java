@@ -126,7 +126,7 @@ public class CertController {
 
 			SQLBuilder builder = new SQLBuilderCertificate();
 			builder.setFilter(filter);
-			List certs = certService.readCertificates(
+			List certs = certService.readCertificates(vmanager.getDownloadconfig().getFields(),
 					vmanager.getOrderby(), vmanager.getOrder(), builder);
 			
 			LOG.debug("Download. Certificates loaded from database..."); 
@@ -179,7 +179,7 @@ public class CertController {
 			onfilter = false;
 
 		vmanager.setPage(page == null ? 1 : page);
-		vmanager.setPagesize(pagesize == null ? 15 : pagesize);
+		vmanager.setPagesize(pagesize == null ? 10 : pagesize);
 		vmanager.setOrderby(orderby);
 		vmanager.setOrder(order);
 		vmanager.setOnfilter(onfilter);
@@ -219,21 +219,21 @@ public class CertController {
 		}
 		// ACL needs
 		
-
-		long step2 = System.currentTimeMillis();
 		SQLBuilder builder = new SQLBuilderCertificate();
-		long step21 = System.currentTimeMillis();
 		builder.setFilter(filter);
-		long step22 = System.currentTimeMillis();
+		
+		long step2 = System.currentTimeMillis();
 		vmanager.setPagecount(certService.getViewPageCount(builder));
-		long step23 = System.currentTimeMillis();
+		
+		long step3 = System.currentTimeMillis();
 		List<Certificate> certs = certService.readCertificatesPage(
+				vmanager.getOrdnames(),
 				vmanager.getPage(), vmanager.getPagesize(),
 				vmanager.getOrderby(), vmanager.getOrder(), builder);
-		long step3 = System.currentTimeMillis();
+		
+		long step4 = System.currentTimeMillis();
 		vmanager.setElements(certs);
 
-		long step4 = System.currentTimeMillis();
 		model.addAttribute("vmanager", vmanager);
 		model.addAttribute("certs", certs);
 		model.addAttribute("next_page", vmanager.getNextPageLink());
@@ -242,11 +242,8 @@ public class CertController {
 		model.addAttribute("first_page", vmanager.getFirstPageLink());
 		model.addAttribute("pages", vmanager.getPagesList());
 		model.addAttribute("sizes", vmanager.getSizesList());
-		model.addAttribute("timeduration", (System.currentTimeMillis() - start)
-				+ " = " + (step1 - start) + "+" + (step2 - step1) + "+"
-				+ (step21 - step2) + (step22 - step21) + "+"
-				+ (step23 - step22) + "+" + (step3 - step23) + "+"
-				+ (step4 - step3) + "+" + (System.currentTimeMillis() - step4));
+		model.addAttribute("timeduration", 
+				(System.currentTimeMillis() - start) + " = " + (step3 - step2) + " + " + (step4 - step3));
 
 		return "listcertificates";
 	}

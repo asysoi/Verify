@@ -7,8 +7,8 @@ order by datein;
 
 
   CREATE OR REPLACE FORCE EDITIONABLE VIEW "BELTPP"."CERT_REPORT" 
-  ("NOMERCERT", "NBLANKA", "ISSUEDATE", "OTD_NAME", "EXPERT", "DATELOAD") AS 
+  ("NOMERCERT", "NBLANKA", "ISSUEDATE", "OTD_NAME", "EXPERT", "DATE_LOAD") AS 
   select nomercert, nblanka, issuedate, otd_name, expert,
-bb.DATE_LOAD as dateload from C_CERT aa 
+bb.DATE_LOAD  from C_CERT aa 
 left join C_FILES_IN bb on aa.cert_id = bb.cert_id 
 left join C_OTD cc on aa.otd_id = cc.id;

@@ -18,9 +18,6 @@
 
 		<div class="navbar-collapse collapse">
 			<ul class="nav navbar-nav navbar-right">
-			
-				<li><a href="login.do">Войти</a></li>
-				<li><a href="help.do">Справка</a></li>
 			</ul>
 		</div>
 		<!--/.nav-collapse -->

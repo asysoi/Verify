@@ -43,7 +43,7 @@ public class ReportFilter extends Filter {
 				"STATUS", "KOLDOPLIST", "FLEXP", "UNNEXP", "EXPORTER", "EXPS",
 				"EXPADRESS", "FLIMP", "IMPORTERFULL", "ADRESSIMP", "FLSEZ", "SEZ",
 				"FLSEZREZ", "STRANAP", "OTD_ID", "OTD_NAME", "PARENTNUMBER",
-				"PARENTSTATUS", "TOVAR", "DENORM", "KRITER", "SCHET", "DATELOAD", "DATELOAD", 
+				"PARENTSTATUS", "TOVAR", "DENORM", "KRITER", "SCHET", "DATE_LOAD", "DATE_LOAD", 
 				"KOLDOPLIST", "KOLDOPLIST"};
 		
 		FieldType[] types = new FieldType[] {
