@@ -196,8 +196,9 @@ public class ReportController {
 				dateto == null ? "" : dateto, FieldType.DATE);
 		filter.setConditionValue("OTD_NAME", "OTD_NAME", "=", "",
 				FieldType.STRING);
+		filter.setConditionValue("OTD_ID", "OTD_ID", "=", "",
+				FieldType.NUMBER);
 
-		String otd_name = null;
 		Iterator iterator = (aut.getAuthorities()).iterator();
 		while (iterator.hasNext()) {
 
@@ -205,8 +206,8 @@ public class ReportController {
 					.getAuthority();
 
 			if (certService.getACL().containsKey(roleName)) {
-				filter.setConditionValue("OTD_NAME", "OTD_NAME", "=",
-						certService.getACL().get(roleName), FieldType.STRING);
+				filter.setConditionValue("OTD_ID", "OTD_ID", "=",
+						certService.getACL().get(roleName), FieldType.NUMBER);
 			}
 		}
 
@@ -243,7 +244,7 @@ public class ReportController {
 		rmanager.setHnames(new String[] { "Дата загрузки", "Номер Сертификата",
 				"Отделение", "Эксперт", "Номер бланка", "Дата серт." });
 		rmanager.setOrdnames(new String[] { "date_load", "nomercert",
-				"otd_name", "expert", "nblanka", "issuedate" });
+				"otd_id", "expert", "nblanka", "issuedate" });
 		rmanager.setWidths(new int[] { 18, 12, 22, 26, 10, 14 });
 		model.addAttribute("rmanager", rmanager);
 

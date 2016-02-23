@@ -179,7 +179,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				+ " AND cert.rw <= " + (page * pagesize);
 		*/
 
-		String flist = "cert_id, datacert";
+		String flist = "cert_id, datacert, otd_name";
 		
 		for (String field : dbfields) {
 		    flist += ", " + field;  	
@@ -342,7 +342,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	// Get MAP of branch's by roles
 	// ---------------------------------------------------------------
 	public Map<String,String> getACL() {
-		String sql = "SELECT otd_name, acl_role from C_OTD";
+		String sql = "SELECT acl_role, id from C_OTD";
 
 		LOG.debug("Got ACL map");
 		
@@ -351,7 +351,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		    public Map<String, String> extractData(ResultSet rs) throws SQLException,DataAccessException {
 		        HashMap<String,String> mapRet= new HashMap<String,String>();
 		        while(rs.next()){
-		            mapRet.put(rs.getString("acl_role"),rs.getString("otd_name"));
+		            mapRet.put(rs.getString("acl_role"), Integer.toString(rs.getInt("id")));
 		        }
 		        return mapRet;
 		    }
@@ -394,7 +394,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	public List<Certificate> getCertificates(String[] dbfields, String orderby, String order,
 			SQLBuilder builder) {
 		
-		String flist = "cert_id";
+		String flist = "cert_id, otd_name";
 		
 		for (String field : dbfields) {
 		    flist += ", " + field;  	

@@ -214,7 +214,7 @@ public class CertController {
 		      String roleName = ((GrantedAuthority) iterator.next()).getAuthority();
 		      
 		      if  (certService.getACL().containsKey(roleName)) {      
-			      filter.setConditionValue("OTD_NAME", "OTD_NAME", "=", certService.getACL().get(roleName), FieldType.STRING);
+			      filter.setConditionValue("OTD_ID", "OTD_ID", "=", certService.getACL().get(roleName), FieldType.NUMBER);
 		      }
 		}
 		// ACL needs
@@ -253,7 +253,7 @@ public class CertController {
 		vmanager.setHnames(new String[] { "Номер Сертификата", "Отделение",
 				"Грузоотправитель/Экспортер", "Номер бланка", "Дата",
 				"Доп. лист", "Замена для." });
-		vmanager.setOrdnames(new String[] { "nomercert", "otd_name", "kontrp",
+		vmanager.setOrdnames(new String[] { "nomercert", "otd_id", "kontrp",
 				"nblanka", "issuedate", "koldoplist", "parentnumber" });
 		vmanager.setWidths(new int[] { 10, 20, 40, 8, 8, 6, 8 });
 		model.addAttribute("vmanager", vmanager);
