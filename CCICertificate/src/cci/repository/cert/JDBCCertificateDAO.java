@@ -201,8 +201,6 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		
 		
 		LOG.info("Next page : " + sql);
-		LOG.info("Query time: "
-				+ (System.currentTimeMillis() - start));
 		return this.template.getJdbcOperations().query(sql,
 				new Object[] {page * pagesize, (page - 1) * pagesize}, 
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));

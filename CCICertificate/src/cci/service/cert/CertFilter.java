@@ -50,7 +50,7 @@ public class CertFilter extends Filter {
 				FieldType.STRING, FieldType.STRING, FieldType.STRING,FieldType.STRING, FieldType.STRING, FieldType.STRING,
 				FieldType.STRING, FieldType.NUMBER, FieldType.STRING,FieldType.STRING, FieldType.STRING, FieldType.STRING,
 				FieldType.STRING, FieldType.STRING, FieldType.STRING,FieldType.STRING, FieldType.STRING, FieldType.STRING,
-				FieldType.STRING, FieldType.STRING, FieldType.STRING,FieldType.STRING, FieldType.STRING, FieldType.STRING,
+				FieldType.STRING, FieldType.STRING, FieldType.NUMBER,FieldType.STRING, FieldType.STRING, FieldType.STRING,
 				FieldType.STRING, FieldType.STRING, FieldType.STRING,FieldType.STRING, FieldType.DATE, FieldType.DATE, 
 				FieldType.NUMBER, FieldType.NUMBER};
 		
