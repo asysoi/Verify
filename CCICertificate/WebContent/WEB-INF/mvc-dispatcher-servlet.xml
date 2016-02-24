@@ -70,16 +70,16 @@
  <security:authentication-manager>
     <security:authentication-provider>
       <security:user-service>
-        <security:user name="admin" password="admin" authorities="ROLE_ADMIN" />
+        <security:user name="admin" password="ad1012" authorities="ROLE_ADMIN" />
         <security:user name="client" password="client" authorities="ROLE_CLIENT" />
         <security:user name="accounter" password="accounter" authorities="ROLE_ACCOUNT" />
-        <security:user name="expert" password="expert" authorities="ROLE_EXPERT" />
-        <security:user name="gomel" password="gomel" authorities="ROLE_GOMEL"/>
-        <security:user name="minsk" password="minsk" authorities="ROLE_MINSK"/>
-        <security:user name="vitebsk" password="vitebsk" authorities="ROLE_VITEBSK"/>
-        <security:user name="brest" password="brest" authorities="ROLE_BREST"/>
-        <security:user name="grodno" password="grodno" authorities="ROLE_GRODNO"/>
-        <security:user name="mogilev" password="mogilev" authorities="ROLE_MOGILEV"/>
+        <security:user name="expert" password="ex2615" authorities="ROLE_EXPERT" />
+        <security:user name="gomel" password="go1012" authorities="ROLE_GOMEL"/>
+        <security:user name="minsk" password="mi1012" authorities="ROLE_MINSK"/>
+        <security:user name="vitebsk" password="vi1012" authorities="ROLE_VITEBSK"/>
+        <security:user name="brest" password="br1012" authorities="ROLE_BREST"/>
+        <security:user name="grodno" password="gr1012" authorities="ROLE_GRODNO"/>
+        <security:user name="mogilev" password="mo1012" authorities="ROLE_MOGILEV"/>
         <security:user name="fil" password="if5750" authorities="ROLE_VITEBSK"/>        
         <security:user name="butkevich" password="ub1256" authorities="ROLE_VITEBSK"/>
         <security:user name="halansky" password="ah4284" authorities="ROLE_VITEBSK"/>

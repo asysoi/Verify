@@ -441,7 +441,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				+ " AND cert.rw <= " + (page * pagesize);
 		*/		
 
-		String flist = "file_in_id, cert_id, datacert";
+		String flist = "file_in_id, cert_id, datacert, otd_name";
 		
 		for (String field : dbfields) {
 		    flist += ", " + field;  	
