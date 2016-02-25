@@ -36,6 +36,7 @@ public class ViewCertCondition {
 	private String stranap= "=";
 	private String otd_id= "like";
 	private String otd_name= "like";
+	private String str_otd_id= "=";
 	private String otd_address_index= "like";
 	private String otd_address_city= "like";
 	private String otd_address_line= "like";
@@ -54,6 +55,12 @@ public class ViewCertCondition {
 	private String doplistto= "<=";
 	
 	
+	public String getStr_otd_id() {
+		return str_otd_id;
+	}
+	public void setStr_otd_id(String str_otd_id) {
+		this.str_otd_id = str_otd_id;
+	}
 	
 	public String getTovar() {
 		return tovar;

@@ -29,7 +29,7 @@ public class CertService {
 
 	@Autowired
 	FTPReader ftpReader;
-	private List<String> departments = null;
+	private Map<String, String> departments = null;
 	private List<String> forms = null;
 	private Map<String, String> countries = null;
 	private Map<String, String> acl = null;
@@ -199,7 +199,7 @@ public class CertService {
 	// ------------------------------------------------------------------------------
 	//
 	// ------------------------------------------------------------------------------
-	public List<String> getDepartmentsList() {
+	public Map<String, String> getDepartmentsList() {
 		if (departments == null) {
 			Locale.setDefault(new Locale("en", "en"));
 			try {

@@ -328,12 +328,19 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	// ---------------------------------------------------------------
 	// Get list of departments
 	// ---------------------------------------------------------------
-	public List<String> getDepartmentsList() {
-		String sql = "SELECT otd_name from C_OTD";
+	public Map<String, String> getDepartmentsList() {
+		String sql = "SELECT id, otd_name from C_OTD Order by otd_name";
 
-		LOG.debug("Got department list");
-		return (List<String>) template.getJdbcOperations().queryForList(sql,
-				String.class);
+        return template.query(sql, new ResultSetExtractor<Map<String, String>>(){
+			
+		    public Map<String, String> extractData(ResultSet rs) throws SQLException,DataAccessException {
+		        HashMap<String,String> mapRet= new HashMap<String,String>();
+		        while(rs.next()){
+		            mapRet.put(Integer.toString(rs.getInt("id")), rs.getString("otd_name"));
+		        }
+		        return mapRet;
+		    }
+		});
 	}
 
 	// ---------------------------------------------------------------

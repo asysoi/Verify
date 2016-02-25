@@ -24,8 +24,8 @@
 							"${viewfilter.viewcertificate.dateto}");
 					$("#codestranapr")
 							.val('${viewfilter.viewcertificate.codestranapr}');
-					$("#otd_name")
-							.val('${viewfilter.viewcertificate.otd_name}');
+					$("#str_otd_id")
+							.val('${viewfilter.viewcertificate.str_otd_id}');
 					$("#forms").val('${viewfilter.viewcertificate.forms}');
 				});
 
@@ -163,9 +163,9 @@
 			<tr>
 				<td>Отделение</td>
 				<td>
-				      <form:select path="viewcertificate.otd_name"
-						items="${departments}" id="otd_name" />
-					  <a href="javascript:clearelement($('#otd_name'));"> 
+				      <form:select path="viewcertificate.str_otd_id"
+						items="${departments}" id="str_otd_id" />
+					  <a href="javascript:clearelement($('#str_otd_id'));"> 
 					  <img src="resources/images/delete-16.png" alt="удл." />	</a>
 			</td>
 			</tr>

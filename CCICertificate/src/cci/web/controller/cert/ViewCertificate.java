@@ -11,6 +11,15 @@ public class ViewCertificate extends Certificate {
 	private String dateto;
 	private String doplistfrom;
 	private String doplistto;
+	private String str_otd_id;
+
+	public String getStr_otd_id() {
+		return str_otd_id;
+	}
+
+	public void setStr_otd_id(String str_otd_id) {
+		this.str_otd_id = str_otd_id;
+	}
 
 	public String getTovar() {
 		return tovar;

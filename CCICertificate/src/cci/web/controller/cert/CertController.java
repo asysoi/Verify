@@ -469,7 +469,7 @@ public class CertController {
 	}
 
 	@ModelAttribute("departments")
-	public List<String> populateDepartmentssList() {
+	public Map<String, String> populateDepartmentssList() {
 		return certService.getDepartmentsList();
 	}
 

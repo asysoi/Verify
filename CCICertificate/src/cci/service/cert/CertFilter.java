@@ -32,7 +32,7 @@ public class CertFilter extends Filter {
 				"EXPADRESS", "FLIMP", "IMPORTER", "ADRESSIMP", "FLSEZ", "SEZ",
 				"FLSEZREZ", "STRANAP", "OTD_ID", "OTD_NAME", "PARENTNUMBER",
 				"PARENTSTATUS", "TOVAR", "DENORM", "KRITER", "SCHET", "DATEFROM", "DATETO", 
-				"DOPLISTFROM", "DOPLISTTO" };
+				"DOPLISTFROM", "DOPLISTTO", "STR_OTD_ID" };
 		
 		String[] dbfields = new String[] { "CERT_ID", "FORMS", "UNN", "KONTRP",
 				"KONTRS", "ADRESS", "POLUCHAT", "ADRESSPOL", "DATACERT",
@@ -42,7 +42,7 @@ public class CertFilter extends Filter {
 				"EXPADRESS", "FLIMP", "IMPORTERFULL", "ADRESSIMP", "FLSEZ", "SEZ",
 				"FLSEZREZ", "STRANAP", "OTD_ID", "OTD_NAME", "PARENTNUMBER",
 				"PARENTSTATUS", "TOVAR", "DENORM", "KRITER", "SCHET", "ISSUEDATE", "ISSUEDATE", 
-				"KOLDOPLIST", "KOLDOPLIST"};
+				"KOLDOPLIST", "KOLDOPLIST", "OTD_ID"};
 		
 		FieldType[] types = new FieldType[] {
 				FieldType.ID, FieldType.STRING, FieldType.STRING,FieldType.STRING,FieldType.STRING,FieldType.STRING,FieldType.STRING,
@@ -52,7 +52,7 @@ public class CertFilter extends Filter {
 				FieldType.STRING, FieldType.STRING, FieldType.STRING,FieldType.STRING, FieldType.STRING, FieldType.STRING,
 				FieldType.STRING, FieldType.STRING, FieldType.NUMBER,FieldType.STRING, FieldType.STRING, FieldType.STRING,
 				FieldType.STRING, FieldType.STRING, FieldType.STRING,FieldType.STRING, FieldType.DATE, FieldType.DATE, 
-				FieldType.NUMBER, FieldType.NUMBER};
+				FieldType.NUMBER, FieldType.NUMBER, FieldType.NUMBER};
 		
 		
 		this.init(fields, dbfields, types);
