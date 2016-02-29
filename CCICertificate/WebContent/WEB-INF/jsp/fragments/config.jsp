@@ -35,7 +35,7 @@
 <td><div id="col1" style="display: none;  vertical-align:top"> </div></td> 
 <td><div id="col2" style="display: none;  vertical-align:top"> </div></td> 
 </tr>
-	
+</table>	
 </form:form>
 
 

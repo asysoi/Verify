@@ -141,7 +141,7 @@
 	}
 
 	function openCertificate(certid) {
-		memo = "Воспроизведение бумажной версиисертификата. <p>" + 
+		memo = "Воспроизведение бумажной версии сертификата. <p>" + 
 		       "Результат воспроизведения может незначительно отличаться по форме и стилю отображения," +
 		       "но полностью воспроизводит содержание документа.</p>"
         //$('#pdf').contents().find("body").html("<div style='color:black; text-align:center; font-size:16pt;'>" + memo + "</div> ");
@@ -240,7 +240,7 @@
 			<td style="width: 60%">
                 <input id="filter" type="checkbox"	onclick="javascript:swithFilter();" >
                 <span id="filterlink"></span>
-                </input></td>
+            </td>
 
 			<td style="width: 40%; text-align: right">
 			       <a href="javascript:reportWindow();"><img src="resources/images/report_24.png" alt="Отчет"/></a>

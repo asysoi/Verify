@@ -227,11 +227,9 @@
 				<input	id="dateto" class="datepicker"
 						size="8" placeholder="по" /> 
 					<a href="javascript: goToList('reportcerts.do?page=1&pagesize=${rmanager.pagesize}&orderby=${rmanager.orderby}&order=${rmanager.order}');"> 
-					<img src="resources/images/refresh_16.png" alt="удл."/>
+					<img src="resources/images/refresh_16.png" alt="удл."/></a>
 					<a href="javascript:clearelement($('.datepicker'));"> 
-					<img src="resources/images/delete-16.png" alt="удл."/>
-					
-				</a>    
+					<img src="resources/images/delete-16.png" alt="удл."/>	</a>    
                 
             </td>
 

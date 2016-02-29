@@ -18,6 +18,7 @@
         </div>
 
 		<div class="navbar-collapse collapse">
+		  <security:authorize access="isAuthenticated()">
 			<ul class="nav navbar-nav navbar-right">
 			
 				<form class="navbar-form navbar-right">
@@ -100,6 +101,7 @@
 				</a></li>
 				<li><a href="help.do">Справка</a></li>
 			</ul>
+		  </security:authorize>
 		</div>
 						
       </div>

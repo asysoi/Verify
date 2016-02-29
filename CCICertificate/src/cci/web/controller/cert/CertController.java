@@ -379,12 +379,11 @@ public class CertController {
 				String  absoluteDiskPath= request.getSession().getServletContext().getRealPath(relativeWebPath);
 				makepdffile(absoluteDiskPath, rcert);
 				
-				String msg = "<p>Найден сертификат номер [" + cert.getNomercert()
-						+ "] на бланке [" + cert.getNblanka() + "] от ["
+				String msg = "<p>Найден сертификат номер " + cert.getNomercert()
+						+ " на бланке с номером " + cert.getNblanka() + ", выданный "
 						+ cert.getDatacert()
-						+ "].</p> "+
-				        "<p>Воспроизведение бумажной версии сертификата <a href=\"javascript:viewCertificate(\'" +
-						//rcert.getCert_id() +
+						+ ".</p> "+
+				        "<p>Воспроизведение бумажной версии сертификата <a href=\"javascript:openCertificate(\'" +
 						"resources/out/" + rcert.getCert_id() + ".pdf" +
 						"')\">" + rcert.getNomercert() + "</a><p style=\"width:100%\">" + 
 			            "<p>Результат воспроизведения может незначительно отличаться по форме и стилю отображения," +
@@ -394,10 +393,10 @@ public class CertController {
 				retpage = "fragments/message";
 			} else {
 				model.addAttribute("cert", cert);
-				String msg = "Сертификат номер [" + cert.getNomercert()
-						+ "] на бланке [" + cert.getNblanka() + "] от ["
+				String msg = "Сертификат номер " + cert.getNomercert()
+						+ " на бланке номер " + cert.getNblanka() + ", выданный "
 						+ cert.getDatacert()
-						+ "] не найден в центральном хранилище";
+						+ " не найден в центральном хранилище";
 				model.addAttribute("msg", msg);
 				retpage = "fragments/message";
 			}

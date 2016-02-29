@@ -63,7 +63,7 @@
 				
                 <input id="filter" type="checkbox"	onclick="javascript:swithFilter();" >
                 <span id="filterlink"></span>
-                </input></td>
+                </td>
 
 			<td style="width: 30%; text-align: right">Строк в списке: <c:forEach
 					items="${sizes}" var="item">

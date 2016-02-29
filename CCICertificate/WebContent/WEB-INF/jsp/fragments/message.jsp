@@ -11,6 +11,6 @@
 
 	<div class="row placeholders">
 
-		<div class="container" id="message"><div style="color: red; font-size: 120%; ">${msg}</div></div>
+		<div class="container" id="message"><div style="font-size: 120%; ">${msg}</div></div>
 	</div>
 </div>

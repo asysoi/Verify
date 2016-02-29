@@ -42,8 +42,8 @@ function getCellValue(row, index){ return $(row).children('td').eq(index).html()
 	<tr>
 		<c:forEach items="${headers}" var="item">
 			<th class="rth" style="width: 70%; background-color: gray; color: white">
-				${item}</td>
-			<th class="rth" style="width: 30%; background-color: gray; color: white">Кол. сертификатов</td>
+				${item}</th>
+			<th class="rth" style="width: 30%; background-color: gray; color: white">Кол. сертификатов</th>
 		</c:forEach>
 	</tr>
 
