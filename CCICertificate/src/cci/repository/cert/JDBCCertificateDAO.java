@@ -88,7 +88,8 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	// ---------------------------------------------------------------
 	public Certificate check(Certificate cert) {
 		Certificate rcert = null;
-
+		long start = System.currentTimeMillis();
+		
 		try {
 			String sql = "select * from CERT_VIEW WHERE NOMERCERT = ? AND NBLANKA = ? AND (DATACERT=? OR ISSUEDATE=TO_DATE(?,'DD.MM.YY'))";
 			rcert = template.getJdbcOperations().queryForObject(
@@ -96,6 +97,8 @@ public class JDBCCertificateDAO implements CertificateDAO {
 					new Object[] { cert.getNomercert(), cert.getNblanka(),
 							cert.getDatacert(), cert.getDatacert() },
 					new BeanPropertyRowMapper<Certificate>(Certificate.class));
+			
+			LOG.info("Certificate check: " + (System.currentTimeMillis() - start));
 			if (rcert != null) {
 				sql = "select * from C_PRODUCT WHERE cert_id = ?  ORDER BY product_id";
 				rcert.setProducts(template.getJdbcOperations().query(sql,
@@ -103,8 +106,10 @@ public class JDBCCertificateDAO implements CertificateDAO {
 						new BeanPropertyRowMapper<Product>(Product.class)));
 			}
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			LOG.info("Certificate isn't found: " + ex.getMessage());
 		}
+		
+		LOG.info("Certificate check load: " + (System.currentTimeMillis() - start));
 		return rcert;
 	}
 

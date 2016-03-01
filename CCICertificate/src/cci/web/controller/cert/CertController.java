@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 
+
 import org.apache.log4j.Logger;
 //import org.apache.logging.log4j.LogManager;
 //import org.apache.logging.log4j.Logger;
@@ -372,12 +373,13 @@ public class CertController {
 			Certificate rcert = certService.checkCertificate(cert);
 
 			if (rcert != null) {
-				//model.addAttribute("cert", rcert);
-				//retpage = "certificate";
 				
 				String relativeWebPath = "/resources";
 				String  absoluteDiskPath= request.getSession().getServletContext().getRealPath(relativeWebPath);
+				
+				long start = System.currentTimeMillis();
 				makepdffile(absoluteDiskPath, rcert);
+				LOG.info("Certificate check pdf making: " + (System.currentTimeMillis() - start));
 				
 				String msg = "<p>Найден сертификат номер " + cert.getNomercert()
 						+ " на бланке с номером " + cert.getNblanka() + ", выданный "
@@ -396,7 +398,7 @@ public class CertController {
 				String msg = "Сертификат номер " + cert.getNomercert()
 						+ " на бланке номер " + cert.getNblanka() + ", выданный "
 						+ cert.getDatacert()
-						+ " не найден в центральном хранилище";
+						+ ", не найден";
 				model.addAttribute("msg", msg);
 				retpage = "fragments/message";
 			}

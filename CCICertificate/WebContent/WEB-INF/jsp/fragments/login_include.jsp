@@ -11,14 +11,14 @@
 
 	<div class="row placeholders">
 	
-    <h2 class="page-header">Вход в систему</h2>
+    <h2 class="page-header">Вход на портал БелТПП</h2>
     
 	<div class="container">
 			<form class="form-signin" action="/CCICertificate/j_spring_security_check" method="POST">
    				<input id="username" name="j_username" placeholder="Имя пользователя" class="form-control" type="text">
  				<input id="password" name="j_password" placeholder="Пароль" class="form-control" type="password">
 				<br>
- 				<button class="btn btn-lg btn-primary btn-block" type="submit">Войти</button>
+ 				<button class="btn btn-lg btn-primary btn-block" type="submit" style="background-color: #36478B;">Войти</button>
 			</form>			
 	</div>
 	

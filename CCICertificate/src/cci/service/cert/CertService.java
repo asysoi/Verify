@@ -177,7 +177,7 @@ public class CertService {
 		try {
 			rcert = certificateDAO.check(cert);
 		} catch (Exception ex) {
-			ex.printStackTrace();
+			LOG.info("Certificate load error: " + ex.getMessage());
 		}
 		return rcert;
 	}

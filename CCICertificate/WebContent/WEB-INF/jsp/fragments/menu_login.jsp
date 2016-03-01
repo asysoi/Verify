@@ -10,18 +10,21 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="main.do" style="font-size: 200%">
-          <img src="resources/images/logo_40.png" width="32" height="32"/>
-          Интранет портал БелТПП
+          <a class="navbar-brand" href="main.do" style="font-size: 240%">
+          <img src="resources/images/logo_40.png" width="32" height="32" style="vertical-align: middle;"/>
+          Портал БелТПП
           </a>
         </div>
 
 		<div class="navbar-collapse collapse">
+		
 			<ul class="nav navbar-nav navbar-right">
+				<li><a href="certcheck.do">
+    			Проверка сертификата 
+				</a></li>
 			</ul>
 		</div>
-		<!--/.nav-collapse -->
-				
+		
       </div>
-    </div>
+</div>
  

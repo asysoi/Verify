@@ -20,7 +20,7 @@
 
     <spring:url value="/resources/jquery/jquery-1.11.1.js" var="jQuery"/>
     <script src="${jQuery}"></script>
-
+    
     <spring:url value="/resources/bootstrap3/js/bootstrap.min.js" var="jBootStrap"/>
     <script src="${jBootStrap}"></script>
     
@@ -38,9 +38,34 @@
     
     
     <script>
+  		
+  		$(function($){
+  			$.datepicker.regional['ru'] = {
+  				closeText: 'Закрыть',
+  				prevText: '&#x3C;Пред',
+  				nextText: 'След&#x3E;',
+  				currentText: 'Сегодня',
+  				monthNames: ['Январь','Февраль','Март','Апрель','Май','Июнь',
+  				'Июль','Август','Сентябрь','Октябрь','Ноябрь','Декабрь'],
+  				monthNamesShort: ['Янв','Фев','Мар','Апр','Май','Июн',
+  				'Июл','Авг','Сен','Окт','Ноя','Дек'],
+  				dayNames: ['воскресенье','понедельник','вторник','среда','четверг','пятница','суббота'],
+  				dayNamesShort: ['вск','пнд','втр','срд','чтв','птн','сбт'],
+  				dayNamesMin: ['Вс','Пн','Вт','Ср','Чт','Пт','Сб'],
+  				weekHeader: 'Нед',
+  				dateFormat: 'dd.mm.yy',
+  				firstDay: 1,
+  				isRTL: false,
+  				showMonthAfterYear: false,
+  				yearSuffix: ''};
+  			$.datepicker.setDefaults($.datepicker.regional['ru']);
+  		});
+  		
   		$(function() {
     		$( "#menu" ).menu();
   		});
+  		
+  		
   	</script>
     
 </head>
