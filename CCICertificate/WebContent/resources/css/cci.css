@@ -161,5 +161,10 @@ cci.loginbox {
 	font-size:15px;
 }
 
-
+.navbar-inverse .navbar-nav>.open>a,
+.navbar-inverse .navbar-nav>.open>a:hover,
+.navbar-inverse .navbar-nav>.open>a:focus{
+	background-color:#36476B;
+	color:#fff
+}
 
