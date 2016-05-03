@@ -75,6 +75,7 @@
         <security:user name="client" password="client" authorities="ROLE_CLIENT" />
         <security:user name="accounter" password="accounter" authorities="ROLE_ACCOUNT" />
         <security:user name="expert" password="ex2615" authorities="ROLE_EXPERT" />
+        <security:user name="zaburuyeva" password="sz2287" authorities="ROLE_EXPERT" />
         <security:user name="gomel" password="go1012" authorities="ROLE_GOMEL"/>
         <security:user name="minsk" password="mi1012" authorities="ROLE_MINSK"/>
         <security:user name="vitebsk" password="vi1012" authorities="ROLE_VITEBSK"/>
