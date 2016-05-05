@@ -1,9 +1,12 @@
 package cci.config.cert;
 
+import com.itextpdf.text.pdf.BaseFont;
+
 public class CTCell {
 	private String text;
 	private int number;
 	private String font;
+	private BaseFont bf;
 	private int fontsize;
 	private int align;
 	private int border;
@@ -12,6 +15,15 @@ public class CTCell {
 	private int colspan;
 	private boolean fill;
 	
+
+	
+	public BaseFont getBf() {
+		return bf;
+	}
+
+	public void setBf(BaseFont bf) {
+		this.bf = bf;
+	}
 
 	public int getColspan() {
 		return colspan;
