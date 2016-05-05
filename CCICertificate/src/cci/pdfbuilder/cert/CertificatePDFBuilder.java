@@ -17,11 +17,12 @@ import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfWriter;
 
 public class CertificatePDFBuilder {
-	public static final String FONT = "c:/windows/fonts/ARIAL.TTF";
+	public static final String FONT_DIR = "resources/fonts/";
 	private Document document;
 	private PdfWriter writer;
 	private PDFConfigReader xreader;
 	private PDFPageConfig pconfig;
+	private String fontpath;
 	
 	public static void main(String[] arg) {
 		CertificatePDFBuilder builder = new CertificatePDFBuilder();
@@ -39,14 +40,17 @@ public class CertificatePDFBuilder {
 		cert.setProducts(products);
 		
 		try {
-		   builder.createPdf("d:\\temp\\cert\\certificate.pdf", cert, "D:\\Java\\git\\CCICertificate\\CCICertificate\\WebContent\\resources\\config\\pages.xml");
+		   builder.createPdf("d:\\temp\\cert\\certificate.pdf", cert, "D:\\Java\\git\\CCICertificate\\CCICertificate\\WebContent\\resources\\config\\pages.xml", "путь к катклогу фонтов");
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
 	}
 
 	public void createPdf(String outfilename, Certificate cert,
-			String configFileName) throws IOException, DocumentException {
+			String configFileName, String fpath) throws IOException, DocumentException {
+		
+		fontpath = fpath;
+		
 		// step 1
 		document = new Document(PageSize.A4, 5, 5, 5, 5);
 
@@ -57,7 +61,7 @@ public class CertificatePDFBuilder {
 		document.open();
 
 		// step 4
-		xreader = XMLConfigReader.getInstance(configFileName);
+		xreader = XMLConfigReader.getInstance(configFileName, fontpath);
 		createMain(cert);
 
 		// step 5
