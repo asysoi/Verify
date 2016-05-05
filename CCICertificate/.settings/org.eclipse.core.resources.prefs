@@ -21,6 +21,7 @@ encoding//WebContent/WEB-INF/jsp/pch/purchaseform.jsp=UTF-8
 encoding//WebContent/WEB-INF/jsp/pch/purchaselist.jsp=UTF-8
 encoding//WebContent/WEB-INF/jsp/welcome.jsp=UTF-8
 encoding//WebContent/WEB-INF/jsp/window.jsp=UTF-8
+encoding//src/cci/pdfbuilder/cert/PDFBuilder.java=UTF-8
 encoding//src/cci/web/controller/ViewManager.java=UTF-8
 encoding//src/cci/web/controller/cert/CertController.java=UTF-8
 encoding//src/cci/web/controller/cert/ReportController.java=UTF-8
