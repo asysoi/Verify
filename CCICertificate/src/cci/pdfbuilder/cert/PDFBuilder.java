@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import cci.config.cert.BoxConfig;
 import cci.config.cert.CTCell;
 import cci.config.cert.ImageBox;
@@ -14,6 +16,7 @@ import cci.model.cert.Certificate;
 import cci.model.cert.Product;
 import cci.model.cert.ProductIterator;
 import cci.service.CountryConverter;
+import cci.web.controller.cert.CertController;
 
 import com.itextpdf.text.Chunk;
 import com.itextpdf.text.DocumentException;
@@ -33,7 +36,9 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.VerticalText;
 
 public abstract class PDFBuilder {
+	private static final Logger LOG=Logger.getLogger(PDFBuilder.class);
 	private static final String CHAR_PARAGRAPH = "\n";
+	
 
 	public void createPDFPage(PdfWriter writer, Certificate certificate,
 			PDFPageConfig pconfig) throws DocumentException, IOException {
@@ -305,12 +310,14 @@ public abstract class PDFBuilder {
 				Utilities.millimetersToPoints(tablecon.getYr()),
 				writer.getDirectContent());
 
-		 System.out.println("Table height : " + table.getTotalHeight()
+		 LOG.info("Table height : " + table.getTotalHeight()
 		 + "  Calculate height : " + getTableHeight(table));
-		 System.out.println("Table height : "
+		 
+		 LOG.info("Table height : "
 		 + Utilities.pointsToMillimeters(table.getTotalHeight())
 		 + "  Calculate height : "
 		 + Utilities.pointsToMillimeters(getTableHeight(table)));
+		 
 		return table;
 	}
 
@@ -372,7 +379,8 @@ public abstract class PDFBuilder {
 	private PdfPCell makeCell(CTCell ctCell) throws DocumentException,
 			IOException {
 		
-		//BaseFont bf = BaseFont.createFont(
+		//!-- moved to page config 5.5.2016 
+		//  BaseFont bf = BaseFont.createFont(
 		//		fontpath + ctCell.getFont() + ".ttf", 
 		//		BaseFont.IDENTITY_H,
 		//		BaseFont.EMBEDDED);
@@ -449,38 +457,38 @@ public abstract class PDFBuilder {
 
 		if ("exporter".equals(map)) {
 			str = 
-					renderString(certificate.getKontrp(), ", ") + 
+					renderString(certificate.getKontrp(), checkfield(certificate.getAdress()) ? ", " : " ") + 
 					renderString(certificate.getAdress(), " ") +
 					((certificate.getExpp() != null && certificate.getExpp().trim() != "" ) || 
 					(certificate.getExpadress() != null && certificate.getExpadress().trim() != "") ? "  по поручению  " : "") +
-					renderString(certificate.getExpp(), ", ") + 
+					renderString(certificate.getExpp(), checkfield(certificate.getExpadress()) ? ", " : " ") + 
 					renderString(certificate.getExpadress(),  ""); 
 					
 		} else if  ("exporterenglish".equals(map)) {
 			str = 
-					renderString(certificate.getKontrp(), " ") + 
+					renderString(certificate.getKontrp(), checkfield(certificate.getAdress()) ? ", " : " ") + 
 					renderString(certificate.getAdress(), " ") +
 					((certificate.getExpp() != null && certificate.getExpp().trim() != "" ) || 
 					(certificate.getExpadress() != null && certificate.getExpadress().trim() != "") ? "  by order  " : "") +
-					renderString(certificate.getExpp(), ", ") + 
+					renderString(certificate.getExpp(), checkfield(certificate.getExpadress()) ? ", " : "") + 
 					renderString(certificate.getExpadress(),  "");
 
 		} else if ("importer".equals(map)) {
 			str =
-					renderString(certificate.getPoluchat(), ",  ") + 
+					renderString(certificate.getPoluchat(), checkfield(certificate.getAdresspol()) ? ", " : " ") + 
 					renderString(certificate.getAdresspol(), " ") +
 					((certificate.getImporter() != null && certificate.getImporter().trim() != "" ) || 
 					(certificate.getAdressimp() != null && certificate.getAdressimp().trim() != "") ? "  по поручению  " : "") +
-					renderString(certificate.getImporter(), ",")   + 
+					renderString(certificate.getImporter(), checkfield(certificate.getAdressimp()) ? ", " : " ")   + 
 					renderString(certificate.getAdressimp(), "");
 			
 		} else if ("importerenglish".equals(map)) {
 			str = 
-					renderString(certificate.getPoluchat(), ", ") + 
+					renderString(certificate.getPoluchat(), checkfield(certificate.getAdresspol()) ? ", " : " ") + 
 					renderString(certificate.getAdresspol(), " ") +
 					((certificate.getImporter() != null && certificate.getImporter().trim() != "" ) || 
 					(certificate.getAdressimp() != null && certificate.getAdressimp().trim() != "") ? "  by order  " : "") +
-					renderString(certificate.getImporter(), ", ")   + 
+					renderString(certificate.getImporter(), checkfield(certificate.getAdressimp()) ? ", " : " ")   + 
 					renderString(certificate.getAdressimp(), "");
 					
 		}else if ("drive".equals(map)) {
@@ -530,6 +538,17 @@ public abstract class PDFBuilder {
 		return str;
 	}
 
+	private boolean checkfield(String field) {
+		return (trim(field).length() > 0);
+	}
+
+	private String trim(String str) {
+        if (str != null) {
+          return str.trim();  	
+        } else {
+          return ""; 	
+        }
+	}
 
 	private String renderString(String field, String strtermination) {
 		return (field != null && field.trim() != "") ? field.trim() + strtermination: "";
