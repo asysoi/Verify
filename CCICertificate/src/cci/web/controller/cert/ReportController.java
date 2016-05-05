@@ -1,5 +1,4 @@
-package cci.web.controller.cert;
-
+п»їpackage cci.web.controller.cert;
 import java.util.Iterator;
 import java.util.List;
 
@@ -112,7 +111,7 @@ public class ReportController {
 			SQLBuilder builder = new SQLBuilderCertificate();
 			builder.setFilter(filter);
 			rmanager.getDownloadconfig().addField("DATE_LOAD");
-			rmanager.getDownloadconfig().addHeader("Дата загрузки сертификата");
+			rmanager.getDownloadconfig().addHeader("Р”Р°С‚Р° Р·Р°РіСЂСѓР·РєРё СЃРµСЂС‚РёС„РёРєР°С‚Р°");
 			
 			List certs = reportService.readCertificates(rmanager.getDownloadconfig().getFields(), 
 					rmanager.getOrderby(), rmanager.getOrder(),	builder);
@@ -126,11 +125,11 @@ public class ReportController {
 			(new XSLWriter()).makeWorkbook(certs,
 					rmanager.getDownloadconfig().getHeaders(),
 					rmanager.getDownloadconfig().getFields(),
-					"Лист Сертификатов").write(response.getOutputStream());
+					"Р›РёСЃС‚ РЎРµСЂС‚РёС„РёРєР°С‚РѕРІ").write(response.getOutputStream());
 			response.flushBuffer();
 			
 			rmanager.getDownloadconfig().removeField("DATE_LOAD");
-			rmanager.getDownloadconfig().removeHeader("Дата загрузки сертификата");
+			rmanager.getDownloadconfig().removeHeader("Р”Р°С‚Р° Р·Р°РіСЂСѓР·РєРё СЃРµСЂС‚РёС„РёРєР°С‚Р°");
 
 			LOG.debug("Download finished...");
 
@@ -241,8 +240,8 @@ public class ReportController {
 
 	private ViewManager initViewManager(ModelMap model) {
 		ViewManager rmanager = new ViewManager();
-		rmanager.setHnames(new String[] { "Дата загрузки", "Номер Сертификата",
-				"Отделение", "Эксперт", "Номер бланка", "Дата серт." });
+		rmanager.setHnames(new String[] { "Р”Р°С‚Р° Р·Р°РіСЂСѓР·РєРё", "РќРѕРјРµСЂ РЎРµСЂС‚РёС„РёРєР°С‚Р°",
+				"РћС‚РґРµР»РµРЅРёРµ", "Р­РєСЃРїРµСЂС‚", "РќРѕРјРµСЂ Р±Р»Р°РЅРєР°", "Р”Р°С‚Р° СЃРµСЂС‚." });
 		rmanager.setOrdnames(new String[] { "date_load", "nomercert",
 				"otd_id", "expert", "nblanka", "issuedate" });
 		rmanager.setWidths(new int[] { 18, 12, 22, 26, 10, 14 });
