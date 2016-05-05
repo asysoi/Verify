@@ -1,4 +1,4 @@
-package cci.web.controller.cert;
+п»їpackage cci.web.controller.cert;
 
 import java.util.Iterator;
 import java.util.List;
@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 
 
 import org.apache.log4j.Logger;
@@ -137,7 +136,7 @@ public class CertController {
 					"attachment; filename=certificates.xlsx");
 			(new XSLWriter()).makeWorkbook(certs,
 					vmanager.getDownloadconfig().getHeaders(),
-					vmanager.getDownloadconfig().getFields(), "Лист Сертификатов").write(
+					vmanager.getDownloadconfig().getFields(), "Р›РёСЃС‚ РЎРµСЂС‚РёС„РёРєР°С‚РѕРІ").write(
 					response.getOutputStream());
 			response.flushBuffer();
 			LOG.debug("Download finished...");
@@ -251,9 +250,9 @@ public class CertController {
 
 	private ViewManager initViewManager(ModelMap model) {
 		ViewManager vmanager = new ViewManager();
-		vmanager.setHnames(new String[] { "Номер Сертификата", "Отделение",
-				"Грузоотправитель/Экспортер", "Номер бланка", "Дата",
-				"Доп. лист", "Замена для." });
+		vmanager.setHnames(new String[] { "РќРѕРјРµСЂ РЎРµСЂС‚РёС„РёРєР°С‚Р°", "РћС‚РґРµР»РµРЅРёРµ",
+				"Р“СЂСѓР·РѕРѕС‚РїСЂР°РІРёС‚РµР»СЊ/Р­РєСЃРїРѕСЂС‚РµСЂ", "РќРѕРјРµСЂ Р±Р»Р°РЅРєР°", "Р”Р°С‚Р°",
+				"Р”РѕРї. Р»РёСЃС‚", "Р—Р°РјРµРЅР° РґР»СЏ." });
 		vmanager.setOrdnames(new String[] { "nomercert", "otd_id", "kontrp",
 				"nblanka", "issuedate", "koldoplist", "parentnumber" });
 		vmanager.setWidths(new int[] { 10, 20, 40, 8, 8, 6, 8 });
@@ -381,24 +380,24 @@ public class CertController {
 				makepdffile(absoluteDiskPath, rcert);
 				LOG.info("Certificate check pdf making: " + (System.currentTimeMillis() - start));
 				
-				String msg = "<p>Найден сертификат номер " + cert.getNomercert()
-						+ " на бланке с номером " + cert.getNblanka() + ", выданный "
+				String msg = "<p>РќР°Р№РґРµРЅ СЃРµСЂС‚РёС„РёРєР°С‚ РЅРѕРјРµСЂ " + cert.getNomercert()
+						+ " РЅР° Р±Р»Р°РЅРєРµ СЃ РЅРѕРјРµСЂРѕРј " + cert.getNblanka() + ", РІС‹РґР°РЅРЅС‹Р№ "
 						+ cert.getDatacert()
 						+ ".</p> "+
-				        "<p>Воспроизведение бумажной версии сертификата <a href=\"javascript:openCertificate(\'" +
+				        "<p>Р’РѕСЃРїСЂРѕРёР·РІРµРґРµРЅРёРµ Р±СѓРјР°Р¶РЅРѕР№ РІРµСЂСЃРёРё СЃРµСЂС‚РёС„РёРєР°С‚Р° <a href=\"javascript:openCertificate(\'" +
 						"resources/out/" + rcert.getCert_id() + ".pdf" +
 						"')\">" + rcert.getNomercert() + "</a><p style=\"width:100%\">" + 
-			            "<p>Результат воспроизведения может незначительно отличаться по форме и стилю отображения," +
-			            "но полностью воспроизводит содержание документа.</p>";
+			            "<p>Р РµР·СѓР»СЊС‚Р°С‚ РІРѕСЃРїСЂРѕРёР·РІРµРґРµРЅРёСЏ РјРѕР¶РµС‚ РЅРµР·РЅР°С‡РёС‚РµР»СЊРЅРѕ РѕС‚Р»РёС‡Р°С‚СЊСЃСЏ РїРѕ С„РѕСЂРјРµ Рё СЃС‚РёР»СЋ РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ," +
+			            "РЅРѕ РїРѕР»РЅРѕСЃС‚СЊСЋ РІРѕСЃРїСЂРѕРёР·РІРѕРґРёС‚ СЃРѕРґРµСЂР¶Р°РЅРёРµ РґРѕРєСѓРјРµРЅС‚Р°.</p>";
 				
 				model.addAttribute("msg", msg);
 				retpage = "fragments/message";
 			} else {
 				model.addAttribute("cert", cert);
-				String msg = "Сертификат номер " + cert.getNomercert()
-						+ " на бланке номер " + cert.getNblanka() + ", выданный "
+				String msg = "РЎРµСЂС‚РёС„РёРєР°С‚ РЅРѕРјРµСЂ " + cert.getNomercert()
+						+ " РЅР° Р±Р»Р°РЅРєРµ РЅРѕРјРµСЂ " + cert.getNblanka() + ", РІС‹РґР°РЅРЅС‹Р№ "
 						+ cert.getDatacert()
-						+ ", не найден";
+						+ ", РЅРµ РЅР°Р№РґРµРЅ";
 				model.addAttribute("msg", msg);
 				retpage = "fragments/message";
 			}
