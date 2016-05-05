@@ -1,4 +1,4 @@
-package cci.web.controller.client;
+п»їpackage cci.web.controller.client;
 
 import java.util.List;
 import java.util.Map;
@@ -120,11 +120,11 @@ public class ClientController {
 		return "window";
 	}
 
-	
+	  
 	private ViewManager initViewManager(ModelMap model) {
 		ViewManager cmanager = new ViewManager();
-		cmanager.setHnames(new String[] { "Наименование компании", "Адрес",
-				"УНП", "Банк", "Контактный телефон" });
+		cmanager.setHnames(new String[] { "РќР°РёРјРµРЅРѕРІР°РЅРёРµ РєРѕРјРїР°РЅРёРё", "РђРґСЂРµСЃ",
+				"РЈРќРџ", "Р‘Р°РЅРє", "РљРѕРЅС‚Р°РєС‚РЅС‹Р№ С‚РµР»РµС„РѕРЅ" });
 		cmanager.setOrdnames(new String[] { "name", "address", "unp", "bname",
 				"work_phone" });
 		cmanager.setWidths(new int[] { 25, 20, 15, 20, 20 });
@@ -275,7 +275,7 @@ public class ClientController {
 					"attachment; filename=companies.xlsx");
 
 			(new XSLWriter()).makeWorkbook(clients, dconfig.getHeaders(),
-					dconfig.getFields(), "Список контрагентов").write(
+					dconfig.getFields(), "РЎРїРёСЃРѕРє РєРѕРЅС‚СЂР°РіРµРЅС‚РѕРІ").write(
 					response.getOutputStream());
 
 			response.flushBuffer();
