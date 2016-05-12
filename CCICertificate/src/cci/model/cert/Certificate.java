@@ -1,4 +1,4 @@
-package cci.model.cert;
+п»їpackage cci.model.cert;
 
 import java.util.List;
 
@@ -471,8 +471,8 @@ public class Certificate {
 	}
 
 	public String toString() {
-		// return "Сертификат :" + nomercert + " Бланк: " + nblanka + " Дата: "
-		// + datacert + " Отделение: " + otd_id;
+		// return "РЎРµСЂС‚РёС„РёРєР°С‚ :" + nomercert + " Р‘Р»Р°РЅРє: " + nblanka + " Р”Р°С‚Р°: "
+		// + datacert + " РћС‚РґРµР»РµРЅРёРµ: " + otd_id;
 		return "Certificate [cert_id=" + cert_id + ", forms=" + forms
 				+ ", unn=" + unn + ", kontrp=" + kontrp + ", kontrs=" + kontrs
 				+ ", adress=" + adress + ", poluchat=" + poluchat

@@ -1,4 +1,4 @@
-package cci.pdfbuilder.cert;
+п»їpackage cci.pdfbuilder.cert;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -450,7 +450,7 @@ public abstract class PDFBuilder {
 					renderString(certificate.getKontrp(), ", ") + 
 					renderString(certificate.getAdress(), " ") +
 					((certificate.getExpp() != null && certificate.getExpp().trim() != "" ) || 
-					(certificate.getExpadress() != null && certificate.getExpadress().trim() != "") ? "  по поручению  " : "") +
+					(certificate.getExpadress() != null && certificate.getExpadress().trim() != "") ? "  РїРѕ РїРѕСЂСѓС‡РµРЅРёСЋ  " : "") +
 					renderString(certificate.getExpp(), ", ") + 
 					renderString(certificate.getExpadress(),  ""); 
 					
@@ -468,7 +468,7 @@ public abstract class PDFBuilder {
 					renderString(certificate.getPoluchat(), ",  ") + 
 					renderString(certificate.getAdresspol(), " ") +
 					((certificate.getImporter() != null && certificate.getImporter().trim() != "" ) || 
-					(certificate.getAdressimp() != null && certificate.getAdressimp().trim() != "") ? "  по поручению  " : "") +
+					(certificate.getAdressimp() != null && certificate.getAdressimp().trim() != "") ? "  РїРѕ РїРѕСЂСѓС‡РµРЅРёСЋ  " : "") +
 					renderString(certificate.getImporter(), ",")   + 
 					renderString(certificate.getAdressimp(), "");
 			
@@ -495,7 +495,7 @@ public abstract class PDFBuilder {
 		}else if ("note".equals(map)) {
 			str = certificate.getOtmetka() == null ? "" : certificate.getOtmetka();
 		} else if ("department".equals(map)) {
-			str = "Унитарное предприятие по оказанию услуг \""
+			str = "РЈРЅРёС‚Р°СЂРЅРѕРµ РїСЂРµРґРїСЂРёСЏС‚РёРµ РїРѕ РѕРєР°Р·Р°РЅРёСЋ СѓСЃР»СѓРі \""
 					+ certificate.getOtd_name() + "\", "
 					+ certificate.getOtd_addr_index() + ", "
 					+ certificate.getOtd_addr_city() + ", "
@@ -516,7 +516,7 @@ public abstract class PDFBuilder {
 		} else if ("datecustomer".equals(map)) {
 			str = certificate.getDatacert();
 		} else if ("issuecountry".equals(map)) {
-			str = (certificate.getStranap() == null ? "Республике Беларусь" : CountryConverter.getCountryNameByCode(certificate.getStranap()));
+			str = (certificate.getStranap() == null ? "Р РµСЃРїСѓР±Р»РёРєРµ Р‘РµР»Р°СЂСѓСЃСЊ" : CountryConverter.getCountryNameByCode(certificate.getStranap()));
 		} else if ("listnumber".equals(map)) {
 			str = "" + certificate.getCurrentlist();  
 		} else if ("place".equals(map)) {

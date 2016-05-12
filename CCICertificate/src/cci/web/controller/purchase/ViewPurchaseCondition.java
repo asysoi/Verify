@@ -1,4 +1,4 @@
-package cci.web.controller.purchase;
+﻿package cci.web.controller.purchase;
 
 public class ViewPurchaseCondition {
 	private String pricefrom = ">";

@@ -1,4 +1,4 @@
-package cci.web.controller.client;
+﻿package cci.web.controller.client;
 
 public class ViewClientFilter {
  	private ViewClientCondition condition = new ViewClientCondition();

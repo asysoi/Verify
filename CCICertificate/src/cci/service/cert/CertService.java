@@ -1,4 +1,4 @@
-package cci.service.cert;
+п»їpackage cci.service.cert;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -88,7 +88,7 @@ public class CertService {
 		Certificate cert = null;
 		try {
 			cert = certificateDAO.findByID(cert_id);
-			LOG.debug("FindByID: " + cert.getCert_id() + " Продуктов: "
+			LOG.debug("FindByID: " + cert.getCert_id() + " РџСЂРѕРґСѓРєС‚РѕРІ: "
 					+ cert.getProducts().size());
 		} catch (Exception ex) {
 			ex.printStackTrace();

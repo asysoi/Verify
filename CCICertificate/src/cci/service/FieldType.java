@@ -1,4 +1,4 @@
-package cci.service;
+﻿package cci.service;
 
 public enum FieldType {
      STRING, ID, NUMBER, DATE, LONG, INTEGER

@@ -1,4 +1,4 @@
-package cci.repository.purchase;
+﻿package cci.repository.purchase;
 
 import cci.repository.SQLBuilder;
 import cci.service.FilterCondition;

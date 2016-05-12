@@ -1,4 +1,4 @@
-package cci.model;
+﻿package cci.model;
 
 public class Client {
 	private long id;		

@@ -1,4 +1,4 @@
-package cci.config.purchase;
+п»їpackage cci.config.purchase;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -7,9 +7,9 @@ import java.util.Map;
 
 public class ExportPurchaseConfig {
 	
-	private String[] headernames = new String[] { "Дата совершения сделки",
-			"Товар", "Продавец", "Покупатель", "Характеристика товара", "Цена",
-			"Количество", "Единица измерения" };
+	private String[] headernames = new String[] { "Р”Р°С‚Р° СЃРѕРІРµСЂС€РµРЅРёСЏ СЃРґРµР»РєРё",
+			"РўРѕРІР°СЂ", "РџСЂРѕРґР°РІРµС†", "РџРѕРєСѓРїР°С‚РµР»СЊ", "РҐР°СЂР°РєС‚РµСЂРёСЃС‚РёРєР° С‚РѕРІР°СЂР°", "Р¦РµРЅР°",
+			"РљРѕР»РёС‡РµСЃС‚РІРѕ", "Р•РґРёРЅРёС†Р° РёР·РјРµСЂРµРЅРёСЏ" };
 
 	private String[] fieldnames = new String[] { "PCHDATE", "PRODUCT", "COMPANY",
 			"DEPARTMENT", "PRODUCTPROPERTY", "PRICE", "VOLUME", "UNIT" };

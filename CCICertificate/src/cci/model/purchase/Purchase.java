@@ -1,4 +1,4 @@
-package cci.model.purchase;
+﻿package cci.model.purchase;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

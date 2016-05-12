@@ -1,4 +1,4 @@
-package cci.model.cert;
+﻿package cci.model.cert;
 
 public class Company {
 	private long id;		

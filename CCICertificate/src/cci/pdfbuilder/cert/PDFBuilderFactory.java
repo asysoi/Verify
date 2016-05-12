@@ -1,18 +1,18 @@
-package cci.pdfbuilder.cert;
+п»їpackage cci.pdfbuilder.cert;
 
 public class PDFBuilderFactory {
-	  public static final String PAGE_CT1 = "СТ-1";
-	  public static final String PAGE_CT1_b = "СТ-1b";
-	  public static final String PAGE_GENERAL = "Общая";
-	  public static final String PAGE_GENERAL_b = "Общаяb";
-	  public static final String PAGE_GENERAL_ENG = "Общая англ.";
-	  public static final String PAGE_GENERAL_ENG_b = "Общая англ.b";
-	  public static final String PAGE_CT2 = "СТ-2";
-	  public static final String PAGE_CT2_b = "СТ-2b";
-	  public static final String PAGE_CT2_ENG = "СТ-2 англ.";
-	  public static final String PAGE_CT2_ENG_b = "СТ-2 англ.b";
-	  public static final String PAGE_A = "А";
-	  public static final String PAGE_TEXTILE = "Текстиль";
+	  public static final String PAGE_CT1 = "РЎРў-1";
+	  public static final String PAGE_CT1_b = "РЎРў-1b";
+	  public static final String PAGE_GENERAL = "РћР±С‰Р°СЏ";
+	  public static final String PAGE_GENERAL_b = "РћР±С‰Р°СЏb";
+	  public static final String PAGE_GENERAL_ENG = "РћР±С‰Р°СЏ Р°РЅРіР».";
+	  public static final String PAGE_GENERAL_ENG_b = "РћР±С‰Р°СЏ Р°РЅРіР».b";
+	  public static final String PAGE_CT2 = "РЎРў-2";
+	  public static final String PAGE_CT2_b = "РЎРў-2b";
+	  public static final String PAGE_CT2_ENG = "РЎРў-2 Р°РЅРіР».";
+	  public static final String PAGE_CT2_ENG_b = "РЎРў-2 Р°РЅРіР».b";
+	  public static final String PAGE_A = "Рђ";
+	  public static final String PAGE_TEXTILE = "РўРµРєСЃС‚РёР»СЊ";
 	  
 	  
 	  

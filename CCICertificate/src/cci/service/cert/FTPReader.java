@@ -1,4 +1,4 @@
-package cci.service.cert;
+п»їpackage cci.service.cert;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,7 +54,7 @@ public class FTPReader {
 							try {
 								cert = xmlreader.loadCertificate(input);
 							} catch (Exception ex) {
-								System.out.println("Сертификат не загружен из-за ошибки: " + ex.toString());
+								System.out.println("РЎРµСЂС‚РёС„РёРєР°С‚ РЅРµ Р·Р°РіСЂСѓР¶РµРЅ РёР·-Р·Р° РѕС€РёР±РєРё: " + ex.toString());
 							}
 							input.close();
 								
@@ -74,14 +74,14 @@ public class FTPReader {
 									   f.deleteFile(directory + file.getName());
 									}
 								} catch(Exception ex) {
-									System.out.println("Сертификат не сохранен из-за ошибки: " + ex.toString());
+									System.out.println("РЎРµСЂС‚РёС„РёРєР°С‚ РЅРµ СЃРѕС…СЂР°РЅРµРЅ РёР·-Р·Р° РѕС€РёР±РєРё: " + ex.toString());
 								}
 							}
 						} else {
 							System.out.println("Input isn't opened");
 						}
 					} catch (Exception ex) {
-						System.out.println("Сертификат не загружен из-за ошибки: " + ex.toString());	
+						System.out.println("РЎРµСЂС‚РёС„РёРєР°С‚ РЅРµ Р·Р°РіСЂСѓР¶РµРЅ РёР·-Р·Р° РѕС€РёР±РєРё: " + ex.toString());	
 					}
 					System.out.println(System.currentTimeMillis() - start);
 				}

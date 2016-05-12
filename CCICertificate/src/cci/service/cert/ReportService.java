@@ -1,4 +1,4 @@
-package cci.service.cert;
+п»їpackage cci.service.cert;
 
 import java.util.List;
 import java.util.Locale;
@@ -69,7 +69,7 @@ public class ReportService {
 		try {
 			certs = certificateDAO.getReportCertificates(dbfields, orderby, order, builder);
 		} catch (Exception ex) {
-			LOG.info("Ошибка загрузки списка сертификатов для выгрузки: " + ex.toString());
+			LOG.info("РћС€РёР±РєР° Р·Р°РіСЂСѓР·РєРё СЃРїРёСЃРєР° СЃРµСЂС‚РёС„РёРєР°С‚РѕРІ РґР»СЏ РІС‹РіСЂСѓР·РєРё: " + ex.toString());
 		}
 
 		return certs;

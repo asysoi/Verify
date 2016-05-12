@@ -1,4 +1,4 @@
-package cci.repository.cert;
+п»їpackage cci.repository.cert;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -44,7 +44,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	}
 
 	// ---------------------------------------------------------------
-	// количкество сертификатов в списке
+	// РєРѕР»РёС‡РєРµСЃС‚РІРѕ СЃРµСЂС‚РёС„РёРєР°С‚РѕРІ РІ СЃРїРёСЃРєРµ
 	// ---------------------------------------------------------------
 	public int getViewPageCount(SQLBuilder builder) {
 		long start = System.currentTimeMillis();
@@ -62,7 +62,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	}
 
 	// ---------------------------------------------------------------
-	// поиск сертификата по id
+	// РїРѕРёСЃРє СЃРµСЂС‚РёС„РёРєР°С‚Р° РїРѕ id
 	// ---------------------------------------------------------------
 	public Certificate findByID(Long id) {
 		Certificate cert = null;
@@ -84,7 +84,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	}
 
 	// ---------------------------------------------------------------
-	// поиск сертификата по id
+	// РїРѕРёСЃРє СЃРµСЂС‚РёС„РёРєР°С‚Р° РїРѕ id
 	// ---------------------------------------------------------------
 	public Certificate check(Certificate cert) {
 		Certificate rcert = null;
@@ -114,8 +114,8 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	}
 
 	// ---------------------------------------------------------------
-	// поиск скртификата по номеру бланка
-	// возможно несколько сертификатов
+	// РїРѕРёСЃРє СЃРєСЂС‚РёС„РёРєР°С‚Р° РїРѕ РЅРѕРјРµСЂСѓ Р±Р»Р°РЅРєР°
+	// РІРѕР·РјРѕР¶РЅРѕ РЅРµСЃРєРѕР»СЊРєРѕ СЃРµСЂС‚РёС„РёРєР°С‚РѕРІ
 	// ---------------------------------------------------------------
 	public List<Certificate> findByNBlanka(String number) {
 		List<Certificate> certs = null;
@@ -139,7 +139,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	}
 
 	// ---------------------------------------------------------------
-	// поиск сертификата по номеру сертификата
+	// РїРѕРёСЃРє СЃРµСЂС‚РёС„РёРєР°С‚Р° РїРѕ РЅРѕРјРµСЂСѓ СЃРµСЂС‚РёС„РёРєР°С‚Р°
 	// ---------------------------------------------------------------
 	public List<Certificate> findByNumberCert(String number) {
 		List<Certificate> certs = null;
@@ -163,7 +163,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	}
 
 	// ---------------------------------------------------------------
-	// вернуть очередную страницу списка сертификатов
+	// РІРµСЂРЅСѓС‚СЊ РѕС‡РµСЂРµРґРЅСѓСЋ СЃС‚СЂР°РЅРёС†Сѓ СЃРїРёСЃРєР° СЃРµСЂС‚РёС„РёРєР°С‚РѕРІ
 	// ---------------------------------------------------------------
 	public List<Certificate> findViewNextPage(String[] dbfields, int page, int pagesize,
 			String orderby, String order, SQLBuilder builder) {
@@ -212,7 +212,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	}
 
 	// ---------------------------------------------------------------
-	// вернуть все сертификаты
+	// РІРµСЂРЅСѓС‚СЊ РІСЃРµ СЃРµСЂС‚РёС„РёРєР°С‚С‹
 	// ---------------------------------------------------------------
 	public List<Certificate> findAll() {
 		String sql = "select * from CERT_VIEW ORDER BY cert_id";
@@ -422,7 +422,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	// Get Analitic Report grouped by Fields 
 	// ---------------------------------------------------------------
 	public List<Report> getReport(String[] fields, SQLBuilder builder, Boolean onfilter) {
-		String field = fields[0];   // берем только одно поле для группировки
+		String field = fields[0];   // Р±РµСЂРµРј С‚РѕР»СЊРєРѕ РѕРґРЅРѕ РїРѕР»Рµ РґР»СЏ РіСЂСѓРїРїРёСЂРѕРІРєРё
 		
 		String sql = "SELECT " + field + " as field, COUNT(*) as value FROM (SELECT * FROM CERT_VIEW " +  
 					 (onfilter ? builder.getWhereClause() : "") + ") group by " + field + " ORDER BY value DESC" ;		

@@ -1,4 +1,4 @@
-package cci.model.cert;
+﻿package cci.model.cert;
 
 public interface ProductIterator {
     public Product first();

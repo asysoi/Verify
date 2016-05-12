@@ -1,4 +1,4 @@
-package cci.model.purchase;
+﻿package cci.model.purchase;
 
 public class Product {
 	private long id;
