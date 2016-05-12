@@ -13,7 +13,8 @@ public class SQLBuilderCertificate extends SQLBuilder {
 			for (String key : getFilter().getConditions().keySet()) {
 				FilterCondition condition =getFilter().getConditions().get(key);
 				
-				if (condition.getValue() != null && condition.getOperator() != null && !condition.getValue().trim().isEmpty() && !condition.getOperator().trim().isEmpty()) {
+				if (condition.getValue() != null && condition.getOperator() != null 
+						&& !condition.getValue().trim().isEmpty() && !condition.getOperator().trim().isEmpty()) {
 					
 					if (key.equals("TOVAR") || key.equals("KRITER") || key.equals("SCHET")) {
 					     where += (where.trim().isEmpty() ? "" : " AND ") + 

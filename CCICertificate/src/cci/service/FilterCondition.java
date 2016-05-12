@@ -83,11 +83,11 @@ public class FilterCondition {
 			if (type == FieldType.DATE) {
 				wherefilter = " " + dbfield + " "
 						+ operator
-						+ " TO_DATE('" + value + "', 'DD.MM.YY')";
+						+ " TO_DATE( ? , 'DD.MM.YY')";
 			} else if (type == FieldType.NUMBER) {
 				wherefilter = " " + dbfield + " "
 						+ operator
-						+ " " + value + " ";
+						+ " ? ";
 			} else {
 				wherefilter = " UPPER("
 						+ dbfield
