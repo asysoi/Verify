@@ -336,11 +336,12 @@ public class CertController {
 		CertificatePDFBuilder builder = new CertificatePDFBuilder();
 		String fout = absoluteDiskPath + "/out/" + cert.getCert_id() + ".pdf";
 		String fconf = absoluteDiskPath + "/config/pages.xml";
+		String fpath = absoluteDiskPath + "/fonts/";
 		
 		CountryConverter.setCountrymap(certService.getCountriesList());
 		
 		try {
-		   builder.createPdf(fout, cert, fconf);
+		   builder.createPdf(fout, cert, fconf, fpath);
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}

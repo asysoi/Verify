@@ -1,14 +1,18 @@
-﻿package cci.config.cert;
+package cci.config.cert;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.DocumentBuilder;
 
+import org.apache.log4j.Logger;
 import org.dom4j.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.pdf.BaseFont;
+
+import cci.pdfbuilder.cert.CertificatePDFBuilder;
+import cci.web.controller.cert.CertController;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -17,6 +21,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class XMLConfigReader extends PDFConfigReader {
+	private static final Logger LOG=Logger.getLogger(XMLConfigReader.class);
+	
 	private final String TAG_TARGETS = "targets";
 	private final String TAG_TARGET = "target";
 	private final String TAG_TYPES = "producttypes";
@@ -48,12 +54,14 @@ public class XMLConfigReader extends PDFConfigReader {
 	private final String TAG_FOOTERROW = "footerrow";
 	private final String TAG_BODYROW = "bodyrow";
 	private static String filename;
+	private static String fontpath;
 	private static PDFConfigReader reader;
 	private org.w3c.dom.Document doc;
 
-	public static PDFConfigReader getInstance(String configFileName) {
+	public static PDFConfigReader getInstance(String configFileName, String fpath) {
 		if (reader == null) {
 			filename = configFileName;
+			fontpath = fpath;
 			reader = new XMLConfigReader();
 		}
 		return reader;
@@ -347,6 +355,15 @@ public class XMLConfigReader extends PDFConfigReader {
 					cell.setNumber(Integer.parseInt(nmap.getNamedItem("number")
 							.getNodeValue()));
 					cell.setFont(nmap.getNamedItem("font").getNodeValue());
+					try {
+						BaseFont bf = BaseFont.createFont(
+							fontpath + cell.getFont() + ".ttf", 
+							BaseFont.IDENTITY_H,
+							BaseFont.EMBEDDED);
+						cell.setBf(bf);
+					} catch (Exception ex) {
+						LOG.info("Ошибка загрузки шрифта: " + ex.getMessage());
+					}
 					cell.setFontsize(Integer.parseInt(nmap
 							.getNamedItem("fsize").getNodeValue()));
 					cell.setBorder(Integer.parseInt(nmap.getNamedItem("border")
@@ -427,8 +444,7 @@ public class XMLConfigReader extends PDFConfigReader {
 					try {
 						box.setFont(tagvalue);
 						BaseFont bf = BaseFont.createFont(
-								System.getenv("windir") + "\\fonts\\"
-										+ tagvalue + ".TTF",
+								fontpath + tagvalue + ".ttf",
 								BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
 						box.setBf(bf);
 					} catch (Exception ex) {
