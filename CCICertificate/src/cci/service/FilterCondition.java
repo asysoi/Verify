@@ -76,29 +76,33 @@ public class FilterCondition {
 	}
 	
 	
-	public String getWhereClause() {
+	public SQLQueryUnit getWhereClause() {
+		SQLQueryUnit sunit = new SQLQueryUnit();
 		String wherefilter = "";
 
 		if (field != null && operator != null && value != null) {
 			if (type == FieldType.DATE) {
 				wherefilter = " " + dbfield + " "
 						+ operator
-						+ " TO_DATE( ? , 'DD.MM.YY')";
+						+ " TO_DATE( :" + field + ", 'DD.MM.YY')";
+				sunit.addParam(field, value);
 			} else if (type == FieldType.NUMBER) {
 				wherefilter = " " + dbfield + " "
 						+ operator
-						+ " ? ";
+						+ " :" + field;
+				sunit.addParam(field, Integer.valueOf(value));
 			} else {
 				wherefilter = " UPPER("
 						+ dbfield
 						+ ") "
 						+ operator
-						+ " "
-						+ (operator.equals("like") ? "'%" + value.toUpperCase()
-								+ "%'" : "'" + value.toUpperCase() + "' ");
+						+ " :" + field;
+				sunit.addParam(field, (operator.equals("like") ? "%" + value.toUpperCase()
+								+ "%" : value.toUpperCase()));
 			}
 		}
-		return wherefilter;
+        sunit.setClause(wherefilter);		
+		return sunit;
 	}
 
 	@Override

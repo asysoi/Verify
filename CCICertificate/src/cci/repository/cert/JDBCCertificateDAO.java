@@ -29,6 +29,7 @@ import cci.model.cert.Product;
 import cci.model.cert.Report;
 import cci.repository.SQLBuilder;
 import cci.service.FilterCondition;
+import cci.service.SQLQueryUnit;
 import cci.web.controller.client.ClientController;
 import cci.web.controller.purchase.ViewPurchase;
 
@@ -44,25 +45,27 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	}
 
 	// ---------------------------------------------------------------
-	// количкество сертификатов в списке
+	// количество сертификатов в списке -> PS
 	// ---------------------------------------------------------------
 	public int getViewPageCount(SQLBuilder builder) {
 		long start = System.currentTimeMillis();
-
+        SQLQueryUnit qunit = builder.getSQLUnitWhereClause();     
 		String sql = "SELECT count(*) FROM CERT_VIEW "
-				+ builder.getWhereClause();
+				+ qunit.getClause();
 
-		int count = this.template.getJdbcOperations().queryForInt(sql);
+		// int count = this.template.getJdbcOperations().queryForInt(sql);
 
+		Integer count = this.template.queryForObject(sql, qunit.getParams(), Integer.class);
+		
 		LOG.info(sql);
 		LOG.info("Query time: "
 				+ (System.currentTimeMillis() - start));
 
-		return count;
+		return count.intValue();
 	}
 
 	// ---------------------------------------------------------------
-	// поиск сертификата по id
+	// поиск сертификата по id -> PS
 	// ---------------------------------------------------------------
 	public Certificate findByID(Long id) {
 		Certificate cert = null;
@@ -84,7 +87,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	}
 
 	// ---------------------------------------------------------------
-	// поиск сертификата по id
+	// поиск сертификата по id -> PS
 	// ---------------------------------------------------------------
 	public Certificate check(Certificate cert) {
 		Certificate rcert = null;
@@ -114,8 +117,8 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	}
 
 	// ---------------------------------------------------------------
-	// поиск скртификата по номеру бланка
-	// возможно несколько сертификатов
+	// поиск сертификата по номеру бланка
+	// возможно несколько сертификатов -> PS
 	// ---------------------------------------------------------------
 	public List<Certificate> findByNBlanka(String number) {
 		List<Certificate> certs = null;
@@ -139,7 +142,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	}
 
 	// ---------------------------------------------------------------
-	// поиск сертификата по номеру сертификата
+	// поиск сертификата по номеру сертификата -> PS
 	// ---------------------------------------------------------------
 	public List<Certificate> findByNumberCert(String number) {
 		List<Certificate> certs = null;
@@ -163,7 +166,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	}
 
 	// ---------------------------------------------------------------
-	// вернуть очередную страницу списка сертификатов
+	// вернуть очередную страницу списка сертификатов XXX
 	// ---------------------------------------------------------------
 	public List<Certificate> findViewNextPage(String[] dbfields, int page, int pagesize,
 			String orderby, String order, SQLBuilder builder) {
@@ -189,30 +192,37 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		for (String field : dbfields) {
 		    flist += ", " + field;  	
 		}
-
+        SQLQueryUnit filter = builder.getSQLUnitWhereClause();
+        LOG.info("SQLQueryUnit : " + filter);
+        
 		String sql = "select " + flist 
 				+ " from cert_view where cert_id in "
 				+ " (select  a.cert_id "
 				+ " from (SELECT cert_id FROM (select cert_id from cert_view "
-				+  builder.getWhereClause()
+				+  filter.getClause()
 				+ " ORDER by " +  orderby + " " + order + ", cert_id " + order  
-				+ ") where rownum <= ? "    
+				+ ") where rownum <= :highposition "    
 				+ ") a left join (SELECT cert_id FROM (select cert_id from cert_view "
-				+  builder.getWhereClause()
+				+  filter.getClause()
 				+ " ORDER by " +  orderby + " " + order + ", cert_id " + order
-				+ ") where rownum <= ? "   
+				+ ") where rownum <= :lowposition "   
 				+ ") b on a.cert_id = b.cert_id where b.cert_id is null)" 
 				+ " ORDER by " +  orderby + " " + order + ", cert_id " + order;
 		
+		Map<String, Object> params = filter.getParams();
+		params.put("highposition", Integer.valueOf(page * pagesize));
+		params.put("lowposition", Integer.valueOf((page - 1) * pagesize));
 		
 		LOG.info("Next page : " + sql);
-		return this.template.getJdbcOperations().query(sql,
-				new Object[] {page * pagesize, (page - 1) * pagesize}, 
+		//return this.template.getJdbcOperations().query(sql,	params, 
+		//		new BeanPropertyRowMapper<Certificate>(Certificate.class));
+		return this.template.query(sql,	params, 
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));
+		
 	}
 
 	// ---------------------------------------------------------------
-	// вернуть все сертификаты
+	// вернуть все сертификаты -> PS
 	// ---------------------------------------------------------------
 	public List<Certificate> findAll() {
 		String sql = "select * from CERT_VIEW ORDER BY cert_id";
@@ -222,7 +232,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	}
 
 	// ---------------------------------------------------------------
-	// save certificate
+	// save certificate -> PS
 	// ---------------------------------------------------------------
 	public int save(Certificate cert) {
 		String sql_cert = "insert into c_cert values "
@@ -260,7 +270,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	}
 
 	// ---------------------------------------------------------------
-	// update certificate
+	// update certificate  XXXX
 	// ---------------------------------------------------------------
 	public void update(Certificate cert) {
 
@@ -300,7 +310,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	}
 
 	// ---------------------------------------------------------------
-	// find certificate by query template
+	// find certificate by query template -> PS
 	// ---------------------------------------------------------------
 	public List<Certificate> findByCertificate(Certificate qcert) {
 		List<Certificate> certs = null;
@@ -331,7 +341,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	}
 
 	// ---------------------------------------------------------------
-	// Get list of departments
+	// Get list of departments -> PS
 	// ---------------------------------------------------------------
 	public Map<String, String> getDepartmentsList() {
 		String sql = "SELECT id, otd_name from C_OTD Order by otd_name";
@@ -349,7 +359,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	}
 
 	// ---------------------------------------------------------------
-	// Get MAP of branch's by roles
+	// Get MAP of branch's by roles -> PS
 	// ---------------------------------------------------------------
 	public Map<String,String> getACL() {
 		String sql = "SELECT acl_role, id from C_OTD";
@@ -369,7 +379,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	}
 	
 	// ---------------------------------------------------------------
-	// Get list of countries
+	// Get list of countries -> PS
 	// ---------------------------------------------------------------
 	public Map<String, String> getCountriesList() {
 		String sql = "SELECT * from C_COUNTRY ORDER BY NAME";
@@ -387,7 +397,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	}
 
 	// ---------------------------------------------------------------
-	// Get list of forms
+	// Get list of forms  -> PS
 	// ---------------------------------------------------------------
 	public List<String> getFormsList() {
 		String sql = "SELECT forms from c_cert group by forms having forms is not null ORDER BY forms ";
