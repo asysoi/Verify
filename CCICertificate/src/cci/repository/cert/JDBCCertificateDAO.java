@@ -469,25 +469,36 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		    flist += ", " + field;  	
 		}
 
+		SQLQueryUnit filter = builder.getSQLUnitWhereClause();
+	    LOG.info("SQLQueryUnit : " + filter);
+	        
 		String sql = "select " + flist 
 				+ " from cert_report where file_in_id in "
 				+ " (select  /*+ materialize  no_merge */ a.file_in_id "
 				+ " from (SELECT file_in_id FROM (select file_in_id from cert_report "
-				+  builder.getWhereClause()
+				+  filter.getClause()
 				+ " ORDER by " +  orderby + " " + order + ", file_in_id " + order  
-				+ ") where rownum <= ? "  
+				+ ") where rownum <= :highposition "  
 				+ ") a left join (SELECT file_in_id FROM (select file_in_id from cert_report "
-				+  builder.getWhereClause()
+				+  filter.getClause()
 				+ " ORDER by " +  orderby + " " + order + ", file_in_id " + order
-				+ ") where rownum <= ? "  
+				+ ") where rownum <=  :lowposition"  
 				+ ") b on a.file_in_id = b.file_in_id where b.file_in_id is null)" 
 				+ " ORDER by " +  orderby + " " + order + ", file_in_id " + order;
 
+		LOG.info("Next loaded page : " + sql);
+		
+		Map<String, Object> params = filter.getParams();
+		params.put("highposition", Integer.valueOf(page * pagesize));
+		params.put("lowposition", Integer.valueOf((page - 1) * pagesize));
+		
 		LOG.info("Next page : " + sql);
-		return this.template.getJdbcOperations().query(sql,
-				new Object[] {page * pagesize, (page - 1) * pagesize},
+		return this.template.query(sql,	params, 
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));
-
+		
+		//return this.template.getJdbcOperations().query(sql,
+		//		new Object[] {page * pagesize, (page - 1) * pagesize},
+		//		new BeanPropertyRowMapper<Certificate>(Certificate.class));
 	}
 
 	// ---------------------------------------------------------------
@@ -495,12 +506,13 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	// ---------------------------------------------------------------
 	public int getViewPageReportCount(SQLBuilder builder) {
 		long start = System.currentTimeMillis();
-
-		String sql = "select count(*) from CERT_REPORT " + builder.getWhereClause();
+		SQLQueryUnit qunit = builder.getSQLUnitWhereClause();
+		
+		String sql = "select count(*) from CERT_REPORT " + qunit.getClause();
 		
 		LOG.info(sql);
-		int count = this.template.getJdbcOperations().queryForInt(sql);
-
+		Integer count = this.template.queryForObject(sql, qunit.getParams(), Integer.class);
+		
 		return count;
 	}
 
