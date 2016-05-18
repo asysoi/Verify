@@ -93,7 +93,7 @@ public class FilterCondition {
 				sunit.addParam(field, Integer.valueOf(value));
 			} else if (type == FieldType.TEXT) {
 				wherefilter = " contains(" + dbfield + ",  :" + field + ") > 0 ";
-				sunit.addParam(field, "%" + value + "%");	
+				sunit.addParam(field, value );	
 			} else {
 				wherefilter = " UPPER("
 						+ dbfield

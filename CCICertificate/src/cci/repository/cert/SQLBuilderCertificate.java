@@ -24,7 +24,7 @@ public class SQLBuilderCertificate extends SQLBuilder {
 					SQLQueryUnit unit = condition.getWhereClause(); 
 					if (key.equals("TOVAR") || key.equals("KRITER") || key.equals("SCHET")) {
 					     where += (where.trim().isEmpty() ? "" : " AND ") + 
-									"cert_id in ( SELECT cert_id FROM C_Product where " +
+									"cert_id in ( SELECT cert_id FROM C_Product_Denorm where " +
 									unit.getClause() + 
 									") ";
 					} else {

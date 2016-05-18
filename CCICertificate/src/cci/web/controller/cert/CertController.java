@@ -161,7 +161,7 @@ public class CertController {
 			ModelMap model) {
 
 		long start = System.currentTimeMillis();
-		LOG.debug("=========================== GET CERT LIST =================================== >");
+		LOG.info("=========================== GET CERT LIST =================================== >");
 
 		// ViewManager vmanager = (ViewManager)
 		// request.getSession().getAttribute("vmanager");
@@ -243,7 +243,7 @@ public class CertController {
 		model.addAttribute("pages", vmanager.getPagesList());
 		model.addAttribute("sizes", vmanager.getSizesList());
 		model.addAttribute("timeduration", 
-				(System.currentTimeMillis() - start) + " = " + (step3 - step2) + " + " + (step4 - step3));
+				" " + (step3 - step2) + " + " + (step4 - step3) + " = " + (System.currentTimeMillis() - start));
 
 		return "listcertificates";
 	}

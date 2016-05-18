@@ -52,9 +52,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
         SQLQueryUnit qunit = builder.getSQLUnitWhereClause();     
 		String sql = "SELECT count(*) FROM CERT_VIEW "
 				+ qunit.getClause();
-
-		// int count = this.template.getJdbcOperations().queryForInt(sql);
-
+	
 		Integer count = this.template.queryForObject(sql, qunit.getParams(), Integer.class);
 		
 		LOG.info(sql);
@@ -214,8 +212,6 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		params.put("lowposition", Integer.valueOf((page - 1) * pagesize));
 		
 		LOG.info("Next page : " + sql);
-		//return this.template.getJdbcOperations().query(sql,	params, 
-		//		new BeanPropertyRowMapper<Certificate>(Certificate.class));
 		return this.template.query(sql,	params, 
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));
 		
@@ -420,11 +416,15 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		    flist += ", " + field;  	
 		}
 		
+		SQLQueryUnit filter = builder.getSQLUnitWhereClause();
+    	Map<String, Object> params = filter.getParams();
+
 		String sql = " SELECT " + flist + " FROM CERT_VIEW_TOFILE " 
-				+ builder.getWhereClause() + " ORDER BY " +  orderby + " " + order;
+				+ filter.getClause() + " ORDER BY " +  orderby + " " + order;
 
 		LOG.info("Get certificates: " + sql);
-		return this.template.getJdbcOperations().query(sql,
+		
+		return this.template.query(sql,	params, 
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));
 	}
 
@@ -434,11 +434,16 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	public List<Report> getReport(String[] fields, SQLBuilder builder, Boolean onfilter) {
 		String field = fields[0];   // берем только одно поле для группировки
 		
+		SQLQueryUnit filter = builder.getSQLUnitWhereClause(); 		
+		
 		String sql = "SELECT " + field + " as field, COUNT(*) as value FROM (SELECT * FROM CERT_VIEW " +  
-					 (onfilter ? builder.getWhereClause() : "") + ") group by " + field + " ORDER BY value DESC" ;		
+					 (onfilter ? filter.getClause() : "") + ") group by " + field + " ORDER BY value DESC" ;		
 
 		LOG.debug("Make report: " + sql);
-		return this.template.getJdbcOperations().query(sql,
+		
+		Map<String, Object> params = filter.getParams();
+
+		return this.template.query(sql,	params, 
 				new BeanPropertyRowMapper<Report>(Report.class));
 	}
 
@@ -496,22 +501,18 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		return this.template.query(sql,	params, 
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));
 		
-		//return this.template.getJdbcOperations().query(sql,
-		//		new Object[] {page * pagesize, (page - 1) * pagesize},
-		//		new BeanPropertyRowMapper<Certificate>(Certificate.class));
 	}
 
 	// ---------------------------------------------------------------
     // Get Count Certificates  
 	// ---------------------------------------------------------------
 	public int getViewPageReportCount(SQLBuilder builder) {
-		long start = System.currentTimeMillis();
-		SQLQueryUnit qunit = builder.getSQLUnitWhereClause();
+		SQLQueryUnit filter = builder.getSQLUnitWhereClause();
 		
-		String sql = "select count(*) from CERT_REPORT " + qunit.getClause();
+		String sql = "select count(*) from CERT_REPORT " + filter.getClause();
 		
 		LOG.info(sql);
-		Integer count = this.template.queryForObject(sql, qunit.getParams(), Integer.class);
+		Integer count = this.template.queryForObject(sql, filter.getParams(), Integer.class);
 		
 		return count;
 	}
@@ -521,6 +522,9 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	// ---------------------------------------------------------------
 	public List<Certificate> getReportCertificates(String[] dbfields, String orderby,
 			String order, SQLBuilder builder) {
+		
+		SQLQueryUnit filter = builder.getSQLUnitWhereClause();
+		
 		String flist = "cert_id";
 		
 		for (String field : dbfields) {
@@ -528,11 +532,13 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		}
 		
 		String sql = " SELECT " + flist + " FROM CERT_VIEW_LOAD_REPORT " 
-				+ builder.getWhereClause() + " ORDER BY " +  orderby + " " + order;
+				+ filter.getClause() + " ORDER BY " +  orderby + " " + order;
 
 		LOG.info("Get certificates for Report: " + sql);
-		return this.template.getJdbcOperations().query(sql,
+
+		return this.template.query(sql,	filter.getParams(), 
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));
+		
 	}
 
 }

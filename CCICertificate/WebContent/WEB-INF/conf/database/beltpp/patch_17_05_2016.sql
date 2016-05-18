@@ -21,3 +21,12 @@ create index indx_cproduct_context on C_PRODUCT(tovar)
 create index indx_cproduct_ctxcat on C_PRODUCT(tovar) indextype is CTXSYS.CTXCAT parameters ('index set cproduct_set');
 
 EXEC CTX_DDL.SYNC_INDEX('indx_cproduct_context');
+
+// add indexes to product_denorm table
+create index indx_cproduct_denorm_ctx on C_PRODUCT_DENORM(tovar) indextype is ctxsys.context;
+  
+CREATE UNIQUE INDEX INDX_PRODUCT_DENORM_CERTID ON C_PRODUCT_DENORM ("CERT_ID");
+
+
+ 
+  
