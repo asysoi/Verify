@@ -41,7 +41,7 @@ public class CertFilter extends Filter {
 				"STATUS", "KOLDOPLIST", "FLEXP", "UNNEXP", "EXPORTER", "EXPS",
 				"EXPADRESS", "FLIMP", "IMPORTERFULL", "ADRESSIMP", "FLSEZ", "SEZ",
 				"FLSEZREZ", "STRANAP", "OTD_ID", "OTD_NAME", "PARENTNUMBER",
-				"PARENTSTATUS", "TOVAR", "DENORM", "KRITER", "SCHET", "ISSUEDATE", "ISSUEDATE", 
+				"PARENTSTATUS", "TOVAR", "DENORM", "TOVAR", "SCHET", "ISSUEDATE", "ISSUEDATE", 
 				"KOLDOPLIST", "KOLDOPLIST", "OTD_ID"};
 		
 		FieldType[] types = new FieldType[] {
@@ -51,7 +51,7 @@ public class CertFilter extends Filter {
 				FieldType.STRING, FieldType.NUMBER, FieldType.STRING,FieldType.STRING, FieldType.STRING, FieldType.STRING,
 				FieldType.STRING, FieldType.STRING, FieldType.STRING,FieldType.STRING, FieldType.STRING, FieldType.STRING,
 				FieldType.STRING, FieldType.STRING, FieldType.NUMBER,FieldType.STRING, FieldType.STRING, FieldType.STRING,
-				FieldType.TEXT, FieldType.STRING, FieldType.STRING,FieldType.STRING, FieldType.DATE, FieldType.DATE, 
+				FieldType.TEXT, FieldType.STRING, FieldType.TEXT,FieldType.STRING, FieldType.DATE, FieldType.DATE, 
 				FieldType.NUMBER, FieldType.NUMBER, FieldType.NUMBER};
 		
 		

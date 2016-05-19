@@ -194,14 +194,14 @@
 		<table class="filter">
 			<tr>
 				<td>Товар</td>
-				<td><form:input path="viewcertificate.tovar" id="tovar" /><a
+				<td><form:input path="viewcertificate.tovar" id="tovar" style="width: 380px"/><a
 					href="javascript:clearelement($('#tovar'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 			</tr>
 			<tr>
 				<td>Критерий происхождения</td>
-				<td><form:input path="viewcertificate.kriter" id="kriter" /><a
+				<td><form:input path="viewcertificate.kriter" id="kriter" style="width: 250px"/><a
 					href="javascript:clearelement($('#kriter'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>

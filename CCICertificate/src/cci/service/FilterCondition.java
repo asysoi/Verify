@@ -1,6 +1,5 @@
 ﻿package cci.service;
 
-
 public class FilterCondition {
 	private String field;
 	private String operator;
@@ -8,6 +7,7 @@ public class FilterCondition {
 	private String dbfield;
 	private FieldType type;
 	private Boolean onfilter;
+	private boolean isPREPARED = false;
 
 	public FieldType getType() {
 		return type;
@@ -57,8 +57,6 @@ public class FilterCondition {
 		return dbfield;
 	}
 
-	
-	  
 	public String makeWhereFilter() {
 		String wherefilter = "";
 
@@ -74,40 +72,65 @@ public class FilterCondition {
 		}
 		return wherefilter;
 	}
-	
-	
+
 	public SQLQueryUnit getWhereClause() {
 		SQLQueryUnit sunit = new SQLQueryUnit();
 		String wherefilter = "";
 
 		if (field != null && operator != null && value != null) {
-			if (type == FieldType.DATE) {
-				wherefilter = " " + dbfield + " "
-						+ operator
-						+ " TO_DATE( :" + field + ", 'DD.MM.YY')";
-				sunit.addParam(field, value);
-			} else if (type == FieldType.NUMBER) {
-				wherefilter = " " + dbfield + " "
-						+ operator
-						+ " :" + field;
-				sunit.addParam(field, Integer.valueOf(value));
-			} else if (type == FieldType.TEXT) {
-				wherefilter = " contains(" + dbfield + ",  :" + field + ") > 0 ";
-				sunit.addParam(field, value );
-			} else if (type == FieldType.TEXTSTRING) {
-					wherefilter = " contains(" + dbfield + ",  :" + field + ") > 0 ";
-					sunit.addParam(field, "%" + value + "%");	
+
+			if (isPREPARED) {
+				if (type == FieldType.DATE) {
+					wherefilter = " " + dbfield + " " + operator
+							+ " TO_DATE( :" + field + ", 'DD.MM.YY')";
+					sunit.addParam(field, value);
+
+				} else if (type == FieldType.NUMBER) {
+					wherefilter = " " + dbfield + " " + operator + " :" + field;
+					sunit.addParam(field, Integer.valueOf(value));
+				} else if (type == FieldType.TEXT) {
+					wherefilter = " contains(" + dbfield + ",  :" + field
+							+ ") > 0 ";
+					sunit.addParam(field, value);
+				} else if (type == FieldType.TEXTSTRING) {
+					wherefilter = " contains(" + dbfield + ",  :" + field
+							+ ") > 0 ";
+					sunit.addParam(field, "%" + value + "%");
+				} else {
+					wherefilter = " UPPER(" + dbfield + ") " + operator + " :"
+							+ field;
+					sunit.addParam(field, (operator.equals("like") ? "%"
+							+ value.toUpperCase() + "%" : value.toUpperCase()));
+				}
+				
 			} else {
-				wherefilter = " UPPER("
-						+ dbfield
-						+ ") "
-						+ operator
-						+ " :" + field;
-				sunit.addParam(field, (operator.equals("like") ? "%" + value.toUpperCase()
-								+ "%" : value.toUpperCase()));
+
+				if (type == FieldType.DATE) {
+					wherefilter = " " + dbfield + " " + operator + " TO_DATE('"
+							+ value + "', 'DD.MM.YY')";
+				} else if (type == FieldType.NUMBER) {
+					wherefilter = " " + dbfield + " " + operator + " " + value
+							+ " ";
+				} else if (type == FieldType.TEXT) {
+					wherefilter = " contains(" + dbfield + ", '" + value
+							+ "') > 0 ";
+				} else if (type == FieldType.TEXTSTRING) {
+					wherefilter = " contains(" + dbfield + ",  '%" + value
+							+ "%) > 0 ";
+				} else {
+					wherefilter = " UPPER("
+							+ dbfield
+							+ ") "
+							+ operator
+							+ " "
+							+ (operator.equals("like") ? "'%"
+									+ value.toUpperCase() + "%'" : "'"
+									+ value.toUpperCase() + "' ");
+				}
+
 			}
 		}
-        sunit.setClause(wherefilter);		
+		sunit.setClause(wherefilter);
 		return sunit;
 	}
 
