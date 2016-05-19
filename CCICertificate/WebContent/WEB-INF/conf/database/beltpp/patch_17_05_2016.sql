@@ -27,6 +27,8 @@ create index indx_cproduct_denorm_ctx on C_PRODUCT_DENORM(tovar) indextype is ct
   
 CREATE UNIQUE INDEX INDX_PRODUCT_DENORM_CERTID ON C_PRODUCT_DENORM ("CERT_ID");
 
+create index cert_nomercert_ctx on c_cert(nomercert) indextype is ctxsys.context;
+
 
  
   
