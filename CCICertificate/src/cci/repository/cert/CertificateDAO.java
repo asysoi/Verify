@@ -22,7 +22,7 @@ public interface CertificateDAO {
 		
 	public List<Certificate> findByCertificate(Certificate cert);
 	
-	public List<Certificate> findViewNextPage(String[] dbfields, int page, int pagesize, String orderby, String order, SQLBuilder builder);
+	public List<Certificate> findViewNextPage(String[] dbfields, int page, int pagesize, int pagecount, String orderby, String order, SQLBuilder builder);
 
 	public int save(Certificate cert);
 

@@ -166,10 +166,11 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	// ---------------------------------------------------------------
 	// вернуть очередную страницу списка сертификатов XXX
 	// ---------------------------------------------------------------
-	public List<Certificate> findViewNextPage(String[] dbfields, int page, int pagesize,
+	public List<Certificate> findViewNextPage(String[] dbfields, int page, int pagesize, int pagecount, 
 			String orderby, String order, SQLBuilder builder) {
+		String sql;
 		long start = System.currentTimeMillis();
-
+		
 		/* 
 		String flist = "cert.cert_id, cert.datacert";
 		
@@ -191,9 +192,12 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		    flist += ", " + field;  	
 		}
         SQLQueryUnit filter = builder.getSQLUnitWhereClause();
+        Map<String, Object> params = filter.getParams();
         LOG.info("SQLQueryUnit : " + filter);
         
-		String sql = "select " + flist 
+        
+        if (pagesize < pagecount) {
+        	sql = "select " + flist 
 				+ " from cert_view where cert_id in "
 				+ " (select  a.cert_id "
 				+ " from (SELECT cert_id FROM (select cert_id from cert_view "
@@ -206,14 +210,23 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				+ ") where rownum <= :lowposition "   
 				+ ") b on a.cert_id = b.cert_id where b.cert_id is null)" 
 				+ " ORDER by " +  orderby + " " + order + ", cert_id " + order;
-		
-		Map<String, Object> params = filter.getParams();
-		params.put("highposition", Integer.valueOf(page * pagesize));
-		params.put("lowposition", Integer.valueOf((page - 1) * pagesize));
+       		params.put("highposition", Integer.valueOf(page * pagesize));
+    		params.put("lowposition", Integer.valueOf((page - 1) * pagesize));
+        } else {
+        	sql = "select " + flist 
+    				+ " from cert_view "
+    				+  filter.getClause()
+    				+ " ORDER by " +  orderby + " " + order + ", cert_id " + order;  
+        }
 		
 		LOG.info("Next page : " + sql);
-		return this.template.query(sql,	params, 
+		
+		if (pagecount != 0) {
+		    return this.template.query(sql,	params, 
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));
+		} else {
+			return null;
+		}
 		
 	}
 

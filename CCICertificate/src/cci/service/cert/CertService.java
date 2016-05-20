@@ -52,14 +52,14 @@ public class CertService {
 	// ------------------------------------------------------------------------------
 	//
 	// ------------------------------------------------------------------------------
-	public List<Certificate> readCertificatesPage(String[] fields, int page, int pagesize,
+	public List<Certificate> readCertificatesPage(String[] fields, int page, int pagesize, int pagecount,
 			String orderby, String order, SQLBuilder builder) {
 		Locale.setDefault(new Locale("en", "en"));
 
 		List<Certificate> certs = null;
 
 		try {
-			certs = certificateDAO.findViewNextPage(fields, page, pagesize, orderby,
+			certs = certificateDAO.findViewNextPage(fields, page, pagesize, pagecount, orderby,
 					order, builder);
 		} catch (Exception ex) {
 			ex.printStackTrace();

@@ -1,5 +1,9 @@
 ﻿package cci.service;
 
+import org.apache.log4j.Logger;
+
+import cci.service.cert.CertService;
+
 public class FilterCondition {
 	private String field;
 	private String operator;
@@ -8,6 +12,8 @@ public class FilterCondition {
 	private FieldType type;
 	private Boolean onfilter;
 	private boolean isPREPARED = false;
+	
+	private static final Logger LOG = Logger.getLogger(FilterCondition.class);
 
 	public FieldType getType() {
 		return type;
@@ -89,18 +95,15 @@ public class FilterCondition {
 					wherefilter = " " + dbfield + " " + operator + " :" + field;
 					sunit.addParam(field, Integer.valueOf(value));
 				} else if (type == FieldType.TEXT) {
-					wherefilter = " contains(" + dbfield + ",  :" + field
-							+ ") > 0 ";
-					sunit.addParam(field, value);
+					wherefilter = " contains(" + dbfield + ",  :" + field + ") > 0 ";
+					sunit.addParam(field, placeHolderReplace(value, '*', '%', true));
 				} else if (type == FieldType.TEXTSTRING) {
-					wherefilter = " contains(" + dbfield + ",  :" + field
-							+ ") > 0 ";
-					sunit.addParam(field, "%" + value + "%");
+					wherefilter = " contains(" + dbfield + ",  :" + field + ") > 0 ";
+					sunit.addParam(field, placeHolderReplace(value, '*', '%', false));
 				} else {
 					wherefilter = " UPPER(" + dbfield + ") " + operator + " :"
 							+ field;
-					sunit.addParam(field, (operator.equals("like") ? "%"
-							+ value.toUpperCase() + "%" : value.toUpperCase()));
+					sunit.addParam(field, (operator.equals("like") ? placeHolderReplace(value.toUpperCase(), '*', '%', true) : value.toUpperCase()));
 				}
 				
 			} else {
@@ -112,26 +115,55 @@ public class FilterCondition {
 					wherefilter = " " + dbfield + " " + operator + " " + value
 							+ " ";
 				} else if (type == FieldType.TEXT) {
-					wherefilter = " contains(" + dbfield + ", '" + value
+					wherefilter = " contains(" + dbfield + ", '" + placeHolderReplace(value, '*', '%', true)
 							+ "') > 0 ";
 				} else if (type == FieldType.TEXTSTRING) {
-					wherefilter = " contains(" + dbfield + ",  '%" + value
-							+ "%) > 0 ";
+					wherefilter = " contains(" + dbfield + ", '" + placeHolderReplace(value, '*', '%', true)	+ "') > 0 ";
 				} else {
 					wherefilter = " UPPER("
 							+ dbfield
 							+ ") "
 							+ operator
 							+ " "
-							+ (operator.equals("like") ? "'%"
-									+ value.toUpperCase() + "%'" : "'"
-									+ value.toUpperCase() + "' ");
+							+ (operator.equals("like") ? "'" + placeHolderReplace(value.toUpperCase(), '*', '%', true) + "'" : 
+														 "'" + value.toUpperCase() + "' ");
 				}
 
 			}
 		}
 		sunit.setClause(wherefilter);
 		return sunit;
+	}
+
+	// ----------------------------------------------------------
+	// Replaces palceholders into target string  
+	//
+	// ----------------------------------------------------------
+	private Object placeHolderReplace(String value, char oldChar,
+			char newChar,  boolean allItems) {
+		String ret = null;
+		
+        if (allItems) {
+        	ret = value.replace(oldChar, newChar);
+        } else {
+        	char[] dst = new char[value.length()];
+        	value.getChars(0, value.length(), dst, 0);
+        	
+        	int i = 0;
+        	while (dst[i] == oldChar && i < value.length()) {
+        		dst[i++] = newChar;
+        	}
+        	
+        	i = value.length() -1;
+        	while (dst[i] == oldChar && i < value.length()) {
+        		dst[i--] = newChar;
+        	}
+        	
+        	ret = dst.toString();
+        }
+        
+        LOG.info("Value : " + value + " -> " + ret );
+		return ret;
 	}
 
 	@Override

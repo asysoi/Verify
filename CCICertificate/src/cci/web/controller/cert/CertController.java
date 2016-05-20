@@ -228,7 +228,7 @@ public class CertController {
 		long step3 = System.currentTimeMillis();
 		List<Certificate> certs = certService.readCertificatesPage(
 				vmanager.getOrdnames(),
-				vmanager.getPage(), vmanager.getPagesize(),
+				vmanager.getPage(), vmanager.getPagesize(), vmanager.getPagecount(),  
 				vmanager.getOrderby(), vmanager.getOrder(), builder);
 		
 		long step4 = System.currentTimeMillis();
