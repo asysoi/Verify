@@ -46,6 +46,8 @@ public class PDFBuilderFactory {
     		  builder = new TextilePDFBuilder();    		  
     	  } else if (pagename.equals(PAGE_EAV)) {
     		  builder = new EAVPDFBuilder();    		  
+    	  }  else if (pagename.equals(PAGE_EAV_b)) {
+    		  builder = new EAVPDFBuilder();    		  
     	  }  
     	  return builder;
       }
