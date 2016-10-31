@@ -13,9 +13,10 @@ public class PDFBuilderFactory {
 	  public static final String PAGE_CT2_ENG_b = "СТ-2 англ.b";
 	  public static final String PAGE_A = "А";
 	  public static final String PAGE_TEXTILE = "Текстиль";
+	  public static final String PAGE_EAV = "EAV";
+	  public static final String PAGE_EAV_b = "EAV.b";
 	  
-	  
-	  
+	  	  
       public static PDFBuilder getPADFBuilder(String pagename) {
     	  PDFBuilder builder = null; 
     	  
@@ -43,6 +44,8 @@ public class PDFBuilderFactory {
     		  builder = new APDFBuilder();    		  
     	  } else if (pagename.equals(PAGE_TEXTILE)) {
     		  builder = new TextilePDFBuilder();    		  
+    	  } else if (pagename.equals(PAGE_EAV)) {
+    		  builder = new EAVPDFBuilder();    		  
     	  }  
     	  return builder;
       }
