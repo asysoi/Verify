@@ -7866,9 +7866,9 @@
 <box>
 <map>exporterenglish</map>
 <text></text>
-<xl>22</xl>
+<xl>17</xl>
 <yl>260</yl>
-<xr>109</xr>
+<xr>105</xr>
 <yr>282</yr>
 <font>ARIAL</font>
 <fontsize>10</fontsize>
@@ -7886,10 +7886,10 @@
 <box>
 <map>importerenglish</map>
 <text></text>
-<xl>22</xl>
+<xl>17</xl>
 <yl>235</yl>
-<xr>109</xr>
-<yr>254</yr>
+<xr>105</xr>
+<yr>253</yr>
 <font>ARIAL</font>
 <fontsize>10</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -7906,10 +7906,10 @@
 <box>
 <map>drive</map>
 <text></text>
-<xl>22</xl>
+<xl>17</xl>
 <yl>210</yl>
-<xr>109</xr>
-<yr>225</yr>
+<xr>105</xr>
+<yr>227</yr>
 <font>ARIAL</font>
 <fontsize>10</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -7966,10 +7966,10 @@
 <box>
 <map>sourcecountry</map>
 <text></text>
-<xl>125</xl>
-<yl>250</yl>
-<xr>198</xr>
-<yr>256</yr>
+<xl>120</xl>
+<yl>248</yl>
+<xr>195</xr>
+<yr>254</yr>
 <font>ARIAL</font>
 <fontsize>10</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -7986,10 +7986,10 @@
 <box>
 <map>subcountry</map>
 <text></text>
-<xl>140</xl>
-<yl>235</yl>
-<xr>198</xr>
-<yr>244</yr>
+<xl>133</xl>
+<yl>236</yl>
+<xr>195</xr>
+<yr>242</yr>
 <font>ARIAL</font>
 <fontsize>10</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8006,10 +8006,10 @@
 <box>
 <map>note</map>
 <text></text>
-<xl>113</xl>
-<yl>209</yl>
-<xr>198</xr>
-<yr>229</yr>
+<xl>108</xl>
+<yl>208</yl>
+<xr>195</xr>
+<yr>227</yr>
 <font>ARIAL</font>
 <fontsize>10</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8027,10 +8027,10 @@
 <box>
 <map>departmentenglish</map>
 <text></text>
-<xl>25</xl>
+<xl>22</xl>
 <yl>40</yl>
-<xr>109</xr>
-<yr>88</yr>
+<xr>106</xr>
+<yr>75</yr>
 <font>ARIAL</font>
 <fontsize>10</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8047,10 +8047,10 @@
 <box>
 <map>issuecountry</map>
 <text></text>
-<xl>117</xl>
-<yl>70</yl>
-<xr>190</xr>
-<yr>75</yr>
+<xl>116</xl>
+<yl>60</yl>
+<xr>184</xr>
+<yr>67</yr>
 <font>ARIAL</font>
 <fontsize>10</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8066,12 +8066,12 @@
 
 
 <box>
-<map>expert</map>
+<map>place</map>
 <text></text>
-<xl>35</xl>
+<xl>19</xl>
 <yl>20</yl>
 <xr>75</xr>
-<yr>30</yr>
+<yr>25</yr>
 <font>ARIAL</font>
 <fontsize>10</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8088,10 +8088,10 @@
 <box>
 <map>dateexpert</map>
 <text></text>
-<xl>60</xl>
+<xl>37</xl>
 <yl>20</yl>
-<xr>109</xr>
-<yr>30</yr>
+<xr>60</xr>
+<yr>25</yr>
 <font>ARIAL</font>
 <fontsize>10</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8106,12 +8106,12 @@
 </box>
 
 <box>
-<map>customer</map>
+<map>place</map>
 <text></text>
-<xl>130</xl>
+<xl>109</xl>
 <yl>20</yl>
-<xr>155</xr>
-<yr>30</yr>
+<xr>130</xr>
+<yr>25</yr>
 <font>ARIAL</font>
 <fontsize>10</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8128,10 +8128,10 @@
 <box>
 <map>datecustomer</map>
 <text></text>
-<xl>155</xl>
+<xl>130</xl>
 <yl>20</yl>
-<xr>198</xr>
-<yr>30</yr>
+<xr>160</xr>
+<yr>25</yr>
 <font>ARIAL</font>
 <fontsize>10</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8150,9 +8150,9 @@
 
 <boxes>
 <box>
-<xl>20</xl>
-<yl>258</yl>
-<xr>111</xr>
+<xl>15</xl>
+<yl>257</yl>
+<xr>106</xr>
 <yr>287</yr>
 <border>15</border>
 <widthborderline>1</widthborderline>
@@ -8160,29 +8160,29 @@
 </box>	    
 	    
 <box>
-<xl>20</xl>
-<yl>233</yl>
-<xr>111</xr>
-<yr>258</yr>
+<xl>15</xl>
+<yl>232</yl>
+<xr>106</xr>
+<yr>257</yr>
 <border>15</border>
 <widthborderline>1</widthborderline>
 <colorfill></colorfill>
 </box>
 	  
 <box>
-<xl>20</xl>
+<xl>15</xl>
 <yl>207</yl>
-<xr>111</xr>
-<yr>233</yr>
+<xr>106</xr>
+<yr>232</yr>
 <border>15</border>
 <widthborderline>1</widthborderline>
 <colorfill></colorfill>
 </box>
        
 <box>
-<xl>111</xl>
-<yl>233</yl>
-<xr>201</xr>
+<xl>106</xl>
+<yl>232</yl>
+<xr>198</xr>
 <yr>287</yr>
 <border>15</border>
 <widthborderline>1</widthborderline>
@@ -8190,60 +8190,50 @@
 </box>
 
 <box>
-<xl>111</xl>
+<xl>106</xl>
 <yl>207</yl>
-<xr>201</xr>
-<yr>233</yr>
+<xr>198</xr>
+<yr>232</yr>
 <border>15</border>
 <widthborderline>1</widthborderline>
 <colorfill></colorfill>
 </box>
 	  
 <box>
-<xl>20</xl>
-<yl>13</yl>
-<xr>111</xr>
-<yr>102</yr>
+<xl>15</xl>
+<yl>9</yl>
+<xr>106</xr>
+<yr>98</yr>
 <border>15</border>
 <widthborderline>1</widthborderline>
 <colorfill></colorfill>
 </box>	  
 	    
 <box>
-<xl>111</xl>
-<yl>13</yl>
-<xr>201</xr>
-<yr>102</yr>
+<xl>106</xl>
+<yl>9</yl>
+<xr>198</xr>
+<yr>98</yr>
 <border>15</border>
 <widthborderline>1</widthborderline>
 <colorfill></colorfill>
 </box>
 
 <box>
-<xl>126</xl>
-<yl>254</yl>
-<xr>198</xr>
-<yr>254</yr>
+<xl>121</xl>
+<yl>252</yl>
+<xr>194</xr>
+<yr>252</yr>
 <border>15</border>
 <widthborderline>0.1</widthborderline>
 <colorfill></colorfill>
 </box>
 
 <box>
-<xl>142</xl>
-<yl>242</yl>
-<xr>198</xr>
-<yr>242</yr>
-<border>15</border>
-<widthborderline>0.1</widthborderline>
-<colorfill></colorfill>
-</box>
-
-<box>
-<xl>117</xl>
-<yl>70</yl>
-<xr>190</xr>
-<yr>70</yr>
+<xl>133</xl>
+<yl>240</yl>
+<xr>194</xr>
+<yr>240</yr>
 <border>15</border>
 <widthborderline>0.1</widthborderline>
 <colorfill></colorfill>
@@ -8251,19 +8241,29 @@
 
 <box>
 <xl>113</xl>
-<yl>25</yl>
-<xr>198</xr>
-<yr>25</yr>
+<yl>62</yl>
+<xr>185</xr>
+<yr>62</yr>
 <border>15</border>
 <widthborderline>0.1</widthborderline>
 <colorfill></colorfill>
 </box>
 
 <box>
-<xl>120</xl>
-<yl>282</yl>
-<xr>160</xr>
-<yr>282</yr>
+<xl>109</xl>
+<yl>19</yl>
+<xr>194</xr>
+<yr>19</yr>
+<border>15</border>
+<widthborderline>0.1</widthborderline>
+<colorfill></colorfill>
+</box>
+
+<box>
+<xl>118</xl>
+<yl>281</yl>
+<xr>158</xr>
+<yr>281</yr>
 <border>15</border>
 <widthborderline>0.1</widthborderline>
 <colorfill></colorfill>
@@ -8271,10 +8271,10 @@
 
 
 <box>
-<xl>22</xl>
-<yl>25</yl>
-<xr>109</xr>
-<yr>25</yr>
+<xl>19</xl>
+<yl>19</yl>
+<xr>102</xr>
+<yr>19</yr>
 <border>15</border>
 <widthborderline>0.1</widthborderline>
 <colorfill></colorfill>
@@ -8287,10 +8287,10 @@
 <textboxes>
 <box>
 <text>1. Exporter (business name, address and country)</text>
-<xl>22</xl>
-<yl>273</yl>
-<xr>109</xr>
-<yr>283</yr>
+<xl>17</xl>
+<yl>279</yl>
+<xr>100</xr>
+<yr>282</yr>
 <font>ARIAL</font>
 <fontsize>8</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8305,10 +8305,10 @@
 
 <box>
 <text>2. Importer/Consignee (business name,address and country)</text>
-<xl>22</xl>
-<yl>246</yl>
-<xr>109</xr>
-<yr>254</yr>
+<xl>17</xl>
+<yl>249</yl>
+<xr>104</xr>
+<yr>253</yr>
 <font>ARIAL</font>
 <fontsize>8</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8323,10 +8323,10 @@
 
 <box>
 <text>3. Means of transport and route (as far as known)</text>
-<xl>22</xl>
-<yl>221</yl>
+<xl>17</xl>
+<yl>224</yl>
 <xr>109</xr>
-<yr>229</yr>
+<yr>228</yr>
 <font>ARIAL</font>
 <fontsize>8</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8341,10 +8341,10 @@
 
 <box>
 <text>4. № </text>
-<xl>113</xl>
-<yl>278</yl>
-<xr>199</xr>
-<yr>283</yr>
+<xl>108</xl>
+<yl>279</yl>
+<xr>120</xr>
+<yr>282</yr>
 <font>ARIAL</font>
 <fontsize>8</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8359,10 +8359,10 @@
 
 <box>
 <text>EAEU-VN FTA</text>
-<xl>130</xl>
-<yl>271</yl>
+<xl>132</xl>
+<yl>268</yl>
 <xr>183</xr>
-<yr>278</yr>
+<yr>275</yr>
 <font>ARIAL</font>
 <fontsize>9</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8376,11 +8376,11 @@
 </box>
 
 <box>
-<text>Certivicate of Origin</text>
-<xl>130</xl>
-<yl>268</yl>
+<text>Certificate of Origin</text>
+<xl>131</xl>
+<yl>265</yl>
 <xr>183</xr>
-<yr>274</yr>
+<yr>271</yr>
 <font>ARIAL</font>
 <fontsize>9</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8413,10 +8413,10 @@
 
 <box>
 <text>Issued in</text>
-<xl>113</xl>
-<yl>250</yl>
-<xr>199</xr>
-<yr>254</yr>
+<xl>108</xl>
+<yl>249</yl>
+<xr>130</xr>
+<yr>253</yr>
 <font>ARIAL</font>
 <fontsize>8</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8432,10 +8432,10 @@
 
 <box>
 <text>(country)</text>
-<xl>145</xl>
-<yl>246</yl>
+<xl>135</xl>
+<yl>244</yl>
 <xr>182</xr>
-<yr>252</yr>
+<yr>249</yr>
 <font>ARIAL</font>
 <fontsize>7</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8450,10 +8450,10 @@
 
 <box>
 <text>For submission to</text>
-<xl>113</xl>
-<yl>236</yl>
+<xl>108</xl>
+<yl>237</yl>
 <xr>199</xr>
-<yr>242</yr>
+<yr>241</yr>
 <font>ARIAL</font>
 <fontsize>8</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8468,10 +8468,10 @@
 
 <box>
 <text>(country)</text>
-<xl>154</xl>
+<xl>144</xl>
 <yl>233</yl>
 <xr>188</xr>
-<yr>240</yr>
+<yr>237</yr>
 <font>ARIAL</font>
 <fontsize>7</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8486,10 +8486,10 @@
 
 <box>
 <text>5. For official use</text>
-<xl>113</xl>
-<yl>221</yl>
+<xl>108</xl>
+<yl>224</yl>
 <xr>199</xr>
-<yr>229</yr>
+<yr>228</yr>
 <font>ARIAL</font>
 <fontsize>8</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8504,10 +8504,10 @@
 
 <box>
 <text>12. Certification</text>
-<xl>22</xl>
+<xl>17</xl>
 <yl>90</yl>
-<xr>109</xr>
-<yr>99</yr>
+<xr>105</xr>
+<yr>94</yr>
 <font>ARIAL</font>
 <fontsize>8</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8521,11 +8521,11 @@
 </box>
 
 <box>
-<text>It is hereby certified, on the basis of control catried out, that the declaration by the applicant is correct</text>
-<xl>26</xl>
+<text>It is hereby certified, on the basis of control carried out, that the declaration by the applicant is correct</text>
+<xl>23</xl>
 <yl>70</yl>
-<xr>90</xr>
-<yr>97</yr>
+<xr>94</xr>
+<yr>89</yr>
 <font>ARIAL</font>
 <fontsize>8</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8541,10 +8541,10 @@
 
 <box>
 <text>13. Declaration by the applicant</text>
-<xl>113</xl>
+<xl>108</xl>
 <yl>90</yl>
 <xr>199</xr>
-<yr>99</yr>
+<yr>94</yr>
 <font>ARIAL</font>
 <fontsize>8</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8558,11 +8558,11 @@
 </box>
 
 <box>
-<text>The undersigned hereby declares that the above details are correct, that all the goods were produced in</text>
-<xl>117</xl>
+<text>The undersigned hereby declares that the above details are correct, that all goods were produced in</text>
+<xl>113</xl>
 <yl>70</yl>
-<xr>194</xr>
-<yr>97</yr>
+<xr>185</xr>
+<yr>89</yr>
 <font>ARIAL</font>
 <fontsize>8</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8578,9 +8578,9 @@
 <box>
 <text>(country)</text>
 <xl>140</xl>
-<yl>60</yl>
-<xr>172</xr>
-<yr>67</yr>
+<yl>56</yl>
+<xr>160</xr>
+<yr>59</yr>
 <font>ARIAL</font>
 <fontsize>7</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8594,11 +8594,11 @@
 </box>	 
 
 <box>
-<text>and then they comply with the rules of origin as provided for in Chapter4(Riles of Origin) of the EAEU-VN FTA</text>
-<xl>117</xl>
+<text>and that they comply with the rules of origin as provided for in Chapter 4 (Rules of Origin) of the EAEU-VN FTA</text>
+<xl>113</xl>
 <yl>48</yl>
-<xr>190</xr>
-<yr>62</yr>
+<xr>188</xr>
+<yr>56</yr>
 <font>ARIAL</font>
 <fontsize>8</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8612,11 +8612,11 @@
 </box>
 
 <box>
-<text>Signature</text>
-<xl>22</xl>
-<yl>15</yl>
-<xr>109</xr>
-<yr>20</yr>
+<text>Place</text>
+<xl>19</xl>
+<yl>12</yl>
+<xr>105</xr>
+<yr>15</yr>
 <font>ARIAL</font>
 <fontsize>8</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8631,10 +8631,28 @@
 
 <box>
 <text>Date</text>
+<xl>40</xl>
+<yl>15</yl>
+<xr>105</xr>
+<yr>15</yr>
+<font>ARIAL</font>
+<fontsize>8</fontsize>
+<widthtextline>0.1</widthtextline>
+<galign>LEFT</galign>
+<valign>MIDDLE</valign>
+<border>15</border>
+<widthborderline>0</widthborderline>
+<leading>0</leading>
+<colorfill></colorfill>
+<rotation></rotation>
+</box>
+
+<box>
+<text>Signature</text>
 <xl>61</xl>
-<yl>15</yl>
-<xr>109</xr>
-<yr>20</yr>
+<yl>12</yl>
+<xr>105</xr>
+<yr>15</yr>
 <font>ARIAL</font>
 <fontsize>8</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8647,12 +8665,13 @@
 <rotation></rotation>
 </box>
 <box>
+
 
 <text>Stamp</text>
-<xl>98</xl>
-<yl>15</yl>
-<xr>109</xr>
-<yr>20</yr>
+<xl>93</xl>
+<yl>12</yl>
+<xr>105</xr>
+<yr>15</yr>
 <font>ARIAL</font>
 <fontsize>8</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8666,11 +8685,11 @@
 </box>
 
 <box>
-<text>Signature</text>
-<xl>113</xl>
-<yl>15</yl>
-<xr>190</xr>
-<yr>20</yr>
+<text>Place</text>
+<xl>109</xl>
+<yl>12</yl>
+<xr>196</xr>
+<yr>15</yr>
 <font>ARIAL</font>
 <fontsize>8</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8685,10 +8704,28 @@
 
 <box>
 <text>Date</text>
-<xl>155</xl>
+<xl>132</xl>
 <yl>15</yl>
-<xr>165</xr>
-<yr>20</yr>
+<xr>196</xr>
+<yr>15</yr>
+<font>ARIAL</font>
+<fontsize>8</fontsize>
+<widthtextline>0.1</widthtextline>
+<galign>LEFT</galign>
+<valign>MIDDLE</valign>
+<border>15</border>
+<widthborderline>0</widthborderline>
+<leading>0</leading>
+<colorfill></colorfill>
+<rotation></rotation>
+</box>
+
+<box>
+<text>Signature</text>
+<xl>155</xl>
+<yl>12</yl>
+<xr>196</xr>
+<yr>15</yr>
 <font>ARIAL</font>
 <fontsize>8</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8702,11 +8739,12 @@
 </box>
 <box>
 
+
 <text>Stamp</text>
-<xl>188</xl>
-<yl>15</yl>
-<xr>198</xr>
-<yr>20</yr>
+<xl>185</xl>
+<yl>12</yl>
+<xr>196</xr>
+<yr>15</yr>
 <font>ARIAL</font>
 <fontsize>8</fontsize>
 <widthtextline>0.1</widthtextline>
@@ -8718,14 +8756,15 @@
 <colorfill></colorfill>
 <rotation></rotation>
 </box>
+
 	 
 	 
 </textboxes>
 
 <table>
-<xl>20</xl>
-<yl>102</yl>
-<xr>201</xr>
+<xl>15</xl>
+<yl>98</yl>
+<xr>198</xr>
 <yr>207</yr>
 <colnumber>6</colnumber>
 <colwidth>
@@ -8738,8 +8777,8 @@
 </colwidth>
 
  <headerrow number="0" height="15">
-    <cell number="0" font="ARIAL" fsize="8" align="CENTER" valign="TOP" border="15" bwidth="1" >6. Item №</cell>
-	<cell number="1" font="ARIAL" fsize="8" align="LEFT" valign="TOP" border="15" bwidth="1">7. Number and kind of packages</cell>
+    <cell number="0" font="ARIAL" fsize="9" align="CENTER" valign="TOP" border="15" bwidth="1" >6.   Item   №</cell>
+	<cell number="1" font="ARIAL" fsize="9" align="LEFT" valign="TOP" border="15" bwidth="1">7. Number    and kind    of packages</cell>
 	<cell number="2" font="ARIAL" fsize="8" align="LEFT" valign="TOP" border="15" bwidth="1">8. Description of goods</cell>
 	<cell number="3" font="ARIAL" fsize="8" align="LEFT" valign="TOP" border="15" bwidth="1">9.  Origin criterion</cell>
 	<cell number="4" font="ARIAL" fsize="8" align="LEFT" valign="TOP" border="15" bwidth="1">10. Quantity of goods</cell>
@@ -8845,9 +8884,9 @@
 
 
 <box>
-<map>expert</map>
+<map>place</map>
 <text></text>
-<xl>35</xl>
+<xl>22</xl>
 <yl>20</yl>
 <xr>75</xr>
 <yr>30</yr>
@@ -8867,7 +8906,7 @@
 <box>
 <map>dateexpert</map>
 <text></text>
-<xl>60</xl>
+<xl>44</xl>
 <yl>20</yl>
 <xr>109</xr>
 <yr>30</yr>
@@ -8885,9 +8924,9 @@
 </box>
 
 <box>
-<map>customer</map>
+<map>place</map>
 <text></text>
-<xl>130</xl>
+<xl>113</xl>
 <yl>20</yl>
 <xr>155</xr>
 <yr>30</yr>
@@ -8907,7 +8946,7 @@
 <box>
 <map>datecustomer</map>
 <text></text>
-<xl>155</xl>
+<xl>136</xl>
 <yl>20</yl>
 <xr>198</xr>
 <yr>30</yr>
@@ -9003,7 +9042,7 @@
 <box>
 <xl>120</xl>
 <yl>282</yl>
-<xr>160</xr>
+<xr>170</xr>
 <yr>282</yr>
 <border>15</border>
 <widthborderline>0.1</widthborderline>
@@ -9015,7 +9054,7 @@
 <textboxes>
 
 <box>
-<text>Addittional Sheet of Certificate of Origin (Form Eav) №</text>
+<text>Addittional Sheet of Certificate of Origin (Form EAV)  №.</text>
 <xl>35</xl>
 <yl>273</yl>
 <xr>130</xr>
@@ -9023,7 +9062,7 @@
 <font>ARIAL</font>
 <fontsize>9</fontsize>
 <widthtextline>0.1</widthtextline>
-<galign>RIGHT</galign>
+<galign>LEFT</galign>
 <valign>MIDDLE</valign>
 <border>15</border>
 <widthborderline>0</widthborderline>
@@ -9052,9 +9091,9 @@
 
 <box>
 <text>It is hereby certified, on the basis of control catried out, that the declaration by the applicant is correct</text>
-<xl>26</xl>
+<xl>25</xl>
 <yl>70</yl>
-<xr>90</xr>
+<xr>96</xr>
 <yr>97</yr>
 <font>ARIAL</font>
 <fontsize>8</fontsize>
@@ -9088,7 +9127,7 @@
 </box>
 
 <box>
-<text>The undersigned hereby declares that the above details are correct, that all the goods were produced in</text>
+<text>The undersigned hereby declares that the above details are correct, that all goods were produced in</text>
 <xl>117</xl>
 <yl>70</yl>
 <xr>194</xr>
@@ -9124,10 +9163,10 @@
 </box>	 
 
 <box>
-<text>and then they comply with the rules of origin as provided for in Chapter 4(Rules of Origin) of the EAEU-VN FTA</text>
+<text>and that they comply with the rules of origin as provided for in Chapter 4 (Rules of Origin) of the EAEU-VN FTA</text>
 <xl>117</xl>
 <yl>48</yl>
-<xr>190</xr>
+<xr>192</xr>
 <yr>62</yr>
 <font>ARIAL</font>
 <fontsize>8</fontsize>
@@ -9142,10 +9181,10 @@
 </box>
 
 <box>
-<text>Signature</text>
+<text>Place</text>
 <xl>22</xl>
-<yl>15</yl>
-<xr>109</xr>
+<yl>16</yl>
+<xr>105</xr>
 <yr>20</yr>
 <font>ARIAL</font>
 <fontsize>8</fontsize>
@@ -9161,9 +9200,27 @@
 
 <box>
 <text>Date</text>
-<xl>61</xl>
-<yl>15</yl>
-<xr>109</xr>
+<xl>44</xl>
+<yl>16</yl>
+<xr>105</xr>
+<yr>20</yr>
+<font>ARIAL</font>
+<fontsize>8</fontsize>
+<widthtextline>0.1</widthtextline>
+<galign>LEFT</galign>
+<valign>MIDDLE</valign>
+<border>15</border>
+<widthborderline>0</widthborderline>
+<leading>0</leading>
+<colorfill></colorfill>
+<rotation></rotation>
+</box>
+
+<box>
+<text>Signature</text>
+<xl>65</xl>
+<yl>16</yl>
+<xr>105</xr>
 <yr>20</yr>
 <font>ARIAL</font>
 <fontsize>8</fontsize>
@@ -9177,11 +9234,12 @@
 <rotation></rotation>
 </box>
 <box>
+
 
 <text>Stamp</text>
 <xl>98</xl>
-<yl>15</yl>
-<xr>109</xr>
+<yl>16</yl>
+<xr>111</xr>
 <yr>20</yr>
 <font>ARIAL</font>
 <fontsize>8</fontsize>
@@ -9196,10 +9254,10 @@
 </box>
 
 <box>
-<text>Signature</text>
+<text>Place</text>
 <xl>113</xl>
-<yl>15</yl>
-<xr>190</xr>
+<yl>16</yl>
+<xr>196</xr>
 <yr>20</yr>
 <font>ARIAL</font>
 <fontsize>8</fontsize>
@@ -9215,9 +9273,27 @@
 
 <box>
 <text>Date</text>
-<xl>155</xl>
-<yl>15</yl>
-<xr>165</xr>
+<xl>136</xl>
+<yl>16</yl>
+<xr>196</xr>
+<yr>20</yr>
+<font>ARIAL</font>
+<fontsize>8</fontsize>
+<widthtextline>0.1</widthtextline>
+<galign>LEFT</galign>
+<valign>MIDDLE</valign>
+<border>15</border>
+<widthborderline>0</widthborderline>
+<leading>0</leading>
+<colorfill></colorfill>
+<rotation></rotation>
+</box>
+
+<box>
+<text>Signature</text>
+<xl>159</xl>
+<yl>16</yl>
+<xr>196</xr>
 <yr>20</yr>
 <font>ARIAL</font>
 <fontsize>8</fontsize>
@@ -9232,10 +9308,11 @@
 </box>
 <box>
 
+
 <text>Stamp</text>
-<xl>188</xl>
-<yl>15</yl>
-<xr>198</xr>
+<xl>189</xl>
+<yl>16</yl>
+<xr>201</xr>
 <yr>20</yr>
 <font>ARIAL</font>
 <fontsize>8</fontsize>
@@ -9283,6 +9360,251 @@
 	<cell number="3" font="ARIAL" fsize="11" align="LEFT" border="12" valign="TOP" bwidth="1"></cell>
 	<cell number="4" font="ARIAL" fsize="11" align="LEFT" border="12" valign="TOP" bwidth="1"></cell>
 	<cell number="5" font="ARIAL" fsize="11" align="LEFT" border="12" valign="TOP" bwidth="1"></cell>
+</bodyrow>
+</table>
+
+</page>
+
+
+<page name="Текстиль" color="Green" height="297" width="210" nextpage="Текстиль">
+
+
+<outputs>
+<box>
+<map>exporterenglish</map>
+<text></text>
+<xl>17</xl>
+<yl>260</yl>
+<xr>105</xr>
+<yr>282</yr>
+<font>ARIAL</font>
+<fontsize>10</fontsize>
+<widthtextline>0.1</widthtextline>
+<galign>LEFT</galign>
+<valign>TOP</valign>
+<border>0</border>
+<widthborderline>0</widthborderline>
+<leading>10</leading>
+<colorfill></colorfill>
+<rotation></rotation>
+<vertical></vertical>
+</box>
+    
+</outputs>
+
+
+<boxes>
+<box>
+<xl>17</xl>
+<yl>261</yl>
+<xr>108</xr>
+<yr>287</yr>
+<border>15</border>
+<widthborderline>1</widthborderline>
+<colorfill></colorfill>
+</box>	    
+	    
+<box>
+<xl>17</xl>
+<yl>218</yl>
+<xr>108</xr>
+<yr>261</yr>
+<border>15</border>
+<widthborderline>1</widthborderline>
+<colorfill></colorfill>
+</box>
+	  
+<box>
+<xl>17</xl>
+<yl>185</yl>
+<xr>108</xr>
+<yr>218</yr>
+<border>15</border>
+<widthborderline>1</widthborderline>
+<colorfill></colorfill>
+</box>
+
+<box>
+<xl>108</xl>
+<yl>277</yl>
+<xr>154</xr>
+<yr>287</yr>
+<border>15</border>
+<widthborderline>1</widthborderline>
+<colorfill></colorfill>
+</box>
+	  
+<box>
+<xl>154</xl>
+<yl>277</yl>
+<xr>199</xr>
+<yr>287</yr>
+<border>15</border>
+<widthborderline>1</widthborderline>
+<colorfill></colorfill>
+</box>	  
+	    
+<box>
+<xl>108</xl>
+<yl>262</yl>
+<xr>154</xr>
+<yr>277</yr>
+<border>15</border>
+<widthborderline>1</widthborderline>
+<colorfill></colorfill>
+</box>
+
+<box>
+<xl>154</xl>
+<yl>262</yl>
+<xr>199</xr>
+<yr>277</yr>
+<border>15</border>
+<widthborderline>0.1</widthborderline>
+<colorfill></colorfill>
+</box>
+
+<box>
+<xl>108</xl>
+<yl>231</yl>
+<xr>199</xr>
+<yr>262</yr>
+<border>15</border>
+<widthborderline>0.1</widthborderline>
+<colorfill></colorfill>
+</box>
+
+<box>
+<xl>122</xl>
+<yl>246</yl>
+<xr>185</xr>
+<yr>246</yr>
+<border>15</border>
+<widthborderline>0.1</widthborderline>
+<colorfill></colorfill>
+</box>
+
+<box>
+<xl>108</xl>
+<yl>218</yl>
+<xr>154</xr>
+<yr>231</yr>
+<border>15</border>
+<widthborderline>0.1</widthborderline>
+<colorfill></colorfill>
+</box>
+
+<box>
+<xl>154</xl>
+<yl>218</yl>
+<xr>199</xr>
+<yr>231</yr>
+<border>15</border>
+<widthborderline>0.1</widthborderline>
+<colorfill></colorfill>
+</box>
+
+
+<box>
+<xl>108</xl>
+<yl>185</yl>
+<xr>199</xr>
+<yr>218</yr>
+<border>15</border>
+<widthborderline>0.1</widthborderline>
+<colorfill></colorfill>
+</box>
+
+<box>
+<xl>17</xl>
+<yl>9</yl>
+<xr>199</xr>
+<yr>68</yr>
+<border>15</border>
+<widthborderline>0.1</widthborderline>
+<colorfill></colorfill>
+</box>
+
+
+<box>
+<xl>17</xl>
+<yl>9</yl>
+<xr>108</xr>
+<yr>40</yr>
+<border>15</border>
+<widthborderline>0.1</widthborderline>
+<colorfill></colorfill>
+</box>
+
+<box>
+<xl>117</xl>
+<yl>31</yl>
+<xr>150</xr>
+<yr>31</yr>
+<border>15</border>
+<widthborderline>0.1</widthborderline>
+<colorfill></colorfill>
+</box>
+
+<box>
+<xl>160</xl>
+<yl>31</yl>
+<xr>195</xr>
+<yr>31</yr>
+<border>15</border>
+<widthborderline>0.1</widthborderline>
+<colorfill></colorfill>
+</box>
+
+</boxes>
+
+<textboxes>
+<box>
+<text>1. Exporter (name, full address, country)</text>
+<xl>17</xl>
+<yl>279</yl>
+<xr>100</xr>
+<yr>282</yr>
+<font>ARIAL</font>
+<fontsize>8</fontsize>
+<widthtextline>0.1</widthtextline>
+<galign>LEFT</galign>
+<valign>MIDDLE</valign>
+<border>15</border>
+<widthborderline>0</widthborderline>
+<leading>0</leading>
+<colorfill></colorfill>
+<rotation></rotation>
+</box>
+
+	 
+	 
+</textboxes>
+
+<table>
+<xl>17</xl>
+<yl>68</yl>
+<xr>199</xr>
+<yr>185</yr>
+<colnumber>3</colnumber>
+<colwidth>
+	<col number="0">136</col>
+	<col number="1">23</col> 
+	<col number="2">23</col>
+	
+</colwidth>
+
+ <headerrow number="0" height="15">
+    <cell number="0" font="ARIAL" fsize="9" align="CENTER" valign="TOP" border="15" bwidth="1" >10.  Mark and numbers - Number and kinf of packages - DESCRIPTION OF GOODS</cell>
+	<cell number="1" font="ARIAL" fsize="9" align="LEFT" valign="TOP" border="15" bwidth="1">11. Quantity (1) </cell>
+	<cell number="2" font="ARIAL" fsize="8" align="LEFT" valign="TOP" border="15" bwidth="1">12. FOB Value (2)</cell>
+	
+ </headerrow>
+  
+<bodyrow  height="1">
+    <cell number="0" font="ARIAL" fsize="11" align="CENTER" border="12" valign="TOP" bwidth="1"></cell>
+	<cell number="1" font="ARIAL" fsize="11" align="LEFT" border="12" valign="TOP" bwidth="1"></cell>
+	<cell number="2" font="ARIAL" fsize="11" align="LEFT" border="12" valign="TOP" bwidth="1"></cell>
 </bodyrow>
 </table>
 

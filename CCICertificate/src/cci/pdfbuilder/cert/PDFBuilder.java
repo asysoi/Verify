@@ -532,7 +532,7 @@ public abstract class PDFBuilder {
 		} else if ("place".equals(map)) {
 			str = "" + certificate.getEotd_addr_city();  
 		} else if ("exporterplace".equals(map)) {
-			str = "" + certificate.getRukovod();  
+			str = "" + certificate.getEotd_addr_city();  
 		} 
 
 		return str;

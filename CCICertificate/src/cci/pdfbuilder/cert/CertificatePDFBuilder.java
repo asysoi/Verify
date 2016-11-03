@@ -27,20 +27,39 @@ public class CertificatePDFBuilder {
 	public static void main(String[] arg) {
 		CertificatePDFBuilder builder = new CertificatePDFBuilder();
 		Certificate cert = new Certificate();
-		cert.setKontrp("Exporter");
+		cert.setKontrp("Exporter Address Exporter");
+		cert.setKontrp("Получатель");
+		cert.setImporter("Importer Importer Importer Importer Importer Importer Importer Importer Importer Importer Importer Importer");
+		cert.setMarshrut("Маршрут движения транспорта");
+		cert.setNomercert("1234567890");
+		cert.setNblanka("000678");
+		cert.setDatacert("23.12.2016");
+		cert.setStranap("Страна Получатель");
+		cert.setStranapr("Страна ПРоизводитель");
+		cert.setStranav("Страна Ввоза");
+		cert.setEotd_name("Minsk branch of BelCCI");
+		cert.setExpert("Minsk");
+		cert.setRukovod("Minsk");
+		cert.setOtmetka("Это отметка о сертификате для Вьетнама. Получение сертификата во вьетнам ничем не отличается от ...");
+		cert.setEotd_addr_city("Minsk");
+		
+		cert.setForms(PDFBuilderFactory.PAGE_TEXTILE);
 		
 		List<Product> products = new ArrayList<Product>();
-		Product product = new Product();
-		product.setNumerator("1");
-		product.setTovar("Tovar");
-		product.setVidup("vidup");
-		product.setVes("ves");
-		product.setSchet("schet");
-		products.add(product);
+		for (int i = 1; i < 30; i++) {
+				Product product = new Product();
+				product.setNumerator(i + ".");
+				product.setTovar("Tovar " + i);
+				product.setVidup("vidup " + i);
+				product.setVes("ves " + i);
+				product.setSchet("schet");
+				products.add(product);
+		}
 		cert.setProducts(products);
 		
+		
 		try {
-		   builder.createPdf("d:\\temp\\cert\\certificate.pdf", cert, "D:\\Java\\git\\CCICertificate\\CCICertificate\\WebContent\\resources\\config\\pages.xml", "путь к катклогу фонтов");
+		   builder.createPdf("c:\\tmp\\cert\\certificate.pdf", cert, "c:\\Java\\git\\CCICertificate\\CCICertificate\\WebContent\\resources\\config\\pages.xml", "c:\\Windows\\Fonts\\");
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -52,7 +71,7 @@ public class CertificatePDFBuilder {
 		fontpath = fpath;
 		
 		// step 1
-		document = new Document(PageSize.A4, 5, 5, 5, 5);
+		document = new Document(PageSize.A4, 0, 0, 0, 0);
 
 		// step 2
 		writer = PdfWriter.getInstance(document,
