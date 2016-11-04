@@ -40,8 +40,10 @@ public class CertificatePDFBuilder {
 		cert.setEotd_name("Minsk branch of BelCCI");
 		cert.setExpert("Minsk");
 		cert.setRukovod("Minsk");
+		cert.setOtmetka("Note about textil certificate");
 		cert.setOtmetka("Это отметка о сертификате для Вьетнама. Получение сертификата во вьетнам ничем не отличается от ...");
 		cert.setEotd_addr_city("Minsk");
+		cert.setCategory("Category");
 		
 		cert.setForms(PDFBuilderFactory.PAGE_TEXTILE);
 		

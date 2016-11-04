@@ -533,7 +533,9 @@ public abstract class PDFBuilder {
 			str = "" + certificate.getEotd_addr_city();  
 		} else if ("exporterplace".equals(map)) {
 			str = "" + certificate.getEotd_addr_city();  
-		} 
+		} else if ("category".equals(map)) {
+			str = "" + certificate.getCategory();  
+		}
 
 		return str;
 	}
