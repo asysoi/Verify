@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import cci.model.Client;
-import cci.model.cert.Certificate;
 import cci.repository.SQLBuilder;
 import cci.repository.client.ClientDAO;
 import cci.web.controller.client.ViewClient;

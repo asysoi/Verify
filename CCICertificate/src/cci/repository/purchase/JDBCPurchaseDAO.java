@@ -9,18 +9,14 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-
 import cci.model.Client;
 import cci.model.cert.Company;
 import cci.model.purchase.Product;
 import cci.model.purchase.Purchase;
 import cci.repository.SQLBuilder;
 import cci.repository.SequenceDAO;
-import cci.web.controller.client.ViewClient;
 import cci.web.controller.purchase.ViewPurchase;
 
 public class JDBCPurchaseDAO extends SequenceDAO implements PurchaseDAO {

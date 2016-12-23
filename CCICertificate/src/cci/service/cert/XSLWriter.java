@@ -17,8 +17,6 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 
-import cci.model.cert.Certificate;
-
 public class XSLWriter {
 	public static Logger LOG=Logger.getLogger(XSLWriter.class);
 	

@@ -11,13 +11,8 @@ import org.w3c.dom.NodeList;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.pdf.BaseFont;
 
-import cci.pdfbuilder.cert.CertificatePDFBuilder;
-import cci.web.controller.cert.CertController;
-
 import java.io.File;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class XMLConfigReader extends PDFConfigReader {

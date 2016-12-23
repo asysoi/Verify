@@ -1,10 +1,5 @@
 ﻿   package cci.web.controller.cert;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import cci.model.cert.Certificate;
-
 public class ViewCertFilter {
    	private ViewCertCondition condition = new ViewCertCondition();
    	private ViewCertificate viewcertificate = new ViewCertificate();;

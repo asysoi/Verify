@@ -6,7 +6,6 @@ import java.util.Map;
 import cci.model.cert.Certificate;
 import cci.model.cert.Report;
 import cci.repository.SQLBuilder;
-import cci.service.FilterCondition;
 
 public interface CertificateDAO {
 

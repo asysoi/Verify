@@ -2,8 +2,6 @@
 
 import org.apache.log4j.Logger;
 
-import cci.service.cert.CertService;
-
 public class FilterCondition {
 	private String field;
 	private String operator;

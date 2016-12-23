@@ -5,7 +5,6 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import cci.model.cert.Customer;
 import cci.model.purchase.Purchase;
 import cci.web.controller.purchase.ViewPurchase;
 

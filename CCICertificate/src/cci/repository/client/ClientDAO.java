@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import cci.model.Client;
-import cci.model.cert.Company;
 import cci.repository.SQLBuilder;
 import cci.web.controller.client.ViewClient;
 

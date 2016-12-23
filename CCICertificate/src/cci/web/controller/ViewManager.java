@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import cci.config.cert.ExportCertConfig;
 import cci.service.Filter;
-import cci.service.FilterCondition;
 
 @Component
 @Scope("session")

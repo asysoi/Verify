@@ -3,12 +3,10 @@
 import java.util.List;
 import java.util.Map;
 
-import cci.model.Client;
 import cci.model.cert.Company;
 import cci.model.purchase.Product;
 import cci.model.purchase.Purchase;
 import cci.repository.SQLBuilder;
-import cci.service.FilterCondition;
 import cci.web.controller.purchase.ViewPurchase;
 
 public interface PurchaseDAO {

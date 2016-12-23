@@ -1,8 +1,6 @@
 ﻿package cci.util.cert;
 
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.InputStream;

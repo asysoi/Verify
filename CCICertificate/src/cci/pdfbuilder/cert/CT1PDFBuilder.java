@@ -1,20 +1,9 @@
 ﻿package cci.pdfbuilder.cert;
 
-import java.io.IOException;
 import java.util.List;
 
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Utilities;
-import com.itextpdf.text.pdf.PdfPRow;
-import com.itextpdf.text.pdf.PdfPTable;
-
 import cci.config.cert.CTCell;
-import cci.config.cert.TableConfig;
-import cci.model.cert.Certificate;
 import cci.model.cert.Product;
-import cci.model.cert.ProductIterator;
-import cci.service.CountryConverter;
 
 public class CT1PDFBuilder extends PDFBuilder {
 

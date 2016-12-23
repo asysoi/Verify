@@ -1,6 +1,5 @@
 package cci.test;
 
-import java.sql.Date;
 import java.text.SimpleDateFormat;
 
 import org.springframework.beans.propertyeditors.CustomDateEditor;

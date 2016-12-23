@@ -7,13 +7,11 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import cci.model.Client;
 import cci.model.cert.Company;
 import cci.model.purchase.Product;
 import cci.model.purchase.Purchase;
 import cci.repository.SQLBuilder;
 import cci.repository.purchase.PurchaseDAO;
-import cci.web.controller.client.ViewClient;
 import cci.web.controller.purchase.ViewPurchase;
 
 @Component

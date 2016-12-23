@@ -16,7 +16,6 @@ import cci.service.Filter;
 import cci.service.FilterCondition;
 import cci.web.controller.cert.ViewCertificate;
 import cci.web.controller.cert.ViewCertCondition;
-import cci.web.controller.client.ClientController;
 
 @Component
 @Scope("session")

@@ -13,9 +13,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.ResultSetExtractor;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
@@ -28,10 +26,7 @@ import cci.model.cert.Country;
 import cci.model.cert.Product;
 import cci.model.cert.Report;
 import cci.repository.SQLBuilder;
-import cci.service.FilterCondition;
 import cci.service.SQLQueryUnit;
-import cci.web.controller.client.ClientController;
-import cci.web.controller.purchase.ViewPurchase;
 
 @Repository
 public class JDBCCertificateDAO implements CertificateDAO {

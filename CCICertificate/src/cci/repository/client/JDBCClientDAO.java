@@ -16,17 +16,12 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.stereotype.Repository;
 
 import cci.model.Client;
-import cci.model.cert.Certificate;
-import cci.model.cert.Company;
 import cci.model.cert.Country;
 import cci.repository.SQLBuilder;
-import cci.service.client.ClientService;
 import cci.web.controller.client.ViewClient;
-import cci.web.controller.purchase.ViewPurchase;
 
 @Repository
 public class JDBCClientDAO implements ClientDAO {

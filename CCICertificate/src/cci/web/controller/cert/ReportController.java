@@ -25,7 +25,6 @@ import cci.repository.SQLBuilder;
 import cci.repository.cert.SQLBuilderCertificate;
 import cci.service.FieldType;
 import cci.service.Filter;
-import cci.service.cert.CertFilter;
 import cci.service.cert.CertService;
 import cci.service.cert.ReportFilter;
 import cci.service.cert.ReportService;

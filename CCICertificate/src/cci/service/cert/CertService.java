@@ -1,7 +1,6 @@
 ﻿package cci.service.cert;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -15,7 +14,6 @@ import cci.model.cert.Report;
 import cci.repository.SQLBuilder;
 import cci.repository.cert.CertificateDAO;
 import cci.util.cert.XMLService;
-import cci.web.controller.client.ClientController;
 
 @Component
 public class CertService {

@@ -1,6 +1,5 @@
 ﻿package cci.config.cert;
 
-import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.pdf.BaseFont;
 
 public class BoxConfig {
