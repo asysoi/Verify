@@ -15,6 +15,7 @@
 		http://www.springframework.org/schema/security 
 		http://www.springframework.org/schema/security/spring-security.xsd ">
 
+    <!-- DJ autoscan configuration --> 
  	<context:component-scan base-package="cci" />
   	<mvc:annotation-driven/>
 
@@ -22,6 +23,7 @@
       <bean class="cci.web.controller.LogInterceptor"/>
     </mvc:interceptors>
      
+    <!--  View resolver config --> 
 	<bean id="viewResolver"
 	      class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
           <property name="prefix">
@@ -32,8 +34,29 @@
           </property>
     </bean>
 
+    <!--  REST Controller handling configuration -->
+    <!--  JSON media Converter -->
+	<bean id="jsonConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+        <property name="prefixJson" value="false"/>
+        <property name="supportedMediaTypes" value="application/json"/>
+    </bean>
+    
+    <!--  XML media converter -->
+    <bean id="xmlMessageConverter" class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter">
+         <property name="supportedMediaTypes" value="application/xml"/>
+    </bean>
+    
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+       <property name="messageConverters">
+		<list>
+			<ref bean="jsonConverter"/>
+			<ref bean="xmlMessageConverter"/>
+		</list>
+		</property>
+	</bean>
+
 	     
-    <!--  database configuration -->     
+    <!--  DataBase configuration -->     
     <bean id="certificateDAO" class="cci.repository.cert.JDBCCertificateDAO">
         <property name="dataSource" ref="dataSource"/>
     </bean>
@@ -54,8 +77,9 @@
     </bean>
 
 
-  <bean id="owncertificateDAO" class="cci.repository.owncert.JDBCOwnCertificateDAO">
-        <property name="dataSourceOwn" ref="dataSourceOwn"/>
+    <!-- Database OwnCertificates -->
+    <bean id="owncertificateDAO" class="cci.repository.owncert.JDBCOwnCertificateDAO">
+        <property name="dataSource" ref="dataSourceOwn"/>
     </bean>
     
  
@@ -68,7 +92,7 @@
  
     
  <security:http auto-config="true" use-expressions="true">
-    <security:intercept-url pattern="/resources/**" access="permitAll"/> 
+    <security:intercept-url pattern="/resources/**" access="permitAll" requires-channel="https"/> 
     <security:intercept-url pattern="/certcheck.**" access="permitAll" requires-channel="https"/>
     <security:intercept-url pattern="/login*.**" access="permitAll" requires-channel="https"/> 
     <security:intercept-url pattern="/client*.do" access="hasRole('ROLE_CLIENT')"/>

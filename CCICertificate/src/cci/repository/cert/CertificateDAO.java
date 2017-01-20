@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.Map;
 
 import cci.model.cert.Certificate;
+import cci.model.cert.CertificateList;
 import cci.model.cert.Report;
 import cci.repository.SQLBuilder;
+import cci.web.controller.cert.Filter;
 
 public interface CertificateDAO {
 
@@ -23,9 +25,9 @@ public interface CertificateDAO {
 	
 	public List<Certificate> findViewNextPage(String[] dbfields, int page, int pagesize, int pagecount, String orderby, String order, SQLBuilder builder);
 
-	public int save(Certificate cert);
+	public long save(Certificate cert);
 
-	public void update(Certificate cert);
+	public Certificate update(Certificate cert) throws Exception;
 	
 	public int getViewPageCount(SQLBuilder builder);
 
@@ -49,5 +51,13 @@ public interface CertificateDAO {
 
 	public List<Certificate> getReportCertificates(String[] dbfields, String orderby,
 			String order, SQLBuilder builder);
+
+	public String getCertificates(Filter filter, boolean b);
+
+	public Certificate getCertificateByNumber(String number, String blanknumber);
+
+	public void deleteCertificate(String number, String blanknumber);
+
+	public long getNextValuePool(String seq_name, int poolsize) throws Exception;
 	
 }

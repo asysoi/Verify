@@ -100,6 +100,7 @@ public class OwnCertificateController {
 					("New filterCertificate created bacause of ACL");
 		}
 		
+		/*  -------------------------------------------------------------------
 		Iterator iterator = aut.getAuthorities().iterator(); 
 		while (iterator.hasNext()) {
 			
@@ -117,6 +118,7 @@ public class OwnCertificateController {
 		vmanager.setPagecount(ownCertService.getViewPageCount(builder));
 		
 		long step3 = System.currentTimeMillis();
+		
 		List<OwnCertificate> certs = ownCertService.readCertificatesPage(
 				vmanager.getOrdnames(),
 				vmanager.getPage(), vmanager.getPagesize(), vmanager.getPagecount(),  
@@ -124,7 +126,8 @@ public class OwnCertificateController {
 		
 		long step4 = System.currentTimeMillis();
 		vmanager.setElements(certs);
-
+        
+		
 		model.addAttribute("ownmanager", vmanager);
 		model.addAttribute("certs", certs);
 		model.addAttribute("next_page", vmanager.getNextPageLink());
@@ -135,6 +138,7 @@ public class OwnCertificateController {
 		model.addAttribute("sizes", vmanager.getSizesList());
 		model.addAttribute("timeduration", 
 				" " + (step3 - step2) + " + " + (step4 - step3) + " = " + (System.currentTimeMillis() - start));
+        ---------------------------------------------------------------------------*/
 
 		return "listowncertificates";
 	}

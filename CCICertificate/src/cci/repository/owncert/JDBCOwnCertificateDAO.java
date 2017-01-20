@@ -14,9 +14,6 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
-import cci.controller.CertificateUpdatErorrException;
-import cci.controller.Filter;
-import cci.controller.NotFoundCertificateException;
 import cci.model.owncert.OwnCertificate;
 import cci.model.owncert.OwnCertificateHeader;
 import cci.model.owncert.OwnCertificateHeaders;
@@ -24,6 +21,9 @@ import cci.model.owncert.OwnCertificates;
 import cci.model.owncert.Product;
 import cci.model.owncert.Company;
 import cci.model.owncert.Products;
+import cci.web.controller.owncert.Filter;
+import cci.web.controller.owncert.NotFoundCertificateException;
+import cci.web.controller.owncert.CertificateUpdatErorrException;;
 
 @Repository
 public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
@@ -106,7 +106,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 	// ---------------------------------------------------------------
 	// Сохранение сертификата в базе дданных
 	// ---------------------------------------------------------------
-	public OwnCertificate saveOwnCertificate(OwnCertificate cert)
+	public  OwnCertificate saveOwnCertificate(OwnCertificate cert)
 			throws Exception {
 
 		cert.setId_beltpp(getBeltppID(cert));

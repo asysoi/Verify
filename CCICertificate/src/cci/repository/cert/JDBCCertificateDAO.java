@@ -13,6 +13,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -20,13 +21,17 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 
+import cci.repository.cert.SequenceGenerator;
 import cci.model.cert.Certificate;
+import cci.model.cert.CertificateList;  
 import cci.model.cert.Country;
 import cci.model.cert.Product;
 import cci.model.cert.Report;
 import cci.repository.SQLBuilder;
 import cci.service.SQLQueryUnit;
+import cci.web.controller.cert.Filter;
 
 @Repository
 public class JDBCCertificateDAO implements CertificateDAO {
@@ -80,7 +85,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	}
 
 	// ---------------------------------------------------------------
-	// поиск сертификата по id -> PS
+	// поиск сертификата по number
 	// ---------------------------------------------------------------
 	public Certificate check(Certificate cert) {
 		Certificate rcert = null;
@@ -235,83 +240,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));
 	}
 
-	// ---------------------------------------------------------------
-	// save certificate -> PS
-	// ---------------------------------------------------------------
-	public int save(Certificate cert) {
-		String sql_cert = "insert into c_cert values "
-				+ "(beltpp.cert_id_seq.nextval, "
-				+ ":forms, :unn, :kontrp, :kontrs, :adress, :poluchat, :adresspol, :datacert,"
-				+ ":nomercert, :expert, :nblanka, :rukovod, :transport, :marshrut, :otmetka,"
-				+ ":stranav, :stranapr, :status, :koldoplist, :flexp, :unnexp, :expp, "
-				+ ":exps, :expadress, :flimp, :importer, :adressimp, :flsez, :sez,"
-				+ ":flsezrez, :stranap, :otd_id, :parentnumber, :parentstatus, TO_DATE(:datacert,'DD.MM.YY'))";
-
-		SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);
-		GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
-		int cert_id = 0;
-
-		try {
-			int row = template.update(sql_cert, parameters, keyHolder,
-					new String[] { "CERT_ID" });
-			cert_id = keyHolder.getKey().intValue();
-
-			String sql_product = "insert into C_PRODUCT values ("
-					+ " beltpp.product_id_seq.nextval, " + cert_id + ", "
-					+ " :numerator, :tovar, :vidup, :kriter, :ves, :schet)";
-
-			if (cert.getProducts() != null && cert.getProducts().size() > 0) {
-				SqlParameterSource[] batch = SqlParameterSourceUtils
-						.createBatch(cert.getProducts().toArray());
-				int[] updateCounts = template.batchUpdate(sql_product, batch);
-			}
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
-		return cert_id;
-	}
-
-	// ---------------------------------------------------------------
-	// update certificate  XXXX
-	// ---------------------------------------------------------------
-	public void update(Certificate cert) {
-
-		String sql_cert = "update c_cert SET "
-				+ "forms = :forms, unn = :unn, kontrp = :kontrp, kontrs = :kontrs, adress = :adress, poluchat = :poluchat, adresspol = :adresspol, datacert = :datacert,"
-				+ "nomercert = :nomercert, expert = :expert, nblanka = :nblanka, rukovod = :rukovod, transport = :transport, marshrut = :marshrut, otmetka = :otmetka,"
-				+ "stranav = :stranav, stranapr = :stranapr, status = :status, koldoplist = :koldoplist, flexp = :flexp, unnexp = :unnexp, expp = :expp, "
-				+ "exps = :exps, expadress = :expadress, flimp = :flimp, importer = :importer, adressimp = :adressimp, flsez = :flsez, sez = :sez,"
-				+ "flsezrez = :flsezrez, stranap = :stranap, parentnumber = :parentnumber, parentstatus = : parentstatus, issuedate=TO_DATE(:datacert,'DD.MM.YY')"
-				+ "WHERE cert_id = :cert_id";
-
-		SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);
-
-		try {
-
-			int row = template.update(sql_cert, parameters);
-
-			template.getJdbcOperations().update(
-					"delete from C_PRODUCT where cert_id = ?",
-					Long.valueOf(cert.getCert_id()));
-
-			String sql_product = "insert into C_PRODUCT values ("
-					+ " beltpp.product_id_seq.nextval, " + cert.getCert_id()
-					+ ", "
-					+ " :numerator, :tovar, :vidup, :kriter, :ves, :schet)";
-
-			if (cert.getProducts() != null && cert.getProducts().size() > 0) {
-				SqlParameterSource[] batch = SqlParameterSourceUtils
-						.createBatch(cert.getProducts().toArray());
-				int[] updateCounts = template.batchUpdate(sql_product, batch);
-			}
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
-	}
+	
 
 	// ---------------------------------------------------------------
 	// find certificate by query template -> PS
@@ -548,5 +477,230 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				new BeanPropertyRowMapper<Certificate>(Certificate.class));
 		
 	}
+	
+
+	// ---------------------------------------------------------------
+	// Save certificate / FOR REST SERVICE
+	// ---------------------------------------------------------------
+	public long save(Certificate cert) {
+		String sql_cert = "insert into c_cert "
+				+ "(cert_id, "
+				+ "forms, unn, kontrp, kontrs, adress, poluchat, adresspol, datacert, "
+				+ "nomercert, expert, nblanka, rukovod, transport, marshrut, otmetka, "
+				+ "stranav, stranapr, status, koldoplist, flexp, unnexp, expp, "
+				+ "exps, expadress, flimp, importer, adressimp, flsez, sez, "
+				+ "flsezrez, stranap, otd_id, parentnumber, parentstatus, issuedate,  "
+				+ "codestranav, codestranapr, codestranap,  category) "
+				+ "values (:cert_id, "
+				+ "TRIM(:forms), :unn, :kontrp, :kontrs, :adress, :poluchat, :adresspol, :datacert, "
+				+ ":nomercert, :expert, :nblanka, :rukovod, :transport, :marshrut, :otmetka, "
+				+ ":stranav, :stranapr, :status, :koldoplist, :flexp, :unnexp, :expp, "
+				+ ":exps, :expadress, :flimp, :importer, :adressimp, :flsez, :sez, "
+				+ ":flsezrez, :stranap, :otd_id, :parentnumber, :parentstatus, TO_DATE(:datacert,'DD.MM.YY'),  "
+				+ ":codestranav, :codestranapr, :codestranap,  :category )";
+
+		long cert_id = 0;
+		
+		try {
+			cert.setCert_id(SequenceGenerator.getNextValue("cert_id", this));
+			SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);
+			
+			int row = template.update(sql_cert, parameters);
+			
+			if (row > 0) {
+				cert_id = cert.getCert_id();
+			
+				if (cert_id > 0) { 
+					String sql_product = "insert into c_PRODUCT values ("
+							+ " beltpp.product_id_seq.nextval, " + cert_id
+							+ ", "
+							+ " :numerator, :tovar, :vidup, :kriter, :ves, :schet, :fobvalue)";
+
+					if (cert.getProducts() != null && cert.getProducts().size() > 0) {
+						SqlParameterSource[] batch = SqlParameterSourceUtils
+								.createBatch(cert.getProducts().toArray());
+						int[] updateCounts = template.batchUpdate(sql_product, batch);
+				
+						// 	very important -> create product  denorm record
+						String tovar = "";
+						for (Product product: cert.getProducts()) {
+							tovar += product.getTovar() +  ", " + product.getKriter() + ", " + product.getVes() + "; "; 
+						}
+				     
+						sql_product = "insert into C_PRODUCT_DENORM values (:cert_id, :tovar)";
+						parameters = new MapSqlParameterSource().addValue("cert_id", cert_id).addValue("tovar",tovar);
+						
+						try {
+						   template.update(sql_product, parameters);
+				        } catch (Exception ex) {
+				        	LOG.error("Certificate product add error " + cert.getNomercert() + ": " + ex.getMessage());
+							template.getJdbcOperations().update(
+									"DELETE FROM C_CERT WHERE cert_id = ?",	cert_id);
+							cert_id = 0;
+				        }
+					}
+				}
+			}
+		} catch (Exception ex) {
+			LOG.error("Error of adding certificate " + cert.getNomercert() + ": " + ex.getMessage());
+			ex.printStackTrace();
+		}
+		return cert_id;
+	}
+
+	
+	// ---------------------------------------------------------------
+	// Update certificate / FOR REST SERVICE
+	// ---------------------------------------------------------------
+	public Certificate update(Certificate cert) throws Exception {
+	  Certificate rcert = getCertificateByNumber(cert.getNomercert(), cert.getNblanka());
+		
+      if (rcert != null) {
+		cert.setCert_id(rcert.getCert_id());
+		
+		String sql_cert = "update c_cert SET "
+				+ "forms = TRIM(:forms), unn = :unn, kontrp = :kontrp, kontrs = :kontrs, adress = :adress, poluchat = :poluchat, adresspol = :adresspol, datacert = :datacert,"
+				+ " expert = :expert, rukovod = :rukovod, transport = :transport, marshrut = :marshrut, otmetka = :otmetka,"
+				+ "stranav = :stranav, stranapr = :stranapr, status = :status, koldoplist = :koldoplist, flexp = :flexp, unnexp = :unnexp, expp = :expp, "
+				+ "exps = :exps, expadress = :expadress, flimp = :flimp, importer = :importer, adressimp = :adressimp, flsez = :flsez, sez = :sez,"
+				+ "flsezrez = :flsezrez, stranap = :stranap, otd_id = :otd_id, parentnumber = :parentnumber, parentstatus = :parentstatus, issuedate = TO_DATE(:datacert,'DD.MM.YY'), "
+				+ "codestranav = :codestranav, codestranapr = :codestranapr, codestranap = :codestranap, category = :category "
+				+ "WHERE nomercert = :nomercert AND nblanka = :nblanka";
+
+		SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);
+
+		//try {
+
+			int row = template.update(sql_cert, parameters);
+
+			template.getJdbcOperations().update(
+					"delete from c_PRODUCT where cert_id = ?",
+					Long.valueOf(cert.getCert_id()));
+			
+			template.getJdbcOperations().update(
+					"delete from c_PRODUCT_DENORM where cert_id = ?",
+					Long.valueOf(cert.getCert_id()));
+
+
+			String sql_product = "insert into c_PRODUCT values ("
+					+ " beltpp.product_id_seq.nextval, "
+					+ cert.getCert_id() + ", "
+					+ " :numerator, :tovar, :vidup, :kriter, :ves, :schet, :fobvalue)";
+
+			if (cert.getProducts() != null && cert.getProducts().size() > 0) {
+				SqlParameterSource[] batch = SqlParameterSourceUtils
+						.createBatch(cert.getProducts().toArray());
+				int[] updateCounts = template.batchUpdate(sql_product, batch);
+			}
+			
+			// create product  denorm record
+			String tovar = "";
+			for (Product product: cert.getProducts()) {
+				tovar += product.getTovar() +  ", " + product.getKriter() + ", " + product.getVes() + "; "; 
+			}
+			
+			sql_product = "insert into C_PRODUCT_DENORM values (:cert_id, :tovar)";
+			parameters = new MapSqlParameterSource().addValue("cert_id", Long.valueOf(cert.getCert_id())).addValue("tovar",tovar);
+			template.update(sql_product, parameters);
+					
+
+		//} catch (Exception ex) {
+		//	LOG.error("Eroor updating certificate " + cert.getNomercert() + ": " + ex.getMessage());
+		//	ex.printStackTrace();
+		//}
+		rcert = cert;
+      }	
+			
+	  return rcert; 	
+	}
+
+	
+	// ---------------------------------------------------------------
+	// get pool. return start pooling / FOR REST SERVICE
+	// ---------------------------------------------------------------
+	public long getNextValuePool(String seq_name, int poolsize) throws Exception {
+
+			String sql = "select value from c_sequence WHERE name = '" + seq_name + "'";
+			long vl = template.getJdbcOperations().queryForInt(sql);
+			
+			sql = "update c_sequence SET "
+					+ " value = value + :poolsize"
+					+ " WHERE name = :seq_name";
+			
+			SqlParameterSource parameters = new MapSqlParameterSource().addValue("poolsize", Integer.valueOf(poolsize)).addValue("seq_name",seq_name);
+		    template.update(sql, parameters);
+		
+		    return vl;
+	}
+	
+	//--------------------------------------------------------------------
+	// Get Certificate by certificate number / FOR REST SERVICE
+	//--------------------------------------------------------------------
+	public Certificate getCertificateByNumber(String number, String blanknumber) {
+		
+		Certificate rcert = null;
+		long start = System.currentTimeMillis();
+		
+		try {
+			String sql = "select * from CERT_VIEW WHERE NOMERCERT = ? AND NBLANKA = ?)";
+			rcert = template.getJdbcOperations().queryForObject(
+					sql,
+					new Object[] { number, blanknumber},
+					new BeanPropertyRowMapper<Certificate>(Certificate.class));
+			
+			LOG.info("Certificate check: " + (System.currentTimeMillis() - start));
+			if (rcert != null) {
+				sql = "select * from C_PRODUCT WHERE cert_id = ?  ORDER BY product_id";
+				rcert.setProducts(template.getJdbcOperations().query(sql,
+						new Object[] { rcert.getCert_id() },
+						new BeanPropertyRowMapper<Product>(Product.class)));
+			}
+		} catch (Exception ex) {
+			LOG.info("Certificate isn't found: " + ex.getMessage());
+		}
+		
+		LOG.info("Certificate check load: " + (System.currentTimeMillis() - start));
+		return rcert;
+	}
+	
+	
+	
+	//--------------------------------------------------------------------
+	// Delete Certificate by certificate number / FOR REST SERVICE
+	//--------------------------------------------------------------------
+	public void deleteCertificate(String number, String blanknumber) {
+		
+		  Certificate rcert = getCertificateByNumber(number, blanknumber);
+			
+	      if (rcert != null) {
+			
+	    	  	template.getJdbcOperations().update(
+						"delete from c_PRODUCT where cert_id = ?",
+						Long.valueOf(rcert.getCert_id()));
+				
+				template.getJdbcOperations().update(
+						"delete from c_PRODUCT_DENORM where cert_id = ?",
+						Long.valueOf(rcert.getCert_id()));
+
+				template.getJdbcOperations().update(
+						"delete from c_cert WHERE cert_id = ?",
+						Long.valueOf(rcert.getCert_id()));
+				
+
+	      }	
+
+	}
+		
+	//--------------------------------------------------------------------
+	// Get certificate's numbers delimited by comma / FOR REST SERVICE
+	//--------------------------------------------------------------------
+	public String getCertificates(Filter filter, boolean b) {
+		String ret = "1111; 22222;33333;444444;555555;666666";
+		
+		String sql = "select nomercert, nblanka from c_cert " + filter.getWhereEqualClause();
+		
+		return ret;
+	}
+
 
 }

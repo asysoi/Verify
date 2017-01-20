@@ -6,36 +6,38 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import cci.controller.Filter;
-import cci.model.OwnCertificate;
-import cci.model.OwnCertificateHeaders;
-import cci.model.OwnCertificates;
-import cci.repository.cert.JDBCOwnCertificateDAO;
+import cci.model.owncert.OwnCertificate;
+import cci.model.owncert.OwnCertificateHeaders;
+import cci.model.owncert.OwnCertificates;
+import cci.repository.owncert.JDBCOwnCertificateDAO;
+import cci.repository.owncert.OwnCertificateDAO;
+import cci.web.controller.owncert.Filter;
+
 
 @Service
 public class OwnCertificateService {
 
 	@Autowired
-	private JDBCOwnCertificateDAO certificateDAO;
+	private OwnCertificateDAO owncertificateDAO;
 
 	public OwnCertificates getOwnCertificates(Filter filter) {
-	   return certificateDAO.getOwnCertificates(filter, true);
+	   return owncertificateDAO.getOwnCertificates(filter, true);
 	}
 	
 	public OwnCertificateHeaders getOwnCertificateHeaders(Filter filter) {
-		   return certificateDAO.getOwnCertificateHeaders(filter, true);
+		   return owncertificateDAO.getOwnCertificateHeaders(filter, true);
 	}
 	
 	public OwnCertificate getOwnCertificateById(int id) throws Exception {
-		return certificateDAO.findOwnCertificateByID(id);
+		return owncertificateDAO.findOwnCertificateByID(id);
 	}
 	
 	public void addOwnSertificate(OwnCertificate certificate) throws Exception {
-		certificateDAO.saveOwnCertificate(certificate);
+		owncertificateDAO.saveOwnCertificate(certificate);
 	}
 
 	public OwnCertificate updateOwnCertificate(OwnCertificate certificate) {
-		return certificateDAO.updateOwnCertificate(certificate);
+		return owncertificateDAO.updateOwnCertificate(certificate);
 	} 
 
 	public Object deleteOwnCertificate(int id) {

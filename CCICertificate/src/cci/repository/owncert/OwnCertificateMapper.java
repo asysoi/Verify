@@ -6,8 +6,9 @@ import java.text.SimpleDateFormat;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import cci.model.Company;
-import cci.model.OwnCertificate;
+import cci.model.owncert.Company;
+import cci.model.owncert.OwnCertificate;
+
 
 
 public class OwnCertificateMapper implements RowMapper {
