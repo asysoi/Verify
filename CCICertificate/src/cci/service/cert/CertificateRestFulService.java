@@ -22,11 +22,11 @@ public class CertificateRestFulService {
 	   return certificateDAO.getCertificates(filter, true);
 	}
 
-	public void addSertificate(Certificate certificate) {
+	public void addCertificate(Certificate certificate) throws Exception {
 		certificateDAO.save(certificate);
 	}
 
-	public Certificate getCertificateByNumber(String number, String blanknumber) {
+	public Certificate getCertificateByNumber(String number, String blanknumber) throws Exception {
 		return certificateDAO.getCertificateByNumber(number, blanknumber);
 	}
 
@@ -34,7 +34,7 @@ public class CertificateRestFulService {
 		return certificateDAO.update(certificate);
 	}
 
-	public void deleteCertificate(String number, String blanknumber) {
+	public void deleteCertificate(String number, String blanknumber) throws Exception {
 	  certificateDAO.deleteCertificate(number, blanknumber);
 	}
 }

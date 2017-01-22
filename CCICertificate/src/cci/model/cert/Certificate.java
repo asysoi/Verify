@@ -5,11 +5,14 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 import org.springframework.stereotype.Component;
 
 @XmlRootElement(name = "cert")
 @Component
+//@XmlType(propOrder = {"forms", "unn"})
 public class Certificate {
 	private Long cert_id;
 	private String forms;
@@ -30,7 +33,7 @@ public class Certificate {
 	private String stranav;
 	private String stranapr;
 	private String status;
-	private Integer koldoplist;
+	private int koldoplist;
 	private String flexp;
 	private String unnexp;
 	private String expp;
@@ -106,6 +109,7 @@ public class Certificate {
 		this.childnumber = childnumber;
 	}
 
+	@XmlTransient 
 	public Integer getChild_id() {
 		return child_id;
 	}
@@ -114,6 +118,7 @@ public class Certificate {
 		this.child_id = child_id;
 	}
 
+	@XmlTransient
 	public String getParentnumber() {
 		return parentnumber;
 	}
@@ -122,6 +127,7 @@ public class Certificate {
 		this.parentnumber = parentnumber;
 	}
 
+	@XmlTransient
 	public String getParentstatus() {
 		return parentstatus;
 	}
@@ -130,6 +136,7 @@ public class Certificate {
 		this.parentstatus = parentstatus;
 	}
 
+	@XmlTransient
 	public Long getCert_id() {
 		return cert_id;
 	}
@@ -387,7 +394,7 @@ public class Certificate {
 	}
 
 	@XmlElementWrapper(name = "products")
-	@XmlElement(name = "row")
+	@XmlElement(name = "product")
 	public List<Product> getProducts() {
 		return products;
 	}
@@ -436,6 +443,7 @@ public class Certificate {
 		this.otd_name = otd_name;
 	}
 
+	@XmlTransient
 	public String getShort_kontrp() {
 
 		// return kontrp.length() > 100 ? kontrp.substring(1, 100) + " ..." :
@@ -518,8 +526,6 @@ public class Certificate {
 		result = prime * result + ((forms == null) ? 0 : forms.hashCode());
 		result = prime * result
 				+ ((importer == null) ? 0 : importer.hashCode());
-		result = prime * result
-				+ ((koldoplist == null) ? 0 : koldoplist.hashCode());
 		result = prime * result + ((kontrp == null) ? 0 : kontrp.hashCode());
 		result = prime * result + ((kontrs == null) ? 0 : kontrs.hashCode());
 		result = prime * result
@@ -684,15 +690,17 @@ public class Certificate {
 			System.out.print(" |  " + 30);
 			return false;
 		}
-		if (koldoplist == null) {
-			if (other.koldoplist != null /*&& other.koldoplist.length() > 0*/) {
-				System.out.print(" |  " + 31);
-				return false;
-			}
-		} else if (!koldoplist.equals(other.koldoplist)) {
-			System.out.print(" |  " + 32);
-			return false;
-		}
+		
+		//if (koldoplist == null) {
+		//	if (other.koldoplist != null /*&& other.koldoplist.length() > 0*/) {
+		//		System.out.print(" |  " + 31);
+		//		return false;
+		//	}
+		//} else if (!koldoplist.equals(other.koldoplist)) {
+		//	System.out.print(" |  " + 32);
+		//	return false;
+		//}
+		
 		if (kontrp == null) {
 			if (other.kontrp != null && other.kontrp.length() > 0) {
 				System.out.print(" |  " + 33);

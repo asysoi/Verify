@@ -1,7 +1,10 @@
 ﻿package cci.repository.cert;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -31,6 +34,7 @@ import cci.model.cert.Product;
 import cci.model.cert.Report;
 import cci.repository.SQLBuilder;
 import cci.service.SQLQueryUnit;
+import cci.web.controller.cert.CertificateGetErrorException;
 import cci.web.controller.cert.Filter;
 
 @Repository
@@ -38,10 +42,12 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	
 	private static final Logger LOG = Logger.getLogger(JDBCCertificateDAO.class);
 	private NamedParameterJdbcTemplate template;
+	private DataSource ds; 
 
 	@Autowired
 	public void setDataSource(DataSource dataSource) {
 		this.template = new NamedParameterJdbcTemplate(dataSource);
+		ds = dataSource;
 	}
 
 	// ---------------------------------------------------------------
@@ -482,7 +488,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	// ---------------------------------------------------------------
 	// Save certificate / FOR REST SERVICE
 	// ---------------------------------------------------------------
-	public long save(Certificate cert) {
+	public long save(Certificate cert) throws Exception {
 		String sql_cert = "insert into c_cert "
 				+ "(cert_id, "
 				+ "forms, unn, kontrp, kontrs, adress, poluchat, adresspol, datacert, "
@@ -537,13 +543,14 @@ public class JDBCCertificateDAO implements CertificateDAO {
 							template.getJdbcOperations().update(
 									"DELETE FROM C_CERT WHERE cert_id = ?",	cert_id);
 							cert_id = 0;
+							throw new RuntimeException(ex);
 				        }
 					}
 				}
 			}
 		} catch (Exception ex) {
 			LOG.error("Error of adding certificate " + cert.getNomercert() + ": " + ex.getMessage());
-			ex.printStackTrace();
+			throw new RuntimeException(ex);
 		}
 		return cert_id;
 	}
@@ -569,7 +576,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);
 
-		//try {
+		try {
 
 			int row = template.update(sql_cert, parameters);
 
@@ -602,12 +609,12 @@ public class JDBCCertificateDAO implements CertificateDAO {
 			sql_product = "insert into C_PRODUCT_DENORM values (:cert_id, :tovar)";
 			parameters = new MapSqlParameterSource().addValue("cert_id", Long.valueOf(cert.getCert_id())).addValue("tovar",tovar);
 			template.update(sql_product, parameters);
-					
 
-		//} catch (Exception ex) {
-		//	LOG.error("Eroor updating certificate " + cert.getNomercert() + ": " + ex.getMessage());
-		//	ex.printStackTrace();
-		//}
+		} catch (Exception ex) {
+			LOG.error("Eroor updating certificate " + cert.getNomercert() + ": " + ex.getMessage());
+			ex.printStackTrace();
+            throw new RuntimeException(ex);			
+		}
 		rcert = cert;
       }	
 			
@@ -636,19 +643,18 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	//--------------------------------------------------------------------
 	// Get Certificate by certificate number / FOR REST SERVICE
 	//--------------------------------------------------------------------
-	public Certificate getCertificateByNumber(String number, String blanknumber) {
+	public Certificate getCertificateByNumber(String number, String blanknumber) throws Exception {
 		
 		Certificate rcert = null;
 		long start = System.currentTimeMillis();
 		
 		try {
-			String sql = "select * from CERT_VIEW WHERE NOMERCERT = ? AND NBLANKA = ?)";
+			String sql = "select * from CERT_VIEW WHERE NOMERCERT = ? AND NBLANKA = ?";
 			rcert = template.getJdbcOperations().queryForObject(
 					sql,
 					new Object[] { number, blanknumber},
 					new BeanPropertyRowMapper<Certificate>(Certificate.class));
 			
-			LOG.info("Certificate check: " + (System.currentTimeMillis() - start));
 			if (rcert != null) {
 				sql = "select * from C_PRODUCT WHERE cert_id = ?  ORDER BY product_id";
 				rcert.setProducts(template.getJdbcOperations().query(sql,
@@ -656,10 +662,10 @@ public class JDBCCertificateDAO implements CertificateDAO {
 						new BeanPropertyRowMapper<Product>(Product.class)));
 			}
 		} catch (Exception ex) {
-			LOG.info("Certificate isn't found: " + ex.getMessage());
+			throw (new CertificateGetErrorException(ex.getMessage()));
 		}
 		
-		LOG.info("Certificate check load: " + (System.currentTimeMillis() - start));
+		LOG.info("Certificate loading: " + (System.currentTimeMillis() - start));
 		return rcert;
 	}
 	
@@ -668,7 +674,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	//--------------------------------------------------------------------
 	// Delete Certificate by certificate number / FOR REST SERVICE
 	//--------------------------------------------------------------------
-	public void deleteCertificate(String number, String blanknumber) {
+	public void deleteCertificate(String number, String blanknumber) throws Exception  {
 		
 		  Certificate rcert = getCertificateByNumber(number, blanknumber);
 			
@@ -694,12 +700,42 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	//--------------------------------------------------------------------
 	// Get certificate's numbers delimited by comma / FOR REST SERVICE
 	//--------------------------------------------------------------------
-	public String getCertificates(Filter filter, boolean b) {
-		String ret = "1111; 22222;33333;444444;555555;666666";
+	public String getCertificates(Filter filter, boolean b)  throws Exception {
+		String ret = null;
+		StringBuffer str = new StringBuffer();
 		
-		String sql = "select nomercert, nblanka from c_cert " + filter.getWhereEqualClause();
+		String sql = "select nomercert, nblanka from c_cert " + filter.getWhereLikeClause();
+		System.out.println(sql);
+		Connection conn = null;
+
+		try {
+			conn = ds.getConnection();
+			Statement ps = conn.createStatement();
+			ResultSet rs = ps.executeQuery(sql);
+			//System.out.println("RS: " + rs.getFetchSize());
+			
+			while (rs.next()) {
+				//System.out.println(rs.getRow());
+				str.append(rs.getString("nomercert"));
+				str.append(",");
+				str.append(rs.getString("nblanka"));
+				str.append(";");
+			}
+			rs.close();
+			ps.close();
+			ret = str.toString();
+  	   } catch (SQLException e) {
+  		    System.out.println("Error: " + e.getMessage());
+			throw new RuntimeException(e);
+	   } finally {
+			if (conn != null) {
+				try {
+				conn.close();
+				} catch (SQLException e) {}
+			}
+	   }
 		
-		return ret;
+	   return ret;
 	}
 
 

@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import cci.model.cert.Certificate;
-import cci.model.cert.CertificateList;
 import cci.service.cert.CertificateRestFulService;
 
 @Controller
@@ -31,7 +30,7 @@ public class CertificateRestFulController {
 	/* -----------------------------------------
 	 * Get list of numbers's certificates by filter
 	 * ----------------------------------------- */
-	@RequestMapping(value = "certs", method = RequestMethod.GET, headers = "Accept=application/xml")
+	@RequestMapping(value = "rcerts.do", method = RequestMethod.GET, headers = "Accept=application/txt")
 	@ResponseStatus (HttpStatus.OK)
 	public ResponseEntity<String> getCertificates(
 			@RequestParam(value = "nomercert", required = false) String number,
@@ -54,17 +53,17 @@ public class CertificateRestFulController {
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.set("Operation", "Get List Certificate Numbers");
 		
-		return new ResponseEntity<String>("Certificate " + number + " deleted.", responseHeaders, HttpStatus.OK);
+		return new ResponseEntity<String>(certificates, responseHeaders, HttpStatus.OK);
 	}
 
 	/* -----------------------------
 	 * Add new certificate from XML body
 	 * ----------------------------- */
-	@RequestMapping(value = "cert", method = RequestMethod.POST, headers = "Accept=application/xml")
+	@RequestMapping(value = "rcert.do", method = RequestMethod.POST, headers = "Accept=application/xml")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Certificate addXMLCertificate(@RequestBody Certificate certificate) {
 		try {
-			service.addSertificate(certificate);
+			service.addCertificate(certificate);
 		} catch (Exception ex) {
 			throw(new AddCertificateException(ex.toString()));
 		}
@@ -75,7 +74,7 @@ public class CertificateRestFulController {
 	/* -----------------------------
 	 * Get certificate by number & blanlnumber
 	 * ----------------------------- */
-	@RequestMapping(value = "cert", method = RequestMethod.GET, headers = "Accept=application/xml")
+	@RequestMapping(value = "rcert.do", method = RequestMethod.GET, headers = "Accept=application/xml")
 	@ResponseStatus(HttpStatus.OK)
 	public Certificate getCertificateByNumber(
 			@RequestParam(value = "nomercert", required = true) String number,
@@ -90,7 +89,7 @@ public class CertificateRestFulController {
 	/* -----------------------------
 	 * Update certificate
 	 * ----------------------------- */
-	@RequestMapping(value = "cert", method = RequestMethod.PUT, headers = "Accept=application/xml")
+	@RequestMapping(value = "rcert.do", method = RequestMethod.PUT, headers = "Accept=application/xml")
 	@ResponseStatus(HttpStatus.OK)
 	public Certificate updateCertificate(@RequestBody Certificate cert) {
 		 Certificate rcert = null;
@@ -109,12 +108,17 @@ public class CertificateRestFulController {
 	/* -----------------------------
 	 * Delete certificate
 	 * ----------------------------- */
-	@RequestMapping(value = "cert", method = RequestMethod.DELETE, headers = "Accept=application/xml")
+	@RequestMapping(value = "rcert.do", method = RequestMethod.DELETE, headers = "Accept=application/txt")
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public ResponseEntity<String> deleteCertificate(
 			@RequestParam(value = "nomercert", required = false) String number,
 			@RequestParam(value = "nblanka", required = false) String blanknumber) {
-		service.deleteCertificate(number, blanknumber);
+		try {
+			service.deleteCertificate(number, blanknumber);
+		} catch(Exception ex) {
+			throw(new CertificateDeleteException("Серитификат номер " + number + ", выданный на бланке " +  blanknumber + "  не может быть удален: " + ex.toString()));	
+		}
+		
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.set("MyResponseHeader", "MyValue");
 		return new ResponseEntity<String>("Certificate " + number + " deleted.", responseHeaders, HttpStatus.OK);
@@ -125,7 +129,7 @@ public class CertificateRestFulController {
 	 * ----------------------------- */
 	@ExceptionHandler(Exception.class)
 	@ResponseBody
-    public ResponseEntity<String> handleIOException(Exception ex) {
+    public ResponseEntity<String> handleRESTException(Exception ex) {
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.set("Error-Code", "12345");
 		responseHeaders.set("Content-Type", "application/json;charset=utf-8");

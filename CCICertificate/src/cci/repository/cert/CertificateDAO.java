@@ -25,7 +25,7 @@ public interface CertificateDAO {
 	
 	public List<Certificate> findViewNextPage(String[] dbfields, int page, int pagesize, int pagecount, String orderby, String order, SQLBuilder builder);
 
-	public long save(Certificate cert);
+	public long save(Certificate cert) throws Exception;
 
 	public Certificate update(Certificate cert) throws Exception;
 	
@@ -52,11 +52,11 @@ public interface CertificateDAO {
 	public List<Certificate> getReportCertificates(String[] dbfields, String orderby,
 			String order, SQLBuilder builder);
 
-	public String getCertificates(Filter filter, boolean b);
+	public String getCertificates(Filter filter, boolean b) throws Exception;
 
-	public Certificate getCertificateByNumber(String number, String blanknumber);
+	public Certificate getCertificateByNumber(String number, String blanknumber) throws Exception;
 
-	public void deleteCertificate(String number, String blanknumber);
+	public void deleteCertificate(String number, String blanknumber) throws Exception;
 
 	public long getNextValuePool(String seq_name, int poolsize) throws Exception;
 	

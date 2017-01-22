@@ -1,10 +1,11 @@
 ﻿package cci.model.cert;
 
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.springframework.stereotype.Component;
 
-@XmlRootElement(name="row")
+@XmlRootElement(name="product")
 @Component
 public class Product {
 	private Long product_id;
@@ -16,6 +17,7 @@ public class Product {
 	private String schet;
 	private String fobvalue;
 	
+	@XmlTransient
 	public Long getProduct_id() {
 		return product_id;
 	}

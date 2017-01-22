@@ -61,7 +61,7 @@ public class Filter {
 				
 		if (blanknumber != null && !blanknumber.isEmpty()) {
 			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
-			sqlwhere += "nblank LIKE '%" + blanknumber + "%'";   
+			sqlwhere += "nblanka LIKE '%" + blanknumber + "%'";   
 		}
 		
 		if (from != null && !from.isEmpty()) {
@@ -88,7 +88,7 @@ public class Filter {
 		
 		if (blanknumber != null && !blanknumber.isEmpty()) {
 			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
-			sqlwhere += "nblank = '" + blanknumber + "'";   
+			sqlwhere += "nblanka = '" + blanknumber + "'";   
 		}
 		
 		if (from != null && !from.isEmpty()) {
