@@ -1,50 +1,44 @@
+
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <cert>
-	<adress>222160, Минская область, г.Жодино, ул. 40 лет Октября, 4,
-		Республика Беларусь</adress>
-	<adresspol>375010 , г.Ереван, ул.Хонджан, 13/201, Республика Армения
-	</adresspol>
-	<childnumber></childnumber>
-	<codestranap>BY</codestranap>
-	<codestranapr>AM</codestranapr>
+	<otd_id>4</otd_id>
+	<otd_name>Гомельское отделение Белорусской торгово-промышленной палаты
+	</otd_name>
+	<forms>А</forms>
+	<kontrp>OJSC "BSW - MANAGEMENT COMPANY OF "BMC" HOLDING". 247210
+		ZHLOBIN PROMYSHLENNAYA STR.37 REPUBLIC BELARUS.</kontrp>
+	<poluchat>MAZUR-TOM
+		UL.MODRZEWIOWA 82
+		11-010, BARCZEWO WOJTOWO
+		POLAND.
+	</poluchat>
+	<datacert>14.01.2017</datacert>
+	<nomercert>BYPL7309010398</nomercert>
+	<expert>ZHLOBIN</expert>
+	<nblanka>0458190</nblanka>
+	<rukovod>ZHLOBIN</rukovod>
+	<transport>TRUCK:</transport>
+	<stranav>THE REPUBLIC OF BELARUS</stranav>
 	<codestranav>BY</codestranav>
-	<currentlist>0</currentlist>
-	<datacert>07.01.2017</datacert>
-	<expert>Г.И.Барсукова</expert>
-	<flexp>0</flexp>
-	<flimp>0</flimp>
-	<flsez>0</flsez>
-	<forms>СТ-1</forms>
-	<kontrp>Ооткрытое акционерное общество "БЕЛАЗ" - управляющая компания
-		холдинга "БЕЛАЗ-ХОЛДИНГ"</kontrp>
-	<kontrs>ОАО "БЕЛАЗ" - управляющая компания холдинга "БЕЛАЗ-ХОЛДИНГ"
-	</kontrs>
-	<marshrut>г.Жодино-г.Ереван</marshrut>
-	<nblanka>4566889</nblanka>
-	<nomercert>BYAM7107277301</nomercert>
-	<otd_addr_building>65</otd_addr_building>
-	<otd_addr_city>Минск</otd_addr_city>
-	<otd_addr_index>220113</otd_addr_index>
-	<otd_addr_line>Я.Колоса</otd_addr_line>
-	<otd_id>1</otd_id>
-	<otd_name>Минское отделение БелТПП</otd_name>
-	<poluchat>ООО "Белаз Кавказ Транс Сервис"</poluchat>
+	<stranapr>POLAND</stranapr>
+	<codestranapr>PL</codestranapr>
+	<stranap>THE REPUBLIC OF BELARUS</stranap>
+	<status>действительный</status>
+	<koldoplist>0</koldoplist>
 	<products>
-		<product>
-			<kriter>Д8412</kriter>
-			<numerator>1.</numerator>
-			<schet>№ 0841856 от 17.10.2013</schet>
-			<tovar>Части к aвтoмобилям БелАЗ - 7822 -3428010 АВТОМАТ РАЗГРУЗКИ
-				НАСОСА</tovar>
-			<ves>Брутто 100кг Нетто 85кг 10шт.</ves>
-			<vidup>2 ящика деревянных</vidup>
-		</product>
+		<row>
+			<numerator>1</numerator>
+			<vidup> 14
+				№4/14,16, 18; 7/21; 9/1,2,5; 10/1-5,7,11.
+			</vidup>
+			<tovar>14 COILS.
+				STEEL WIRE FOR NAILS 3,40mm.
+			</tovar>
+			<kriter>"W"72.17</kriter>
+			<ves>19842 kg/
+				19814 kg
+			</ves>
+			<schet>75571211 от 14.01.2017</schet>
+		</row>
 	</products>
-	<rukovod>Л.В. Луферчик</rukovod>
-	<status>Действителен</status>
-	<stranap>Республике Беларусь                                                                                 </stranap>
-	<stranapr>Республике Армения                                                                                  </stranapr>
-	<stranav>Республике Беларусь                                                                                 </stranav>
-	<transport>автомашина-авиа</transport>
-	<unn>600038906</unn>
 </cert>

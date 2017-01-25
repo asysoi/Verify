@@ -2,7 +2,7 @@ package cci.web.controller.cert;
 
 public class Filter {
 
-	public final String DATE_FORMAT = "%d.%m.%Y";
+	public final String DATE_FORMAT = "DD.MM.YY";
 
 	private String number = null;
 	private String blanknumber = null;
@@ -66,12 +66,12 @@ public class Filter {
 		
 		if (from != null && !from.isEmpty()) {
 			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
-			sqlwhere += "datacert > STR_TO_DATE('" + from + "','" +  DATE_FORMAT + "') ";   
+			sqlwhere += "datacert > TO_DATE('" + from + "','" +  DATE_FORMAT + "') ";   
 		}
 		
 		if (to != null && !to.isEmpty()) {
 			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
-			sqlwhere += "datacert < STR_TO_DATE('" + to + "','" +  DATE_FORMAT + "') ";   
+			sqlwhere += "datacert < TO_DATE('" + to + "','" +  DATE_FORMAT + "') ";   
 		}
 		
 		return sqlwhere;
@@ -93,12 +93,12 @@ public class Filter {
 		
 		if (from != null && !from.isEmpty()) {
 			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
-			sqlwhere += "datacert > STR_TO_DATE('" + from + "','" +  DATE_FORMAT + "') ";   
+			sqlwhere += "datacert > TO_DATE('" + from + "','" +  DATE_FORMAT + "') ";   
 		}
 		
 		if (to != null && !to.isEmpty()) {
 			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
-			sqlwhere += "datacert < STR_TO_DATE('" + to + "','" +  DATE_FORMAT + "') ";   
+			sqlwhere += "datacert < TO_DATE('" + to + "','" +  DATE_FORMAT + "') ";   
 		}
 		
 		return sqlwhere;

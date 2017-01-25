@@ -546,6 +546,8 @@ public class JDBCCertificateDAO implements CertificateDAO {
 							throw new RuntimeException(ex);
 				        }
 					}
+					
+					saveSourceInfo(cert_id, "RESTFUL service");
 				}
 			}
 		} catch (Exception ex) {
@@ -554,7 +556,26 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		}
 		return cert_id;
 	}
-
+    
+	// ---------------------------------------------------------------
+	// Save info about certificate load
+	// ---------------------------------------------------------------
+	public int saveSourceInfo(long cert_id, String source) {
+			String sql = "insert into c_files_in(file_in_id, file_in_name, cert_id, date_load) values "
+					     + "(beltpp.file_id_seq.nextval, :file_in_name, :cert_id, SYSDATE)";
+			int row = 0;
+			Map<String, Object> parameters = new HashMap<String, Object>();
+			parameters.put("file_in_name", source);
+			parameters.put("cert_id", cert_id);
+		
+			try {
+				row = template.update(sql, parameters);
+			} catch (Exception ex) {
+				LOG.error("Eroor source info saving during certificate adding: " + ex.getMessage());
+			}
+			return row;
+	}
+	
 	
 	// ---------------------------------------------------------------
 	// Update certificate / FOR REST SERVICE
@@ -662,6 +683,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 						new BeanPropertyRowMapper<Product>(Product.class)));
 			}
 		} catch (Exception ex) {
+			LOG.info("Certificate loading error: " + ex.getMessage());
 			throw (new CertificateGetErrorException(ex.getMessage()));
 		}
 		
@@ -691,8 +713,6 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				template.getJdbcOperations().update(
 						"delete from c_cert WHERE cert_id = ?",
 						Long.valueOf(rcert.getCert_id()));
-				
-
 	      }	
 
 	}
@@ -725,7 +745,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 			ps.close();
 			ret = str.toString();
   	   } catch (SQLException e) {
-  		    System.out.println("Error: " + e.getMessage());
+  		    LOG.info("Error: " + e.getMessage());
 			throw new RuntimeException(e);
 	   } finally {
 			if (conn != null) {

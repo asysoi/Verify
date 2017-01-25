@@ -2,10 +2,12 @@
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 import org.springframework.stereotype.Component;
 
-@XmlRootElement(name="product")
+@XmlRootElement(name="row")
+@XmlType(propOrder = {"numerator", "vidup", "tovar", "kriter", "ves", "schet", "fobvalue"})
 @Component
 public class Product {
 	private Long product_id;

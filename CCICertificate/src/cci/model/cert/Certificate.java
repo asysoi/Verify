@@ -12,7 +12,11 @@ import org.springframework.stereotype.Component;
 
 @XmlRootElement(name = "cert")
 @Component
-//@XmlType(propOrder = {"forms", "unn"})
+@XmlType(propOrder = {"otd_id", "otd_name", "forms", "unn",  "kontrp",  "kontrs", "adress", "poluchat", "adresspol", "datacert", "nomercert", "expert", "nblanka", "rukovod", 
+		"transport", "marshrut", "otmetka",  "stranav","codestranav", "stranapr","codestranapr", "stranap", "codestranap", "status", 
+		"koldoplist", "flexp", "unnexp", "expp", "exps", "expadress", "flimp",  "importer","adressimp","flsez","sez", "flsezrez", "parentnumber", "parentstatus", 
+		"category", "date_load", "products"})
+
 public class Certificate {
 	private Long cert_id;
 	private String forms;
@@ -85,6 +89,7 @@ public class Certificate {
 		this.date_load = date_load;
 	}
 
+	@XmlTransient
 	public int getCurrentlist() {
 		return currentlist;
 	}
@@ -93,6 +98,7 @@ public class Certificate {
 		this.currentlist = currentlist;
 	}
 
+	@XmlTransient
 	public String getTovar() {
 		return tovar;
 	}
@@ -101,6 +107,7 @@ public class Certificate {
 		this.tovar = tovar;
 	}
 
+	@XmlTransient
 	public String getChildnumber() {
 		return childnumber;
 	}
@@ -118,7 +125,6 @@ public class Certificate {
 		this.child_id = child_id;
 	}
 
-	@XmlTransient
 	public String getParentnumber() {
 		return parentnumber;
 	}
@@ -127,7 +133,6 @@ public class Certificate {
 		this.parentnumber = parentnumber;
 	}
 
-	@XmlTransient
 	public String getParentstatus() {
 		return parentstatus;
 	}
@@ -289,7 +294,7 @@ public class Certificate {
 		this.status = status;
 	}
 
-	public Integer getKoldoplist() {
+	public int getKoldoplist() {
 		return koldoplist;
 	}
 
@@ -394,7 +399,7 @@ public class Certificate {
 	}
 
 	@XmlElementWrapper(name = "products")
-	@XmlElement(name = "product")
+	@XmlElement(name = "row")
 	public List<Product> getProducts() {
 		return products;
 	}
@@ -403,6 +408,7 @@ public class Certificate {
 		this.products = products;
 	}
 
+	@XmlTransient
 	public String getOtd_addr_index() {
 		return otd_addr_index;
 	}
@@ -411,6 +417,7 @@ public class Certificate {
 		this.otd_addr_index = otd_addr_index;
 	}
 
+	@XmlTransient
 	public String getOtd_addr_city() {
 		return otd_addr_city;
 	}
@@ -419,6 +426,7 @@ public class Certificate {
 		this.otd_addr_city = otd_addr_city;
 	}
 
+	@XmlTransient
 	public String getOtd_addr_line() {
 		return otd_addr_line;
 	}
@@ -427,6 +435,7 @@ public class Certificate {
 		this.otd_addr_line = otd_addr_line;
 	}
 
+	@XmlTransient
 	public String getOtd_addr_building() {
 		return otd_addr_building;
 	}
@@ -445,7 +454,6 @@ public class Certificate {
 
 	@XmlTransient
 	public String getShort_kontrp() {
-
 		// return kontrp.length() > 100 ? kontrp.substring(1, 100) + " ..." :
 		// kontrp;
 		return (kontrp != null && kontrp.length() > 100) ? kontrp.substring(1,
@@ -453,7 +461,7 @@ public class Certificate {
 	}
 	
 	
-
+	@XmlTransient
 	public String getEotd_name() {
 		return eotd_name;
 	}
@@ -462,6 +470,7 @@ public class Certificate {
 		this.eotd_name = eotd_name;
 	}
 
+	@XmlTransient
 	public String getEotd_addr_city() {
 		return eotd_addr_city;
 	}
@@ -470,6 +479,7 @@ public class Certificate {
 		this.eotd_addr_city = eotd_addr_city;
 	}
 
+	@XmlTransient
 	public String getEotd_addr_line() {
 		return eotd_addr_line;
 	}
@@ -854,6 +864,7 @@ public class Certificate {
 		return true;
 	}
 
+	
 	public int getOtd_id() {
 		return otd_id;
 	}
@@ -862,6 +873,7 @@ public class Certificate {
 		this.otd_id = otd_id;
 	}
 
+	@XmlTransient
 	public Long getParent_id() {
 		return parent_id;
 	}
@@ -902,6 +914,7 @@ public class Certificate {
 		this.category = category;
 	}
 
+	@XmlTransient
 	public ProductIterator getIterator() {
 		if (iterator == null) {
 			iterator = new ProductIteratorImpl();
