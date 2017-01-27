@@ -32,7 +32,7 @@ public class CertificateRestFulController {
 	
 	@Autowired
 	private CertificateRestFulService service;
-	
+	@Autowired
 	private CertService certService;
 
 
