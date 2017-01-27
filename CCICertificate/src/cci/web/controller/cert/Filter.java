@@ -8,6 +8,7 @@ public class Filter {
 	private String blanknumber = null;
 	private String from = null;
 	private String to = null;
+	private String otd_id = null;
 
 	public Filter(String number, String blanknumber, String from, String to) {
 		super();
@@ -48,6 +49,14 @@ public class Filter {
 	public void setBlanknumber(String blanknumber) {
 		this.blanknumber = blanknumber;
 	}
+	
+	public String getOtd_id() {
+		return otd_id;
+	}
+
+	public void setOtd_id(String otd_id) {
+		this.otd_id = otd_id;
+	}
 
 	public String getWhereLikeClause() {
 		
@@ -57,8 +66,7 @@ public class Filter {
 			sqlwhere += " WHERE ";
 			sqlwhere += "nomercert LIKE '%" + number + "%'";   
 		}
-		
-				
+						
 		if (blanknumber != null && !blanknumber.isEmpty()) {
 			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
 			sqlwhere += "nblanka LIKE '%" + blanknumber + "%'";   
@@ -66,13 +74,19 @@ public class Filter {
 		
 		if (from != null && !from.isEmpty()) {
 			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
-			sqlwhere += "datacert > TO_DATE('" + from + "','" +  DATE_FORMAT + "') ";   
+			sqlwhere += "issuedate >= TO_DATE('" + from + "','" +  DATE_FORMAT + "') ";   
 		}
 		
 		if (to != null && !to.isEmpty()) {
 			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
-			sqlwhere += "datacert < TO_DATE('" + to + "','" +  DATE_FORMAT + "') ";   
+			sqlwhere += "issuedate <= TO_DATE('" + to + "','" +  DATE_FORMAT + "') ";   
 		}
+		
+		if (otd_id != null && !otd_id.isEmpty()) {
+			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
+			sqlwhere += "otd_id = " + otd_id;   
+		}
+		
 		
 		return sqlwhere;
 	}
@@ -93,12 +107,17 @@ public class Filter {
 		
 		if (from != null && !from.isEmpty()) {
 			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
-			sqlwhere += "datacert > TO_DATE('" + from + "','" +  DATE_FORMAT + "') ";   
+			sqlwhere += "issudate >= TO_DATE('" + from + "','" +  DATE_FORMAT + "') ";   
 		}
 		
 		if (to != null && !to.isEmpty()) {
 			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
-			sqlwhere += "datacert < TO_DATE('" + to + "','" +  DATE_FORMAT + "') ";   
+			sqlwhere += "issuedate <= TO_DATE('" + to + "','" +  DATE_FORMAT + "') ";   
+		}
+		
+		if (otd_id != null && !otd_id.isEmpty()) {
+			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
+			sqlwhere += "otd_id = " + otd_id;   
 		}
 		
 		return sqlwhere;

@@ -15,6 +15,7 @@ import javax.sql.DataSource;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.ResultSetExtractor;
@@ -582,7 +583,10 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	// ---------------------------------------------------------------
 	public Certificate update(Certificate cert) throws Exception {
 	  Certificate rcert = getCertificateByNumber(cert.getNomercert(), cert.getNblanka());
-		
+	  
+	  // дата сертификата не может меняться
+	  // номер отделения не меняется
+	  
       if (rcert != null) {
 		cert.setCert_id(rcert.getCert_id());
 		
@@ -682,6 +686,10 @@ public class JDBCCertificateDAO implements CertificateDAO {
 						new Object[] { rcert.getCert_id() },
 						new BeanPropertyRowMapper<Product>(Product.class)));
 			}
+		} catch(EmptyResultDataAccessException ex) {
+			LOG.info("Certificate find error: " + ex.getMessage());
+			throw (new CertificateGetErrorException("Обновляемый сертификат с номером " + number + " на бланке с номером  " + blanknumber  
+ 					                                + " не найден в базе. Обновление невозможно. Сертификат должен быть добавлен в базу."));
 		} catch (Exception ex) {
 			LOG.info("Certificate loading error: " + ex.getMessage());
 			throw (new CertificateGetErrorException(ex.getMessage()));
@@ -724,7 +732,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		String ret = null;
 		StringBuffer str = new StringBuffer();
 		
-		String sql = "select nomercert, nblanka from c_cert " + filter.getWhereLikeClause();
+		String sql = "select nomercert, nblanka, datacert from c_cert " + filter.getWhereLikeClause() + " ORDER by issuedate";
 		System.out.println(sql);
 		Connection conn = null;
 
@@ -732,14 +740,15 @@ public class JDBCCertificateDAO implements CertificateDAO {
 			conn = ds.getConnection();
 			Statement ps = conn.createStatement();
 			ResultSet rs = ps.executeQuery(sql);
-			//System.out.println("RS: " + rs.getFetchSize());
+			str.append("Number;Blank;Date\n");
 			
 			while (rs.next()) {
-				//System.out.println(rs.getRow());
 				str.append(rs.getString("nomercert"));
-				str.append(",");
+				str.append(";");
 				str.append(rs.getString("nblanka"));
 				str.append(";");
+				str.append(rs.getString("datacert"));
+				str.append("\n");
 			}
 			rs.close();
 			ps.close();

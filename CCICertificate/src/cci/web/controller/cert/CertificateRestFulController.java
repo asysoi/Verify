@@ -1,7 +1,11 @@
 package cci.web.controller.cert;
 
+import java.util.Iterator;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +20,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import cci.model.cert.Certificate;
+import cci.service.FieldType;
+import cci.service.cert.CertService;
 import cci.service.cert.CertificateRestFulService;
 
 @Controller
@@ -26,20 +32,27 @@ public class CertificateRestFulController {
 	
 	@Autowired
 	private CertificateRestFulService service;
+	
+	private CertService certService;
+
 
 	/* -----------------------------------------
 	 * Get list of numbers's certificates by filter
 	 * ----------------------------------------- */
-	@RequestMapping(value = "rcerts.do", method = RequestMethod.GET, headers = "Accept=application/txt")
+	@RequestMapping(value = "rcerts.do", method = RequestMethod.GET, headers = "Accept=application/csv")
 	@ResponseStatus (HttpStatus.OK)
 	public ResponseEntity<String> getCertificates(
 			@RequestParam(value = "nomercert", required = false) String number,
 			@RequestParam(value = "nblanka", required = false) String blanknumber,
 			@RequestParam(value = "from", required = false) String from,
-			@RequestParam(value = "to", required = false) String to ) {
-		String certificates = null;
-		Filter filter = new Filter(number, blanknumber, from, to);
+			@RequestParam(value = "to", required = false) String to,
+			Authentication aut) {
 		
+		String certificates = null;
+		
+		Filter filter = new Filter(number, blanknumber, from, to);
+	    filter.setOtd_id(getOtd_idByRole(aut));
+	
 		try {
 		   certificates = service.getCertificates(filter);
 		
@@ -56,17 +69,47 @@ public class CertificateRestFulController {
 		return new ResponseEntity<String>(certificates, responseHeaders, HttpStatus.OK);
 	}
 
+	
+	/* -----------------------------
+	 * Find OTD_ID by Role
+	 * ----------------------------- */
+	private String getOtd_idByRole(Authentication aut) {
+		String ret = null;
+		if (aut != null) {
+			Iterator iterator = aut.getAuthorities().iterator();
+		
+			while (iterator.hasNext()) {
+				String roleName = ((GrantedAuthority) iterator.next()).getAuthority();
+				if  (certService.getACL().containsKey(roleName)) {      
+			      ret = certService.getACL().get(roleName);
+				}
+			}
+		} else {
+			LOG.info("Authentification object is not presented.");			
+		}
+		return ret;
+	}
+
 	/* -----------------------------
 	 * Add new certificate from XML body
 	 * ----------------------------- */
 	@RequestMapping(value = "rcert.do", method = RequestMethod.POST, headers = "Accept=application/xml")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Certificate addXMLCertificate(@RequestBody Certificate certificate) {
-		try {
-			service.addCertificate(certificate);
-		} catch (Exception ex) {
-			throw(new AddCertificateException(ex.toString()));
-		}
+	public Certificate addXMLCertificate(@RequestBody Certificate certificate,
+			Authentication aut) {
+		
+		String otd_id = getOtd_idByRole(aut);
+		
+		if (otd_id != null) {
+			certificate.setOtd_id(Integer.parseInt(otd_id));
+			try {
+				service.addCertificate(certificate);
+			} catch (Exception ex) {
+				throw(new AddCertificateException("Ошибка добавления сертификата: " + ex.toString()));
+			}
+	   	} else {
+	   		throw(new AddCertificateException("Добавлять сертификат может только авторизированный представитель отделения"));
+	   	}
 		return certificate;
 	}
 	
@@ -96,11 +139,11 @@ public class CertificateRestFulController {
 		 try {
    		     rcert = service.updateCertificate(cert);
 		 } catch (Exception ex) {
-			 throw(new CertificateUpdateErorrException("Серитификат номер " + cert.getNomercert() + ", выданный на бланке " +  cert.getNblanka() + "  :  " + ex.toString()));
+			 throw(new CertificateUpdateErorrException("Ошибка обновления сертификата номер " + cert.getNomercert() + ", выданного на бланке " +  cert.getNblanka() + "  :  " + ex.toString()));
 		 }
 		 
 		 if (rcert == null) {
-			 throw(new NotFoundCertificateException("Серитификат номер " + cert.getNomercert() + ", выданный на бланке " +  cert.getNblanka() + "  не найден и не может быть изменен."));		    	 
+			 throw(new NotFoundCertificateException("Сертификат номер " + cert.getNomercert() + ", выданный на бланке " +  cert.getNblanka() + "  не найден и не может быть изменен."));		    	 
 		 }
 		 return rcert;
 	}
