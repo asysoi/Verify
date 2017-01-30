@@ -35,8 +35,11 @@ import cci.model.cert.Product;
 import cci.model.cert.Report;
 import cci.repository.SQLBuilder;
 import cci.service.SQLQueryUnit;
+import cci.web.controller.cert.CertificateDeleteException;
 import cci.web.controller.cert.CertificateGetErrorException;
+import cci.web.controller.cert.CertificateUpdateErorrException;
 import cci.web.controller.cert.Filter;
+import cci.web.controller.cert.NotFoundCertificateException;
 
 @Repository
 public class JDBCCertificateDAO implements CertificateDAO {
@@ -581,13 +584,17 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	// ---------------------------------------------------------------
 	// Update certificate / FOR REST SERVICE
 	// ---------------------------------------------------------------
-	public Certificate update(Certificate cert) throws Exception {
+	public Certificate update(Certificate cert, String otd_id) throws Exception {
 	  Certificate rcert = getCertificateByNumber(cert.getNomercert(), cert.getNblanka());
 	  
 	  // дата сертификата не может меняться
 	  // номер отделения не меняется
 	  
       if (rcert != null) {
+    	if (otd_id == null || rcert.getOtd_id() != Integer.parseInt(otd_id)) {
+    		throw( new CertificateUpdateErorrException("Пользователь не авторизирован для обновления сертификата."));	
+    	}
+    	
 		cert.setCert_id(rcert.getCert_id());
 		
 		String sql_cert = "update c_cert SET "
@@ -704,12 +711,16 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	//--------------------------------------------------------------------
 	// Delete Certificate by certificate number / FOR REST SERVICE
 	//--------------------------------------------------------------------
-	public void deleteCertificate(String number, String blanknumber) throws Exception  {
+	public void deleteCertificate(String number, String blanknumber, String otd_id) throws Exception  {
 		
 		  Certificate rcert = getCertificateByNumber(number, blanknumber);
 			
-	      if (rcert != null) {
-			
+		  
+	      if (rcert != null ) {
+	    	    if (otd_id == null || rcert.getOtd_id() != Integer.parseInt(otd_id)) {
+	      		   throw( new CertificateDeleteException("Пользователь не авторизирован для удаления сертификата."));	
+	      	    }
+	      	
 	    	  	template.getJdbcOperations().update(
 						"delete from c_PRODUCT where cert_id = ?",
 						Long.valueOf(rcert.getCert_id()));
@@ -721,7 +732,10 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				template.getJdbcOperations().update(
 						"delete from c_cert WHERE cert_id = ?",
 						Long.valueOf(rcert.getCert_id()));
-	      }	
+	      } else {
+	    	  throw (new NotFoundCertificateException("Не найдено сертификата с номером "  +  number + " на бланке " + blanknumber));
+	      }
+	      
 
 	}
 		

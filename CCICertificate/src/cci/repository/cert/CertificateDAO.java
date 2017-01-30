@@ -27,7 +27,7 @@ public interface CertificateDAO {
 
 	public long save(Certificate cert) throws Exception;
 
-	public Certificate update(Certificate cert) throws Exception;
+	public Certificate update(Certificate cert, String otd_id) throws Exception;
 	
 	public int getViewPageCount(SQLBuilder builder);
 
@@ -56,7 +56,7 @@ public interface CertificateDAO {
 
 	public Certificate getCertificateByNumber(String number, String blanknumber) throws Exception;
 
-	public void deleteCertificate(String number, String blanknumber) throws Exception;
+	public void deleteCertificate(String number, String blanknumber, String otd_id) throws Exception;
 
 	public long getNextValuePool(String seq_name, int poolsize) throws Exception;
 	

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 
 
+
+
 import cci.model.cert.Certificate;
 import cci.model.cert.CertificateList;
 import cci.repository.cert.CertificateDAO;
@@ -30,11 +32,11 @@ public class CertificateRestFulService {
 		return certificateDAO.getCertificateByNumber(number, blanknumber);
 	}
 
-	public Certificate updateCertificate(Certificate certificate) throws Exception {
-		return certificateDAO.update(certificate);
+	public Certificate updateCertificate(Certificate certificate, String otd_id) throws Exception {
+		return certificateDAO.update(certificate, otd_id);
 	}
 
-	public void deleteCertificate(String number, String blanknumber) throws Exception {
-	  certificateDAO.deleteCertificate(number, blanknumber);
+	public void deleteCertificate(String number, String blanknumber, String otd_id) throws Exception {
+	  certificateDAO.deleteCertificate(number, blanknumber, otd_id);
 	}
 }

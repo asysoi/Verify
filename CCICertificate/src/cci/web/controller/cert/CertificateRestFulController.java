@@ -108,7 +108,7 @@ public class CertificateRestFulController {
 				throw(new AddCertificateException("Ошибка добавления сертификата: " + ex.toString()));
 			}
 	   	} else {
-	   		throw(new AddCertificateException("Добавлять сертификат может только авторизированный представитель отделения"));
+	   		throw(new AddCertificateException("Добавлять сертификат может только авторизированный представитель отделения."));
 	   	}
 		return certificate;
 	}
@@ -121,8 +121,10 @@ public class CertificateRestFulController {
 	@ResponseStatus(HttpStatus.OK)
 	public Certificate getCertificateByNumber(
 			@RequestParam(value = "nomercert", required = true) String number,
-			@RequestParam(value = "nblanka", required = true) String blanknumber)  {
+			@RequestParam(value = "nblanka", required = true) String blanknumber,
+			Authentication aut)  {
 		try {
+			String otd_id = getOtd_idByRole(aut);
 		    return service.getCertificateByNumber(number, blanknumber);
 		} catch (Exception ex) {
 			throw(new NotFoundCertificateException("Серитификат номер " + number + ", выданный на бланке " +  blanknumber + " не найден :  " + ex.toString()));			
@@ -134,10 +136,14 @@ public class CertificateRestFulController {
 	 * ----------------------------- */
 	@RequestMapping(value = "rcert.do", method = RequestMethod.PUT, headers = "Accept=application/xml")
 	@ResponseStatus(HttpStatus.OK)
-	public Certificate updateCertificate(@RequestBody Certificate cert) {
+	public Certificate updateCertificate(@RequestBody Certificate cert, Authentication aut) {
 		 Certificate rcert = null;
 		 try {
-   		     rcert = service.updateCertificate(cert);
+			 String otd_id = getOtd_idByRole(aut);
+			 if (otd_id == null) {
+				 throw(new CertificateUpdateErorrException("Изменить сертификат может только авторизированный представитель отделения."));
+			 }
+   		     rcert = service.updateCertificate(cert, otd_id);
 		 } catch (Exception ex) {
 			 throw(new CertificateUpdateErorrException("Ошибка обновления сертификата номер " + cert.getNomercert() + ", выданного на бланке " +  cert.getNblanka() + "  :  " + ex.toString()));
 		 }
@@ -155,9 +161,14 @@ public class CertificateRestFulController {
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public ResponseEntity<String> deleteCertificate(
 			@RequestParam(value = "nomercert", required = false) String number,
-			@RequestParam(value = "nblanka", required = false) String blanknumber) {
+			@RequestParam(value = "nblanka", required = false) String blanknumber,
+			Authentication aut) {
 		try {
-			service.deleteCertificate(number, blanknumber);
+			String otd_id = getOtd_idByRole(aut);
+			 if (otd_id == null) {
+				 throw(new CertificateDeleteException("Удалить сертификат может только авторизированный представитель отделения."));
+			}
+			service.deleteCertificate(number, blanknumber, otd_id);
 		} catch(Exception ex) {
 			throw(new CertificateDeleteException("Серитификат номер " + number + ", выданный на бланке " +  blanknumber + "  не может быть удален: " + ex.toString()));	
 		}

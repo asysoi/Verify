@@ -138,6 +138,7 @@
         <security:user name="drozdova" password="nd3645" authorities="ROLE_GOMEL"/>
         <security:user name="studenkov" password="as8937" authorities="ROLE_GOMEL"/>
         <security:user name="tachiliva" password="tt4834" authorities="ROLE_EXPERT"/>
+        <security:user name="nevestenko" password="vn9851" authorities="ROLE_EXPERT"/>
      </security:user-service>
     </security:authentication-provider>
  </security:authentication-manager>
