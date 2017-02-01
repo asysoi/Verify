@@ -596,6 +596,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
     	}
     	
 		cert.setCert_id(rcert.getCert_id());
+		cert.setOtd_id(Integer.parseInt(otd_id));
 		
 		String sql_cert = "update c_cert SET "
 				+ "forms = TRIM(:forms), unn = :unn, kontrp = :kontrp, kontrs = :kontrs, adress = :adress, poluchat = :poluchat, adresspol = :adresspol, datacert = :datacert,"
@@ -686,7 +687,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 					sql,
 					new Object[] { number, blanknumber},
 					new BeanPropertyRowMapper<Certificate>(Certificate.class));
-			
+		
 			if (rcert != null) {
 				sql = "select * from C_PRODUCT WHERE cert_id = ?  ORDER BY product_id";
 				rcert.setProducts(template.getJdbcOperations().query(sql,

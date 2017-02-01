@@ -108,7 +108,7 @@ public class CertificateRestFulController {
 				throw(new AddCertificateException("Ошибка добавления сертификата: " + ex.toString()));
 			}
 	   	} else {
-	   		throw(new AddCertificateException("Добавлять сертификат может только авторизированный представитель отделения."));
+	   		throw(new AddCertificateException("Добавлять сертификат может только авторизированный представитель отделения ."));
 	   	}
 		return certificate;
 	}
@@ -123,12 +123,20 @@ public class CertificateRestFulController {
 			@RequestParam(value = "nomercert", required = true) String number,
 			@RequestParam(value = "nblanka", required = true) String blanknumber,
 			Authentication aut)  {
+		
+		String otd_id = getOtd_idByRole(aut);
 		try {
-			String otd_id = getOtd_idByRole(aut);
-		    return service.getCertificateByNumber(number, blanknumber);
-		} catch (Exception ex) {
-			throw(new NotFoundCertificateException("Серитификат номер " + number + ", выданный на бланке " +  blanknumber + " не найден :  " + ex.toString()));			
+			    
+			    Certificate rcert = service.getCertificateByNumber(number, blanknumber);
+			    
+			    if (otd_id != null && rcert.getOtd_id() != Integer.parseInt(otd_id)) {
+			    	throw(new NotFoundCertificateException("Нет доступа к серитификату номер " + number + ", выданному на бланке " +  blanknumber));
+			    }
+				return rcert; 
+			} catch (Exception ex) {
+				throw(new NotFoundCertificateException("Серитификат номер " + number + ", выданный на бланке " +  blanknumber + " не найден :  " + ex.toString()));			
 		}
+		
 	}
 
 	/* -----------------------------
