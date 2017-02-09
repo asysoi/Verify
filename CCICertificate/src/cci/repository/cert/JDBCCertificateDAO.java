@@ -696,8 +696,8 @@ public class JDBCCertificateDAO implements CertificateDAO {
 			}
 		} catch(EmptyResultDataAccessException ex) {
 			LOG.info("Certificate find error: " + ex.getMessage());
-			throw (new CertificateGetErrorException("Обновляемый сертификат с номером " + number + " на бланке с номером  " + blanknumber  
- 					                                + " не найден в базе. Обновление невозможно. Сертификат должен быть добавлен в базу."));
+			throw (new NotFoundCertificateException("Cертификат с номером " + number + " на бланке с номером  " + blanknumber  
+ 					                                + " не найден в базе."));
 		} catch (Exception ex) {
 			LOG.info("Certificate loading error: " + ex.getMessage());
 			throw (new CertificateGetErrorException(ex.getMessage()));

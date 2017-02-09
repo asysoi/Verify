@@ -115,7 +115,7 @@ public class CertificateRestFulController {
 	
 	
 	/* -----------------------------
-	 * Get certificate by number & blanlnumber
+	 * Get certificate by number & blanknumber
 	 * ----------------------------- */
 	@RequestMapping(value = "rcert.do", method = RequestMethod.GET, headers = "Accept=application/xml")
 	@ResponseStatus(HttpStatus.OK)
@@ -152,6 +152,8 @@ public class CertificateRestFulController {
 				 throw(new CertificateUpdateErorrException("Изменить сертификат может только авторизированный представитель отделения."));
 			 }
    		     rcert = service.updateCertificate(cert, otd_id);
+		 } catch (NotFoundCertificateException ex) {
+			 throw(new CertificateUpdateErorrException("Cертификат номер " + cert.getNomercert() + ", выданный на бланке " +  cert.getNblanka() + " не найден в базе. Обновление невозможно. Добавьте сертификат в базу."));
 		 } catch (Exception ex) {
 			 throw(new CertificateUpdateErorrException("Ошибка обновления сертификата номер " + cert.getNomercert() + ", выданного на бланке " +  cert.getNblanka() + "  :  " + ex.toString()));
 		 }
@@ -182,7 +184,7 @@ public class CertificateRestFulController {
 		}
 		
 		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.set("MyResponseHeader", "MyValue");
+		responseHeaders.set("CertificateResponseHeader", "Message");
 		return new ResponseEntity<String>("Certificate " + number + " deleted.", responseHeaders, HttpStatus.OK);
 	}
 	
@@ -193,7 +195,7 @@ public class CertificateRestFulController {
 	@ResponseBody
     public ResponseEntity<String> handleRESTException(Exception ex) {
 		HttpHeaders responseHeaders = new HttpHeaders();
-		responseHeaders.set("Error-Code", "12345");
+		responseHeaders.set("Error Name", ex.getClass().getName());
 		responseHeaders.set("Content-Type", "application/json;charset=utf-8");
 		return new ResponseEntity<String>(ex.toString(), responseHeaders,  HttpStatus.BAD_REQUEST);
     }
