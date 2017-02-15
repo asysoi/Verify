@@ -1,5 +1,10 @@
 package cci.model.owncert;
 
+//* ------------------------------------
+//*  This class contains   
+//*  list of light OwnCertificates   
+//* ------------------------------------
+
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;

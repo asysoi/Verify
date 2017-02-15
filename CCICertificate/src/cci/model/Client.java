@@ -1,12 +1,19 @@
 ﻿package cci.model;
 
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+
+import org.springframework.stereotype.Component;
+
+@XmlRootElement(name = "client")
+@Component
 public class Client {
 	private long id;		
 	private String name;
 	private String codecountry;
+	private String index;
 	private String city;		
 	private String line;		
-	private String cindex;
 	private String office;
 	private String building;
 	private String work_phone;	
@@ -16,10 +23,10 @@ public class Client {
 	private String okpo;
 	private String account;
 	private String bname;
+	private String bindex;
 	private String bcodecountry;
 	private String bcity;		
 	private String bline;		
-	private String bindex;
 	private String boffice;
 	private String bbuilding;
 	private String bwork_phone;	
@@ -27,6 +34,7 @@ public class Client {
 	private String bemail;
 	private String bunp;
 	
+	@XmlTransient
 	public long getId() {
 		return id;
 	}
@@ -51,11 +59,11 @@ public class Client {
 	public void setLine(String line) {
 		this.line = line;
 	}
-	public String getCindex() {
-		return cindex;
+	public String getIindex() {
+		return index;
 	}
-	public void setCindex(String cindex) {
-		this.cindex = cindex;
+	public void setIndex(String index) {
+		this.index = index;
 	}
 	public String getOffice() {
 		return office;

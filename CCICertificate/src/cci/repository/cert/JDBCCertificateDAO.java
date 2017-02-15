@@ -38,7 +38,7 @@ import cci.service.SQLQueryUnit;
 import cci.web.controller.cert.CertificateDeleteException;
 import cci.web.controller.cert.CertificateGetErrorException;
 import cci.web.controller.cert.CertificateUpdateErorrException;
-import cci.web.controller.cert.Filter;
+import cci.web.controller.cert.CertFilter;
 import cci.web.controller.cert.NotFoundCertificateException;
 
 @Repository
@@ -743,7 +743,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	//--------------------------------------------------------------------
 	// Get certificate's numbers delimited by comma / FOR REST SERVICE
 	//--------------------------------------------------------------------
-	public String getCertificates(Filter filter, boolean b)  throws Exception {
+	public String getCertificates(CertFilter filter, boolean b)  throws Exception {
 		String ret = null;
 		StringBuffer str = new StringBuffer();
 		

@@ -69,9 +69,9 @@
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
         <!-- property name="url" value="jdbc:oracle:thin:@//192.168.0.46:1521/pdborcl"/ -->
-        <!-- property name="url" value="jdbc:oracle:thin:@//localhost:1521/pdborcl"/ -->
+        <property name="url" value="jdbc:oracle:thin:@//localhost:1521/pdborcl"/>
         <!-- property name="url" value="jdbc:oracle:thin:@//dev.cci.by:1521/pdborcl"/ --> 
-        <property name="url" value="jdbc:oracle:thin:@//192.168.1.28:1521/pdborcl"/>     
+        <!--  property name="url" value="jdbc:oracle:thin:@//192.168.1.28:1521/pdborcl"/ -->     
         <property name="username" value="beltpp"/>
         <property name="password" value="123456"/>
     </bean>

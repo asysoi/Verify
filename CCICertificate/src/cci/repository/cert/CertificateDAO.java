@@ -7,7 +7,7 @@ import cci.model.cert.Certificate;
 import cci.model.cert.CertificateList;
 import cci.model.cert.Report;
 import cci.repository.SQLBuilder;
-import cci.web.controller.cert.Filter;
+import cci.web.controller.cert.CertFilter;
 
 public interface CertificateDAO {
 
@@ -52,7 +52,7 @@ public interface CertificateDAO {
 	public List<Certificate> getReportCertificates(String[] dbfields, String orderby,
 			String order, SQLBuilder builder);
 
-	public String getCertificates(Filter filter, boolean b) throws Exception;
+	public String getCertificates(CertFilter filter, boolean b) throws Exception;
 
 	public Certificate getCertificateByNumber(String number, String blanknumber) throws Exception;
 

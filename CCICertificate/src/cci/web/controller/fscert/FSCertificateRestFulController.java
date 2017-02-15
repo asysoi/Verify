@@ -1,4 +1,4 @@
-package cci.web.controller.cert;
+package cci.web.controller.fscert;
 
 import java.util.Iterator;
 
@@ -20,41 +20,44 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import cci.model.cert.Certificate;
-import cci.service.FieldType;
+import cci.model.cert.fscert.FSCertificate;
 import cci.service.cert.CertService;
-import cci.service.cert.CertificateRestFulService;
+import cci.service.fscert.FSCertificateRestFulService;
+import cci.web.controller.cert.AddCertificateException;
+import cci.web.controller.cert.CertificateDeleteException;
+import cci.web.controller.cert.CertificateUpdateErorrException;
+import cci.web.controller.cert.NotFoundCertificateException;
 
 @Controller
 @RestController
-public class CertificateRestFulController {
+public class FSCertificateRestFulController {
 
-	private static final Logger LOG=Logger.getLogger(CertificateRestFulController.class);
+	private static final Logger LOG=Logger.getLogger(FSCertificateRestFulController.class);
 	
 	@Autowired
-	private CertificateRestFulService restservice;
+	private FSCertificateRestFulService fsservice;
+	
 	@Autowired
 	private CertService certService;
-
-
+	
 	/* -----------------------------------------
-	 * Get list of numbers's certificates by filter
+	 * Get list of header's certificates by filter
 	 * ----------------------------------------- */
-	@RequestMapping(value = "rcerts.do", method = RequestMethod.GET, headers = "Accept=application/csv")
+	@RequestMapping(value = "fscerts.do", method = RequestMethod.GET, headers = "Accept=application/csv")
 	@ResponseStatus (HttpStatus.OK)
 	public ResponseEntity<String> getCertificates(
 			@RequestParam(value = "nomercert", required = false) String number,
-			@RequestParam(value = "nblanka", required = false) String blanknumber,
 			@RequestParam(value = "from", required = false) String from,
 			@RequestParam(value = "to", required = false) String to,
 			Authentication aut) {
 		
 		String certificates = null;
 		
-		CertFilter filter = new CertFilter(number, blanknumber, from, to);
+		FSFilter filter = new FSFilter(number, from, to);
 	    filter.setOtd_id(getOtd_idByRole(aut));
 	
 		try {
-		   certificates = restservice.getCertificates(filter);
+		   certificates = fsservice.getCertificates(filter);
 		
 		   if (certificates == null ) {
 			  throw (new NotFoundCertificateException("Не найдено сертификатов, удовлетворяющих условиям поиска: " + filter.toString()));
@@ -93,23 +96,24 @@ public class CertificateRestFulController {
 	/* -----------------------------
 	 * Add new certificate from XML body
 	 * ----------------------------- */
-	@RequestMapping(value = "rcert.do", method = RequestMethod.POST, headers = "Accept=application/xml")
+	@RequestMapping(value = "fscert.do", method = RequestMethod.POST, headers = "Accept=application/xml")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Certificate addXMLCertificate(@RequestBody Certificate certificate,
+	public FSCertificate addXMLCertificate(@RequestBody FSCertificate certificate,
 			Authentication aut) {
 		
 		String otd_id = getOtd_idByRole(aut);
 		
 		if (otd_id != null) {
-			certificate.setOtd_id(Integer.parseInt(otd_id));
+			//certificate.setOtd_id(Integer.parseInt(otd_id));
 			try {
-				restservice.addCertificate(certificate);
+				fsservice.addCertificate(certificate);
 			} catch (Exception ex) {
 				throw(new AddCertificateException("Ошибка добавления сертификата: " + ex.toString()));
 			}
 	   	} else {
 	   		throw(new AddCertificateException("Добавлять сертификат может только авторизированный представитель отделения ."));
 	   	}
+		
 		return certificate;
 	}
 	
@@ -117,24 +121,23 @@ public class CertificateRestFulController {
 	/* -----------------------------
 	 * Get certificate by number & blanknumber
 	 * ----------------------------- */
-	@RequestMapping(value = "rcert.do", method = RequestMethod.GET, headers = "Accept=application/xml")
+	@RequestMapping(value = "fscert.do", method = RequestMethod.GET, headers = "Accept=application/xml")
 	@ResponseStatus(HttpStatus.OK)
-	public Certificate getCertificateByNumber(
+	public FSCertificate getCertificateByNumber(
 			@RequestParam(value = "nomercert", required = true) String number,
-			@RequestParam(value = "nblanka", required = true) String blanknumber,
 			Authentication aut)  {
 		
 		String otd_id = getOtd_idByRole(aut);
 		try {
 			    
-			    Certificate rcert = restservice.getCertificateByNumber(number, blanknumber);
+			    FSCertificate rcert = fsservice.getCertificateByNumber(number);
 			    
-			    if (otd_id != null && rcert.getOtd_id() != Integer.parseInt(otd_id)) {
-			    	throw(new NotFoundCertificateException("Нет доступа к серитификату номер " + number + ", выданному на бланке " +  blanknumber));
+			    if (otd_id != null) {
+			    	throw(new NotFoundCertificateException("Нет доступа к серитификату номер " + number));
 			    }
 				return rcert; 
 			} catch (Exception ex) {
-				throw(new NotFoundCertificateException("Серитификат номер " + number + ", выданный на бланке " +  blanknumber + " не найден :  " + ex.toString()));			
+				throw(new NotFoundCertificateException("Серитификат номер " + number + " не найден :  " + ex.toString()));			
 		}
 		
 	}
@@ -142,7 +145,7 @@ public class CertificateRestFulController {
 	/* -----------------------------
 	 * Update certificate
 	 * ----------------------------- */
-	@RequestMapping(value = "rcert.do", method = RequestMethod.PUT, headers = "Accept=application/xml")
+	@RequestMapping(value = "fscert.do", method = RequestMethod.PUT, headers = "Accept=application/xml")
 	@ResponseStatus(HttpStatus.OK)
 	public Certificate updateCertificate(@RequestBody Certificate cert, Authentication aut) {
 		 Certificate rcert = null;
@@ -151,7 +154,7 @@ public class CertificateRestFulController {
 			 if (otd_id == null) {
 				 throw(new CertificateUpdateErorrException("Изменить сертификат может только авторизированный представитель отделения."));
 			 }
-   		     rcert = restservice.updateCertificate(cert, otd_id);
+   		     rcert = fsservice.updateCertificate(cert, otd_id);
 		 } catch (NotFoundCertificateException ex) {
 			 throw(new CertificateUpdateErorrException("Cертификат номер " + cert.getNomercert() + ", выданный на бланке " +  cert.getNblanka() + " не найден в базе. Обновление невозможно. Добавьте сертификат в базу."));
 		 } catch (Exception ex) {
@@ -167,7 +170,7 @@ public class CertificateRestFulController {
 	/* -----------------------------
 	 * Delete certificate
 	 * ----------------------------- */
-	@RequestMapping(value = "rcert.do", method = RequestMethod.DELETE, headers = "Accept=application/txt")
+	@RequestMapping(value = "fscert.do", method = RequestMethod.DELETE, headers = "Accept=application/txt")
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public ResponseEntity<String> deleteCertificate(
 			@RequestParam(value = "nomercert", required = false) String number,
@@ -178,7 +181,7 @@ public class CertificateRestFulController {
 			 if (otd_id == null) {
 				 throw(new CertificateDeleteException("Удалить сертификат может только авторизированный представитель отделения."));
 			}
-			restservice.deleteCertificate(number, blanknumber, otd_id);
+			fsservice.deleteCertificate(number, blanknumber, otd_id);
 		} catch(Exception ex) {
 			throw(new CertificateDeleteException("Серитификат номер " + number + ", выданный на бланке " +  blanknumber + "  не может быть удален: " + ex.toString()));	
 		}
@@ -201,3 +204,8 @@ public class CertificateRestFulController {
     }
 
 }
+
+
+
+	
+	

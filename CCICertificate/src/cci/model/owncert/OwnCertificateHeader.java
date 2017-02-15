@@ -1,5 +1,9 @@
 package cci.model.owncert;
 
+// *  --------------------------------
+// *  Light OwnCertificate presentation
+// * ---------------------------------  
+
 public class OwnCertificateHeader {
 	private String number;
 	private String blanknumber;

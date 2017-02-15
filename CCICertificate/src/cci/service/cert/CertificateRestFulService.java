@@ -2,18 +2,10 @@ package cci.service.cert;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-
-
-
-
-
-
-
 import cci.model.cert.Certificate;
 import cci.model.cert.CertificateList;
 import cci.repository.cert.CertificateDAO;
-import cci.web.controller.cert.Filter;
+import cci.web.controller.cert.CertFilter;
 
 @Service
 public class CertificateRestFulService {
@@ -21,7 +13,7 @@ public class CertificateRestFulService {
 	@Autowired
 	private CertificateDAO certificateDAO;
 
-	public String getCertificates(Filter filter) throws Exception {
+	public String getCertificates(CertFilter filter) throws Exception {
 	   return certificateDAO.getCertificates(filter, true);
 	}
 
