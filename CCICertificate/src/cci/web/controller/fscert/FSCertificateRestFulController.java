@@ -156,13 +156,13 @@ public class FSCertificateRestFulController {
 			 }
    		     rcert = fsservice.updateCertificate(cert, otd_id);
 		 } catch (NotFoundCertificateException ex) {
-			 throw(new CertificateUpdateErorrException("Cертификат номер " + cert.getNumber() + " не найден в базе. Обновление невозможно. Добавьте сертификат в базу."));
+			 throw(new CertificateUpdateErorrException("Cертификат номер " + cert.getCertnumber() + " не найден в базе. Обновление невозможно. Добавьте сертификат в базу."));
 		 } catch (Exception ex) {
-			 throw(new CertificateUpdateErorrException("Ошибка обновления сертификата номер " + cert.getNumber() + ", выданного на бланке "  + "  :  " + ex.toString()));
+			 throw(new CertificateUpdateErorrException("Ошибка обновления сертификата номер " + cert.getCertnumber() + ", выданного на бланке "  + "  :  " + ex.toString()));
 		 }
 		 
 		 if (rcert == null) {
-			 throw(new NotFoundCertificateException("Сертификат номер " + cert.getNumber() + ", выданный на бланке " + "  не найден и не может быть изменен."));		    	 
+			 throw(new NotFoundCertificateException("Сертификат номер " + cert.getCertnumber() + ", выданный на бланке " + "  не найден и не может быть изменен."));		    	 
 		 }
 		 return rcert;
 	}
