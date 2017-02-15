@@ -1,15 +1,29 @@
 package cci.model.cert.fscert;
 
 import java.util.List;
+
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
+
+import org.springframework.stereotype.Component;
+
 import cci.model.cert.Product;
 
-// ------------------------------------
-//       Free Certificate Model
-// ------------------------------------
+//------------------------------------
+//Free Certificate Model
+//------------------------------------
+
+@XmlRootElement(name = "fscertificate")
+@Component
+@XmlType(propOrder = {"certnumber","parentnumber", "dateissue", "dateexpiry", "confirmation", "declaration", 
+		"branch", "exporter", "producer", "expert", "signer", "products", "blanks"})
+
 public class FSCertificate {
 	private long id;
-	private String number;
+	private String certnumber;
 	private String parentnumber;
 	private String dateissue;
 	private String dateexpiry;
@@ -32,12 +46,12 @@ public class FSCertificate {
 		this.id = id;
 	}
 
-	public String getNumber() {
-		return number;
+	public String getCertnumber() {
+		return certnumber;
 	}
 
-	public void setNumber(String number) {
-		this.number = number;
+	public void setCertnumber(String number) {
+		this.certnumber = number;
 	}
 
 	public String getParentnumber() {
@@ -120,6 +134,8 @@ public class FSCertificate {
 		this.signer = signer;
 	}
 
+	@XmlElementWrapper(name = "products")
+	@XmlElement(name = "row")
 	public List<Product> getProducts() {
 		return products;
 	}
@@ -128,12 +144,22 @@ public class FSCertificate {
 		this.products = products;
 	}
 
+	@XmlElementWrapper(name = "blanks")
+	@XmlElement(name = "blank")
 	public List<Blank> getBlanks() {
 		return blanks;
 	}
 
 	public void setBlanks(List<Blank> blanks) {
 		this.blanks = blanks;
+	}
+
+	@Override
+	public String toString() {
+		return "FSCertificate [id=" + id + ", certnumber=" + certnumber + ", parentnumber=" + parentnumber + ", dateissue="
+				+ dateissue + ", dateexpiry=" + dateexpiry + ", confirmation=" + confirmation + ", declaration="
+				+ declaration + ", branch=" + branch + ", exporter=" + exporter + ", producer=" + producer + ", expert="
+				+ expert + ", signer=" + signer + ", products=" + products + ", blanks=" + blanks + "]";
 	}
 
 	

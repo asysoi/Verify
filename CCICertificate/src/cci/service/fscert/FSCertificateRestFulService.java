@@ -1,23 +1,29 @@
 package cci.service.fscert;
 
-import cci.model.cert.Certificate;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import cci.model.cert.fscert.FSCertificate;
+import cci.repository.cert.CertificateDAO;
 import cci.web.controller.fscert.FSFilter;
 
+@Service
 public class FSCertificateRestFulService {
+	@Autowired
+	private CertificateDAO certificateDAO;
 
 	public String getCertificates(FSFilter filter) {
 		return null;
 	}
 
-	public void addCertificate(FSCertificate certificate) {
+	public void addCertificate(FSCertificate certificate) throws Exception {
+		certificateDAO.saveFSCertificate(certificate);
 	}
 
 	public FSCertificate getCertificateByNumber(String number) {
 		return null;
 	}
 
-	public Certificate updateCertificate(Certificate cert, String otd_id) {
+	public FSCertificate updateCertificate(FSCertificate cert, String otd_id) {
 		return null;
 	}
 

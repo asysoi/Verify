@@ -147,8 +147,8 @@ public class FSCertificateRestFulController {
 	 * ----------------------------- */
 	@RequestMapping(value = "fscert.do", method = RequestMethod.PUT, headers = "Accept=application/xml")
 	@ResponseStatus(HttpStatus.OK)
-	public Certificate updateCertificate(@RequestBody Certificate cert, Authentication aut) {
-		 Certificate rcert = null;
+	public FSCertificate updateCertificate(@RequestBody FSCertificate cert, Authentication aut) {
+		 FSCertificate rcert = null;
 		 try {
 			 String otd_id = getOtd_idByRole(aut);
 			 if (otd_id == null) {
@@ -156,13 +156,13 @@ public class FSCertificateRestFulController {
 			 }
    		     rcert = fsservice.updateCertificate(cert, otd_id);
 		 } catch (NotFoundCertificateException ex) {
-			 throw(new CertificateUpdateErorrException("Cертификат номер " + cert.getNomercert() + ", выданный на бланке " +  cert.getNblanka() + " не найден в базе. Обновление невозможно. Добавьте сертификат в базу."));
+			 throw(new CertificateUpdateErorrException("Cертификат номер " + cert.getNumber() + " не найден в базе. Обновление невозможно. Добавьте сертификат в базу."));
 		 } catch (Exception ex) {
-			 throw(new CertificateUpdateErorrException("Ошибка обновления сертификата номер " + cert.getNomercert() + ", выданного на бланке " +  cert.getNblanka() + "  :  " + ex.toString()));
+			 throw(new CertificateUpdateErorrException("Ошибка обновления сертификата номер " + cert.getNumber() + ", выданного на бланке "  + "  :  " + ex.toString()));
 		 }
 		 
 		 if (rcert == null) {
-			 throw(new NotFoundCertificateException("Сертификат номер " + cert.getNomercert() + ", выданный на бланке " +  cert.getNblanka() + "  не найден и не может быть изменен."));		    	 
+			 throw(new NotFoundCertificateException("Сертификат номер " + cert.getNumber() + ", выданный на бланке " + "  не найден и не может быть изменен."));		    	 
 		 }
 		 return rcert;
 	}

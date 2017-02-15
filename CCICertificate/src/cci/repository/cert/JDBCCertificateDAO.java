@@ -33,6 +33,7 @@ import cci.model.cert.CertificateList;
 import cci.model.cert.Country;
 import cci.model.cert.Product;
 import cci.model.cert.Report;
+import cci.model.cert.fscert.FSCertificate;
 import cci.repository.SQLBuilder;
 import cci.service.SQLQueryUnit;
 import cci.web.controller.cert.CertificateDeleteException;
@@ -782,5 +783,18 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	   return ret;
 	}
 
+	//--------------------------------------------------------------------
+	//--------------------------------------------------------------------
+	// Add new FS Certificate WEB or REST service 
+	//--------------------------------------------------------------------
+	//--------------------------------------------------------------------
+	public long  saveFSCertificate(FSCertificate certificate) throws Exception {
+		long id = 0;
+		
+		
 
+		return id;
+	}
+
+     
 }

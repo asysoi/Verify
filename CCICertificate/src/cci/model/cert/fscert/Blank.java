@@ -5,26 +5,31 @@ import javax.xml.bind.annotation.XmlType;
 import org.springframework.stereotype.Component;
 
 @XmlRootElement(name = "blank")
-@XmlType(propOrder = { "page", "number" })
+@XmlType(propOrder = { "page", "blanknumber" })
 @Component
+
 public class Blank {
-	private String number;
-	private int page;
+	private Integer page;
+	private String blanknumber;
 
-	public String getNumber() {
-		return number;
+	public String getBlanknumber() {
+		return blanknumber;
 	}
 
-	public void setNumber(String number) {
-		this.number = number;
+	public void setBlanknumber(String blanknumber) {
+		this.blanknumber = blanknumber;
 	}
 
-	public int getPage() {
+	public Integer getPage() {
 		return page;
 	}
 
-	public void setPage(int page) {
+	public void setPage(Integer page) {
 		this.page = page;
 	}
 
+	@Override
+	public String toString() {
+		return "Blank [page=" + page + ", blanknumber=" + blanknumber + "]";
+	}
 }

@@ -2,11 +2,16 @@
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 import org.springframework.stereotype.Component;
 
 @XmlRootElement(name = "client")
 @Component
+@XmlType(propOrder = {"name", "codecountry" , "index", "city", "line", "office", "building", 
+		"work_phone", "cell_phone", "email", "unp", "okpo", "account", "bname", "bindex", "bcodecountry"
+		,"bcity", "bline", "boffice", "bbuilding", "bwork_phone", "bcell_phone", "bemail", "bunp"})
+
 public class Client {
 	private long id;		
 	private String name;
@@ -59,7 +64,7 @@ public class Client {
 	public void setLine(String line) {
 		this.line = line;
 	}
-	public String getIindex() {
+	public String getIndex() {
 		return index;
 	}
 	public void setIndex(String index) {
@@ -184,5 +189,18 @@ public class Client {
 	}
 	public void setBcodecountry(String bcodecountry) {
 		this.bcodecountry = bcodecountry;
-	}	
+	}
+	
+	@Override
+	public String toString() {
+		return "Client [id=" + id + ", name=" + name + ", codecountry=" + codecountry + ", index=" + index + ", city="
+				+ city + ", line=" + line + ", office=" + office + ", building=" + building + ", work_phone="
+				+ work_phone + ", cell_phone=" + cell_phone + ", email=" + email + ", unp=" + unp + ", okpo=" + okpo
+				+ ", account=" + account + ", bname=" + bname + ", bindex=" + bindex + ", bcodecountry=" + bcodecountry
+				+ ", bcity=" + bcity + ", bline=" + bline + ", boffice=" + boffice + ", bbuilding=" + bbuilding
+				+ ", bwork_phone=" + bwork_phone + ", bcell_phone=" + bcell_phone + ", bemail=" + bemail + ", bunp="
+				+ bunp + "]";
+	}
+	
+	
 }

@@ -2,6 +2,7 @@ package cci.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.XmlType;
 
 import org.springframework.stereotype.Component;
 
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Component;
 //------------------------------------------
 @XmlRootElement(name = "employee")
 @Component
+@XmlType(propOrder = {"name", "job"})
+
 public class Employee {
 	private long id;
 	private String name;
@@ -35,5 +38,10 @@ public class Employee {
 	public void setJob(String job) {
 		this.job = job;
 	}
-
+	
+	@Override
+	public String toString() {
+		return "Employee [id=" + id + ", name=" + name + ", job=" + job + "]";
+	}
+	
 }

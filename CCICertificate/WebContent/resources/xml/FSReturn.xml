@@ -1,0 +1,115 @@
+<fscertificate>
+	<number></number>
+	<parentnumber></parentnumber>
+	<dateissue>01.03.2017</dateissue>
+	<dateexpiry>28.02.208</dateexpiry>
+	<confirmation>Настоящим удостоверяем, основываясь на представленных
+		сведениях, что товары, перечисленные ниже, производятся...
+	</confirmation>
+	<declaration>Данный сертификат не является явной или подразумеваемой
+		гарантией для како-=го-либо товара...</declaration>
+	<branch>
+		<name>Унитарное предприятие по оказанию услуг «Минское отделение
+			Белорусской торгово-промышленной палаты»</name>
+		<index>220113</index>
+		<line>Якуба Коласа</line>
+		<office></office>
+		<building>65</building>
+		<work_phone>+375 17 280 04 73</work_phone>
+		<cell_phone></cell_phone>
+		<email>tppm@tppm.by</email>
+		<unp></unp>
+		<okpo></okpo>
+	</branch>
+	<exporter>
+		<name>УП «Унитехпром БГУ»</name>
+		<codecountry>BY</codecountry>
+		<index>2201108</index>
+		<city>Минск</city>
+		<line>Курчатова</line>
+		<office></office>
+		<building>1</building>
+		<work_phone></work_phone>
+		<cell_phone></cell_phone>
+		<email></email>
+		<unp></unp>
+		<okpo></okpo>
+		<account></account>
+		<bname></bname>
+		<bindex></bindex>
+		<bcodecountry></bcodecountry>
+		<bcity></bcity>
+		<bline></bline>
+		<boffice></boffice>
+		<bbuilding></bbuilding>
+		<bwork_phone></bwork_phone>
+		<bcell_phone></bcell_phone>
+		<bemail></bemail>
+		<bunp></bunp>
+	</exporter>
+	<producer>
+		<name>УП «Унитехпром БГУ»</name>
+		<codecountry>BY</codecountry>
+		<index>2201108</index>
+		<city>Минск</city>
+		<line>Курчатова</line>
+		<office></office>
+		<building>1</building>
+		<work_phone></work_phone>
+		<cell_phone></cell_phone>
+		<email></email>
+		<unp></unp>
+		<okpo></okpo>
+		<account></account>
+		<bname></bname>
+		<bindex></bindex>
+		<bcodecountry></bcodecountry>
+		<bcity></bcity>
+		<bline></bline>
+		<boffice></boffice>
+		<bbuilding></bbuilding>
+		<bwork_phone></bwork_phone>
+		<bcell_phone></bcell_phone>
+		<bemail></bemail>
+		<bunp></bunp>
+	</producer>
+	<expert>
+		<name>Петров В.С.</name>
+		<job>эксперт</job>
+	</expert>
+	<signer>
+		<name>М.В.Гуринович</name>
+		<job>Начальник отдела экспертизы и сертификации №1</job>
+	</signer>
+	<products>
+		<row>
+			<numerator>1</numerator>
+			<tovar>Спирометр автоматизированный многофункциональный МАС-1_А
+			</tovar>
+		</row>
+		<row>
+			<numerator>2</numerator>
+			<tovar>Спирометр автоматизированный многофункциональный МАС-1_ВГА
+			</tovar>
+		</row>
+		<row>
+			<numerator>3</numerator>
+			<tovar>Спирометр автоматизированный многофункциональный МАС-1_ПК
+			</tovar>
+		</row>
+	</products>
+	<blanks>
+		<blank>
+			<page>1</page>
+			<number>23456711</number>
+		</blank>
+		<blank>
+			<page>2</page>
+			<number>1238990</number>
+		</blank>
+		<blank>
+			<page>3</page>
+			<number>66667778</number>
+		</blank>
+	</blanks>
+</fscertificate>

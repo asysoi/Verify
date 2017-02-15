@@ -7,9 +7,9 @@ public class SequenceGenerator {
 	private static final Logger LOG = Logger.getLogger(SequenceGenerator.class);
 	private static long value = 1;
 	private static long maxvalue = 1;
-	private static int poolsize = 100;
+	private static int poolsize = 200;
 	    
-    public static long getNextValue(String seq_name, CertificateDAO dao) throws Exception{
+    public synchronized static long getNextValue(String seq_name, CertificateDAO dao) throws Exception{
     	if (value == maxvalue) {
    		   value = dao.getNextValuePool(seq_name, poolsize);
    		   maxvalue = value + poolsize;

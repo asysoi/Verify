@@ -6,6 +6,7 @@ import java.util.Map;
 import cci.model.cert.Certificate;
 import cci.model.cert.CertificateList;
 import cci.model.cert.Report;
+import cci.model.cert.fscert.FSCertificate;
 import cci.repository.SQLBuilder;
 import cci.web.controller.cert.CertFilter;
 
@@ -25,10 +26,6 @@ public interface CertificateDAO {
 	
 	public List<Certificate> findViewNextPage(String[] dbfields, int page, int pagesize, int pagecount, String orderby, String order, SQLBuilder builder);
 
-	public long save(Certificate cert) throws Exception;
-
-	public Certificate update(Certificate cert, String otd_id) throws Exception;
-	
 	public int getViewPageCount(SQLBuilder builder);
 
 	public Map<String, String> getDepartmentsList();
@@ -52,6 +49,11 @@ public interface CertificateDAO {
 	public List<Certificate> getReportCertificates(String[] dbfields, String orderby,
 			String order, SQLBuilder builder);
 
+	// --------------  Certificate methods for REST ------------------------
+	public long save(Certificate cert) throws Exception;
+
+	public Certificate update(Certificate cert, String otd_id) throws Exception;
+
 	public String getCertificates(CertFilter filter, boolean b) throws Exception;
 
 	public Certificate getCertificateByNumber(String number, String blanknumber) throws Exception;
@@ -59,5 +61,8 @@ public interface CertificateDAO {
 	public void deleteCertificate(String number, String blanknumber, String otd_id) throws Exception;
 
 	public long getNextValuePool(String seq_name, int poolsize) throws Exception;
+
+	// --------------  FS Certificate methods-------------------------------
+	public long saveFSCertificate(FSCertificate certificate) throws Exception;
 	
 }
