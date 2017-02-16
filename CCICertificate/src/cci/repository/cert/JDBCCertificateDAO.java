@@ -61,8 +61,6 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		ds = dataSource;
 	}
 	
-	
-
 	// ---------------------------------------------------------------
 	// количество сертификатов в списке -> PS
 	// ---------------------------------------------------------------
@@ -795,7 +793,6 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	//            Add new FS Certificate WEB or REST service 
 	//--------------------------------------------------------------------
 	//--------------------------------------------------------------------
-	
 	public FSCertificate saveFSCertificate(FSCertificate cert) throws Exception {
 		long id = 0;
  		
@@ -840,9 +837,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 
 			cert.setId(id);
 		}
-
 		return cert;
-
 	}
 
 	
@@ -882,7 +877,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	}
 	
 	// -------------------------------------------
-	// Get id of client
+	// Get id of client / create client
 	// -------------------------------------------
 	private long findOrCreateClientID(Client client) throws Exception{
 		String sql = "SELECT id FROM cci_client WHERE name = ? and cindex = ? and line = ? and building = ? and codecountry = ? and ROWNUM  < 2";
@@ -916,9 +911,9 @@ public class JDBCCertificateDAO implements CertificateDAO {
      }
 
 	
-	// -------------------------------------------
-	// Get id of client
-	// -------------------------------------------
+	// ------------------------------------------------------------
+	//  Get id of employee / create employee if it doesn't exist
+	// ------------------------------------------------------------
 	private long findOrCreateEmployeeID(Employee emp) throws Exception{
 		String sql = "SELECT id FROM cci_employee WHERE name = ? and job = ?";
 
