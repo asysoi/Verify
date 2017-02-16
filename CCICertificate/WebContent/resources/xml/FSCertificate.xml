@@ -1,5 +1,5 @@
-<fscertificate>
-  <certnumber></certnumber>
+﻿<fscertificate>
+  <certnumber>BYUA31010000066767676767676767676767676767767677877733737373737373773737373737373373737373737</certnumber>
   <parentnumber></parentnumber>
   <dublicate></dublicate>
   <dateissue>01.03.2017</dateissue>
@@ -15,9 +15,11 @@
 	 <email>tppm@tppm.by</email>
 	 <unp></unp>
 	 <okpo></okpo>  
+                 <city>Минск</city>
+                 <codecountry>BY</codecountry>		
   </branch>
   <exporter>
-    <name>УП «Унитехпром БГУ»</name>
+    <name>Рога и копыта</name>
 	<codecountry>BY</codecountry>
 	<city>Минск</city>		
 	<line>Курчатова</line>		
@@ -43,7 +45,7 @@
 	<bunp></bunp>
   </exporter>
   <producer>
-    <name>УП «Унитехпром БГУ»</name>
+    <name>Морковная страна</name>
 	<codecountry>BY</codecountry>
 	<city>Минск</city>		
 	<line>Курчатова</line>		
@@ -71,7 +73,7 @@
   <confirmation>Настоящим удостоверяем, основываясь на представленных сведениях, что товары, перечисленные ниже, производятся...  </confirmation>
   <declaration>Данный сертификат не является явной или подразумеваемой гарантией для како-=го-либо товара...</declaration>
   <expert>
-    <name>Петров В.С.</name>
+    <name>Сидоров В.С.</name>
     <job>эксперт</job>
   </expert>>
   <signer>
@@ -94,15 +96,15 @@
   </products>
   <blanks>
     <blank>
-     <number>23456711</number>
+     <blanknumber>23456711</blanknumber>
      <page>1</page>
     </blank>
     <blank>
-     <number>1238990</number>
+     <blanknumber>1238990</blanknumber>
      <page>2</page>
     </blank>
     <blank>
-     <number>66667778</number>
+     <blanknumber>66667778</blanknumber>
      <page>3</page>
     </blank>
   </blanks>
