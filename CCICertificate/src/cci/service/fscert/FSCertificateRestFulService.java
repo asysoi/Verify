@@ -2,6 +2,9 @@ package cci.service.fscert;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+
 import cci.model.cert.fscert.FSCertificate;
 import cci.repository.cert.CertificateDAO;
 import cci.web.controller.fscert.FSFilter;
@@ -15,8 +18,13 @@ public class FSCertificateRestFulService {
 		return null;
 	}
 
+	@Transactional(propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
 	public void addCertificate(FSCertificate certificate) throws Exception {
-		certificateDAO.saveFSCertificate(certificate);
+		try {
+		   certificateDAO.saveFSCertificate(certificate);
+		} catch (Exception up) {
+			throw up;
+		}
 	}
 
 	public FSCertificate getCertificateByNumber(String number) {

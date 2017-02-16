@@ -63,6 +63,6 @@ public interface CertificateDAO {
 	public long getNextValuePool(String seq_name, int poolsize) throws Exception;
 
 	// --------------  FS Certificate methods-------------------------------
-	public long saveFSCertificate(FSCertificate certificate) throws Exception;
+	public FSCertificate saveFSCertificate(FSCertificate certificate) throws Exception;
 	
 }

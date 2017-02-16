@@ -1,5 +1,5 @@
 <fscertificate>
-	<number></number>
+	<certnumber></certnumber>
 	<parentnumber></parentnumber>
 	<dateissue>01.03.2017</dateissue>
 	<dateexpiry>28.02.208</dateexpiry>
@@ -101,15 +101,12 @@
 	<blanks>
 		<blank>
 			<page>1</page>
-			<number>23456711</number>
 		</blank>
 		<blank>
 			<page>2</page>
-			<number>1238990</number>
 		</blank>
 		<blank>
 			<page>3</page>
-			<number>66667778</number>
 		</blank>
 	</blanks>
 </fscertificate>

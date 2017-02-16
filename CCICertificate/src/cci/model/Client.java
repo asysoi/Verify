@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @XmlRootElement(name = "client")
 @Component
-@XmlType(propOrder = {"name", "codecountry" , "index", "city", "line", "office", "building", 
+@XmlType(propOrder = {"name", "codecountry" , "cindex", "city", "line", "office", "building", 
 		"work_phone", "cell_phone", "email", "unp", "okpo", "account", "bname", "bindex", "bcodecountry"
 		,"bcity", "bline", "boffice", "bbuilding", "bwork_phone", "bcell_phone", "bemail", "bunp"})
 
@@ -16,7 +16,7 @@ public class Client {
 	private long id;		
 	private String name;
 	private String codecountry;
-	private String index;
+	private String cindex;
 	private String city;		
 	private String line;		
 	private String office;
@@ -64,11 +64,11 @@ public class Client {
 	public void setLine(String line) {
 		this.line = line;
 	}
-	public String getIndex() {
-		return index;
+	public String getCindex() {
+		return cindex;
 	}
-	public void setIndex(String index) {
-		this.index = index;
+	public void setCindex(String cindex) {
+		this.cindex = cindex;
 	}
 	public String getOffice() {
 		return office;
@@ -193,7 +193,7 @@ public class Client {
 	
 	@Override
 	public String toString() {
-		return "Client [id=" + id + ", name=" + name + ", codecountry=" + codecountry + ", index=" + index + ", city="
+		return "Client [id=" + id + ", name=" + name + ", codecountry=" + codecountry + ", cindex=" + cindex + ", city="
 				+ city + ", line=" + line + ", office=" + office + ", building=" + building + ", work_phone="
 				+ work_phone + ", cell_phone=" + cell_phone + ", email=" + email + ", unp=" + unp + ", okpo=" + okpo
 				+ ", account=" + account + ", bname=" + bname + ", bindex=" + bindex + ", bcodecountry=" + bcodecountry

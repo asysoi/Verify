@@ -6,7 +6,7 @@
   <dateexpiry>28.02.208</dateexpiry>
   <branch>
      <name>Унитарное предприятие по оказанию услуг «Минское отделение Белорусской торгово-промышленной палаты»</name>
-     <index>220113</index>
+     <cindex>220113</cindex>
      <line>Якуба Коласа</line>
      <office></office>
 	 <building>65</building>
@@ -21,7 +21,7 @@
 	<codecountry>BY</codecountry>
 	<city>Минск</city>		
 	<line>Курчатова</line>		
-	<index>2201108</index>
+	<cindex>2201108</cindex>
 	<office></office>
 	<building>1</building>
 	<work_phone></work_phone>	
@@ -47,7 +47,7 @@
 	<codecountry>BY</codecountry>
 	<city>Минск</city>		
 	<line>Курчатова</line>		
-	<index>2201108</index>
+	<cindex>2201108</cindex>
 	<office></office>
 	<building>1</building>
 	<work_phone></work_phone>	

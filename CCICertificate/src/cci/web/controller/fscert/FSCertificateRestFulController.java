@@ -107,6 +107,7 @@ public class FSCertificateRestFulController {
 			//certificate.setOtd_id(Integer.parseInt(otd_id));
 			try {
 				fsservice.addCertificate(certificate);
+				LOG.info(certificate.toString());
 			} catch (Exception ex) {
 				throw(new AddCertificateException("Ошибка добавления сертификата: " + ex.toString()));
 			}

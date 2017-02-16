@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
+import javax.xml.bind.annotation.XmlType;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,12 +29,16 @@ import org.springframework.stereotype.Repository;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 
 import cci.repository.cert.SequenceGenerator;
+import cci.model.Client;
+import cci.model.Employee;
 import cci.model.cert.Certificate;
 import cci.model.cert.CertificateList;  
 import cci.model.cert.Country;
 import cci.model.cert.Product;
 import cci.model.cert.Report;
+import cci.model.cert.fscert.Branch;
 import cci.model.cert.fscert.FSCertificate;
+import cci.model.owncert.OwnCertificate;
 import cci.repository.SQLBuilder;
 import cci.service.SQLQueryUnit;
 import cci.web.controller.cert.CertificateDeleteException;
@@ -46,6 +51,7 @@ import cci.web.controller.cert.NotFoundCertificateException;
 public class JDBCCertificateDAO implements CertificateDAO {
 	
 	private static final Logger LOG = Logger.getLogger(JDBCCertificateDAO.class);
+	
 	private NamedParameterJdbcTemplate template;
 	private DataSource ds; 
 
@@ -54,6 +60,8 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		this.template = new NamedParameterJdbcTemplate(dataSource);
 		ds = dataSource;
 	}
+	
+	
 
 	// ---------------------------------------------------------------
 	// количество сертификатов в списке -> PS
@@ -646,7 +654,6 @@ public class JDBCCertificateDAO implements CertificateDAO {
 
 		} catch (Exception ex) {
 			LOG.error("Eroor updating certificate " + cert.getNomercert() + ": " + ex.getMessage());
-			ex.printStackTrace();
             throw new RuntimeException(ex);			
 		}
 		rcert = cert;
@@ -749,7 +756,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		StringBuffer str = new StringBuffer();
 		
 		String sql = "select nomercert, nblanka, datacert from c_cert " + filter.getWhereLikeClause() + " ORDER by issuedate";
-		System.out.println(sql);
+		LOG.info(sql);
 		Connection conn = null;
 
 		try {
@@ -785,16 +792,158 @@ public class JDBCCertificateDAO implements CertificateDAO {
 
 	//--------------------------------------------------------------------
 	//--------------------------------------------------------------------
-	// Add new FS Certificate WEB or REST service 
+	//            Add new FS Certificate WEB or REST service 
 	//--------------------------------------------------------------------
 	//--------------------------------------------------------------------
-	public long  saveFSCertificate(FSCertificate certificate) throws Exception {
+	
+	public FSCertificate saveFSCertificate(FSCertificate cert) throws Exception {
+		long id = 0;
+ 		
+		if (cert.getBranch().getId() == 0 ) cert.getBranch().setId(findOrCreateBranchID(cert.getBranch()));
+		if (cert.getExporter().getId() == 0 ) cert.getExporter().setId(findOrCreateClientID(cert.getExporter()));
+		if (cert.getProducer().getId() == 0 ) cert.getProducer().setId(findOrCreateClientID(cert.getProducer()));
+		if (cert.getExpert().getId() == 0 ) cert.getExpert().setId(findOrCreateEmployeeID(cert.getExpert()));
+		if (cert.getSigner().getId() == 0 ) cert.getSigner().setId(findOrCreateEmployeeID(cert.getSigner()));
+		
+		LOG.info(cert);
+		
+		String sql = "insert into fs_cert(certnumber, parentnumber, dateissue, dateexpiry, confirmation, declaration, id_branch, id_exporter, id_producer, id_expert, id_signer) "
+				    + " values (:certnumber, :parentnumber, "
+				    + " TO_DATE(:dateissue,'DD.MM.YY'), "
+				    + " TO_DATE(:dateexpiry,'DD.MM.YY'), "
+				    + " :confirmation, :declaration,  :branch.id, :exporter.id, :producer.id, :expert.id, :signer.id)";
+
+		SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);
+		GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+		
+		int row = template.update(sql, parameters, keyHolder,
+				new String[] { "id" });
+		id = keyHolder.getKey().intValue();
+
+		if (row > 0) {
+			sql = "insert into fs_product(id_fscert, numerator, tovar) values ("
+					+ id + ", :numerator, :tovar)";
+			if (cert.getProducts() != null && cert.getProducts().size() > 0) {
+				SqlParameterSource[] batch = SqlParameterSourceUtils
+						.createBatch(cert.getProducts().toArray());
+				int[] updateCounts = template.batchUpdate(sql, batch);
+			}
+			
+			sql = "insert into fs_blank(id_fscert, page, blanknumber) values ("
+					+ id + ", :page, :blanknumber)";
+			
+			if (cert.getBlanks() != null && cert.getBlanks().size() > 0) {
+				SqlParameterSource[] batch = SqlParameterSourceUtils
+						.createBatch(cert.getBlanks().toArray());
+				int[] updateCounts = template.batchUpdate(sql, batch);
+			}
+
+			cert.setId(id);
+		}
+
+		return cert;
+
+	}
+
+	
+	// -------------------------------------------
+	// Get id of branch
+	// -------------------------------------------
+	private long findOrCreateBranchID(Branch branch) throws Exception{
+			String sql = "SELECT id FROM fs_branch WHERE name = ? and cindex = ? and line = ? and building = ? and codecountry = ? and ROWNUM  < 2";
+
+			long id = 0;
+			
+			try {
+				id = this.template.getJdbcOperations().queryForObject(sql, 
+						new Object[] {branch.getName(), branch.getCindex(), branch.getLine(), branch.getBuilding(), branch.getCodecountry()},
+						Long.class);
+				
+			} catch (Exception ex) {
+				
+                LOG.info(ex.getMessage());
+				if (id == 0) {
+				  sql = "insert into fs_branch(name, codecountry, cindex, city, line, office, building," + 
+						  	"work_phone, cell_phone, email, unp, okpo, account, bname, bindex, bcodecountry," + 
+		                    "bcity, bline, boffice, bbuilding, bemail, bunp) " +  
+							"values(:name, :codecountry, :cindex, :city, :line, :office, :building," + 
+						  	":work_phone, :cell_phone, :email, :unp, :okpo, :account, :bname, :bindex, :bcodecountry," + 
+		                    ":bcity, :bline, :boffice, :bbuilding,:bemail, :bunp) ";
+				  
+				  SqlParameterSource parameters = new BeanPropertySqlParameterSource(branch);
+				  GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+				  
+				  int row = template.update(sql, parameters, keyHolder,
+						new String[] { "id" });
+				  id = keyHolder.getKey().longValue();
+			    }
+			}
+			return id;
+	}
+	
+	// -------------------------------------------
+	// Get id of client
+	// -------------------------------------------
+	private long findOrCreateClientID(Client client) throws Exception{
+		String sql = "SELECT id FROM cci_client WHERE name = ? and cindex = ? and line = ? and building = ? and codecountry = ? and ROWNUM  < 2";
+
 		long id = 0;
 		
-		
+		try {
+			id = this.template.getJdbcOperations().queryForObject(sql, 
+					new Object[] {client.getName(), client.getCindex(), client.getLine(), client.getBuilding(), client.getCodecountry()},
+					Long.class);
+		} catch (Exception ex) {
+			
+			LOG.info(ex.getMessage());;
+			if (id == 0) {
+			  sql = "insert into cci_client(id, name, codecountry, cindex, city, line, office, building," + 
+					  	"work_phone, cell_phone, email, unp, okpo, account, bname, bindex, bcodecountry," + 
+	                    "bcity, bline, boffice, bbuilding, bemail, bunp) " +  
+						"values(id_client_seq.nextval, :name, :codecountry, :cindex, :city, :line, :office, :building," + 
+					  	":work_phone, :cell_phone, :email, :unp, :okpo, :account, :bname, :bindex, :bcodecountry," + 
+	                    ":bcity, :bline, :boffice, :bbuilding, :bemail, :bunp) ";
+			  
+			  SqlParameterSource parameters = new BeanPropertySqlParameterSource(client);
+			  GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+			  
+			  int row = template.update(sql, parameters, keyHolder,
+					new String[] { "id" });
+			  id = keyHolder.getKey().longValue();
+		    }
+		}
+		return id;
+     }
 
+	
+	// -------------------------------------------
+	// Get id of client
+	// -------------------------------------------
+	private long findOrCreateEmployeeID(Employee emp) throws Exception{
+		String sql = "SELECT id FROM cci_employee WHERE name = ? and job = ?";
+
+		long id = 0;
+		
+		try {
+			id = this.template.getJdbcOperations().queryForObject(sql, 
+					new Object[] {emp.getName(), emp.getJob()},
+					Long.class);
+		} catch (Exception ex) {
+		   if (id == 0) {
+			  sql = "insert into cci_employee(name, job) " +  
+						"values( :name, :job) ";
+			  
+			  SqlParameterSource parameters = new BeanPropertySqlParameterSource(emp);
+			  GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+			  
+			  int row = template.update(sql, parameters, keyHolder,
+					new String[] { "id" });
+			  id = keyHolder.getKey().longValue();
+		    }
+		}
 		return id;
 	}
 
-     
+
+	
 }
