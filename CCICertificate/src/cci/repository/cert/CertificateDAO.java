@@ -64,5 +64,9 @@ public interface CertificateDAO {
 
 	// --------------  FS Certificate methods-------------------------------
 	public FSCertificate saveFSCertificate(FSCertificate certificate) throws Exception;
+
+	public FSCertificate updateFSCertificate(FSCertificate certificate, String branch_id);
+
+	public FSCertificate getFSCertificateByNumber(String number);
 	
 }

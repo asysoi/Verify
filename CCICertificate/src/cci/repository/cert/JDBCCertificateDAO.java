@@ -36,6 +36,7 @@ import cci.model.cert.CertificateList;
 import cci.model.cert.Country;
 import cci.model.cert.Product;
 import cci.model.cert.Report;
+import cci.model.cert.fscert.Blank;
 import cci.model.cert.fscert.Branch;
 import cci.model.cert.fscert.FSCertificate;
 import cci.model.owncert.OwnCertificate;
@@ -790,17 +791,19 @@ public class JDBCCertificateDAO implements CertificateDAO {
 
 	//--------------------------------------------------------------------
 	//--------------------------------------------------------------------
+	//--------------------------------------------------------------------	
 	//            Add new FS Certificate WEB or REST service 
+	//--------------------------------------------------------------------
 	//--------------------------------------------------------------------
 	//--------------------------------------------------------------------
 	public FSCertificate saveFSCertificate(FSCertificate cert) throws Exception {
 		long id = 0;
  		
-		if (cert.getBranch().getId() == 0 ) cert.getBranch().setId(findOrCreateBranchID(cert.getBranch()));
-		if (cert.getExporter().getId() == 0 ) cert.getExporter().setId(findOrCreateClientID(cert.getExporter()));
-		if (cert.getProducer().getId() == 0 ) cert.getProducer().setId(findOrCreateClientID(cert.getProducer()));
-		if (cert.getExpert().getId() == 0 ) cert.getExpert().setId(findOrCreateEmployeeID(cert.getExpert()));
-		if (cert.getSigner().getId() == 0 ) cert.getSigner().setId(findOrCreateEmployeeID(cert.getSigner()));
+		if (cert.getBranch()!= null && cert.getBranch().getId() == 0 ) cert.getBranch().setId(findOrCreateBranchID(cert.getBranch()));
+		if (cert.getExporter()!=null && cert.getExporter().getId() == 0 ) cert.getExporter().setId(findOrCreateClientID(cert.getExporter()));
+		if (cert.getProducer()!=null && cert.getProducer().getId() == 0 ) cert.getProducer().setId(findOrCreateClientID(cert.getProducer()));
+		if (cert.getExpert()!=null && cert.getExpert().getId() == 0 ) cert.getExpert().setId(findOrCreateEmployeeID(cert.getExpert()));
+		if (cert.getSigner()!=null && cert.getSigner().getId() == 0 ) cert.getSigner().setId(findOrCreateEmployeeID(cert.getSigner()));
 		
 		LOG.info(cert);
 		
@@ -808,8 +811,15 @@ public class JDBCCertificateDAO implements CertificateDAO {
 				    + " values (:certnumber, :parentnumber, "
 				    + " TO_DATE(:dateissue,'DD.MM.YY'), "
 				    + " TO_DATE(:dateexpiry,'DD.MM.YY'), "
-				    + " :confirmation, :declaration,  :branch.id, :exporter.id, :producer.id, :expert.id, :signer.id)";
-
+				    + " :confirmation, :declaration "
+				    + ((cert.getBranch() != null) ?  ", :branch.id " : ", :branch")
+				    + ((cert.getExporter() != null) ?  ", :exporter.id " : ", :exporter ")
+				    + ((cert.getProducer() != null) ?  ", :producer.id " : ", :producer ")
+				    + ((cert.getExpert() != null) ?  ", :expert.id " : ", :expert ")
+				    + ((cert.getSigner() != null) ?  ", :signer.id " : ", :signer ")	
+				    + ")";
+		LOG.info(sql);
+		
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);
 		GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 		
@@ -937,6 +947,59 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		    }
 		}
 		return id;
+	}
+
+	//--------------------------------------------------------------------
+	//--------------------------------------------------------------------
+	//--------------------------------------------------------------------	
+	//            UPDATE FS Certificate WEB or REST service 
+	//--------------------------------------------------------------------
+	//--------------------------------------------------------------------
+	//--------------------------------------------------------------------
+
+	public FSCertificate updateFSCertificate(FSCertificate certificate, String branch_id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	//--------------------------------------------------------------------
+	//--------------------------------------------------------------------
+	//--------------------------------------------------------------------	
+	//            GET FS Certificate WEB or REST service 
+	//--------------------------------------------------------------------
+	//--------------------------------------------------------------------
+	//--------------------------------------------------------------------
+	public FSCertificate getFSCertificateByNumber(String number) {
+        FSCertificate rcert;
+		
+		String sql = "select * from FS_CERT WHERE CERTNUMBER = ?";
+		rcert = template.getJdbcOperations().queryForObject(
+					sql,
+					new Object[] { number},
+					new FSCertificateRowMapper());
+
+		if (rcert != null) {
+		    if (rcert.getBranch() != null ) {
+		    	Branch branch = template.getJdbcOperations().queryForObject(
+						sql,
+						new Object[] { number},
+						new BeanPropertyRowMapper<Branch>(Branch.class));
+		    }
+		
+		    if (rcert != null) {
+				sql = "select * from FS_PRODUCT WHERE ID_FSCERT = ?  ORDER BY id";
+				rcert.setProducts(template.getJdbcOperations().query(sql,
+						new Object[] { rcert.getId() },
+						new BeanPropertyRowMapper<Product>(Product.class)));
+				
+				sql = "select * from FS_BLANK WHERE ID_FSCERT = ?  ORDER BY id";
+				rcert.setBlanks(template.getJdbcOperations().query(sql,
+						new Object[] { rcert.getId() },
+						new BeanPropertyRowMapper<Blank>(Blank.class)));
+		    }
+		}
+		
+		return rcert;
 	}
 
 

@@ -14,28 +14,26 @@ public class FSCertificateRestFulService {
 	@Autowired
 	private CertificateDAO certificateDAO;
 
-	public String getCertificates(FSFilter filter) {
+	public String getFSCertificates(FSFilter filter) {
 		return null;
 	}
 
 	@Transactional(propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
-	public void addCertificate(FSCertificate certificate) throws Exception {
-		try {
-		   certificateDAO.saveFSCertificate(certificate);
-		} catch (Exception up) {
-			throw up;
-		}
+	public FSCertificate addCertificate(FSCertificate certificate) throws Exception {
+		return certificateDAO.saveFSCertificate(certificate);
 	}
 
-	public FSCertificate getCertificateByNumber(String number) {
-		return null;
+	public FSCertificate getFSCertificateByNumber(String number) {
+		return certificateDAO.getFSCertificateByNumber(number);
 	}
 
-	public FSCertificate updateCertificate(FSCertificate cert, String otd_id) {
-		return null;
+	@Transactional(propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
+	public FSCertificate updateFSCertificate(FSCertificate certificate, String branch_id) {
+		return certificateDAO.updateFSCertificate(certificate, branch_id);
 	}
 
-	public void deleteCertificate(String number, String blanknumber, String otd_id) {
+	@Transactional(propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
+	public void deleteFSCertificate(String number, String otd_id) {
 		
 	}
 	
