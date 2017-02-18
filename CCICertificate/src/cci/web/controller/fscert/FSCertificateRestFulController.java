@@ -4,6 +4,8 @@ import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Controller;
@@ -18,8 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import cci.model.cert.Certificate;
 import cci.model.cert.fscert.FSCertificate;
 import cci.service.cert.CertService;
 import cci.service.fscert.FSCertificateRestFulService;
@@ -109,8 +109,11 @@ public class FSCertificateRestFulController {
 			try {
 				fsservice.addCertificate(certificate);
 				LOG.info(certificate.toString());
+			} catch(DuplicateKeyException ex) {	
+				throw(new AddCertificateException("Сертификат с номером " + certificate.getCertnumber()  
+									+ " уже добавлен в базу. Недопустимо дубирование новеров сертификатов."));
 			} catch (Exception ex) {
-				throw(new AddCertificateException("Ошибка добавления сертификата: " + ex.toString()));
+				throw(new AddCertificateException(ex.toString()));
 			}
 	   	} else {
 	   		throw(new AddCertificateException("Добавлять сертификат может только авторизированный представитель отделения ."));
@@ -128,18 +131,19 @@ public class FSCertificateRestFulController {
 	public FSCertificate getCertificateByNumber(
 			@RequestParam(value = "certnumber", required = true) String number,
 			Authentication aut)  {
-		
+
+		if (number == null  || number.isEmpty()) {
+			throw new RuntimeException("Номер сертификата не задан. Поиск неаозможен.");
+		}
 		String otd_id = getOtd_idByRole(aut);
+		
 		try {
-			    
 			    FSCertificate rcert = fsservice.getFSCertificateByNumber(number);
-			    
-			    if (otd_id != null) {
-			    	throw(new NotFoundCertificateException("Нет доступа к серитификату номер " + number));
-			    }
-				return rcert; 
-			} catch (Exception ex) {
-				throw(new NotFoundCertificateException("Серитификат номер " + number + " не найден :  " + ex.toString()));			
+				return rcert;
+	    } catch (EmptyResultDataAccessException ex) {
+			throw(new NotFoundCertificateException("Серитификат номер " + number + " не найден в базе."));
+		} catch (Exception ex) {
+			throw(new NotFoundCertificateException("Серитификат номер " + number + " не найден :  " + ex.toString()));			
 		}
 		
 	}
@@ -157,14 +161,16 @@ public class FSCertificateRestFulController {
 				 throw(new CertificateUpdateErorrException("Изменить сертификат может только авторизированный представитель отделения."));
 			 }
    		     rcert = fsservice.updateFSCertificate(cert, otd_id);
+  		 } catch (EmptyResultDataAccessException ex) {
+			throw(new CertificateUpdateErorrException("Серитификат номер " + cert.getCertnumber() + " не найден в базе."));
 		 } catch (NotFoundCertificateException ex) {
 			 throw(new CertificateUpdateErorrException("Cертификат номер " + cert.getCertnumber() + " не найден в базе. Обновление невозможно. Добавьте сертификат в базу."));
 		 } catch (Exception ex) {
-			 throw(new CertificateUpdateErorrException("Ошибка обновления сертификата номер " + cert.getCertnumber() + ", выданного на бланке "  + "  :  " + ex.toString()));
+			 throw(new CertificateUpdateErorrException("Ошибка обновления сертификата номер " + cert.getCertnumber() + ": " + ex.toString()));
 		 }
 		 
 		 if (rcert == null) {
-			 throw(new NotFoundCertificateException("Сертификат номер " + cert.getCertnumber() + ", выданный на бланке " + "  не найден и не может быть изменен."));		    	 
+			 throw(new NotFoundCertificateException("Сертификат номер " + cert.getCertnumber() +  "  не найден и не может быть изменен."));		    	 
 		 }
 		 return rcert;
 	}
@@ -175,7 +181,7 @@ public class FSCertificateRestFulController {
 	@RequestMapping(value = "fscert.do", method = RequestMethod.DELETE, headers = "Accept=application/txt")
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public ResponseEntity<String> deleteCertificate(
-			@RequestParam(value = "nomercert", required = false) String number,
+			@RequestParam(value = "certnumber", required = true) String number,
 			Authentication aut) {
 		try {
 			String otd_id = getOtd_idByRole(aut);
@@ -183,7 +189,9 @@ public class FSCertificateRestFulController {
 				 throw(new CertificateDeleteException("Удалить сертификат может только авторизированный представитель отделения."));
 			}
 			fsservice.deleteFSCertificate(number, otd_id);
-		} catch(Exception ex) {
+		} catch (EmptyResultDataAccessException ex) {
+			throw(new CertificateDeleteException("Серитификат номер " + number + " не найден в базе"));
+	    } catch(Exception ex) {
 			throw(new CertificateDeleteException("Серитификат номер " + number + "  не может быть удален: " + ex.toString()));	
 		}
 		

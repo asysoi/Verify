@@ -14,24 +14,18 @@ public class FSFilter extends Filter {
 		
 		if (getNumber() != null && !getNumber().isEmpty()) {
 			sqlwhere += " WHERE ";
-			sqlwhere += "number LIKE '%" + getNumber() + "%'";   
+			sqlwhere += "certnumber LIKE '%" + getNumber() + "%'";   
 		}
 	
 		if (getFrom() != null && !getFrom().isEmpty()) {
 			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
-			sqlwhere += "dateissue >= TO_DATE('" + getFrom() + "','" +  DATE_FORMAT + "') ";   
+			sqlwhere += "dateissue >= TO_DATE(:from,'" +  DATE_FORMAT + "') ";   
 		}
 		
 		if (getTo() != null && !getTo().isEmpty()) {
 			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
-			sqlwhere += "dateissue <= TO_DATE('" + getTo() + "','" +  DATE_FORMAT + "') ";   
+			sqlwhere += "dateissue <= TO_DATE(:to,'" +  DATE_FORMAT + "') ";   
 		}
-		
-		if (getOtd_id() != null && !getOtd_id().isEmpty()) {
-			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
-			sqlwhere += "otd_id = " + getOtd_id();   
-		}
-		
 		
 		return sqlwhere;
 	}
@@ -42,23 +36,19 @@ public class FSFilter extends Filter {
 		
 		if (getNumber() != null && !getNumber().isEmpty()) {
 			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
-			sqlwhere += "nomercert = '" + getNumber() + "'";   
+			sqlwhere += "certnumber = '" + getNumber() + "'";   
 		}
 		
 		if (getFrom() != null && !getFrom().isEmpty()) {
 			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
-			sqlwhere += "dateissue >= TO_DATE('" + getFrom() + "','" +  DATE_FORMAT + "') ";   
+			sqlwhere += "dateissue >= TO_DATE(:from,'" +  DATE_FORMAT + "') ";
 		}
 		
 		if (getTo() != null && !getTo().isEmpty()) {
 			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
-			sqlwhere += "dateissue <= TO_DATE('" + getTo() + "','" +  DATE_FORMAT + "') ";   
+			sqlwhere += "dateissue <= TO_DATE(:to,'" +  DATE_FORMAT + "') ";
 		}
 		
-		if (getOtd_id() != null && !getOtd_id().isEmpty()) {
-			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
-			sqlwhere += "otd_id = " + getOtd_id();   
-		}
 		return sqlwhere;
 	}
 

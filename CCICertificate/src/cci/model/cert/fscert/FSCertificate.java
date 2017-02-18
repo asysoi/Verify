@@ -34,8 +34,8 @@ public class FSCertificate {
 	private Producer producer;
 	private Expert expert;
 	private Signer signer;
-	private List<Product> products;
-	private List<Blank> blanks;
+	private List<FSProduct> products;
+	private List<FSBlank> blanks;
 
 	@XmlTransient
 	public long getId() {
@@ -136,21 +136,21 @@ public class FSCertificate {
 
 	@XmlElementWrapper(name = "products")
 	@XmlElement(name = "row")
-	public List<Product> getProducts() {
+	public List<FSProduct> getProducts() {
 		return products;
 	}
 
-	public void setProducts(List<Product> products) {
+	public void setProducts(List<FSProduct> products) {
 		this.products = products;
 	}
 
 	@XmlElementWrapper(name = "blanks")
 	@XmlElement(name = "blank")
-	public List<Blank> getBlanks() {
+	public List<FSBlank> getBlanks() {
 		return blanks;
 	}
 
-	public void setBlanks(List<Blank> blanks) {
+	public void setBlanks(List<FSBlank> blanks) {
 		this.blanks = blanks;
 	}
 

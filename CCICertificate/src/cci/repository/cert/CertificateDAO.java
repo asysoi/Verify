@@ -9,6 +9,7 @@ import cci.model.cert.Report;
 import cci.model.cert.fscert.FSCertificate;
 import cci.repository.SQLBuilder;
 import cci.web.controller.cert.CertFilter;
+import cci.web.controller.fscert.FSFilter;
 
 public interface CertificateDAO {
 
@@ -49,6 +50,7 @@ public interface CertificateDAO {
 	public List<Certificate> getReportCertificates(String[] dbfields, String orderby,
 			String order, SQLBuilder builder);
 
+	
 	// --------------  Certificate methods for REST ------------------------
 	public long save(Certificate cert) throws Exception;
 
@@ -61,12 +63,17 @@ public interface CertificateDAO {
 	public void deleteCertificate(String number, String blanknumber, String otd_id) throws Exception;
 
 	public long getNextValuePool(String seq_name, int poolsize) throws Exception;
+	
 
 	// --------------  FS Certificate methods-------------------------------
 	public FSCertificate saveFSCertificate(FSCertificate certificate) throws Exception;
 
-	public FSCertificate updateFSCertificate(FSCertificate certificate, String branch_id);
+	public FSCertificate updateFSCertificate(FSCertificate certificate, String branch_id) throws Exception;
 
-	public FSCertificate getFSCertificateByNumber(String number);
+	public FSCertificate getFSCertificateByNumber(String number) throws Exception;
+
+	public String getFSCertificates(FSFilter filter) throws Exception;
+
+	public String deleteFSCertificate(String certnumber, String branch_id) throws Exception;
 	
 }

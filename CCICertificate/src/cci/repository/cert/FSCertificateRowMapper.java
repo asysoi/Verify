@@ -7,7 +7,11 @@ import java.text.SimpleDateFormat;
 import org.springframework.jdbc.core.RowMapper;
 
 import cci.model.cert.fscert.Branch;
+import cci.model.cert.fscert.Expert;
+import cci.model.cert.fscert.Exporter;
 import cci.model.cert.fscert.FSCertificate;
+import cci.model.cert.fscert.Producer;
+import cci.model.cert.fscert.Signer;
 
 public class FSCertificateRowMapper implements RowMapper {
 
@@ -16,17 +20,41 @@ public class FSCertificateRowMapper implements RowMapper {
 		cert.setId(rs.getLong("ID"));
 		cert.setCertnumber(rs.getString("CERTNUMBER"));
 		cert.setParentnumber(rs.getString("PARENTNUMBER"));
-		cert.setDateissue((new SimpleDateFormat("MM.dd.yyyyrs")).format(rs.getDate("dateissue")));
-		cert.setDateexpiry((new SimpleDateFormat("MM.dd.yyyyrs")).format(rs.getDate("dateexpiry")));
+		cert.setDateissue((new SimpleDateFormat("MM.dd.yyyy")).format(rs.getDate("dateissue")));
+		cert.setDateexpiry((new SimpleDateFormat("MM.dd.yyyy")).format(rs.getDate("dateexpiry")));
 		cert.setConfirmation(rs.getString("confirmation"));
 		cert.setDeclaration(rs.getString("declaration"));
 		
 		if (rs.getLong("ID_BRANCH") != 0) {
-		   Branch br = new Branch();
-		   br.setId(rs.getLong("ID_BRANCH"));
-		   cert.setBranch(br);	
+		   Branch obj = new Branch();
+		   obj.setId(rs.getLong("ID_BRANCH"));
+		   cert.setBranch(obj);	
 		}
 
+		if (rs.getLong("ID_EXPORTER") != 0) {
+			Exporter obj = new Exporter();
+			obj.setId(rs.getLong("ID_EXPORTER"));
+			cert.setExporter(obj);	
+		}
+		
+		if (rs.getLong("ID_PRODUCER") != 0) {
+			Producer obj = new Producer();
+			obj.setId(rs.getLong("ID_PRODUCER"));
+			cert.setProducer(obj);	
+		}
+		
+		if (rs.getLong("ID_EXPERT") != 0) {
+			Expert obj = new Expert();
+			obj.setId(rs.getLong("ID_EXPERT"));
+			cert.setExpert(obj);	
+		}
+		
+		if (rs.getLong("ID_SIGNER") != 0) {
+			Signer obj = new Signer();
+			obj.setId(rs.getLong("ID_SIGNER"));
+			cert.setSigner(obj);	
+		}
+		
 		return cert;
 	}
 

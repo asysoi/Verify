@@ -11,14 +11,11 @@ import java.util.List;
 import java.util.Map;
 
 import javax.sql.DataSource;
-import javax.xml.bind.annotation.XmlType;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
-import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -32,14 +29,17 @@ import cci.repository.cert.SequenceGenerator;
 import cci.model.Client;
 import cci.model.Employee;
 import cci.model.cert.Certificate;
-import cci.model.cert.CertificateList;  
 import cci.model.cert.Country;
 import cci.model.cert.Product;
 import cci.model.cert.Report;
-import cci.model.cert.fscert.Blank;
+import cci.model.cert.fscert.FSBlank;
 import cci.model.cert.fscert.Branch;
+import cci.model.cert.fscert.Expert;
+import cci.model.cert.fscert.Exporter;
 import cci.model.cert.fscert.FSCertificate;
-import cci.model.owncert.OwnCertificate;
+import cci.model.cert.fscert.FSProduct;
+import cci.model.cert.fscert.Producer;
+import cci.model.cert.fscert.Signer;
 import cci.repository.SQLBuilder;
 import cci.service.SQLQueryUnit;
 import cci.web.controller.cert.CertificateDeleteException;
@@ -47,6 +47,7 @@ import cci.web.controller.cert.CertificateGetErrorException;
 import cci.web.controller.cert.CertificateUpdateErorrException;
 import cci.web.controller.cert.CertFilter;
 import cci.web.controller.cert.NotFoundCertificateException;
+import cci.web.controller.fscert.FSFilter;
 
 @Repository
 public class JDBCCertificateDAO implements CertificateDAO {
@@ -496,7 +497,12 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		
 	}
 	
-
+	// ------------------------------------------------------------------------------------------------------
+	//
+	//  Methods are applicable for CT-1 Certificate REST service 
+	//
+	// ------------------------------------------------------------------------------------------------------
+	
 	// ---------------------------------------------------------------
 	// Save certificate / FOR REST SERVICE
 	// ---------------------------------------------------------------
@@ -667,14 +673,18 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	// ---------------------------------------------------------------
 	public long getNextValuePool(String seq_name, int poolsize) throws Exception {
 
-			String sql = "select value from c_sequence WHERE name = '" + seq_name + "'";
-			long vl = template.getJdbcOperations().queryForInt(sql);
+			String sql = "select value from c_sequence WHERE name = ? ";
+			// long vl = template.getJdbcOperations().queryForInt(sql);
+			long vl = template.getJdbcOperations().queryForObject(sql,
+					new Object[] {seq_name}, Long.class);
 			
 			sql = "update c_sequence SET "
 					+ " value = value + :poolsize"
 					+ " WHERE name = :seq_name";
 			
-			SqlParameterSource parameters = new MapSqlParameterSource().addValue("poolsize", Integer.valueOf(poolsize)).addValue("seq_name",seq_name);
+			SqlParameterSource parameters = 
+						new MapSqlParameterSource().addValue("poolsize", Integer.valueOf(poolsize))
+						                           .addValue("seq_name",seq_name);
 		    template.update(sql, parameters);
 		
 		    return vl;
@@ -789,16 +799,24 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	   return ret;
 	}
 
-	//--------------------------------------------------------------------
+
+	// ------------------------------------------------------------------------------------------------------
+	//
+	//  Methods are applicable for Free Sale Certificate database manipulation GRUD service 
+	//
+	// ------------------------------------------------------------------------------------------------------
+
 	//--------------------------------------------------------------------
 	//--------------------------------------------------------------------	
-	//            Add new FS Certificate WEB or REST service 
-	//--------------------------------------------------------------------
+	//            ADD new FS Certificate for WEB or REST service request 
 	//--------------------------------------------------------------------
 	//--------------------------------------------------------------------
 	public FSCertificate saveFSCertificate(FSCertificate cert) throws Exception {
 		long id = 0;
- 		
+ 		if (cert.getCertnumber().isEmpty()) {
+ 			throw new RuntimeException("Добвляемый в базу сертификат должен иметь номер.");
+ 		}
+		
 		if (cert.getBranch()!= null && cert.getBranch().getId() == 0 ) cert.getBranch().setId(findOrCreateBranchID(cert.getBranch()));
 		if (cert.getExporter()!=null && cert.getExporter().getId() == 0 ) cert.getExporter().setId(findOrCreateClientID(cert.getExporter()));
 		if (cert.getProducer()!=null && cert.getProducer().getId() == 0 ) cert.getProducer().setId(findOrCreateClientID(cert.getProducer()));
@@ -854,15 +872,23 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	// -------------------------------------------
 	// Get id of branch
 	// -------------------------------------------
-	private long findOrCreateBranchID(Branch branch) throws Exception{
-			String sql = "SELECT id FROM fs_branch WHERE name = ? and cindex = ? and line = ? and building = ? and codecountry = ? and ROWNUM  < 2";
-
+	private long findOrCreateBranchID(Branch branch) throws Exception {
+		    String where = createClientWhereClause(branch);
+		    
+			if (where.isEmpty()) {
+				throw new RuntimeException("Отсутствует информация об отделении БелТПП");
+			}
+				
 			long id = 0;
+			String sql = "SELECT id FROM fs_branch " + where;
 			
 			try {
-				id = this.template.getJdbcOperations().queryForObject(sql, 
-						new Object[] {branch.getName(), branch.getCindex(), branch.getLine(), branch.getBuilding(), branch.getCodecountry()},
-						Long.class);
+				SqlParameterSource parameters = new BeanPropertySqlParameterSource(branch);
+				Branch client = this.template.queryForObject(sql, 
+								parameters,
+								new BeanPropertyRowMapper<Branch>(Branch.class));
+				
+				id = client.getId();
 				
 			} catch (Exception ex) {
 				
@@ -886,18 +912,67 @@ public class JDBCCertificateDAO implements CertificateDAO {
 			return id;
 	}
 	
+	// ------------------------------------------------------------------------
+	//  make where clause for client 
+	//-------------------------------------------------------------------------
+	private String createClientWhereClause(Client client) {
+		String sqlwhere = "";
+		
+		if (client.getName() != null && !client.getName().isEmpty()) {
+			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
+			sqlwhere += " name = :name ";   
+		}    
+		if (client.getUnp() != null && !client.getUnp().isEmpty()) {
+			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
+			sqlwhere += " unp = :unp ";   
+		}
+		if (client.getCity() != null && !client.getCity().isEmpty()) {
+			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
+			sqlwhere += " city = :city ";   
+		}
+		if (client.getLine() != null && !client.getLine().isEmpty()) {
+			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
+			sqlwhere += " line = :line ";   
+		}
+		if (client.getCindex() != null && !client.getCindex().isEmpty()) {
+			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
+			sqlwhere += " cindex = :cindex ";   
+		}
+		if (client.getOffice() != null && !client.getOffice().isEmpty()) {
+			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
+			sqlwhere += " office = :office ";   
+		}
+		if (client.getBuilding() != null && !client.getBuilding().isEmpty()) {
+			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
+			sqlwhere += " building = :building ";   
+		}
+		if (sqlwhere.length() != 0)  sqlwhere += " AND ROWNUM = 1 ";
+			
+		return sqlwhere;
+	}
+
 	// -------------------------------------------
 	// Get id of client / create client
 	// -------------------------------------------
 	private long findOrCreateClientID(Client client) throws Exception{
-		String sql = "SELECT id FROM cci_client WHERE name = ? and cindex = ? and line = ? and building = ? and codecountry = ? and ROWNUM  < 2";
-
+	    String where = createClientWhereClause(client);
+	    
+		if (where.isEmpty()) {
+			throw new RuntimeException("Нет никакой информации о предприятии");
+		}
+			
 		long id = 0;
+		String sql = "SELECT id FROM cci_client " + where;
 		
 		try {
-			id = this.template.getJdbcOperations().queryForObject(sql, 
-					new Object[] {client.getName(), client.getCindex(), client.getLine(), client.getBuilding(), client.getCodecountry()},
-					Long.class);
+			SqlParameterSource parameters = 
+					new BeanPropertySqlParameterSource(client);
+			Client company = this.template.queryForObject(sql, 
+							parameters,
+							new BeanPropertyRowMapper<Client>(Client.class));
+			
+			id = company.getId();
+			
 		} catch (Exception ex) {
 			
 			LOG.info(ex.getMessage());;
@@ -925,15 +1000,29 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	//  Get id of employee / create employee if it doesn't exist
 	// ------------------------------------------------------------
 	private long findOrCreateEmployeeID(Employee emp) throws Exception{
-		String sql = "SELECT id FROM cci_employee WHERE name = ? and job = ?";
-
+		String where = createEmployeeWhereClause(emp);
+		
+		if (where.isEmpty()) {
+			throw new RuntimeException("Отсутствует информация об эксперте");
+		}
+		
+		String sql = "SELECT id FROM cci_employee " + where ;
 		long id = 0;
 		
 		try {
-			id = this.template.getJdbcOperations().queryForObject(sql, 
-					new Object[] {emp.getName(), emp.getJob()},
-					Long.class);
+			SqlParameterSource parameters = 
+					new BeanPropertySqlParameterSource(emp);
+			
+			Employee expert = this.template.queryForObject(sql, 
+							parameters,
+							new BeanPropertyRowMapper<Employee>(Employee.class));
+			id = expert.getId();
+			
+			//id = this.template.getJdbcOperations().queryForObject(sql, 
+			//		new Object[] {emp.getName(), emp.getJob()},
+			//		Long.class);
 		} catch (Exception ex) {
+		   LOG.info(ex.getMessage());	
 		   if (id == 0) {
 			  sql = "insert into cci_employee(name, job) " +  
 						"values( :name, :job) ";
@@ -941,7 +1030,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 			  SqlParameterSource parameters = new BeanPropertySqlParameterSource(emp);
 			  GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 			  
-			  int row = template.update(sql, parameters, keyHolder,
+			  template.update(sql, parameters, keyHolder,
 					new String[] { "id" });
 			  id = keyHolder.getKey().longValue();
 		    }
@@ -949,27 +1038,31 @@ public class JDBCCertificateDAO implements CertificateDAO {
 		return id;
 	}
 
-	//--------------------------------------------------------------------
-	//--------------------------------------------------------------------
-	//--------------------------------------------------------------------	
-	//            UPDATE FS Certificate WEB or REST service 
-	//--------------------------------------------------------------------
-	//--------------------------------------------------------------------
-	//--------------------------------------------------------------------
+	// ------------------------------------------------------------------------
+	//  make where clause for employee 
+	//-------------------------------------------------------------------------
+	private String createEmployeeWhereClause(Employee emp) {
+        String sqlwhere = "";
+		
+		if (emp.getName() != null && !emp.getName().isEmpty()) {
+			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
+			sqlwhere += " name = :name ";   
+		}    
+		if (emp.getJob() != null && !emp.getJob().isEmpty()) {
+			if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
+			sqlwhere += " job = :job ";   
+		}
+		if (sqlwhere.length() != 0)  sqlwhere += " AND ROWNUM = 1 ";
 
-	public FSCertificate updateFSCertificate(FSCertificate certificate, String branch_id) {
-		// TODO Auto-generated method stub
-		return null;
+		return sqlwhere;
 	}
 
 	//--------------------------------------------------------------------
 	//--------------------------------------------------------------------
-	//--------------------------------------------------------------------	
 	//            GET FS Certificate WEB or REST service 
 	//--------------------------------------------------------------------
 	//--------------------------------------------------------------------
-	//--------------------------------------------------------------------
-	public FSCertificate getFSCertificateByNumber(String number) {
+	public FSCertificate getFSCertificateByNumber(String number) throws Exception {
         FSCertificate rcert;
 		
 		String sql = "select * from FS_CERT WHERE CERTNUMBER = ?";
@@ -977,31 +1070,187 @@ public class JDBCCertificateDAO implements CertificateDAO {
 					sql,
 					new Object[] { number},
 					new FSCertificateRowMapper());
-
+		
+        // If certificate found fill in  all linked objects 
 		if (rcert != null) {
 		    if (rcert.getBranch() != null ) {
 		    	Branch branch = template.getJdbcOperations().queryForObject(
-						sql,
-						new Object[] { number},
+						"select * from fs_branch where id = ? ",
+						new Object[] {rcert.getBranch().getId() },
 						new BeanPropertyRowMapper<Branch>(Branch.class));
+		    	rcert.setBranch(branch);
 		    }
-		
+		    
+		    if (rcert.getExporter() != null ) {
+		    	Exporter obj = template.getJdbcOperations().queryForObject(
+						"select * from cci_client where id = ? ",
+						new Object[] {rcert.getExporter().getId() },
+						new BeanPropertyRowMapper<Exporter>(Exporter.class));
+		    	rcert.setExporter(obj);
+		    }
+		    
+		    if (rcert.getProducer() != null ) {
+		    	Producer obj = template.getJdbcOperations().queryForObject(
+						"select * from cci_client where id = ? ",
+						new Object[] {rcert.getProducer().getId() },
+						new BeanPropertyRowMapper<Producer>(Producer.class));
+		    	rcert.setProducer(obj);
+		    }
+		    
+		    if (rcert.getExpert() != null ) {
+		    	Expert obj = template.getJdbcOperations().queryForObject(
+						"select * from cci_employee where id = ? ",
+						new Object[] {rcert.getExpert().getId() },
+						new BeanPropertyRowMapper<Expert>(Expert.class));
+		    	rcert.setExpert(obj);
+		    }
+
+		    if (rcert.getSigner() != null ) {
+		    	Signer obj = template.getJdbcOperations().queryForObject(
+						"select * from cci_employee where id = ? ",
+						new Object[] {rcert.getSigner().getId() },
+						new BeanPropertyRowMapper<Signer>(Signer.class));
+		    	rcert.setSigner(obj);
+		    }
+		    
 		    if (rcert != null) {
 				sql = "select * from FS_PRODUCT WHERE ID_FSCERT = ?  ORDER BY id";
 				rcert.setProducts(template.getJdbcOperations().query(sql,
 						new Object[] { rcert.getId() },
-						new BeanPropertyRowMapper<Product>(Product.class)));
+						new BeanPropertyRowMapper<FSProduct>(FSProduct.class)));
 				
 				sql = "select * from FS_BLANK WHERE ID_FSCERT = ?  ORDER BY id";
 				rcert.setBlanks(template.getJdbcOperations().query(sql,
 						new Object[] { rcert.getId() },
-						new BeanPropertyRowMapper<Blank>(Blank.class)));
+						new BeanPropertyRowMapper<FSBlank>(FSBlank.class)));
 		    }
 		}
 		
 		return rcert;
 	}
+	
+	//--------------------------------------------------------------------
+	//--------------------------------------------------------------------	
+	//            UPDATE FS Certificate WEB or REST service 
+	//--------------------------------------------------------------------
+	//--------------------------------------------------------------------
+	public FSCertificate updateFSCertificate(FSCertificate cert, String branch_id) throws Exception {
+		
+ 		if (cert.getId() == 0) cert.setId(getFSCertificateIdByNUmber(cert.getCertnumber()));
+		if (cert.getBranch()!= null && cert.getBranch().getId() == 0 ) cert.getBranch().setId(findOrCreateBranchID(cert.getBranch()));
+		if (cert.getExporter()!=null && cert.getExporter().getId() == 0 ) cert.getExporter().setId(findOrCreateClientID(cert.getExporter()));
+		if (cert.getProducer()!=null && cert.getProducer().getId() == 0 ) cert.getProducer().setId(findOrCreateClientID(cert.getProducer()));
+		if (cert.getExpert()!=null && cert.getExpert().getId() == 0 ) cert.getExpert().setId(findOrCreateEmployeeID(cert.getExpert()));
+		if (cert.getSigner()!=null && cert.getSigner().getId() == 0 ) cert.getSigner().setId(findOrCreateEmployeeID(cert.getSigner()));
+		
+		LOG.info(cert);
+		
+		String sql = "UPDATE fs_cert SET parentnumber = :parentnumber, dateissue = TO_DATE(:dateissue,'DD.MM.YY'), "
+				    + " dateexpiry = TO_DATE(:dateexpiry,'DD.MM.YY'), confirmation = :confirmation, " 
+				    + " declaration = :declaration, "
+				    + " id_branch = " + ((cert.getBranch() != null) ?  ":branch.id, " : ":branch,")  
+				    + " id_exporter = " + ((cert.getExporter() != null) ?  ":exporter.id, " : ":exporter, ") 
+				    + " id_producer = " + ((cert.getProducer() != null) ?  ":producer.id, " : ":producer, ")
+				    + " id_expert =  " + ((cert.getExpert() != null) ?  ":expert.id, " : ":expert, ")
+				    + " id_signer = " + ((cert.getSigner() != null) ?  ":signer.id " : ":signer ")
+				    + " WHERE certnumber = :certnumber "; 
 
+		LOG.info(sql);
+		
+		SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);
+		int row = template.update(sql, parameters);
+
+		if (row > 0) {
+			
+			template.getJdbcOperations().update(
+					"delete from FS_PRODUCT where id_fscert = ?",
+					cert.getId());
+			
+			sql = "insert into fs_product(id_fscert, numerator, tovar) values ("
+					+ cert.getId() + ", :numerator, :tovar)";
+			if (cert.getProducts() != null && cert.getProducts().size() > 0) {
+				SqlParameterSource[] batch = SqlParameterSourceUtils
+						.createBatch(cert.getProducts().toArray());
+				int[] updateCounts = template.batchUpdate(sql, batch);
+				LOG.info("Added products : " +  updateCounts.toString());
+			}
+			
+			template.getJdbcOperations().update(
+					"delete from FS_BLANK where id_fscert = ?",
+					cert.getId());
+			
+			sql = "insert into fs_blank(id_fscert, page, blanknumber) values ("
+					+ cert.getId() + ", :page, :blanknumber)";
+			
+			if (cert.getBlanks() != null && cert.getBlanks().size() > 0) {
+				SqlParameterSource[] batch = SqlParameterSourceUtils
+						.createBatch(cert.getBlanks().toArray());
+				int[] updateCounts = template.batchUpdate(sql, batch);
+				LOG.info("Added blank : " +  updateCounts.toString());
+			}
+ 
+		} else {
+			throw new RuntimeException("Сертификат номер " + cert.getCertnumber() + " не был изменен.");
+		}
+		return cert;
+	}
+
+	//--------------------------------------------------------------------	
+	//            GET ID certificate by its numbers 
+	//--------------------------------------------------------------------
+	private long getFSCertificateIdByNUmber(String certnumber) {
+		String sql = "select id from FS_CERT WHERE CERTNUMBER = ?";
+		
+		long id = template.getJdbcOperations().queryForObject(
+                sql, new Object[] { certnumber }, Long.class);
+		
+		return id;
+	}
+
+	//--------------------------------------------------------------------
+	//--------------------------------------------------------------------	
+	//            GET list of certificate numbers in CVS string format 
+	//--------------------------------------------------------------------
+	//--------------------------------------------------------------------
+	public String getFSCertificates(FSFilter filter) throws Exception {
+		String ret = null;
+		
+		String sql = "select certnumber, dateissue from fs_cert " 
+		              + filter.getWhereLikeClause() 
+		              + " ORDER by dateissue";
+		
+		LOG.info(sql);
+		SqlParameterSource parameters = new BeanPropertySqlParameterSource(filter);		
+		
+		return this.template.query(sql,	parameters, 
+				new FSLightCertificateRowMapper());
+	}
+
+	//--------------------------------------------------------------------
+	//--------------------------------------------------------------------	
+	//            DELETE FS certificate by certificate number 
+	//--------------------------------------------------------------------
+	//--------------------------------------------------------------------
+	public String deleteFSCertificate(String certnumber, String branch_id) throws Exception {
+        String rnumber = null;
+        long id = getFSCertificateIdByNUmber(certnumber);
+        
+    	template.getJdbcOperations().update(
+				"delete from FS_PRODUCT where id_fscert = ?",
+				Long.valueOf(id));
+	
+    	template.getJdbcOperations().update(
+				"delete from FS_BLANK where id_fscert = ?",
+				Long.valueOf(id));
+    	
+    	template.getJdbcOperations().update(
+				"delete from FS_CERT where id = ?",
+				Long.valueOf(id));
+    	
+    	rnumber = certnumber;
+    	LOG.info("Certificate " + rnumber + " deleted !");
+		return rnumber;
+	}
 
 	
 }
