@@ -1,4 +1,4 @@
-﻿package cci.util.cert;
+﻿package cci.service.utils;
 
 import org.springframework.stereotype.Component;
 import java.io.File;
