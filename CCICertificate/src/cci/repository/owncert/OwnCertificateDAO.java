@@ -3,13 +3,13 @@ package cci.repository.owncert;
 import cci.model.owncert.OwnCertificate;
 import cci.model.owncert.OwnCertificateHeaders;
 import cci.model.owncert.OwnCertificates;
-import cci.web.controller.owncert.Filter;
+import cci.web.controller.owncert.OwnFilter;
 
 public interface OwnCertificateDAO {
 
-	OwnCertificates getOwnCertificates(Filter filter, boolean b);
+	OwnCertificates getOwnCertificates(OwnFilter filter, boolean b);
 
-	OwnCertificateHeaders getOwnCertificateHeaders(Filter filter, boolean b);
+	OwnCertificateHeaders getOwnCertificateHeaders(OwnFilter filter, boolean b);
 
 	OwnCertificate findOwnCertificateByID(int id) throws Exception ;
 

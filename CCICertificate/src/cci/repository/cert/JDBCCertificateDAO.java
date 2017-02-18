@@ -32,21 +32,21 @@ import cci.model.cert.Certificate;
 import cci.model.cert.Country;
 import cci.model.cert.Product;
 import cci.model.cert.Report;
-import cci.model.cert.fscert.FSBlank;
-import cci.model.cert.fscert.Branch;
-import cci.model.cert.fscert.Expert;
-import cci.model.cert.fscert.Exporter;
-import cci.model.cert.fscert.FSCertificate;
-import cci.model.cert.fscert.FSProduct;
-import cci.model.cert.fscert.Producer;
-import cci.model.cert.fscert.Signer;
+import cci.model.fscert.Branch;
+import cci.model.fscert.Expert;
+import cci.model.fscert.Exporter;
+import cci.model.fscert.FSBlank;
+import cci.model.fscert.FSCertificate;
+import cci.model.fscert.FSProduct;
+import cci.model.fscert.Producer;
+import cci.model.fscert.Signer;
 import cci.repository.SQLBuilder;
 import cci.service.SQLQueryUnit;
-import cci.web.controller.cert.CertificateDeleteException;
-import cci.web.controller.cert.CertificateGetErrorException;
-import cci.web.controller.cert.CertificateUpdateErorrException;
 import cci.web.controller.cert.CertFilter;
-import cci.web.controller.cert.NotFoundCertificateException;
+import cci.web.controller.cert.exception.CertificateDeleteException;
+import cci.web.controller.cert.exception.CertificateGetException;
+import cci.web.controller.cert.exception.CertificateUpdateException;
+import cci.web.controller.cert.exception.NotFoundCertificateException;
 import cci.web.controller.fscert.FSFilter;
 
 @Repository
@@ -606,7 +606,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	  
       if (rcert != null) {
     	if (otd_id == null || rcert.getOtd_id() != Integer.parseInt(otd_id)) {
-    		throw( new CertificateUpdateErorrException("Пользователь не авторизирован для обновления сертификата."));	
+    		throw( new CertificateUpdateException("Пользователь не авторизирован для обновления сертификата."));	
     	}
     	
 		cert.setCert_id(rcert.getCert_id());
@@ -717,7 +717,7 @@ public class JDBCCertificateDAO implements CertificateDAO {
  					                                + " не найден в базе."));
 		} catch (Exception ex) {
 			LOG.info("Certificate loading error: " + ex.getMessage());
-			throw (new CertificateGetErrorException(ex.getMessage()));
+			throw (new CertificateGetException(ex.getMessage()));
 		}
 		
 		LOG.info("Certificate loading: " + (System.currentTimeMillis() - start));

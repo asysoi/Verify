@@ -1,4 +1,4 @@
-package cci.model.cert.fscert;
+package cci.model.fscert;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;

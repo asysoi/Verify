@@ -1,4 +1,4 @@
-package cci.web.controller.cert;
+package cci.web.controller.cert.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

@@ -6,12 +6,12 @@ import java.text.SimpleDateFormat;
 
 import org.springframework.jdbc.core.RowMapper;
 
-import cci.model.cert.fscert.Branch;
-import cci.model.cert.fscert.Expert;
-import cci.model.cert.fscert.Exporter;
-import cci.model.cert.fscert.FSCertificate;
-import cci.model.cert.fscert.Producer;
-import cci.model.cert.fscert.Signer;
+import cci.model.fscert.Branch;
+import cci.model.fscert.Expert;
+import cci.model.fscert.Exporter;
+import cci.model.fscert.FSCertificate;
+import cci.model.fscert.Producer;
+import cci.model.fscert.Signer;
 
 public class FSCertificateRowMapper implements RowMapper {
 

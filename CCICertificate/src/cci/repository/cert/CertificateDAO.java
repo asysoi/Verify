@@ -6,7 +6,7 @@ import java.util.Map;
 import cci.model.cert.Certificate;
 import cci.model.cert.CertificateList;
 import cci.model.cert.Report;
-import cci.model.cert.fscert.FSCertificate;
+import cci.model.fscert.FSCertificate;
 import cci.repository.SQLBuilder;
 import cci.web.controller.cert.CertFilter;
 import cci.web.controller.fscert.FSFilter;

@@ -20,13 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import cci.model.cert.fscert.FSCertificate;
+
+import cci.model.fscert.FSCertificate;
 import cci.service.cert.CertService;
 import cci.service.fscert.FSCertificateRestFulService;
-import cci.web.controller.cert.AddCertificateException;
-import cci.web.controller.cert.CertificateDeleteException;
-import cci.web.controller.cert.CertificateUpdateErorrException;
-import cci.web.controller.cert.NotFoundCertificateException;
+import cci.web.controller.cert.exception.AddCertificateException;
+import cci.web.controller.cert.exception.CertificateDeleteException;
+import cci.web.controller.cert.exception.CertificateUpdateException;
+import cci.web.controller.cert.exception.NotFoundCertificateException;
 
 @Controller
 @RestController
@@ -158,15 +159,15 @@ public class FSCertificateRestFulController {
 		 try {
 			 String otd_id = getOtd_idByRole(aut);
 			 if (otd_id == null) {
-				 throw(new CertificateUpdateErorrException("Изменить сертификат может только авторизированный представитель отделения."));
+				 throw(new CertificateUpdateException("Изменить сертификат может только авторизированный представитель отделения."));
 			 }
    		     rcert = fsservice.updateFSCertificate(cert, otd_id);
   		 } catch (EmptyResultDataAccessException ex) {
-			throw(new CertificateUpdateErorrException("Серитификат номер " + cert.getCertnumber() + " не найден в базе."));
+			throw(new CertificateUpdateException("Серитификат номер " + cert.getCertnumber() + " не найден в базе."));
 		 } catch (NotFoundCertificateException ex) {
-			 throw(new CertificateUpdateErorrException("Cертификат номер " + cert.getCertnumber() + " не найден в базе. Обновление невозможно. Добавьте сертификат в базу."));
+			 throw(new CertificateUpdateException("Cертификат номер " + cert.getCertnumber() + " не найден в базе. Обновление невозможно. Добавьте сертификат в базу."));
 		 } catch (Exception ex) {
-			 throw(new CertificateUpdateErorrException("Ошибка обновления сертификата номер " + cert.getCertnumber() + ": " + ex.toString()));
+			 throw(new CertificateUpdateException("Ошибка обновления сертификата номер " + cert.getCertnumber() + ": " + ex.toString()));
 		 }
 		 
 		 if (rcert == null) {

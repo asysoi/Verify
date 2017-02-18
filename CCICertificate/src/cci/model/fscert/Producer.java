@@ -1,14 +1,14 @@
-package cci.model.cert.fscert;
+package cci.model.fscert;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import org.springframework.stereotype.Component;
-import cci.model.Employee;
+import cci.model.Client;
 
 //------------------------------------------
-// Signer extends branch employee for XML needs         
+// Producer extends common class Client         
 //------------------------------------------
-@XmlRootElement(name = "signer")
+@XmlRootElement(name = "producer")
 @Component
-public class Signer extends Employee {
+public class Producer extends Client {
 
 }

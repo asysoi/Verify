@@ -1,14 +1,14 @@
-package cci.web.controller.cert;
+package cci.web.controller.cert.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus (HttpStatus.BAD_REQUEST)
-public class CertificateGetErrorException extends RuntimeException {
+public class CertificateGetException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-	public  CertificateGetErrorException(String err) {
+	public  CertificateGetException(String err) {
 		   super(err);
     }
 }

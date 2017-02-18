@@ -1,6 +1,6 @@
 package cci.web.controller.owncert;
 
-public class Filter {
+public class OwnFilter {
 
 	public final String DATE_FORMAT = "%d.%m.%Y";
 
@@ -9,7 +9,7 @@ public class Filter {
 	private String from = null;
 	private String to = null;
 
-	public Filter(String number, String blanknumber, String from, String to) {
+	public OwnFilter(String number, String blanknumber, String from, String to) {
 		super();
 		this.number = number;
 		this.blanknumber = blanknumber;

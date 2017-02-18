@@ -13,7 +13,7 @@ import cci.model.cert.Certificate;
 import cci.model.cert.Report;
 import cci.repository.SQLBuilder;
 import cci.repository.cert.CertificateDAO;
-import cci.util.cert.XMLService;
+import cci.service.utils.XMLService;
 
 @Component
 public class CertService {
@@ -24,9 +24,7 @@ public class CertService {
 
 	@Autowired
 	XMLService xmlService;
-
-	@Autowired
-	FTPReader ftpReader;
+	
 	private Map<String, String> departments = null;
 	private List<String> forms = null;
 	private Map<String, String> countries = null;
@@ -125,21 +123,6 @@ public class CertService {
 
 	}
 
-	// ------------------------------------------------------------------------------
-	//
-	// ------------------------------------------------------------------------------
-	public void uploadCertificateFromFTP() {
-		Locale.setDefault(new Locale("en", "en"));
-
-		try {
-			Long start = System.currentTimeMillis();
-			ftpReader.load(certificateDAO);
-			LOG.debug("Duration: " + (System.currentTimeMillis() - start));
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
-	}
 
 	// ------------------------------------------------------------------------------
 	//

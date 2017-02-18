@@ -21,9 +21,10 @@ import cci.model.owncert.OwnCertificates;
 import cci.model.owncert.Product;
 import cci.model.owncert.Company;
 import cci.model.owncert.Products;
-import cci.web.controller.owncert.Filter;
-import cci.web.controller.owncert.NotFoundCertificateException;
-import cci.web.controller.owncert.CertificateUpdatErorrException;;
+import cci.web.controller.owncert.OwnFilter;
+import cci.web.controller.cert.exception.NotFoundCertificateException;
+import cci.web.controller.cert.exception.CertificateDeleteException;
+import cci.web.controller.cert.exception.CertificateUpdateException;
 
 @Repository
 public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
@@ -40,7 +41,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 	// ---------------------------------------------------------------
 	// Получить список сертификатов
 	// ---------------------------------------------------------------
-	public OwnCertificates getOwnCertificates(Filter filter, boolean isLike) {
+	public OwnCertificates getOwnCertificates(OwnFilter filter, boolean isLike) {
 
 		String sql = "select * from certview "
 				+ (isLike ? filter.getWhereLikeClause() : filter
@@ -59,7 +60,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 	// ---------------------------------------------------------------
 	// Получить список заголовков сертификатов
 	// ---------------------------------------------------------------
-	public OwnCertificateHeaders getOwnCertificateHeaders(Filter filter, boolean isLike) {
+	public OwnCertificateHeaders getOwnCertificateHeaders(OwnFilter filter, boolean isLike) {
 
 		String sql = "select number, blanknumber from certview "
 				+ (isLike ? filter.getWhereLikeClause() : filter
@@ -180,7 +181,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 	// ---------------------------------------------------------------
 	public OwnCertificate updateOwnCertificate(OwnCertificate cert) {
 
-		Filter filter = new Filter(cert.getNumber(), cert.getBlanknumber(),
+		OwnFilter filter = new OwnFilter(cert.getNumber(), cert.getBlanknumber(),
 				null, null);
 		List<OwnCertificate> bufcerts = null;
 
@@ -198,7 +199,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 		if (bufcerts != null && bufcerts.size() == 1) {
 
 			if (cert.equals(bufcerts.get(0))) {
-				throw new CertificateUpdatErorrException("Обновляемый сертификат не изменился. Обновление в базе данных не выполнялось.");
+				throw new CertificateDeleteException("Обновляемый сертификат не изменился. Обновление в базе данных не выполнялось.");
 				
 			} else {
 
@@ -242,13 +243,13 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 					}
 				} catch (Exception ex) {
 					LOG.info(ex.getMessage());
-					throw (new NotFoundCertificateException(
+					throw (new cci.web.controller.cert.exception.NotFoundCertificateException(
 							"Ошибка обновления найденного cертификата в базе данных: "
 									+ ex.getMessage()));
 				}
 			}
 		} else {
-			throw (new NotFoundCertificateException(
+			throw (new cci.web.controller.cert.exception.NotFoundCertificateException(
 					"Сертификат для обновления в базе данных не найден."));
 		}
 

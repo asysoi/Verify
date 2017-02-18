@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import cci.model.cert.fscert.FSCertificate;
+import cci.model.fscert.FSCertificate;
 import cci.repository.cert.CertificateDAO;
 import cci.web.controller.fscert.FSFilter;
 

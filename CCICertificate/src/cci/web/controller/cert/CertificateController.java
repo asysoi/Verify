@@ -42,10 +42,10 @@ import cci.web.controller.ViewManager;
 
 @Controller
 @SessionAttributes({ "certfilter", "vmanager" })
-public class CertController {
+public class CertificateController {
 	
 	//public static Logger LOG=LogManager.getLogger(CertController.class);
-	private static final Logger LOG=Logger.getLogger(CertController.class);
+	private static final Logger LOG=Logger.getLogger(CertificateController.class);
 	
 	@Autowired
 	private CertService certService;

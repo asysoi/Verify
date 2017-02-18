@@ -1,4 +1,4 @@
-package cci.model.cert.fscert;
+package cci.model.fscert;
 
 import java.util.List;
 

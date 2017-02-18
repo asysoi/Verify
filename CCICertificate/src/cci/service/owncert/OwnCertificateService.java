@@ -11,7 +11,7 @@ import cci.model.owncert.OwnCertificateHeaders;
 import cci.model.owncert.OwnCertificates;
 import cci.repository.owncert.JDBCOwnCertificateDAO;
 import cci.repository.owncert.OwnCertificateDAO;
-import cci.web.controller.owncert.Filter;
+import cci.web.controller.owncert.OwnFilter;
 
 
 @Service
@@ -20,11 +20,11 @@ public class OwnCertificateService {
 	@Autowired
 	private OwnCertificateDAO owncertificateDAO;
 
-	public OwnCertificates getOwnCertificates(Filter filter) {
+	public OwnCertificates getOwnCertificates(OwnFilter filter) {
 	   return owncertificateDAO.getOwnCertificates(filter, true);
 	}
 	
-	public OwnCertificateHeaders getOwnCertificateHeaders(Filter filter) {
+	public OwnCertificateHeaders getOwnCertificateHeaders(OwnFilter filter) {
 		   return owncertificateDAO.getOwnCertificateHeaders(filter, true);
 	}
 	

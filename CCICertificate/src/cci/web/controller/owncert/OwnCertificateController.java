@@ -28,14 +28,14 @@ import cci.service.Filter;
 import cci.service.cert.CertFilter;
 import cci.service.owncert.OwnCertificateService;
 import cci.web.controller.ViewManager;
-import cci.web.controller.cert.CertController;
+import cci.web.controller.cert.CertificateController;
 
 
 @Controller
 @SessionAttributes({ "owncertfilter", "ownmanager" })
 public class OwnCertificateController {
 	
-	private static final Logger LOG=Logger.getLogger(CertController.class);
+	private static final Logger LOG=Logger.getLogger(CertificateController.class);
 	
 	@Autowired
 	private OwnCertificateService ownCertService;

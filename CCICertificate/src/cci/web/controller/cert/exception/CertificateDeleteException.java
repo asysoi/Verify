@@ -1,4 +1,4 @@
-package cci.web.controller.cert;
+package cci.web.controller.cert.exception;
 
 public class CertificateDeleteException extends RuntimeException {
 	   private static final long serialVersionUID = 1L;

@@ -1,7 +1,5 @@
 ﻿package cci.web.controller;
 
-//import org.apache.logging.log4j.LogManager; 
-//import org.apache.logging.log4j.Logger;
 import org.apache.log4j.Logger;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -20,7 +18,6 @@ import cci.web.controller.User;
 @Controller
 public class MainController {
 	
-	//private static final Logger LOG=LogManager.getLogger(MainController.class);
 	private static final Logger LOG=Logger.getLogger(MainController.class);
 	
 	@RequestMapping(value = "/main.do", method = RequestMethod.GET)
@@ -33,11 +30,6 @@ public class MainController {
 	public String defaultpage(ModelMap model, Authentication aut) {
         LOG.debug("User " + aut.getName() + " logged" ); 
 		return "welcome";
-	}
-
-	@RequestMapping(value = "/window.do", method = RequestMethod.GET)
-	public String dasboard(ModelMap model) {
-		return "window";
 	}
 
 	@RequestMapping(value = "/help.do", method = RequestMethod.GET)
@@ -65,13 +57,5 @@ public class MainController {
 			return "login";
 		}
 	}
-
-	@RequestMapping(value = "/print.do")
-	@ResponseBody
-	public String print(
-			@RequestParam(value = "name", required = false) String name,
-			Model model) {
-
-		return "<html>Hello <p> Name: " + name + "</p></html>";
-	}
+	
 }
