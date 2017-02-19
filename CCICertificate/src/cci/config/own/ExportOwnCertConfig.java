@@ -1,4 +1,4 @@
-﻿package cci.config.cert;
+package cci.config.own;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -9,35 +9,24 @@ import org.apache.commons.lang.ArrayUtils;
 
 import cci.config.ExportConfig;
 
-public class ExportCertConfig implements ExportConfig {
+public class ExportOwnCertConfig implements ExportConfig {
 	
-	private String[] headernames = new String[] { "Форма сертификата", "УНП",
-			"Грузоотправитель.Полное наименование", "Грузоотправитель.Краткое наименование",
-			"Адрес грузоотправителя", "Грузополучатель", "Адрес грузополучателя",
-			"Дата сертификата", "Номер сертификата", "Эксперт", "Номер бланка",
-			"Заявитель", "Средства транспорта", "Маршрут",
-			"Для служебных отметок", "Страна выдачи", "Страна предоставления",
-			"Статус", "Количество доп.листов", "УНП Экспортера",
-			"Экспортер. Полное наименование",
-			"Экспортер. Сокращенное наименование",
-			"Адрес экспортера", "Импортер",
-			"Адрес импортера", "Флаг СЭЗ", "СЭЗ", "Флаг резидента СЭЗ", "Страна происхождения",
-			"Отделение БелТПП", "Номер замененного сертификата",
-			"Статус замененного сертификата", "Свод товарных позиций"};
+	private String[] headernames = new String[] { "Номер сертификата",	"Номер бланка",	"Производитель",
+		"Адрес производителя","Регитсрационный номер производителя","Адрес производства","Обособленные подразделения",
+		"Коды дополнительных бланков",	"Действителен с ","Действителен до ","Эксперт","Удостоверен",
+		"Должность удостоверителя","Дата сертификата","Дата загрузки",
+		"Отделение","Адрес отделения"};
 
-	private String[] fieldnames = new String[] { "FORMS", "UNN", "KONTRP",
-			"KONTRS", "ADRESS", "POLUCHAT", "ADRESSPOL", "DATACERT",
-			"NOMERCERT", "EXPERT", "NBLANKA", "RUKOVOD", "TRANSPORT",
-			"MARSHRUT", "OTMETKA", "STRANAV", "STRANAPR", "STATUS",
-			"KOLDOPLIST", "UNNEXP", "EXPP", "EXPS", "EXPADRESS",
-			"IMPORTER", "ADRESSIMP", "FLSEZ", "SEZ", "FLSEZREZ",
-			"STRANAP", "OTD_NAME", "PARENTNUMBER", "PARENTSTATUS", "TOVAR"};
+	private String[] fieldnames = new String[] { "number",	"blanknumber",	"customername",
+			"customeraddress","customerunp","factoryaddress","branches","additionallists","datestart",
+			"dateexpire","expert","signer","signerjob","datecert","dateload","beltppname",
+			"beltppaddress"};
 	
 	private Map<String, String> headermap = new LinkedHashMap<String, String>();
 	private String[] headers = new String[]{};
 	private String[] fields = new String[]{};
 	
-	public ExportCertConfig() {
+	public ExportOwnCertConfig() {
 		 
 		for(int i = 0; i < fieldnames.length; i++) {
 			headermap.put(fieldnames[i], headernames[i]);

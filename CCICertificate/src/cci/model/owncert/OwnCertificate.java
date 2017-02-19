@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @XmlRootElement
 @JsonIgnoreProperties(ignoreUnknown = true)
-@XmlType(propOrder = { "id", "type", "number", "blanknumber", "beltpp", "customername", "customeraddress", "customerunp", 
+@XmlType(propOrder = {"type", "number", "blanknumber", "beltpp", "customername", "customeraddress", "customerunp", 
 		"factoryaddress", "branches", "additionallists", "datestart", "dateexpire", "expert", "signer", "signerjob", "datecert", "dateload", "products" })
 public class OwnCertificate {
     
@@ -38,7 +38,7 @@ public class OwnCertificate {
 	private String dateload;	
 	private List<Product> products;
 
-	
+	@XmlTransient
 	public int getId() {
 		return id;
 	}

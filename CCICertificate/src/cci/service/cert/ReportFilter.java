@@ -21,7 +21,6 @@ import cci.web.controller.cert.ViewCertCondition;
 @Scope("session")
 public class ReportFilter extends Filter {
 	
-	// public static Logger LOG=LogManager.getLogger(CertFilter.class);
 	public static Logger LOG=Logger.getLogger(CertFilter.class);
 	
 	public ReportFilter() {

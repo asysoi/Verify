@@ -3,6 +3,8 @@
 import org.apache.log4j.Logger;
 
 public class FilterCondition {
+	private String dateconvertfunction = "TO_DATE";
+	private String dateconvertformat= "'DD.MM.YY'";
 	private String field;
 	private String operator;
 	private String value;
@@ -13,6 +15,22 @@ public class FilterCondition {
 	
 	private static final Logger LOG = Logger.getLogger(FilterCondition.class);
 
+	public String getDateconvertfunction() {
+		return dateconvertfunction;
+	}
+
+	public void setDateconvertfunction(String dateconvertfunction) {
+		this.dateconvertfunction = dateconvertfunction;
+	}
+
+	public String getDateconvertformat() {
+		return dateconvertformat;
+	}
+
+	public void setDateconvertformat(String dateconvertformat) {
+		this.dateconvertformat = dateconvertformat;
+	}
+	
 	public FieldType getType() {
 		return type;
 	}
@@ -86,7 +104,7 @@ public class FilterCondition {
 			if (isPREPARED) {
 				if (type == FieldType.DATE) {
 					wherefilter = " " + dbfield + " " + operator
-							+ " TO_DATE( :" + field + ", 'DD.MM.YY')";
+							+ dateconvertfunction + "( :" + field + "," +  dateconvertformat + ")";
 					sunit.addParam(field, value);
 
 				} else if (type == FieldType.NUMBER) {
@@ -98,6 +116,11 @@ public class FilterCondition {
 				} else if (type == FieldType.TEXTSTRING) {
 					wherefilter = " contains(" + dbfield + ",  :" + field + ") > 0 ";
 					sunit.addParam(field, placeHolderReplace(value, '*', '%', false));
+				} else if (type == FieldType.STRING){
+					wherefilter = " UPPER(" + dbfield + ") " + operator + " :"
+							+ field;
+					sunit.addParam(field, (operator.equals("like") ? "%" + value.toUpperCase() + "%" : value.toUpperCase()));
+					
 				} else {
 					wherefilter = " UPPER(" + dbfield + ") " + operator + " :"
 							+ field;
@@ -107,16 +130,23 @@ public class FilterCondition {
 			} else {
 
 				if (type == FieldType.DATE) {
-					wherefilter = " " + dbfield + " " + operator + " TO_DATE('"
-							+ value + "', 'DD.MM.YY')";
+					wherefilter = " " + dbfield + " " + operator + dateconvertfunction +"('"
+							+ value + "'," + dateconvertformat + ")";
 				} else if (type == FieldType.NUMBER) {
 					wherefilter = " " + dbfield + " " + operator + " " + value
 							+ " ";
 				} else if (type == FieldType.TEXT) {
-					wherefilter = " contains(" + dbfield + ", '" + placeHolderReplace(value, '*', '%', true)
-							+ "') > 0 ";
+					wherefilter = " contains(" + dbfield + ", '" + placeHolderReplace(value, '*', '%', true) + "') > 0 ";
 				} else if (type == FieldType.TEXTSTRING) {
-					wherefilter = " contains(" + dbfield + ", '" + placeHolderReplace(value, '*', '%', true)	+ "') > 0 ";
+					wherefilter = " contains(" + dbfield + ", '" + placeHolderReplace(value, '*', '%', true) + "') > 0 ";
+				} else if (type == FieldType.STRING){
+					wherefilter = " UPPER("
+							+ dbfield
+							+ ") "
+							+ operator
+							+ " "
+							+ (operator.equals("like") ? "'%" + value.toUpperCase() + "%' " : 
+														 "'" + value.toUpperCase() + "' ");
 				} else {
 					wherefilter = " UPPER("
 							+ dbfield

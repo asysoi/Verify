@@ -16,10 +16,9 @@ import cci.model.cert.Company;
 import cci.model.purchase.Product;
 import cci.model.purchase.Purchase;
 import cci.repository.SQLBuilder;
-import cci.repository.SequenceDAO;
 import cci.web.controller.purchase.ViewPurchase;
 
-public class JDBCPurchaseDAO extends SequenceDAO implements PurchaseDAO {
+public class JDBCPurchaseDAO implements PurchaseDAO {
 
 	private NamedParameterJdbcTemplate template;
 

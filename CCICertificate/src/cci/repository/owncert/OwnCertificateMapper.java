@@ -11,7 +11,7 @@ import cci.model.owncert.OwnCertificate;
 
 
 
-public class OwnCertificateMapper implements RowMapper {
+public class OwnCertificateMapper<T> implements RowMapper<OwnCertificate> {
 	
 	 public OwnCertificate mapRow(ResultSet resultSet, int row) throws SQLException {
 		    OwnCertificate cert = new OwnCertificate();
