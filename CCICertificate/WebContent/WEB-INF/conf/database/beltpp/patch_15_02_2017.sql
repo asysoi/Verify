@@ -536,3 +536,8 @@ left join c_country g on a.codecountrytarget = g.code;
 
   ALTER TABLE "BELTPP"."FS_BLANK" ADD CONSTRAINT "FS_BLANK_FK1" FOREIGN KEY ("ID_FSCERT")
 	  REFERENCES "BELTPP"."FS_CERT" ("ID") ENABLE;
+
+	  
+	  
+	  
+	  
