@@ -44,7 +44,7 @@ public class FSCertificateRestFulController {
 	/* -----------------------------------------
 	 * Get list of header's certificates by filter
 	 * ----------------------------------------- */
-	@RequestMapping(value = "fscerts.do", method = RequestMethod.GET, headers = "Accept=application/csv")
+	@RequestMapping(value = "rfscerts.do", method = RequestMethod.GET, headers = "Accept=application/csv")
 	@ResponseStatus (HttpStatus.OK)
 	public ResponseEntity<String> getCertificates(
 			@RequestParam(value = "certnumber", required = false) String number,
@@ -97,7 +97,7 @@ public class FSCertificateRestFulController {
 	/* -----------------------------
 	 * Add new certificate from XML body
 	 * ----------------------------- */
-	@RequestMapping(value = "fscert.do", method = RequestMethod.POST, headers = "Accept=application/xml")
+	@RequestMapping(value = "rfscert.do", method = RequestMethod.POST, headers = "Accept=application/xml")
 	@ResponseStatus(HttpStatus.CREATED)
 	public FSCertificate addXMLCertificate(@RequestBody FSCertificate certificate,
 			Authentication aut) {
@@ -127,7 +127,7 @@ public class FSCertificateRestFulController {
 	/* -----------------------------
 	 * Get certificate by number
 	 * ----------------------------- */
-	@RequestMapping(value = "fscert.do", method = RequestMethod.GET, headers = "Accept=application/xml")
+	@RequestMapping(value = "rfscert.do", method = RequestMethod.GET, headers = "Accept=application/xml")
 	@ResponseStatus(HttpStatus.OK)
 	public FSCertificate getCertificateByNumber(
 			@RequestParam(value = "certnumber", required = true) String number,
@@ -152,7 +152,7 @@ public class FSCertificateRestFulController {
 	/* -----------------------------
 	 * Update certificate
 	 * ----------------------------- */
-	@RequestMapping(value = "fscert.do", method = RequestMethod.PUT, headers = "Accept=application/xml")
+	@RequestMapping(value = "rfscert.do", method = RequestMethod.PUT, headers = "Accept=application/xml")
 	@ResponseStatus(HttpStatus.OK)
 	public FSCertificate updateCertificate(@RequestBody FSCertificate cert, Authentication aut) {
 		 FSCertificate rcert = null;
@@ -179,7 +179,7 @@ public class FSCertificateRestFulController {
 	/* -----------------------------
 	 * Delete certificate
 	 * ----------------------------- */
-	@RequestMapping(value = "fscert.do", method = RequestMethod.DELETE, headers = "Accept=application/txt")
+	@RequestMapping(value = "rfscert.do", method = RequestMethod.DELETE, headers = "Accept=application/txt")
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	public ResponseEntity<String> deleteCertificate(
 			@RequestParam(value = "certnumber", required = true) String number,

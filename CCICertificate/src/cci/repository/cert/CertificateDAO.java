@@ -64,16 +64,4 @@ public interface CertificateDAO {
 
 	public long getNextValuePool(String seq_name, int poolsize) throws Exception;
 	
-
-	// --------------  FS Certificate methods-------------------------------
-	public FSCertificate saveFSCertificate(FSCertificate certificate) throws Exception;
-
-	public FSCertificate updateFSCertificate(FSCertificate certificate, String branch_id) throws Exception;
-
-	public FSCertificate getFSCertificateByNumber(String number) throws Exception;
-
-	public String getFSCertificates(FSFilter filter) throws Exception;
-
-	public String deleteFSCertificate(String certnumber, String branch_id) throws Exception;
-	
 }

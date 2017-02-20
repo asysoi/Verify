@@ -1,4 +1,4 @@
-package cci.repository.cert;
+package cci.repository.fscert;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,7 +17,7 @@ public class FSLightCertificateRowMapper implements ResultSetExtractor {
 		while (rs.next()) {
 			str.append(rs.getString("certnumber"));
 			str.append(";");
-			str.append((new SimpleDateFormat("MM.dd.yyyy")).format(rs.getDate("dateissue")));
+			str.append((new SimpleDateFormat("MM.dd.yyyy")).format(rs.getDate("datecert")));
 			str.append("\n");
 		}
 		return str.toString();

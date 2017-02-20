@@ -26,7 +26,7 @@
       <bean class="cci.web.controller.LogInterceptor"/>
     </mvc:interceptors>
      
-    <!--  View resolver config --> 
+    <!--  View resolver config JSP standard resolver --> 
 	<bean id="viewResolver"
 	      class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
           <property name="prefix">
@@ -37,7 +37,7 @@
           </property>
     </bean>
 
-	<!-- TRANSACTION --> 
+	<!-- TRANSACTION support transactional handling --> 
 	<!-- Enable Annotation based Declarative Transaction Management -->
 	<tx:annotation-driven proxy-target-class="true"
 		transaction-manager="transactionManager" />
@@ -69,24 +69,28 @@
 		</list>
 		</property>
 	</bean>
-
-	     
+    <!--  REST Controller handling configuration -->
+    
     <!--  DataBase configuration -->     
     <bean id="certificateDAO" class="cci.repository.cert.JDBCCertificateDAO">
         <property name="dataSource" ref="dataSource"/>
     </bean>
-    
-     <!--  database configuration -->     
+
     <bean id="purchaseDAO" class="cci.repository.purchase.JDBCPurchaseDAO">
         <property name="dataSource" ref="dataSource"/>
     </bean>
+    
+    <bean id="fscertificateDAO" class="cci.repository.fscert.JDBCFSCertificateDAO">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    
    
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
         <!-- property name="url" value="jdbc:oracle:thin:@//192.168.0.46:1521/pdborcl"/ -->
-        <!-- property name="url" value="jdbc:oracle:thin:@//localhost:1521/pdborcl"/ -->
+        <property name="url" value="jdbc:oracle:thin:@//localhost:1521/pdborcl"/>
         <!-- property name="url" value="jdbc:oracle:thin:@//dev.cci.by:1521/pdborcl"/ --> 
-        <property name="url" value="jdbc:oracle:thin:@//192.168.1.28:1521/pdborcl"/>     
+        <!-- property name="url" value="jdbc:oracle:thin:@//192.168.1.28:1521/pdborcl"/ -->     
         <property name="username" value="beltpp"/>
         <property name="password" value="123456"/>
     </bean>

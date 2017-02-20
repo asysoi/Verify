@@ -18,7 +18,7 @@ import cci.model.cert.Product;
 
 @XmlRootElement(name = "fscertificate")
 @Component
-@XmlType(propOrder = {"certnumber","parentnumber", "dateissue", "dateexpiry", "confirmation", "declaration", 
+@XmlType(propOrder = {"certnumber","parentnumber", "dateissue", "dateexpiry", "confirmation", "declaration", "codecountrytarget", "datecert", "listscount", 
 		"branch", "exporter", "producer", "expert", "signer", "products", "blanks"})
 
 public class FSCertificate {
@@ -29,6 +29,9 @@ public class FSCertificate {
 	private String dateexpiry;
 	private String confirmation;
 	private String declaration;
+	private String codecountrytarget;
+	private String listscount;
+	private String datecert;
 	private Branch branch;
 	private Exporter exporter;
 	private Producer producer;
@@ -94,6 +97,30 @@ public class FSCertificate {
 		this.declaration = declaration;
 	}
 
+	public String getCodecountrytarget() {
+		return codecountrytarget;
+	}
+
+	public void setCodecountrytarget(String codecountrytarget) {
+		this.codecountrytarget = codecountrytarget;
+	}
+
+	public String getListscount() {
+		return listscount;
+	}
+
+	public void setListscount(String listscount) {
+		this.listscount = listscount;
+	}
+
+	public String getDatecert() {
+		return datecert;
+	}
+
+	public void setDatecert(String datecert) {
+		this.datecert = datecert;
+	}
+	
 	public Branch getBranch() {
 		return branch;
 	}
@@ -154,15 +181,11 @@ public class FSCertificate {
 		this.blanks = blanks;
 	}
 
-	@Override
 	public String toString() {
-		return "FSCertificate [id=" + id + ", certnumber=" + certnumber + ", parentnumber=" + parentnumber + ", dateissue="
-				+ dateissue + ", dateexpiry=" + dateexpiry + ", confirmation=" + confirmation + ", declaration="
-				+ declaration + ", branch=" + branch + ", exporter=" + exporter + ", producer=" + producer + ", expert="
-				+ expert + ", signer=" + signer + ", products=" + products + ", blanks=" + blanks + "]";
+		return "FSCertificate [id=" + id + ", certnumber=" + certnumber + ", parentnumber=" + parentnumber
+				+ ", dateissue=" + dateissue + ", dateexpiry=" + dateexpiry + ", confirmation=" + confirmation
+				+ ", declaration=" + declaration + ", codecountrytarget=" + codecountrytarget + ", datecert=" + datecert
+				+ ", branch=" + branch + ", exporter=" + exporter + ", producer=" + producer + ", expert=" + expert
+				+ ", signer=" + signer + ", products=" + products + ", blanks=" + blanks + "]";
 	}
-
-	
-	
-	
 }

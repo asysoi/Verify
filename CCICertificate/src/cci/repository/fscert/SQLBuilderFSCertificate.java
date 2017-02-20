@@ -1,4 +1,4 @@
-package cci.repository.owncert;
+package cci.repository.fscert;
 
 import org.apache.log4j.Logger;
 
@@ -6,8 +6,8 @@ import cci.repository.SQLBuilder;
 import cci.service.FilterCondition;
 import cci.service.SQLQueryUnit;
 
-public class SQLBuilderOwnCertificate extends SQLBuilder {
-	private static final Logger LOG = Logger.getLogger(SQLBuilderOwnCertificate.class);
+public class SQLBuilderFSCertificate extends SQLBuilder {
+private static final Logger LOG = Logger.getLogger(SQLBuilderFSCertificate.class);
 	
 	public SQLQueryUnit getSQLUnitWhereClause() {
 		SQLQueryUnit qunit = new SQLQueryUnit();
@@ -24,9 +24,9 @@ public class SQLBuilderOwnCertificate extends SQLBuilder {
 						&& !condition.getValue().trim().isEmpty() && !condition.getOperator().trim().isEmpty()) {
 					
 					SQLQueryUnit unit = condition.getWhereClause(); 
-					if (key.equals("PRODUCTNAME") || key.equals("PRODUCTCODE") ) {
+					if (key.equals("TOVAR") ) {
 					     where += (where.trim().isEmpty() ? "" : " AND ") + 
-									"id in ( SELECT id_certificate FROM ownproduct where " +
+									"id in ( SELECT id_fscert FROM fs_product where " +
 									unit.getClause() + 
 									") ";
 					} else {
@@ -45,3 +45,4 @@ public class SQLBuilderOwnCertificate extends SQLBuilder {
 		return qunit;
 	}
 }
+
