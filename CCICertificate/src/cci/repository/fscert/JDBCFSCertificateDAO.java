@@ -322,64 +322,63 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 						new Object[] { number},
 						new FSCertificateRowMapper());
 			
-	        // If certificate found fill in  all linked objects 
-			if (rcert != null) {
-			    if (rcert.getBranch() != null ) {
-			    	Branch branch = template.getJdbcOperations().queryForObject(
-							"select * from fs_branch where id = ? ",
-							new Object[] {rcert.getBranch().getId() },
-							new BeanPropertyRowMapper<Branch>(Branch.class));
-			    	rcert.setBranch(branch);
-			    }
-			    
-			    if (rcert.getExporter() != null ) {
-			    	Exporter obj = template.getJdbcOperations().queryForObject(
-							"select * from cci_client where id = ? ",
-							new Object[] {rcert.getExporter().getId() },
-							new BeanPropertyRowMapper<Exporter>(Exporter.class));
-			    	rcert.setExporter(obj);
-			    }
-			    
-			    if (rcert.getProducer() != null ) {
-			    	Producer obj = template.getJdbcOperations().queryForObject(
-							"select * from cci_client where id = ? ",
-							new Object[] {rcert.getProducer().getId() },
-							new BeanPropertyRowMapper<Producer>(Producer.class));
-			    	rcert.setProducer(obj);
-			    }
-			    
-			    if (rcert.getExpert() != null ) {
-			    	Expert obj = template.getJdbcOperations().queryForObject(
-							"select * from cci_employee where id = ? ",
-							new Object[] {rcert.getExpert().getId() },
-							new BeanPropertyRowMapper<Expert>(Expert.class));
-			    	rcert.setExpert(obj);
-			    }
-
-			    if (rcert.getSigner() != null ) {
-			    	Signer obj = template.getJdbcOperations().queryForObject(
-							"select * from cci_employee where id = ? ",
-							new Object[] {rcert.getSigner().getId() },
-							new BeanPropertyRowMapper<Signer>(Signer.class));
-			    	rcert.setSigner(obj);
-			    }
-			    
-			    if (rcert != null) {
-					sql = "select * from FS_PRODUCT WHERE ID_FSCERT = ?  ORDER BY id";
-					rcert.setProducts(template.getJdbcOperations().query(sql,
-							new Object[] { rcert.getId() },
-							new BeanPropertyRowMapper<FSProduct>(FSProduct.class)));
-					
-					sql = "select * from FS_BLANK WHERE ID_FSCERT = ?  ORDER BY id";
-					rcert.setBlanks(template.getJdbcOperations().query(sql,
-							new Object[] { rcert.getId() },
-							new BeanPropertyRowMapper<FSBlank>(FSBlank.class)));
-			    }
-			}
-			
+	        loadAllLinkedObject(rcert);
+	        
 			return rcert;
 		}
 		
+		// ------------------------------------------------------------------
+		//   Fill in FS certificate
+		// ------------------------------------------------------------------
+		private void loadAllLinkedObject(FSCertificate rcert) throws Exception {
+
+		  if (rcert != null) {
+			if (rcert.getBranch() != null) {
+				Branch branch = template.getJdbcOperations().queryForObject("select * from fs_branch where id = ? ",
+						new Object[] { rcert.getBranch().getId() }, new BeanPropertyRowMapper<Branch>(Branch.class));
+				rcert.setBranch(branch);
+			}
+
+			if (rcert.getExporter() != null) {
+				Exporter obj = template.getJdbcOperations().queryForObject("select * from cci_client where id = ? ",
+						new Object[] { rcert.getExporter().getId() },
+						new BeanPropertyRowMapper<Exporter>(Exporter.class));
+				rcert.setExporter(obj);
+			}
+
+			if (rcert.getProducer() != null) {
+				Producer obj = template.getJdbcOperations().queryForObject("select * from cci_client where id = ? ",
+						new Object[] { rcert.getProducer().getId() },
+						new BeanPropertyRowMapper<Producer>(Producer.class));
+				rcert.setProducer(obj);
+			}
+
+			if (rcert.getExpert() != null) {
+				Expert obj = template.getJdbcOperations().queryForObject("select * from cci_employee where id = ? ",
+						new Object[] { rcert.getExpert().getId() }, new BeanPropertyRowMapper<Expert>(Expert.class));
+				rcert.setExpert(obj);
+			}
+
+			if (rcert.getSigner() != null) {
+				Signer obj = template.getJdbcOperations().queryForObject("select * from cci_employee where id = ? ",
+						new Object[] { rcert.getSigner().getId() }, new BeanPropertyRowMapper<Signer>(Signer.class));
+				rcert.setSigner(obj);
+			}
+
+			if (rcert != null) {
+				String sql = "select * from FS_PRODUCT WHERE ID_FSCERT = ?  ORDER BY id";
+				rcert.setProducts(template.getJdbcOperations().query(sql, new Object[] { rcert.getId() },
+						new BeanPropertyRowMapper<FSProduct>(FSProduct.class)));
+
+				sql = "select * from FS_BLANK WHERE ID_FSCERT = ?  ORDER BY id";
+				rcert.setBlanks(template.getJdbcOperations().query(sql, new Object[] { rcert.getId() },
+						new BeanPropertyRowMapper<FSBlank>(FSBlank.class)));
+			}
+		  }
+
+		}
+
+
 		//--------------------------------------------------------------------
 		//--------------------------------------------------------------------	
 		//            UPDATE FS Certificate WEB or REST service 
@@ -548,11 +547,11 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 	        	sql = "select " + flist 
 					+ " from fscertview where id in "
 					+ " (select  a.id "
-					+ " from (SELECT id FROM (select id from fscertview "
+					+ " from (SELECT id FROM (select id from fs_cert "
 					+  filter.getClause()
 					+ " ORDER by " +  orderby + " " + order + ", id " + order  
 					+ ") where rownum <= :highposition "    
-					+ ") a left join (SELECT id FROM (select id from fscertview "
+					+ ") a left join (SELECT id FROM (select id from fs_cert "
 					+  filter.getClause()
 					+ " ORDER by " +  orderby + " " + order + ", id " + order
 					+ ") where rownum <= :lowposition "   
@@ -608,7 +607,7 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 		// ---------------------------------------------------------------
 		// поиск единственного сертификата по id -> PS
 		// ---------------------------------------------------------------
-		public FSCertificate findFSCertificateByID(int id) {
+		public FSCertificate findFSCertificateByID(int id) throws Exception {
 			String sql = "select * from certview WHERE id = ?";
 			
 			FSCertificate cert = template.getJdbcOperations()
@@ -617,12 +616,10 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 							new Object[] { id },
 							new BeanPropertyRowMapper<FSCertificate>(FSCertificate.class));
 			
-			sql = "select * from ownproduct WHERE id_certificate = ? ORDER BY id";
-			
-			cert.setProducts(template.getJdbcOperations().query(sql,
-					new Object[] { cert.getId() },
-					new BeanPropertyRowMapper<FSProduct>(FSProduct.class)));
+	        loadAllLinkedObject(cert);
+	        
 			return cert;
+
 		}
 
 	

@@ -123,7 +123,7 @@ public class FSCertificateController {
 		
 		long step3 = System.currentTimeMillis();
 		
-		List<FSCertificate> certs = fsCertService.readCertificatesPage(
+		List<ViewFSCertificate> certs = fsCertService.readCertificatesPage(
 				vmanager.getOrdnames(),
 				vmanager.getPage(), vmanager.getPagesize(), vmanager.getPagecount(),  
 				vmanager.getOrderby(), vmanager.getOrder(), builder);

@@ -40,11 +40,11 @@ public class FSCertificateService {
 	// ------------------------------------------------------------------------------
 	//  This method returns a current page of the certificate's list
 	// ------------------------------------------------------------------------------
-	public List<FSCertificate> readCertificatesPage(String[] fields, int page, int pagesize, int pagecount,
+	public List<ViewFSCertificate> readCertificatesPage(String[] fields, int page, int pagesize, int pagecount,
 			String orderby, String order, SQLBuilder builder) {
 		Locale.setDefault(new Locale("en", "en"));
 
-		List<FSCertificate> certs = null;
+		List<ViewFSCertificate> certs = null;
 
 		try {
 			certs = fscertificateDAO.findViewNextPage(fields, page, pagesize, pagecount, orderby,

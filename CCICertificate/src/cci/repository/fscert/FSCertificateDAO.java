@@ -30,6 +30,6 @@ public interface FSCertificateDAO {
 
 	public List<ViewFSCertificate> getCertificates(String[] fields, String orderby, String order, SQLBuilder builder);
 
-	public FSCertificate findFSCertificateByID(int id);
+	public FSCertificate findFSCertificateByID(int id) throws Exception;
 	
 }
