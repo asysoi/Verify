@@ -30,7 +30,7 @@ public class FSCertificate {
 	private String confirmation;
 	private String declaration;
 	private String codecountrytarget;
-	private String listscount;
+	private Integer listscount;
 	private String datecert;
 	private Branch branch;
 	private Exporter exporter;
@@ -39,6 +39,15 @@ public class FSCertificate {
 	private Signer signer;
 	private List<FSProduct> products;
 	private List<FSBlank> blanks;
+	private int otd_id;
+	
+	@XmlTransient
+	public int getOtd_id() {
+		return otd_id;
+	}
+	public void setOtd_id(int otd_id) {
+		this.otd_id = otd_id;
+	}
 
 	@XmlTransient
 	public long getId() {
@@ -105,11 +114,11 @@ public class FSCertificate {
 		this.codecountrytarget = codecountrytarget;
 	}
 
-	public String getListscount() {
+	public Integer getListscount() {
 		return listscount;
 	}
 
-	public void setListscount(String listscount) {
+	public void setListscount(Integer listscount) {
 		this.listscount = listscount;
 	}
 
@@ -184,8 +193,10 @@ public class FSCertificate {
 	public String toString() {
 		return "FSCertificate [id=" + id + ", certnumber=" + certnumber + ", parentnumber=" + parentnumber
 				+ ", dateissue=" + dateissue + ", dateexpiry=" + dateexpiry + ", confirmation=" + confirmation
-				+ ", declaration=" + declaration + ", codecountrytarget=" + codecountrytarget + ", datecert=" + datecert
-				+ ", branch=" + branch + ", exporter=" + exporter + ", producer=" + producer + ", expert=" + expert
-				+ ", signer=" + signer + ", products=" + products + ", blanks=" + blanks + "]";
+				+ ", declaration=" + declaration + ", codecountrytarget=" + codecountrytarget + ", listscount="
+				+ listscount + ", datecert=" + datecert + ", branch=" + branch + ", exporter=" + exporter
+				+ ", producer=" + producer + ", expert=" + expert + ", signer=" + signer + ", products=" + products
+				+ ", blanks=" + blanks + ", otd_id=" + otd_id + "]";
 	}
-}
+
+	}

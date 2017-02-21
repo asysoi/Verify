@@ -48,7 +48,127 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 		this.template = new NamedParameterJdbcTemplate(dataSource);
 		ds = dataSource;
 	}
+
 	
+	// ------------------------------------------------------------------------------------------------------
+	// ------------------------------------------------------------------------------------------------------		
+	//
+	//   WEB  WEB  WEB WEB WEB WEB  
+	//
+	// ------------------------------------------------------------------------------------------------------
+	// ------------------------------------------------------------------------------------------------------
+	// ------------------------------------------------------------------------------
+	//  This method returns count of pages in certificate list 
+	// ------------------------------------------------------------------------------
+	public int getViewPageCount(SQLBuilder builder) {
+        SQLQueryUnit qunit = builder.getSQLUnitWhereClause();     
+		String sql = "SELECT count(*) FROM FSCERTVIEW "
+				+ qunit.getClause();
+	
+		Integer count = this.template.queryForObject(sql, qunit.getParams(), Integer.class);
+		
+		LOG.info(sql);
+		return count.intValue();
+	}
+
+
+	// ------------------------------------------------------------------------------
+	//  This method returns a current page of the certificate's list
+	// ------------------------------------------------------------------------------
+	public List<ViewFSCertificate> findViewNextPage(String[] dbfields, int page, int pagesize, int pagecount,
+			String orderby, String order, SQLBuilder builder) {
+		String sql; 
+		String flist = "id";
+		
+		for (String field : dbfields) {
+		    flist += ", " + field;  	
+		}
+		flist = "*"; // all fields are needed 
+		
+        SQLQueryUnit filter = builder.getSQLUnitWhereClause();
+        Map<String, Object> params = filter.getParams();
+        LOG.info("SQLQueryUnit : " + filter);
+        
+        
+        if (pagesize < pagecount) {
+        	sql = "select " + flist 
+				+ " from fscertview where id in "
+				+ " (select  a.id "
+				+ " from (SELECT id FROM (select id from fs_cert "
+				+  filter.getClause()
+				+ " ORDER by " +  orderby + " " + order + ", id " + order  
+				+ ") where rownum <= :highposition "    
+				+ ") a left join (SELECT id FROM (select id from fs_cert "
+				+  filter.getClause()
+				+ " ORDER by " +  orderby + " " + order + ", id " + order
+				+ ") where rownum <= :lowposition "   
+				+ ") b on a.id = b.id where b.id is null)" 
+				+ " ORDER by " +  orderby + " " + order + ", id " + order;
+       		params.put("highposition", Integer.valueOf(page * pagesize));
+    		params.put("lowposition", Integer.valueOf((page - 1) * pagesize));
+        } else {
+        	sql = "select " + flist 
+    				+ " from fscertview "
+    				+  filter.getClause()
+    				+ " ORDER by " +  orderby + " " + order + ", id " + order;  
+        }
+		
+		LOG.info("Next page : " + sql);
+		
+		if (pagecount != 0) {
+		    return this.template.query(sql,	params, 
+				new BeanPropertyRowMapper<ViewFSCertificate>(ViewFSCertificate.class));
+		} else {
+			return null;
+		}
+	
+	}
+
+	// ------------------------------------------------------------------------------
+	//  This method returns list of FS certificates for export to Excel file
+	// ------------------------------------------------------------------------------
+	public List<ViewFSCertificate> getCertificates(String[] dbfields, String orderby, String order,
+			SQLBuilder builder) {
+		
+		String flist = "id";
+		
+		for (String field : dbfields) {
+		    flist += ", " + field;  	
+		} 
+		
+		flist = "*";
+		
+		SQLQueryUnit filter = builder.getSQLUnitWhereClause();
+    	Map<String, Object> params = filter.getParams();
+
+		String sql = " SELECT " + flist + " FROM FSCERTVIEW " 
+				+ filter.getClause() + " ORDER BY " +  orderby + " " + order;
+
+		LOG.info("Get certificates: " + sql);
+		
+		return this.template.query(sql,	params, 
+				new BeanPropertyRowMapper<ViewFSCertificate>(ViewFSCertificate.class));
+	}
+
+
+	// ---------------------------------------------------------------
+	// поиск единственного сертификата по id -> PS
+	// ---------------------------------------------------------------
+	public FSCertificate findFSCertificateByID(int id) throws Exception {
+		String sql = "select * from fs_cert WHERE id = ?";
+		
+		FSCertificate cert = template.getJdbcOperations()
+				.queryForObject(
+						sql,
+						new Object[] { id },
+						new BeanPropertyRowMapper<FSCertificate>(FSCertificate.class));
+		
+        loadAllLinkedObject(cert);
+        
+		return cert;
+
+	}
+
 	
 	// ------------------------------------------------------------------------------------------------------
 	//
@@ -76,11 +196,11 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 			LOG.info(cert);
 			
 			String sql = "insert into fs_cert(certnumber, parentnumber, dateissue, dateexpiry, confirmation, declaration, codecountrytarget, "
-					    + " datecert, id_branch, id_exporter, id_producer, id_expert, id_signer) "
+					    + " datecert, listscount, otd_id, id_branch, id_exporter, id_producer, id_expert, id_signer) "
 					    + " values (:certnumber, :parentnumber, "
 					    + " TO_DATE(:dateissue,'DD.MM.YY'), "
 					    + " TO_DATE(:dateexpiry,'DD.MM.YY'), "
-					    + " :confirmation, :declaration, :codecountrytarget,  :datecert "
+					    + " :confirmation, :declaration, :codecountrytarget,  TO_DATE(:datecert,'DD.MM.YY'), :listscount, :otd_id "
 					    + ((cert.getBranch() != null) ?  ", :branch.id " : ", :branch")
 					    + ((cert.getExporter() != null) ?  ", :exporter.id " : ", :exporter ")
 					    + ((cert.getProducer() != null) ?  ", :producer.id " : ", :producer ")
@@ -397,7 +517,7 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 			
 			String sql = "UPDATE fs_cert SET parentnumber = :parentnumber, dateissue = TO_DATE(:dateissue,'DD.MM.YY'), "
 					    + " dateexpiry = TO_DATE(:dateexpiry,'DD.MM.YY'), confirmation = :confirmation, " 
-					    + " declaration = :declaration, codecountrytarget=:codecountrytarget, datecert=:datecert,"
+					    + " declaration = :declaration, codecountrytarget=:codecountrytarget, datecert=TO_DATE(:datecert,'DD.MM.YY'), listscount = :listscount, "
 					    + " id_branch = " + ((cert.getBranch() != null) ?  ":branch.id, " : ":branch,")  
 					    + " id_exporter = " + ((cert.getExporter() != null) ?  ":exporter.id, " : ":exporter, ") 
 					    + " id_producer = " + ((cert.getProducer() != null) ?  ":producer.id, " : ":producer, ")
@@ -465,9 +585,9 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 		public String getFSCertificates(FSFilter filter) throws Exception {
 			String ret = null;
 			
-			String sql = "select certnumber, dateissue from fs_cert " 
+			String sql = "select certnumber, datecert from fs_cert " 
 			              + filter.getWhereLikeClause() 
-			              + " ORDER by dateissue";
+			              + " ORDER by datecert";
 			
 			LOG.info(sql);
 			SqlParameterSource parameters = new BeanPropertySqlParameterSource(filter);		
@@ -505,122 +625,6 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 
 
 
-		// ------------------------------------------------------------------------------------------------------
-		// ------------------------------------------------------------------------------------------------------		
-		//
-		//   WEB  WEB  WEB WEB WEB WEB  
-		//
-		// ------------------------------------------------------------------------------------------------------
-		// ------------------------------------------------------------------------------------------------------
-		// ------------------------------------------------------------------------------
-		//  This method returns count of pages in certificate list 
-		// ------------------------------------------------------------------------------
-		public int getViewPageCount(SQLBuilder builder) {
-	        SQLQueryUnit qunit = builder.getSQLUnitWhereClause();     
-			String sql = "SELECT count(*) FROM FSCERTVIEW "
-					+ qunit.getClause();
-		
-			Integer count = this.template.queryForObject(sql, qunit.getParams(), Integer.class);
-			
-			LOG.info(sql);
-			return count.intValue();
-		}
-
-
-		// ------------------------------------------------------------------------------
-		//  This method returns a current page of the certificate's list
-		// ------------------------------------------------------------------------------
-		public List<ViewFSCertificate> findViewNextPage(String[] dbfields, int page, int pagesize, int pagecount,
-				String orderby, String order, SQLBuilder builder) {
-			String sql; 
-			String flist = "id";
-			
-			for (String field : dbfields) {
-			    flist += ", " + field;  	
-			}
-	        SQLQueryUnit filter = builder.getSQLUnitWhereClause();
-	        Map<String, Object> params = filter.getParams();
-	        LOG.info("SQLQueryUnit : " + filter);
-	        
-	        
-	        if (pagesize < pagecount) {
-	        	sql = "select " + flist 
-					+ " from fscertview where id in "
-					+ " (select  a.id "
-					+ " from (SELECT id FROM (select id from fs_cert "
-					+  filter.getClause()
-					+ " ORDER by " +  orderby + " " + order + ", id " + order  
-					+ ") where rownum <= :highposition "    
-					+ ") a left join (SELECT id FROM (select id from fs_cert "
-					+  filter.getClause()
-					+ " ORDER by " +  orderby + " " + order + ", id " + order
-					+ ") where rownum <= :lowposition "   
-					+ ") b on a.id = b.id where b.id is null)" 
-					+ " ORDER by " +  orderby + " " + order + ", cert_id " + order;
-	       		params.put("highposition", Integer.valueOf(page * pagesize));
-	    		params.put("lowposition", Integer.valueOf((page - 1) * pagesize));
-	        } else {
-	        	sql = "select " + flist 
-	    				+ " from fscertview "
-	    				+  filter.getClause()
-	    				+ " ORDER by " +  orderby + " " + order + ", id " + order;  
-	        }
-			
-			LOG.info("Next page : " + sql);
-			
-			if (pagecount != 0) {
-			    return this.template.query(sql,	params, 
-					new BeanPropertyRowMapper<ViewFSCertificate>(ViewFSCertificate.class));
-			} else {
-				return null;
-			}
-		
-		}
-
-		// ------------------------------------------------------------------------------
-		//  This method returns list of FS certificates for export to Excel file
-		// ------------------------------------------------------------------------------
-		public List<ViewFSCertificate> getCertificates(String[] dbfields, String orderby, String order,
-				SQLBuilder builder) {
-			
-			String flist = "id";
-			
-			for (String field : dbfields) {
-			    flist += ", " + field;  	
-			} 
-			
-			flist = "*";
-			
-			SQLQueryUnit filter = builder.getSQLUnitWhereClause();
-	    	Map<String, Object> params = filter.getParams();
-
-			String sql = " SELECT " + flist + " FROM FSCERTVIEW " 
-					+ filter.getClause() + " ORDER BY " +  orderby + " " + order;
-
-			LOG.info("Get certificates: " + sql);
-			
-			return this.template.query(sql,	params, 
-					new BeanPropertyRowMapper<ViewFSCertificate>(ViewFSCertificate.class));
-		}
-
-
-		// ---------------------------------------------------------------
-		// поиск единственного сертификата по id -> PS
-		// ---------------------------------------------------------------
-		public FSCertificate findFSCertificateByID(int id) throws Exception {
-			String sql = "select * from certview WHERE id = ?";
-			
-			FSCertificate cert = template.getJdbcOperations()
-					.queryForObject(
-							sql,
-							new Object[] { id },
-							new BeanPropertyRowMapper<FSCertificate>(FSCertificate.class));
-			
-	        loadAllLinkedObject(cert);
-	        
-			return cert;
-
-		}
 
 	
 }

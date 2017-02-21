@@ -214,8 +214,8 @@ DROP TABLE "FS_BRANCH";
 --------------------------------------------------------
 
 	  
-CREATE OR REPLACE FORCE EDITIONABLE VIEW "FSCERTVIEW" ("ID", "CERTNUMBER", "PARENTNUMBER", "DATEISSUE", "DATEEXPIRY", "CONFIRMATION", "DECLARATION", "ID_BRANCH", "ID_EXPORTER", "ID_PRODUCER", "ID_EXPERT", "ID_SIGNER", "DATECERT", "CODECOUNTRYTARGET", "OTD_ID", "LISTCOUNT", "BRANCHNAME", "BRANCHADDRESS", "EXPORTERNAME", "EXPORTERADDRESS", "PRODUCERNAME", "PRODUCERADDRESS", "EXPERTNAME", "SIGNERNAME", "JOB", "COUNTRYNAME") AS 
-  select a."ID",a."CERTNUMBER",a."PARENTNUMBER",a."DATEISSUE",a."DATEEXPIRY",a."CONFIRMATION",a."DECLARATION",a."ID_BRANCH",a."ID_EXPORTER",a."ID_PRODUCER",a."ID_EXPERT",a."ID_SIGNER",a."DATECERT",a."CODECOUNTRYTARGET",a."OTD_ID",a."LISTCOUNT", b.name branchname, b.cindex||', '||b.city||', '||b.line||', '||b.building||', '||b.office branchaddress,  
+CREATE OR REPLACE FORCE EDITIONABLE VIEW "FSCERTVIEW" ("ID", "CERTNUMBER", "PARENTNUMBER", "DATEISSUE", "DATEEXPIRY", "CONFIRMATION", "DECLARATION", "ID_BRANCH", "ID_EXPORTER", "ID_PRODUCER", "ID_EXPERT", "ID_SIGNER", "DATECERT", "CODECOUNTRYTARGET", "OTD_ID", "LISTSCOUNT", "BRANCHNAME", "BRANCHADDRESS", "EXPORTERNAME", "EXPORTERADDRESS", "PRODUCERNAME", "PRODUCERADDRESS", "EXPERTNAME", "SIGNERNAME", "JOB", "COUNTRYNAME") AS 
+  select a."ID",a."CERTNUMBER",a."PARENTNUMBER",a."DATEISSUE",a."DATEEXPIRY",a."CONFIRMATION",a."DECLARATION",a."ID_BRANCH",a."ID_EXPORTER",a."ID_PRODUCER",a."ID_EXPERT",a."ID_SIGNER",a."DATECERT",a."CODECOUNTRYTARGET",a."OTD_ID",a."LISTSCOUNT", b.name branchname, b.cindex||', '||b.city||', '||b.line||', '||b.building||', '||b.office branchaddress,  
 c.name exportername, c.cindex||', '||c.city||', '||c.line||', '||c.building||', '||c.office exporteraddress,  
 c.name producername, d.cindex||', '||d.city||', '||d.line||', '||d.building||', '||d.office produceraddress,  
 e.name expertname, f.name signername, f.job job, g.name countryname

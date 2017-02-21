@@ -312,7 +312,6 @@ public class OwnCertificateController {
 	
 	public String gocert(@RequestParam(value = "certid", required = true) Integer certid,
 				ModelMap model) {
-		    System.out.println("OWNCERT.DO");
 			try {
 			     OwnCertificate cert = ownCertService.getOwnCertificateById(certid);
 			     model.addAttribute("owncert", cert);

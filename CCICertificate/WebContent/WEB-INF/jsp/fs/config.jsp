@@ -9,7 +9,7 @@
 <script>
     $(document).ready(function(){
 	      $( "#content li" ).each(function(index, element) {
-	        if (index < 9) {
+	        if (index < 11) {
 	           $("#col1").append("<li>" + $(element).html() + "</li>");
 	        } else {
 	           $("#col2").append("<li>" + $(element).html() + "</li>");
@@ -22,7 +22,7 @@
 	});
 </script>
 
-<h4>Список экспортируемых реквизитов сертификата собственного производства</h4>
+<h4>Список экспортируемых реквизитов сертификата свободной продажи</h4>
 <form:form id="config" method="POST" commandName="downloadconfig">
 <div id="content" style="display: none">
 	<ul>

@@ -15,9 +15,8 @@ public class ViewFSCertificate extends FSCertificate {
     private String job;
     private String productname;
     private String blanknumber;
-    private String otd_id;
-    private String datefrom;
-    private String dateto;
+    private String datecertfrom;
+    private String datecertto;
     private String countfrom;
     private String countto;
     
@@ -81,23 +80,18 @@ public class ViewFSCertificate extends FSCertificate {
 	public void setBlanknumber(String blanknumber) {
 		this.blanknumber = blanknumber;
 	}
-	public String getOtd_id() {
-		return otd_id;
+	
+	public String getDatecertfrom() {
+		return datecertfrom;
 	}
-	public void setOtd_id(String otd_id) {
-		this.otd_id = otd_id;
+	public void setDatecertfrom(String datecertfrom) {
+		this.datecertfrom = datecertfrom;
 	}
-	public String getDatefrom() {
-		return datefrom;
+	public String getDatecertto() {
+		return datecertto;
 	}
-	public void setDatefrom(String datefrom) {
-		this.datefrom = datefrom;
-	}
-	public String getDateto() {
-		return dateto;
-	}
-	public void setDateto(String dateto) {
-		this.dateto = dateto;
+	public void setDatecertto(String datecertto) {
+		this.datecertto = datecertto;
 	}
 	public String getCountfrom() {
 		return countfrom;

@@ -2,6 +2,8 @@ package cci.web.controller.fscert;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -143,7 +145,7 @@ public class FSCertificateController {
 		model.addAttribute("timeduration", 
 				" " + (step3 - step2) + " + " + (step4 - step3) + " = " + (System.currentTimeMillis() - start));
 
-		return "fs/listfscertificates";
+		return "listfscertificates";
 	}
 	
 	//------------------------------------------------------------------------------
@@ -154,7 +156,7 @@ public class FSCertificateController {
 		vmanager.setHnames(new String[] {"Номер Сертификата",  "Экспортер", 
 				"Производитель", "Дата", "Кол. лист"});
 		vmanager.setOrdnames(new String[] { "certnumber", "exportername", "producername",
-				"datecert", "listcount"});
+				"datecert", "listscount"});
 		vmanager.setWidths(new int[] { 10, 35, 35, 10, 10,  });
 		model.addAttribute("fsmanager", vmanager);
 
@@ -279,7 +281,7 @@ public class FSCertificateController {
 				response.setHeader("Content-Disposition",
 						"attachment; filename=certificates.xlsx");
 				(new XSLWriter()).makeWorkbook(certs,
-						vmanager.getDownloadconfig().getHeaders(),
+						vmanager.getDownloadconfig().getHeaders(),  
 						vmanager.getDownloadconfig().getFields(), "Лист Сертификатов").write(
 						response.getOutputStream());
 				response.flushBuffer();
@@ -296,7 +298,6 @@ public class FSCertificateController {
 	@RequestMapping(value = "fscert.do",  method = RequestMethod.GET)
 	public String gocert(@RequestParam(value = "certid", required = true) Integer certid,
 				ModelMap model) {
-		    System.out.println("OWNCERT.DO");
 			try {
 			     FSCertificate cert = fsCertService.getFSCertificateById(certid);
 			     model.addAttribute("fscert", cert);
@@ -306,6 +307,19 @@ public class FSCertificateController {
 				return "error";
 			}
 			return "fs/viewfscertificate";
+	}
+	
+	// ---------------------------------------------------------------------------------------
+	// Fillin lists 
+	// ---------------------------------------------------------------------------------------
+	@ModelAttribute("countries")
+	public Map<String, String> populateCompanyList() {
+		return certService.getCountriesList();
+	}
+
+	@ModelAttribute("departments")
+	public Map<String, String> populateDepartmentssList() {
+		return certService.getDepartmentsList();
 	}
 	
 }

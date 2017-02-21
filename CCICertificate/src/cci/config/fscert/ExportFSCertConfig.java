@@ -19,7 +19,7 @@ public class ExportFSCertConfig implements ExportConfig {
 		"ФИО Эксперта","ФИО Подписи","Должность Подписи", "Список товаров", "Номера бланков"};
 
 	private String[] fieldnames = new String[] { "CERTNUMBER", "PARENTNUMBER", "DATEISSUE", "DATEEXPIRY","CONFIRMATION",
-			"DECLARATION","CODECOUNTRYTARGET","DATECERT","LISTCOUNT","BRANCHNAME","BRANCHADDRESS", 
+			"DECLARATION","CODECOUNTRYTARGET","DATECERT","LISTSCOUNT","BRANCHNAME","BRANCHADDRESS", 
 			"EXPORTERNAME", "EXPORTERADDRESS", "PRODUCERNAME", "PRODUCERADDRESS",
 			"EXPERTNAME", "SIGNERNAME", "JOB", "TOVARS", "BLANKNUMBERS"};
 	

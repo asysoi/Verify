@@ -105,7 +105,7 @@ public class FSCertificateRestFulController {
 		String otd_id = getOtd_idByRole(aut);
 		
 		if (otd_id != null) {
-			//certificate.setOtd_id(Integer.parseInt(otd_id));
+			certificate.setOtd_id(Integer.parseInt(otd_id));
 			
 			try {
 				fsservice.addCertificate(certificate);
