@@ -17,16 +17,39 @@ private static final Logger LOG = Logger.getLogger(SQLBuilderFSCertificate.class
             
 			for (String key : getFilter().getConditions().keySet()) {
 				FilterCondition condition = getFilter().getConditions().get(key);
-				condition.setDateconvertfunction("STR_TO_DATE");
-				condition.setDateconvertformat("'%d.%m.%Y'");
 				
 				if (condition.getValue() != null && condition.getOperator() != null 
 						&& !condition.getValue().trim().isEmpty() && !condition.getOperator().trim().isEmpty()) {
 					
 					SQLQueryUnit unit = condition.getWhereClause(); 
-					if (key.equals("TOVAR") ) {
+					if (key.equals("PRODUCTNAME") ) {
 					     where += (where.trim().isEmpty() ? "" : " AND ") + 
 									"id in ( SELECT id_fscert FROM fs_product where " +
+									unit.getClause() + 
+									") ";
+					} else if(key.equals("BLANKNUMBER")) {
+					     where += (where.trim().isEmpty() ? "" : " AND ") + 
+									"id in ( SELECT id_fscert FROM fs_blank where " +
+									unit.getClause() + 
+									") ";
+					} else if(key.equals("EXPORTERNAME")) {
+						     where += (where.trim().isEmpty() ? "" : " AND ") + 
+										"id_exporter in ( SELECT id FROM cci_client where " +
+										unit.getClause() + 
+										") ";
+					} else if(key.equals("PRODUCERNAME")) {
+					     where += (where.trim().isEmpty() ? "" : " AND ") + 
+									"id_producer in ( SELECT id FROM cci_client where " +
+									unit.getClause() + 
+									") ";
+					} else if(key.equals("EXPERTNAME")) {
+					     where += (where.trim().isEmpty() ? "" : " AND ") + 
+									"id_expert in ( SELECT id FROM cci_employee where " +
+									unit.getClause() + 
+									") ";
+					} else if(key.equals("SIGNERNAME")) {
+					     where += (where.trim().isEmpty() ? "" : " AND ") + 
+									"id_signer in ( SELECT id FROM cci_employee where " +
 									unit.getClause() + 
 									") ";
 					} else {
