@@ -25,15 +25,24 @@
 <h2 align="center">BELARUSIAN CHAMBER OF COMMERCE AND INDUSTRY</h2>
 
 <h3 align="center"><b>${fscert.branch.name}</b></h3>
-<h3 align="center"><b>${fscert.branch.address}</b></h3>
+<h3 align="center"><b>${fscert.branch.cindex}, ${fscert.branch.line}, ${fscert.branch.building}, ${fscert.branch.city}, Республика Беларусь</b></h3>
 
-<h1 align="center"><b>СЕРТИФИКАТ СВОБОДНОЙ ПРОДАЖИ</b></h1>
-<h1 align="center"><b>CERTIFICATE OF FREE SALE</b></h1>
-<p>№ <b>${fscert.certnumber}</b> <b>${fscert.datecert}</b></p>
+<h2 align="center"><b>СЕРТИФИКАТ СВОБОДНОЙ ПРОДАЖИ</b></h2>
+<h2 align="center"><b>CERTIFICATE OF FREE SALE</b></h2>
+<table style="width:100%">
+<tr>
+<td align="left"> №  ${fscert.certnumber}</td> 
+<td align="right">${fscert.datecert}</td>
+</tr>
 
-<p> Экспортер: <b>${fscert.exporter.name}, ${fscert.exporter.cindex}, ${fscert.exporter.line}, ${fscert.exporter.building}, 
-${fscert.exporter.city}, ${fscert.exporter.country}</b> </p> 
+<p>Выдан для представления в: ${fcert.codecountrytarget}</p>
 
+<table><tr><td>Экспортер:</td>
+<td> ${fscert.exporter.name}, ${fscert.exporter.cindex}, ${fscert.exporter.line}, ${fscert.exporter.building}, 
+${fscert.exporter.city}, Республика Беларусь  </td></tr>
+</table>
+ 
+<p></p>
 <p>${fscert.confirmation}</b> </p>
 
 <p>Перечень товаров:
@@ -52,7 +61,7 @@ ${fscert.exporter.city}, ${fscert.exporter.country}</b> </p>
 
 <p>Срок действия с  <b>${fscert.dateissue}</b>  по  <b>${fscert.dateexpiry}</b> включительно</p>
 <p></p>
- <p style="font-size: 120% "><b>${fscert.signer.name}  ${fscert.signer.job} </b></p>
+ <p style="font-size: 110% "><b>${fscert.signer.job} ________________   ${fscert.signer.name} </b></p>
  </td> <td></td>
 <tr> 
 <td width="5%" height="20px"></td>

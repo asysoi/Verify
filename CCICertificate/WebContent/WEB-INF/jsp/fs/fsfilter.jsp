@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+﻿<%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -22,10 +22,10 @@
 							"${viewfsfilter.viewcertificate.datecertfrom}");
 					$("#dateto").datepicker("setDate",
 							"${viewfsfilter.viewcertificate.datecertto}");
-					$("#otd_id")
-							.val('${viewfsfilter.viewcertificate.otd_id}');
-		  		    $("#codecountrytarget")
-							.val('${viewfilter.viewcertificate.codecountrytarget}');
+ 		  		        $("#codecountrytarget")
+							.val('${viewfsfilter.viewcertificate.codecountrytarget}');
+					$("#str_otd_id")
+							.val('${viewfsfilter.viewcertificate.str_otd_id}');
 				});
 
 	});
@@ -121,9 +121,9 @@
 			<tr>
 				<td>Отделение</td>
 				<td>
-				      <form:select path="viewcertificate.otd_id"
-						items="${departments}" id="otd_id" />
-					  <a href="javascript:clearelement($('#otd_id'));"> 
+				      <form:select path="viewcertificate.str_otd_id"
+						items="${departments}" id="str_otd_id" />
+					  <a href="javascript:clearelement($('#str_otd_id'));"> 
 					  <img src="resources/images/delete-16.png" alt="удл." />	</a>
 			</td>
 			</tr>

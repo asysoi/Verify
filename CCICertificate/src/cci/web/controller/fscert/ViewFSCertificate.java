@@ -19,6 +19,7 @@ public class ViewFSCertificate extends FSCertificate {
     private String datecertto;
     private String countfrom;
     private String countto;
+    private String str_otd_id;
     
 	public String getBranchname() {
 		return branchname;
@@ -110,5 +111,11 @@ public class ViewFSCertificate extends FSCertificate {
 	}
 	public void setJob(String job) {
 		this.job = job;
+	}
+	public String getStr_otd_id() {
+		return str_otd_id;
+	}
+	public void setStr_otd_id(String str_otd_id) {
+		this.str_otd_id = str_otd_id;
 	}
 }

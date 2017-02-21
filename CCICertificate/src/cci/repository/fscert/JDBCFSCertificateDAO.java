@@ -161,9 +161,9 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 				.queryForObject(
 						sql,
 						new Object[] { id },
-						new BeanPropertyRowMapper<FSCertificate>(FSCertificate.class));
+						new FSCertificateRowMapper());
 		
-        loadAllLinkedObject(cert);
+		loadAllLinkedObject(cert);
         
 		return cert;
 
@@ -490,7 +490,7 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 				rcert.setProducts(template.getJdbcOperations().query(sql, new Object[] { rcert.getId() },
 						new BeanPropertyRowMapper<FSProduct>(FSProduct.class)));
 
-				sql = "select * from FS_BLANK WHERE ID_FSCERT = ?  ORDER BY id";
+				sql = "select * from FS_BLANK WHERE ID_FSCERT = ?  ORDER BY PAGE";
 				rcert.setBlanks(template.getJdbcOperations().query(sql, new Object[] { rcert.getId() },
 						new BeanPropertyRowMapper<FSBlank>(FSBlank.class)));
 			}
