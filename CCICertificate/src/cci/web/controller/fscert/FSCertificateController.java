@@ -39,7 +39,7 @@ import cci.web.controller.cert.CertificateController;
 @SessionAttributes({ "fscertfilter", "fsmanager"})
 public class FSCertificateController {
 	
-	private static final Logger LOG=Logger.getLogger(CertificateController.class);
+	private static final Logger LOG=Logger.getLogger(FSCertificateController.class);
 	
 	@Autowired
 	private FSCertificateService fsCertService;
@@ -257,11 +257,11 @@ public class FSCertificateController {
 
 				Filter filter = vmanager.getFilter();
 				if (filter == null) {
-					if (model.get("certfilter") != null) {
-						filter = (Filter) model.get("certfilter");
+					if (model.get("fscertfilter") != null) {
+						filter = (Filter) model.get("fscertfilter");
 					} else {
-						filter = new CertFilter();
-						model.addAttribute("certfilter", filter);
+						filter = new FSFilter();
+						model.addAttribute("fscertfilter", filter);
 					}
 					vmanager.setFilter(filter);
 				}

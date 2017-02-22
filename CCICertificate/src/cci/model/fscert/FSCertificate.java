@@ -79,7 +79,7 @@ public class FSCertificate {
 	}
 
 	public void setDateissue(String dateissue) {
-		this.dateissue = dateissue;
+		this.dateissue = dateissue.replace("00:00:00.0", "");
 	}
 
 	public String getDateexpiry() {
@@ -87,7 +87,7 @@ public class FSCertificate {
 	}
 
 	public void setDateexpiry(String dateexpiry) {
-		this.dateexpiry = dateexpiry;
+		this.dateexpiry = dateexpiry.replace("00:00:00.0", "");
 	}
 
 	public String getConfirmation() {
@@ -127,7 +127,7 @@ public class FSCertificate {
 	}
 
 	public void setDatecert(String datecert) {
-		this.datecert = datecert;
+		this.datecert = datecert.replace("00:00:00.0", "");
 	}
 	
 	public Branch getBranch() {

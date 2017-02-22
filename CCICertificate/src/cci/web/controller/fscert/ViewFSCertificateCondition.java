@@ -23,9 +23,9 @@ public class ViewFSCertificateCondition {
     private String signername="like";
     private String productname="like";
     private String blanknumber="like";
-    private String otd_id="=";
-    private String datefrom=">=";
-    private String dateto="<=";
+    private String str_otd_id="=";
+    private String datecertfrom=">=";
+    private String datecertto="<=";
     private String countfrom=">=";
     private String countto="<=";
     
@@ -150,23 +150,23 @@ public class ViewFSCertificateCondition {
 	public void setBlanknumber(String blanknumber) {
 		this.blanknumber = blanknumber;
 	}
-	public String getOtd_id() {
-		return otd_id;
+	public String getStr_otd_id() {
+		return str_otd_id;
 	}
-	public void setOtd_id(String otd_id) {
-		this.otd_id = otd_id;
+	public void setStr_otd_id(String str_otd_id) {
+		this.str_otd_id = str_otd_id;
 	}
-	public String getDatefrom() {
-		return datefrom;
+	public String getDatecertfrom() {
+		return datecertfrom;
 	}
-	public void setDatefrom(String datefrom) {
-		this.datefrom = datefrom;
+	public void setDatecertfrom(String datecertfrom) {
+		this.datecertfrom = datecertfrom;
 	}
-	public String getDateto() {
-		return dateto;
+	public String getDatecertto() {
+		return datecertto;
 	}
-	public void setDateto(String dateto) {
-		this.dateto = dateto;
+	public void setDateto(String datecertto) {
+		this.datecertto = datecertto;
 	}
 	public String getCountfrom() {
 		return countfrom;

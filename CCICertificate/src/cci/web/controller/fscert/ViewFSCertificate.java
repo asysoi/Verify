@@ -20,7 +20,21 @@ public class ViewFSCertificate extends FSCertificate {
     private String countfrom;
     private String countto;
     private String str_otd_id;
-    
+    private String tovars;
+    private String blanknumbers;
+        
+    public String getBlanknumbers() {
+		return blanknumbers;
+	}
+	public void setBlanknumbers(String blanknumbers) {
+		this.blanknumbers = blanknumbers;
+	}
+	public String getTovars() {
+		return tovars;
+	}
+	public void setTovars(String tovars) {
+		this.tovars = tovars;
+	}
 	public String getBranchname() {
 		return branchname;
 	}

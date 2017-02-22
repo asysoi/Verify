@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
@@ -62,7 +63,7 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 	// ------------------------------------------------------------------------------
 	public int getViewPageCount(SQLBuilder builder) {
         SQLQueryUnit qunit = builder.getSQLUnitWhereClause();     
-		String sql = "SELECT count(*) FROM FSCERTVIEW "
+		String sql = "SELECT count(*) FROM FS_CERT "
 				+ qunit.getClause();
 	
 		Integer count = this.template.queryForObject(sql, qunit.getParams(), Integer.class);
@@ -141,10 +142,11 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 		SQLQueryUnit filter = builder.getSQLUnitWhereClause();
     	Map<String, Object> params = filter.getParams();
 
-		String sql = " SELECT " + flist + " FROM FSCERTVIEW " 
+		String sql = " SELECT " + flist + " FROM FSCERTVIEWEXPORT " 
+				// + " WHERE id in (SELECT id from fs_cert " + filter.getClause() + ") ORDER BY " +  orderby + " " + order;
 				+ filter.getClause() + " ORDER BY " +  orderby + " " + order;
 
-		LOG.info("Get certificates: " + sql);
+		LOG.info("Get EXPORT certificates: " + sql);
 		
 		return this.template.query(sql,	params, 
 				new BeanPropertyRowMapper<ViewFSCertificate>(ViewFSCertificate.class));
@@ -235,6 +237,7 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 				}
 
 				cert.setId(id);
+				insertValueIntoDenormTable(cert);
 			}
 			return cert;
 	}
@@ -558,12 +561,40 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 					int[] updateCounts = template.batchUpdate(sql, batch);
 					LOG.info("Added blank : " +  updateCounts.toString());
 				}
+				
+				insertValueIntoDenormTable(cert);
 	 
 			} else {
 				throw new RuntimeException("Не удалось изменить сертификат номер " + cert.getCertnumber() + " по неизвестной причине.");
 			}
 			return cert;
 		}
+
+		
+		// ---------------------------------------------------------------------
+		//  Insert Values into denorm tables
+		// ---------------------------------------------------------------------
+		private void insertValueIntoDenormTable(FSCertificate cert) {
+
+			String tovars = "";
+			String sql = "insert into fs_product_denorm(id_fscert, tovars) values (:id_fscert, :tovars)";
+			for (FSProduct product : cert.getProducts()) {
+				tovars += product.getTovar() + "; ";
+			}
+			MapSqlParameterSource parameters = 
+					new MapSqlParameterSource().addValue("id_fscert", cert.getId()).addValue("tovars",tovars);
+		    template.update(sql, parameters);
+
+			String blanks = "";
+			sql = "insert into fs_blank_denorm(id_fscert, blanknumbers) values (:id_fscert, :blanknumbers)";
+			for (FSBlank blank : cert.getBlanks()) {
+				blanks += blank.getBlanknumber() + "; ";
+			}
+			parameters = 
+					new MapSqlParameterSource().addValue("id_fscert", cert.getId()).addValue("blanknumbers",blanks);
+		    template.update(sql, parameters);
+		}
+
 
 		//--------------------------------------------------------------------	
 		//            GET ID certificate by its numbers 

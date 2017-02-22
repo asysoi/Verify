@@ -42,6 +42,16 @@ private static final Logger LOG = Logger.getLogger(SQLBuilderFSCertificate.class
 									"id_producer in ( SELECT id FROM cci_client where " +
 									unit.getClause() + 
 									") ";
+					} else if(key.equals("EXPORTERADDRESS")) {
+					     where += (where.trim().isEmpty() ? "" : " AND ") + 
+									"id_exporter in ( SELECT id FROM cci_client where " +
+									unit.getClause() + 
+									") ";
+				    } else if(key.equals("PRODUCERADDRESS")) {
+				         where += (where.trim().isEmpty() ? "" : " AND ") + 
+								"id_producer in ( SELECT id FROM cci_client where " +
+								unit.getClause() + 
+								") ";     
 					} else if(key.equals("EXPERTNAME")) {
 					     where += (where.trim().isEmpty() ? "" : " AND ") + 
 									"id_expert in ( SELECT id FROM cci_employee where " +

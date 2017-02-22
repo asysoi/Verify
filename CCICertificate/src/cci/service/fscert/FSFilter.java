@@ -29,8 +29,8 @@ public class FSFilter extends Filter {
 										"DATECERTFROM", "DATECERTTO", "COUNTFROM", "COUNTTO", "STR_OTD_ID"};
 		
 		String[] dbfields = new String[] {"ID", "CERTNUMBER", "PARENTNUMBER", "DATEISSUE", "DATEEXPIRY","CONFIRMATION",
-										"DECLARATION","CODECOUNTRYTARGET","DATECERT","LISTSCOUNT","NAME","BRANCHADDRESS", 
-										"NAME", "EXPORTERADDRESS", "NAME", "PRODUCERADDRESS",
+										"DECLARATION","CODECOUNTRYTARGET","DATECERT","LISTSCOUNT","NAME","ADDRESS", 
+										"NAME", "ADDRESS", "NAME", "ADDRESS",
 										"NAME", "NAME", "TOVAR", "BLANKNUMBER", "OTD_ID", 
 										"DATECERT", "DATECERT", "LISTSCOUNT", "LISTSCOUNT", "OTD_ID"};
 		
@@ -61,7 +61,8 @@ public class FSFilter extends Filter {
 					    m.invoke(cert, new Object[]{fcond.getValue()});
 					}
 				} catch (Exception ex) {
-					LOG.info("Error get view own certificate." + ex.getMessage());
+					LOG.info("Error get view FS certificate."  + ex.getMessage() );
+					LOG.info(fcond != null ?  fcond.toString() : " Условие не найдено ");
 				}
 			}
 		}
@@ -86,7 +87,8 @@ public class FSFilter extends Filter {
 					    m.invoke(cond, new Object[]{fcond.getOperator()});
 					}
 				} catch (Exception ex) {
-    				LOG.info("Error get own view condition." + ex.getMessage());
+    				LOG.info("Error get FS view condition." + ex.getMessage());
+    				LOG.info(fcond != null ?  fcond.toString() : " Условие не найдено ");
 				}
 			}
 		}
@@ -111,7 +113,9 @@ public class FSFilter extends Filter {
 						fcond.setValue((String) m.invoke(cert, new Object[]{}));
 					}
 				} catch (Exception ex) {
-					LOG.info("Error view own certificate load." + ex.getMessage());
+					LOG.info("Error view FS certificate load." + ex.getMessage());
+					LOG.info(fcond != null ?  fcond.toString() : " Условие не найдено ");
+					
 				}
 			}
 		}
@@ -134,7 +138,8 @@ public class FSFilter extends Filter {
 						fcond.setOperator((String) m.invoke(cond, new Object[]{}));
 					}
 				} catch (Exception ex) {
-					LOG.info("Error view own condition load." + ex.getMessage());
+					LOG.info("Error view FS condition load." + ex.getMessage());
+					LOG.info(fcond != null ?  fcond.toString() : " Условие не найдено ");
 				}
 			}
 		}

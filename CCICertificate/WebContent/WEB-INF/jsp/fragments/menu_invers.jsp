@@ -68,8 +68,10 @@
 					<ul class="dropdown-menu">
 						<li><a href="certs.do">Сертификаты происхождения</a></li>
 						<li><a href="reportcerts.do">Отчет о загрузке сертификатов происхождения</a></li>
+						<li class="divider"></li>
 						<li><a href="owncerts.do">Сертификаты собственного производства</a></li>
 						<li><a href="fscerts.do">Сертификаты свободной продажи</a></li>
+						<li class="divider"></li>						
 						<li><a href="#">Акты экспертиз</a></li>
 						<li><a href="certcheck.do">Верификация</a></li>
 					</ul>

@@ -38,7 +38,15 @@ public class Client {
 	private String bcell_phone;
 	private String bemail;
 	private String bunp;
+	private String address;
 	
+	@XmlTransient	
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
 	@XmlTransient
 	public long getId() {
 		return id;

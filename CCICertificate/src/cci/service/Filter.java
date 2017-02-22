@@ -4,7 +4,14 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
+
+import cci.web.controller.fscert.FSCertificateController;
+
 public abstract class Filter {
+	
+	private static final Logger LOG=Logger.getLogger(Filter.class);
+	
 	private Map<String, FilterCondition> conditions;
 	private Boolean onfilter;
 
@@ -72,7 +79,7 @@ public abstract class Filter {
 			 }
 			 
 		} catch (Exception ex) {
-			// LOG.info("Error get nethod: " + ex.getMessage());
+			LOG.info("Error get method: " + ex.getMessage());
 		}
          
 		return m;

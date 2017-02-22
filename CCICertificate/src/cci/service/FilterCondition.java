@@ -196,7 +196,7 @@ public class FilterCondition {
 
 	@Override
 	public String toString() {
-		return "FilterCondition [field=" + field + ", operator=" + operator
+		return "FilterCondition [field=" + field + ", dbfield = " + dbfield + ", operator=" + operator
 				+ ", value=" + value + ", onfilter=" + onfilter + "]";
 	}
 }

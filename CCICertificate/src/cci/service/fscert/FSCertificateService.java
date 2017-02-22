@@ -49,6 +49,7 @@ public class FSCertificateService {
 		try {
 			certs = fscertificateDAO.findViewNextPage(fields, page, pagesize, pagecount, orderby,
 					order, builder);
+			
 		} catch (Exception ex) {
 			LOG.info(ex.getMessage());
 		}
