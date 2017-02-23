@@ -49,6 +49,7 @@ public class FSFilter extends Filter {
 	// -------------------------------------------------------------
 	public ViewFSCertificate getViewcertificate() {
 		ViewFSCertificate cert = new ViewFSCertificate();
+		cert.init();
 		
 		for (String field : getConditions().keySet()) {
 			FilterCondition fcond = getConditions().get(field);

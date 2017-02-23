@@ -35,7 +35,7 @@
 	}
 </script>
 
-<form:form id="ffilter" method="POST" modelAttribute="viewfsfilter">
+<form:form id="ffilter" method="POST" modelAttribute="fscert">
 
 	<fieldset>
 		<legend class="grp_title">Основные данные</legend>
@@ -43,23 +43,16 @@
 		<table class="filter">
 			<tr>
 				<td>Номер сертификата</td>
-				<td><form:input path="viewcertificate.certnumber" id="certnumber" /><a
+				<td><form:input path="certnumber" id="certnumber" /><a
 					href="javascript:clearelement($('#certnumber'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 			</tr>
 			<tr>
-				<td>Номер бланка</td>
-				<td><form:input path="viewcertificate.blanknumber" id="blanknumber" /><a
-					href="javascript:clearelement($('#blanknumber'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
-			</tr>
-			<tr>
 				<td>Дата сертификата</td>
-				<td><form:input path="viewcertificate.datecertfrom" id="datecertfrom"
+				<td><form:input path="dateissue" id="dateisse"
 						class="datepicker" size="8" placeholder="с" />&nbsp;-&nbsp; 
-						<form:input	path="viewcertificate.datecertto" id="datecertto" class="datepicker"
+				<form:input	path="dateexpiry" id="dateexpiry" class="datepicker"
 						size="8" placeholder="по" /> <a
 					href="javascript:clearelement($('.datepicker'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
@@ -67,16 +60,14 @@
 			</tr>
 			<tr>
 				<td>Кол. доплистов</td>
-				<td><form:input path="viewcertificate.countfrom" id="countfrom" class="doplist" 
+				<td><form:input path="listscount" id="listscount" class="doplist" 
 						size="8" placeholder="от" />&nbsp;-&nbsp; 
-						<form:input	path="viewcertificate.countto" id="countto" class="doplist" 
-						size="8" placeholder="до" /> <a
-					href="javascript:clearelement($('.doplist'));"> <img
+						<a href="javascript:clearelement($('.doplist'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 			</tr>
 			<td>Для предоставления в</td>
-				<td><form:select path="viewcertificate.codecountrytarget"
+				<td><form:select path="codecountrytarget"
 						items="${countries}" id="codecountrytarget" /><a
 					href="javascript:clearelement($('#codecountrytarget'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
@@ -88,24 +79,24 @@
 		<table class="filter">
 			<tr>
 				<td>Экспортер</td>
-				<td><form:input path="viewcertificate.exportername" id="exportername" /><a
+				<td><form:input path="exporter.name" id="exportername" /><a
 					href="javascript:clearelement($('#exportername'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 				<td>Производитель</td>
-				<td><form:input path="viewcertificate.producername" id="producername" /><a
+				<td><form:input path="producer.name" id="producername" /><a
 					href="javascript:clearelement($('#producername'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 			</tr>
 			<tr>
 				<td>Адрес экспортера</td>
-				<td><form:input path="viewcertificate.exporteraddress" id="exporteraddress" /><a
+				<td><form:input path="exporter.address" id="exporteraddress" /><a
 					href="javascript:clearelement($('#exporteraddress'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 				<td>Адрес производителя</td>
-				<td><form:input path="viewcertificate.produceraddress" id="produceraddress" /><a
+				<td><form:input path="producer.address" id="produceraddress" /><a
 					href="javascript:clearelement($('#produceraddress'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
@@ -121,8 +112,8 @@
 			<tr>
 				<td>Отделение</td>
 				<td>
-				      <form:select path="viewcertificate.str_otd_id"
-						items="${departments}" id="str_otd_id" />
+				      <form:select path="otd_id"
+						items="${departments}" id="otd_id" />
 					  <a href="javascript:clearelement($('#str_otd_id'));"> 
 					  <img src="resources/images/delete-16.png" alt="удл." />	</a>
 			</td>
@@ -130,14 +121,14 @@
 			</security:authorize>
 						<tr>
 				<td>Эксперт</td>
-				<td><form:input path="viewcertificate.expertname" id="expertname" /><a
+				<td><form:input path="expert.name" id="expertname" /><a
 					href="javascript:clearelement($('#expertname'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 			</tr>
 			<tr>
 				<td>Подписан</td>
-				<td><form:input path="viewcertificate.signername" id="signername" /><a
+				<td><form:input path="signer.name" id="signername" /><a
 					href="javascript:clearelement($('#signername'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
@@ -151,13 +142,13 @@
 		<table class="filter">
 			<tr>
 				<td>Продукция</td>
-				<td><form:input path="viewcertificate.productname" id="productname" style="width: 380px"/><a
+				<td><form:input path="products" id="productname" style="width: 380px"/><a
 					href="javascript:clearelement($('#productname'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 			</tr>
 				<td>Экспортер</td>
-				<td><form:input path="viewcertificate.exporter.name" id="exporter_name" /><a
+				<td><form:input path="blanks" id="blanks" /><a
 					href="javascript:clearelement($('#exporter_name'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>

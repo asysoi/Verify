@@ -309,6 +309,25 @@ public class FSCertificateController {
 			return "fs/viewfscertificate";
 	}
 	
+	
+	// ---------------------------------------------------------------------------------------
+	//   EDIT FS Certificate as HTML page 
+	// ---------------------------------------------------------------------------------------
+	@RequestMapping(value = "fsedit.do",  method = RequestMethod.GET)
+	public String fsCertificateEdit(@RequestParam(value = "certid", required = true) Integer certid,
+				ModelMap model) {
+			try {
+			     FSCertificate cert = fsCertService.getFSCertificateById(certid);
+			     model.addAttribute("fscert", cert);
+			     LOG.info(cert); 
+			} catch (Exception ex) {
+				model.addAttribute("error", ex.getMessage());
+				return "error";
+			}
+			return "fs/fsedit";
+	}
+
+	
 	// ---------------------------------------------------------------------------------------
 	// Fillin lists 
 	// ---------------------------------------------------------------------------------------

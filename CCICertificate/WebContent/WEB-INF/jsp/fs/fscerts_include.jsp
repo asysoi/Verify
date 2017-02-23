@@ -151,6 +151,13 @@
 		win.focus();
 	}
 	
+	function editCertificate(certid) {
+		url = "fsedit.do?certid=" + certid;
+		var win=window.open(url,'_blank');
+		win.focus();
+	}
+
+	
     // ---------------------------------------------------------------------------------
     // Download list to Excel файл 
     // ---------------------------------------------------------------------------------
@@ -267,7 +274,7 @@
 
 		<c:forEach items="${certs}" var="cert">
 			<tr>
-				<td><a href="javascript:openCertificate('${cert.id}')">${cert.certnumber}</a></td>
+				<td><a href="javascript:editCertificate('${cert.id}')">${cert.certnumber}</a></td>
 				<td>${cert.exportername}. ${cert.exporteraddress} </td>
 				<td>${cert.producername}. ${cert.produceraddress}</td>
 				<td>${cert.datecert}</td>

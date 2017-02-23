@@ -41,6 +41,15 @@ public class FSCertificate {
 	private List<FSBlank> blanks;
 	private int otd_id;
 	
+	public void init() {
+		branch = new Branch();
+		exporter = new Exporter();
+		exporter.setName("SSSS");
+		producer = new Producer();
+		expert = new Expert();
+		signer = new Signer();
+	}
+	
 	@XmlTransient
 	public int getOtd_id() {
 		return otd_id;
