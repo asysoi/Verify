@@ -44,11 +44,19 @@ public class FSCertificate {
 	public void init() {
 		branch = new Branch();
 		exporter = new Exporter();
-		exporter.setName("SSSS");
 		producer = new Producer();
 		expert = new Expert();
 		signer = new Signer();
 	}
+
+	@XmlTransient
+	public String getSotd_id() {
+		return ""+otd_id;
+	}
+	public void setSotd_id(String sotd_id) {
+		this.otd_id = Integer.valueOf(sotd_id);
+	}
+
 	
 	@XmlTransient
 	public int getOtd_id() {

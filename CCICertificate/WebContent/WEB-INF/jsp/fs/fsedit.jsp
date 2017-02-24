@@ -18,14 +18,10 @@
 				function() {
 					$(".datepicker").datepicker("option", "dateFormat",
 							'dd.mm.yy');
-					$("#datefrom").datepicker("setDate",
-							"${viewfsfilter.viewcertificate.datecertfrom}");
-					$("#dateto").datepicker("setDate",
-							"${viewfsfilter.viewcertificate.datecertto}");
- 		  		        $("#codecountrytarget")
-							.val('${viewfsfilter.viewcertificate.codecountrytarget}');
-					$("#str_otd_id")
-							.val('${viewfsfilter.viewcertificate.str_otd_id}');
+		  		    $("#codecountrytarget")
+							.val('${fscert.codecountrytarget}');
+					$("#otd_id")
+							.val('${fscert.otd_id}');
 				});
 
 	});
@@ -35,124 +31,152 @@
 	}
 </script>
 
-<form:form id="ffilter" method="POST" modelAttribute="fscert">
+<h2 align="center"><b>СЕРТИФИКАТ СВОБОДНОЙ ПРОДАЖИ</b></h2>
+<h2 align="center"><b>CERTIFICATE OF FREE SALE</b></h2>
+<h3 align="center"><b>${fscert.branch.name}</b></h3>
+<h3 align="center"><b>${fscert.branch.address}, Республика Беларусь</b></h3>
+<h3 align="center"><b>телефон: ${fscert.branch.work_phone}, факс: ${fscert.branch.cell_phone}, e-mail: ${fscert.branch.email} </b></h3>
 
-	<fieldset>
-		<legend class="grp_title">Основные данные</legend>
+<form:form id="fscertedit" method="POST" modelAttribute="fscert">
+<form:hidden path="id"/>
 
-		<table class="filter">
-			<tr>
-				<td>Номер сертификата</td>
-				<td><form:input path="certnumber" id="certnumber" /><a
+<table>
+<tr>
+<td align="left">Номер сертификата:<form:input path="certnumber" id="certnumber" size="15"/><a
 					href="javascript:clearelement($('#certnumber'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
-			</tr>
-			<tr>
-				<td>Дата сертификата</td>
-				<td><form:input path="dateissue" id="dateisse"
-						class="datepicker" size="8" placeholder="с" />&nbsp;-&nbsp; 
-				<form:input	path="dateexpiry" id="dateexpiry" class="datepicker"
-						size="8" placeholder="по" /> <a
-					href="javascript:clearelement($('.datepicker'));"> <img
+				</a></td> 
+<td align="right">Дата сертификата: <form:input path="datecert" id="datecert"
+						class="datepicker" size="8" placeholder="с" /> 
+					<a href="javascript:clearelement($('#datecert'));"> 
+					<img src="resources/images/delete-16.png" alt="удл." />	</a></td>
+</tr>
+<tr>
+<td>Дубликат сертификата:</td>
+ <td><form:select path="parentnumber" id="parentnumber" /><a
+					href="javascript:clearelement($('#parentnumber'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
-			</tr>
-			<tr>
-				<td>Кол. доплистов</td>
-				<td><form:input path="listscount" id="listscount" class="doplist" 
-						size="8" placeholder="от" />&nbsp;-&nbsp; 
-						<a href="javascript:clearelement($('.doplist'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
-			</tr>
-			<td>Для предоставления в</td>
-				<td><form:select path="codecountrytarget"
+				</a>
+				
+</td>
+</tr>
+<tr>
+<td>Выдан для представления в:<td>
+<td> <form:select path="codecountrytarget"
+						
 						items="${countries}" id="codecountrytarget" /><a
 					href="javascript:clearelement($('#codecountrytarget'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+				</a></p>
+</td>
+</tr>
+<tr>
+<td>Экспортер: </td>
+<td>${fscert.exporter.name}, ${fscert.exporter.address}</td>
+</tr>
+<tr>
+|<td>Производитель:</td>
+<td>${fscert.producer.name}, ${fscert.producer.address}</td>	
+</table>
+
+<table>
+<tr>
+<td><form:textarea path="confirmation" id="confirmation" /></td>
+</tr>
+<tr>
+<td><form:textarea path="declaration" id="declaration" /></td>
+</tr>
+
+<tr>
+<td>Срок действия сертификата: 
+				<form:input path="dateissue" id="dateissue"
+						class="datepicker" size="8" placeholder="с" />&nbsp;-&nbsp; 
+				<form:input	path="dateexpiry" id="dateexpiry" class="datepicker"
+						size="8" placeholder="по" />
+</td>
+</tr>
+<tr>
+<td>Количество листов сертификата <form:input path="listscount" id="listscount" class="doplist" 
+						size="8" /> 
+</td>
+</tr>
+</table>
+
+
+
+<table>
+<tr>
+		  <td>Эксперт</td>
+				<td><form:input path="expert.name" id="expertname" /></td>
+</tr>
+<tr>				
+				<td>Должность эксперта</td>
+				<td><form:input path="expert.job" id="expertjob" /></td>
+</tr>
+<tr>
+				<td>Подписан</td>
+				<td><form:input path="signer.name" id="signername" /></td>
+</tr>				
+				<td>Должность подписанты</td>
+				<td><form:input path="signer.job" id="signerjob" /></td>
+</tr>
+</table>
+
+
+<table>
+ <tr>
+		        <td>Товарные позиции</td> 
+				<td>
+				 <table> 
+				    <c:forEach items="${fscert.products}" var="product">
+				        <tr> 
+				        <td> ${product.numerator} </td>
+				        <td> ${product.tovar} </td>
+				        </tr>
+			       </c:forEach>
+				</table>
+				</td>
+			</tr>
+				<td>Бланки сертификата</td>
+				<td>
+				 <table> 
+				    <c:forEach items="${fscert.blanks}" var="blank">
+				        <tr> 
+				        <td> ${blank.page} </td>
+				        <td> ${blank.blanknumber} </td>
+				        </tr>
+			       </c:forEach>
+				</table>
+				
+               </td>
+			
+</table>
+
+
+	<fieldset>
+		<legend class="grp_title">Основные данные</legend>
+		 
+
+		<table class="filter">
 		</table>
 	</fieldset>
+	
 	<fieldset>
 		<legend class="grp_title">Производство</legend>
 		<table class="filter">
-			<tr>
-				<td>Экспортер</td>
-				<td><form:input path="exporter.name" id="exportername" /><a
-					href="javascript:clearelement($('#exportername'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
-				<td>Производитель</td>
-				<td><form:input path="producer.name" id="producername" /><a
-					href="javascript:clearelement($('#producername'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
-			</tr>
-			<tr>
-				<td>Адрес экспортера</td>
-				<td><form:input path="exporter.address" id="exporteraddress" /><a
-					href="javascript:clearelement($('#exporteraddress'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
-				<td>Адрес производителя</td>
-				<td><form:input path="producer.address" id="produceraddress" /><a
-					href="javascript:clearelement($('#produceraddress'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
-			</tr>
+			
 		</table>
 	</fieldset>
 
 	<fieldset>
 		<legend class="grp_title">Выдан</legend>
 
-		<table class="filter">
-			<security:authorize ifAnyGranted="ROLE_EXPERT">
-			<tr>
-				<td>Отделение</td>
-				<td>
-				      <form:select path="otd_id"
-						items="${departments}" id="otd_id" />
-					  <a href="javascript:clearelement($('#str_otd_id'));"> 
-					  <img src="resources/images/delete-16.png" alt="удл." />	</a>
-			</td>
-			</tr>
-			</security:authorize>
-						<tr>
-				<td>Эксперт</td>
-				<td><form:input path="expert.name" id="expertname" /><a
-					href="javascript:clearelement($('#expertname'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
-			</tr>
-			<tr>
-				<td>Подписан</td>
-				<td><form:input path="signer.name" id="signername" /><a
-					href="javascript:clearelement($('#signername'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
-			</tr>
-		</table>
+	
 	</fieldset>
 
 	<fieldset>
 		<legend class="grp_title">Товарные позиции</legend>
 
-		<table class="filter">
-			<tr>
-				<td>Продукция</td>
-				<td><form:input path="products" id="productname" style="width: 380px"/><a
-					href="javascript:clearelement($('#productname'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
-			</tr>
-				<td>Экспортер</td>
-				<td><form:input path="blanks" id="blanks" /><a
-					href="javascript:clearelement($('#exporter_name'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
-			
-		</table>
+		
 	</fieldset>
 </form:form>

@@ -296,7 +296,7 @@ public class FSCertificateController {
 	//   View FS Certificate as HTML page 
 	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "fscert.do",  method = RequestMethod.GET)
-	public String gocert(@RequestParam(value = "certid", required = true) Integer certid,
+	public String viewHTML(@RequestParam(value = "certid", required = true) Integer certid,
 				ModelMap model) {
 			try {
 			     FSCertificate cert = fsCertService.getFSCertificateById(certid);
@@ -314,7 +314,7 @@ public class FSCertificateController {
 	//   EDIT FS Certificate as HTML page 
 	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "fsedit.do",  method = RequestMethod.GET)
-	public String fsCertificateEdit(@RequestParam(value = "certid", required = true) Integer certid,
+	public String edit(@RequestParam(value = "certid", required = true) Integer certid,
 				ModelMap model) {
 			try {
 			     FSCertificate cert = fsCertService.getFSCertificateById(certid);
@@ -324,7 +324,7 @@ public class FSCertificateController {
 				model.addAttribute("error", ex.getMessage());
 				return "error";
 			}
-			return "fs/fsedit";
+			return "editfscertificate";
 	}
 
 	

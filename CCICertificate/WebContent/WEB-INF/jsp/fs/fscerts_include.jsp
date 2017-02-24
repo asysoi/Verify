@@ -5,6 +5,10 @@
 
 <spring:url value="resources/css/cci.css" var="CCICss" />
 <link href="${CCICss}" rel="stylesheet" />
+<link href="https://swisnl.github.io/jQuery-contextMenu/dist/jquery.contextMenu.css" rel="stylesheet" type="text/css" />
+
+<script src="https://swisnl.github.io/jQuery-contextMenu/dist/jquery.contextMenu.js" type="text/javascript"></script>
+<script src="https://swisnl.github.io/jQuery-contextMenu/dist/jquery.ui.position.min.js" type="text/javascript"></script>
 
 <script>
 	function clear() {
@@ -44,7 +48,6 @@
 		} else {
 			$("#filterlink").html('&nbsp;Фильтр');
 		}
-
 	});
 
 	function goToList(link) {
@@ -153,7 +156,8 @@
 	
 	function editCertificate(certid) {
 		url = "fsedit.do?certid=" + certid;
-		var win=window.open(url,'_blank');
+		//window.location.href = url;
+		var win=window.open(url, "_self");
 		win.focus();
 	}
 
@@ -233,6 +237,30 @@
 		});
 		$("#pview").dialog("open");
 	}
+
+	//-------------------------------------------------------------
+	// Create context menu
+	//-------------------------------------------------------------
+	$(function() {
+        $.contextMenu({
+            selector: '.context-menu-one', 
+            callback: function(key, options, $element, item) {
+                var m = "clicked: " + key + " | " + options + "|" +item + "|" + $element;
+                window.console && console.log(m) || alert(m); 
+            },
+            items: {
+                "edit": {name: "Редактировать"},
+                "view": {name: "Просмотр"},
+                "print": {name: "Печать"}
+                }
+           });
+
+        $('.context-menu-one').on('click', function(e){
+            console.log('clicked', this);
+        })    
+    });	
+
+
 </script>
 
 
@@ -274,11 +302,13 @@
 
 		<c:forEach items="${certs}" var="cert">
 			<tr>
-				<td><a href="javascript:editCertificate('${cert.id}')">${cert.certnumber}</a></td>
+				<td><a href="javascript:openCertificate('${cert.id}')">${cert.certnumber}</a></td>
 				<td>${cert.exportername}. ${cert.exporteraddress} </td>
 				<td>${cert.producername}. ${cert.produceraddress}</td>
 				<td>${cert.datecert}</td>
-                <td>${cert.listscount}</td> 
+                <td>${cert.listscount}
+                <a href="javascript:editCertificate('${cert.id}')">Edit</a>
+                </td> 
 			</tr>
 		</c:forEach>
 	</table>

@@ -27,6 +27,7 @@ public class FSCertificateRowMapper implements RowMapper {
 		cert.setCodecountrytarget(rs.getString("codecountrytarget"));
 		cert.setDatecert((new SimpleDateFormat("MM.dd.yyyy")).format(rs.getDate("datecert")));
 		cert.setListscount(Integer.valueOf(rs.getInt("LISTSCOUNT")));
+		cert.setOtd_id(rs.getInt("OTD_ID"));
 		
 		if (rs.getLong("ID_BRANCH") != 0) {
 		   Branch obj = new Branch();
