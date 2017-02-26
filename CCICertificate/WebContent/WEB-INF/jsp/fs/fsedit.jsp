@@ -40,10 +40,10 @@ div.row {
 	}
 
 	function selectClient() {
-        link="clients.do";
+        link="sclients.do?pagesize=5";
 		$("#cpview").load(link);
 		$("#cpview").dialog("option", "title", 'Список компаний');
-		$("#cpview").dialog("option", "width", 1000);
+		$("#cpview").dialog("option", "width", 1200);
 		$("#cpview").dialog("option", "height", 520);
 		$("#cpview").dialog("option", "modal", true);
 		$("#cpview").dialog("option", "resizable", true );

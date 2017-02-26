@@ -131,6 +131,78 @@ public class ClientController {
 		return cmanager;
 	}
 
+	// ---------------------------------------------------------------
+	// Get Clients List
+	// ---------------------------------------------------------------
+	@RequestMapping(value = "sclients.do", method = RequestMethod.GET)
+	public String selectclients(
+			@RequestParam(value = "page", required = false) Integer page,
+			@RequestParam(value = "pagesize", required = false) Integer pagesize,
+			@RequestParam(value = "orderby", required = false) String orderby,
+			@RequestParam(value = "order", required = false) String order,
+			@RequestParam(value = "filter", required = false) Boolean onfilter,
+			ModelMap model) {
+
+		System.out
+				.println("=========================== GET CLIENT SELECTION =================================== >");
+
+		ViewManager cmanager = (ViewManager) model.get("cmanager");
+
+		if (cmanager == null) {
+			cmanager = initViewManager(model);
+		}
+
+		if (orderby == null || orderby.isEmpty())
+			orderby = "name";
+		if (order == null || order.isEmpty())
+			order = ViewManager.ORDASC;
+		if (onfilter == null)
+			onfilter = false;
+
+		cmanager.setPage(page == null ? 1 : page);
+		cmanager.setPagesize(pagesize == null ? 10 : pagesize);
+		cmanager.setOrderby(orderby);
+		cmanager.setOrder(order);
+		cmanager.setOnfilter(onfilter);
+		cmanager.setUrl("clients.do");
+
+		Filter filter = null;
+		if (onfilter) {
+			filter = cmanager.getFilter();
+
+			if (filter == null) {
+				if (model.get("clientfilter") != null) {
+					filter = (Filter) model.get("clientfilter");
+				} else {
+					filter = new ClientFilter();
+					model.addAttribute("clientfilter", filter);
+				}
+				cmanager.setFilter(filter);
+			}
+		}
+
+		SQLBuilder builder = new SQLBuilderClient();
+		builder.setFilter(filter);
+		cmanager.setPagecount(clientService.getViewPageCount(builder));
+		List<ViewClient> clients = clientService.readClientsPage(
+				cmanager.getPage(), cmanager.getPagesize(),
+				cmanager.getOrderby(), cmanager.getOrder(), builder);
+		cmanager.setElements(clients);
+
+		model.addAttribute("cmanager", cmanager);
+		model.addAttribute("clients", clients);
+		model.addAttribute("next_page", cmanager.getNextPageLink());
+		model.addAttribute("prev_page", cmanager.getPrevPageLink());
+		model.addAttribute("last_page", cmanager.getLastPageLink());
+		model.addAttribute("first_page", cmanager.getFirstPageLink());
+		model.addAttribute("pages", cmanager.getPagesList());
+		model.addAttribute("sizes", cmanager.getSizesList());
+
+		return "client/clients";
+	}
+
+
+	
 	
 	// ---------------------------------------------------------------
 	// Get Client Filter Window
