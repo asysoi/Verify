@@ -37,7 +37,6 @@ import cci.web.validator.ClientValidator;
 @SessionAttributes({ "clientfilter", "cmanager" })
 public class ClientController {
 
-	//public static Logger LOG = LogManager.getLogger(ClientController.class);
 	private static final Logger LOG = Logger.getLogger(ClientController.class);
 	private ClientValidator clientValidator;
 

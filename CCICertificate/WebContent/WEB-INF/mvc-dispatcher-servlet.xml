@@ -88,9 +88,9 @@
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
         <!-- property name="url" value="jdbc:oracle:thin:@//192.168.0.46:1521/pdborcl"/ -->
-        <property name="url" value="jdbc:oracle:thin:@//localhost:1521/pdborcl"/>
+        <!-- property name="url" value="jdbc:oracle:thin:@//localhost:1521/pdborcl"/-->
         <!-- property name="url" value="jdbc:oracle:thin:@//dev.cci.by:1521/pdborcl"/ --> 
-        <!-- property name="url" value="jdbc:oracle:thin:@//192.168.1.28:1521/pdborcl"/ -->     
+        <property name="url" value="jdbc:oracle:thin:@//192.168.1.28:1521/pdborcl"/>     
         <property name="username" value="beltpp"/>
         <property name="password" value="123456"/>
     </bean>
@@ -113,8 +113,8 @@
  <security:http auto-config="true" use-expressions="true">
     <security:intercept-url pattern="/resources/**" access="permitAll" requires-channel="https"/> 
     <security:intercept-url pattern="/certcheck.**" access="permitAll" requires-channel="https"/>
-    <security:intercept-url pattern="/login*.**" access="permitAll" requires-channel="https"/> 
-    <security:intercept-url pattern="/client*.do" access="hasRole('ROLE_CLIENT')"/>
+    <security:intercept-url pattern="/login*.**" access="permitAll" requires-channel="https"/>
+    <security:intercept-url pattern="/ccclient*.do" access="hasRole('ROLE_CLIENT')"/> 
     <security:intercept-url pattern="/cert*.do" access="hasAnyRole('ROLE_EXPERT','ROLE_MINSK', 'ROLE_GOMEL', 'ROLE_VITEBSK', 'ROLE_GRODNO', 'ROLE_MOGILEV', 'ROLE_BREST')"/>
     <security:intercept-url pattern="/owncert*.do" access="hasAnyRole('ROLE_EXPERT','ROLE_MINSK', 'ROLE_GOMEL', 'ROLE_VITEBSK', 'ROLE_GRODNO', 'ROLE_MOGILEV', 'ROLE_BREST')"/>
     <security:intercept-url pattern="/pch*.do" access="hasRole('ROLE_ACCOUNT')"/>

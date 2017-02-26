@@ -5,10 +5,49 @@
 
 <spring:url value="resources/css/cci.css" var="CCICss" />
 <link href="${CCICss}" rel="stylesheet" />
-<link href="https://swisnl.github.io/jQuery-contextMenu/dist/jquery.contextMenu.css" rel="stylesheet" type="text/css" />
 
-<script src="https://swisnl.github.io/jQuery-contextMenu/dist/jquery.contextMenu.js" type="text/javascript"></script>
-<script src="https://swisnl.github.io/jQuery-contextMenu/dist/jquery.ui.position.min.js" type="text/javascript"></script>
+<style>
+.ccidropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.ccidropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
+    padding: 5px 15px 5px 15px;
+    z-index: 1;
+}
+
+.ccidropdown:hover .ccidropdown-content {
+    display: block;
+}
+
+.ccidropdown:hover {
+    color: #428bca;
+    cursor: pointer;
+}
+
+ul.cci {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: #f1f1f1;
+}
+
+li.cci a.cci {
+    display: block;
+    padding: 3px 3px;
+    text-decoration: none;
+}
+
+li.cci a.cci:hover {
+    background-color: #428bca;
+    color: white;
+}
+</style>
 
 <script>
 	function clear() {
@@ -237,38 +276,14 @@
 		});
 		$("#pview").dialog("open");
 	}
-
-	//-------------------------------------------------------------
-	// Create context menu
-	//-------------------------------------------------------------
-	$(function() {
-        $.contextMenu({
-            selector: '.context-menu-one', 
-            callback: function(key, options, $element, item) {
-                var m = "clicked: " + key + " | " + options + "|" +item + "|" + $element;
-                window.console && console.log(m) || alert(m); 
-            },
-            items: {
-                "edit": {name: "Редактировать"},
-                "view": {name: "Просмотр"},
-                "print": {name: "Печать"}
-                }
-           });
-
-        $('.context-menu-one').on('click', function(e){
-            console.log('clicked', this);
-        })    
-    });	
-
-
 </script>
 
 
 <div id="listwindow" class="main">
 	<h3>Список сертификатов свободной продажи</h3>
+	
 	<table style="width: 100%">
 		<tr>
-
 			<td style="width: 60%">
                 <input id="filter" type="checkbox"	onclick="javascript:swithFilter();" >
                 <span id="filterlink"></span>
@@ -296,18 +311,25 @@
 					style="width:${item.width}%;background-color: gray; color: black"><a
 					href="javascript: goToList('${item.link}');" style="color: white; font-size: 120%;">${item.name}${item.selection}
 
-</a></td>
+			</a></td>
 			</c:forEach>
 		</tr>
 
 		<c:forEach items="${certs}" var="cert">
 			<tr>
-				<td><a href="javascript:openCertificate('${cert.id}')">${cert.certnumber}</a></td>
+				<td>
+				<div class="ccidropdown"><span>${cert.certnumber}</span>
+				<div class="ccidropdown-content"> 
+				<ul class="cci">
+					<li class="cci"><a class="cci" href="javascript:editCertificate('${cert.id}')"><i class="glyphicon glyphicon-edit"></i></a></li>
+					<li class="cci"><a class="cci" href="javascript:openCertificate('${cert.id}')"><i class="glyphicon glyphicon-open"></i></a></li>
+					<li class="cci"><a class="cci" href="javascript:printCertificate('${cert.id}')"><i class="glyphicon glyphicon-print"></i></a></li>
+				</ul> </div> </div>
+				</td>
 				<td>${cert.exportername}. ${cert.exporteraddress} </td>
 				<td>${cert.producername}. ${cert.produceraddress}</td>
 				<td>${cert.datecert}</td>
                 <td>${cert.listscount}
-                <a href="javascript:editCertificate('${cert.id}')">Edit</a>
                 </td> 
 			</tr>
 		</c:forEach>
@@ -322,17 +344,8 @@
 					src="resources/images/prev_page_24.png" alt="Пред."></a> <c:forEach
 					items="${pages}" var="item">
 	           	   &nbsp;	
-	               <a
-						href="javascript: goToList('fscerts.do?page=${item}&pagesize=${fsmanager.pagesize}
-
-&orderby=
-
-${fsmanager.orderby}
-
-&order=${fsmanager.order}');"
-						<c:if test="${item==fsmanager.page}">style="border-style: solid; border-width: 
-
-1px;"</c:if>>
+	               <a href="javascript: goToList('fscerts.do?page=${item}&pagesize=${fsmanager.pagesize}&orderby=${fsmanager.orderby}&order=${fsmanager.order}');"
+						<c:if test="${item==fsmanager.page}">style="border-style: solid; border-width:1px;"</c:if>>
 						${item} </a>
 				</c:forEach> &nbsp; [Сертификатов:&nbsp;${fsmanager.pagecount}]</td>
 			<td style="width: 20%; text-align: right"><a
@@ -343,12 +356,11 @@ ${fsmanager.orderby}
 		</tr>
 	</table>
 
-	
 	<div id="pview" name="pview">
 	</div>
 
 	<div id="pdfview" name="pdfview">
-                  <!--  iframe class="pdf" id="pdf"></iframe -->
+     <!--  iframe class="pdf" id="pdf"></iframe -->
 	</div>
 
     <p >Время загрузки: ${timeduration}</p> 

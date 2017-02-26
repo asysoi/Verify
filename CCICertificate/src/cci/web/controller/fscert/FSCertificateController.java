@@ -36,7 +36,7 @@ import cci.web.controller.cert.CertificateController;
 
 
 @Controller
-@SessionAttributes({ "fscertfilter", "fsmanager"})
+@SessionAttributes({ "fscertfilter", "fsmanager","fscert"})
 public class FSCertificateController {
 	
 	private static final Logger LOG=Logger.getLogger(FSCertificateController.class);
@@ -327,6 +327,34 @@ public class FSCertificateController {
 			return "editfscertificate";
 	}
 
+	// ---------------------------------------------------------------------------------------
+	//   EDIT FS Certificate as HTML page 
+	// ---------------------------------------------------------------------------------------
+	@RequestMapping(value = "fsedit.do",  method = RequestMethod.POST)
+	public String save(FSCertificate fscert,
+			BindingResult result, SessionStatus status, ModelMap model) {
+		    
+		    FSCertificate storedCert = (FSCertificate)model.get("fscert");
+		    
+		    if (storedCert == null) {
+			    model.addAttribute("error", "Информация о редактируемом сертификате потеряна. Перезегрузите сертификат.");		       	
+		    } else {
+		    	fscert.setId(storedCert.getId());
+		    	fscert.setCertnumber(storedCert.getCertnumber());
+		    	fscert.setBranch(storedCert.getBranch());
+		    	fscert.setExporter(storedCert.getExporter());
+		    	fscert.setProducer(storedCert.getProducer());
+		    	fscert.setExpert(storedCert.getExpert());
+		    	fscert.setSigner(storedCert.getSigner());
+		    	fscert.setBlanks(storedCert.getBlanks());
+		    	fscert.setProducts(storedCert.getProducts());
+		    	model.addAttribute("fscert", fscert);
+		    	storedCert = null;
+		    }
+			return "editfscertificate";
+	}
+
+	
 	
 	// ---------------------------------------------------------------------------------------
 	// Fillin lists 
