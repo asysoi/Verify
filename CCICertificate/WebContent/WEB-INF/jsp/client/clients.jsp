@@ -13,16 +13,15 @@
 	}
 
 	function reset() {
-		$('#ffilter')[0].reset();
+		$('#clientfilter')[0].reset();
 	}
 
-	function submit() {
-		url = $("#ffilter").attr("action");
-		$.post(url, $("#ffilter").serialize());
-		$( document ).ajaxComplete(function(event,request, settings ) {
-			  goToList('sclients.do?page=1&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}');
-			  $("#clpview").dialog("close");
-		});
+	function submitFilter() {
+		url = $("#clientfilter").attr("action");
+		$.ajaxSetup({async:false});
+		$.post(url, $("#clientfilter").serialize());
+  	    goToList('sclients.do?page=1&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}');
+		$("#clpview").dialog("close");
 	}
 	
 	function resetClient() {
@@ -31,27 +30,21 @@
 
 	function saveClient() {
 		url = $("#fclient").attr("action");
+		$.ajaxSetup({async:false});
 		$.post(url, $("#fclient").serialize());
-		
-		$( document ).ajaxComplete(function(event,request, settings ) {
-			  goToList('sclients.do?page=1&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}');
-			  $("#clview").dialog("close");
-		});
+  	    goToList('sclients.do?page=1&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}');
+		$("#clview").dialog("close");
 	}
 	
 	function updateClient() {
         var x;
 		if (confirm("Сохранить сделанные изменения?") == true) {
-		
 			url = $("#fclient").attr("action");
+			$.ajaxSetup({async:false});
 			$.post(url, $("#fclient").serialize());
-		
-			$( document ).ajaxComplete(function(event,request, settings ) {
-				  goToList('sclients.do?page=1&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}');
-				  $("#clview").dialog("close");
-			});
+			goToList('sclients.do?page=1&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}');
+			$("#clview").dialog("close");
 		} 
-			
 	}
 	
 	function close() {
@@ -77,11 +70,12 @@
 
 	function goToList(link) {
 		var url = link;
+
 		if (document.getElementById("filter").checked) {
 			url = url + "&filter="
 			        + document.getElementById("filter").checked;
    	    }
-  		document.location.href = url;
+		$("#fsview").load(url);
 	}
 
 	function swithFilter() {
@@ -102,7 +96,7 @@
 		$("#clpview").dialog("option", "height", 500);
 		$("#clpview").dialog("option", "modal", true);
 		$("#clpview").dialog("option", "resizable", false );
-		$("#clpview").dialog({ buttons: [ { text: "Применить",  click : function() { submit(); } },  
+		$("#clpview").dialog({ buttons: [ { text: "Применить",  click : function() { submitFilter(); } },  
 				               { text: "Очистить Все ", click: function() { clear(); } },
  				               { text: "Отменить изменения", click: function() { reset(); } },
 				               { text: "Отмена", click: function() { $( this ).dialog( "close" ); } }
@@ -214,7 +208,6 @@
 	    	document.body.appendChild(iframe);
     	}
     	iframe.src = "clientsecport.do";
-		
 	}
 
 </script>

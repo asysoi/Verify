@@ -22,7 +22,7 @@ div.row {
 
 		$("document").ready(
 				function() {
-					$("#cpview").dialog({
+					$("#fsview").dialog({
 						autoOpen : false
 					});
 					$(".datepicker").datepicker("option", "dateFormat",
@@ -39,16 +39,20 @@ div.row {
 		element.val('');
 	}
 
-	function selectClient() {
+	function openClients() {
         link="sclients.do?pagesize=5";
-		$("#cpview").load(link);
-		$("#cpview").dialog("option", "title", 'Список компаний');
-		$("#cpview").dialog("option", "width", 1200);
-		$("#cpview").dialog("option", "height", 520);
-		$("#cpview").dialog("option", "modal", true);
-		$("#cpview").dialog("option", "resizable", true );
-		$("#cpview").dialog( "option", "position", { my: "center",  at: "center", of:window} );
-		$("#cpview").dialog("open");
+		$("#fsview").load(link);
+		$("#fsview").dialog("option", "title", 'Список компаний');
+		$("#fsview").dialog("option", "width", 1200);
+		$("#fsview").dialog("option", "height", 520);
+		$("#fsview").dialog("option", "modal", true);
+		$("#fsview").dialog("option", "resizable", true );
+		$("#fsview").dialog( "option", "position", { my: "center",  at: "center", of:window} );
+		$("#fsview").dialog("open");
+	}
+	
+	function updateClients(link) {
+    	$("#fsview").load(link);
 	}
 	
 </script>
@@ -82,9 +86,8 @@ ${fscert.branch.address}, Республика Беларусь<br>
 </div>
 					
 <div class="row">
-<div class="col-md-1">Экспортер: </div>
+<div class="col-md-1"><a href="javascript:openClients()">Экспортер: </a></div>
 <div class="col-md-6" id="exporter">${fscert.exporter.name}, ${fscert.exporter.address}</div>
-<div class="col-md-5"><a href="javascript:selectClient()">Выбрать</a></div> 
 </div>
 
 <div class="row">
@@ -93,10 +96,12 @@ ${fscert.branch.address}, Республика Беларусь<br>
 </div>	
 
 <div class="row">
-<div class="col-md-12"><form:textarea rows="3" cols="110" path="confirmation" id="confirmation" /></div>
+<div class="col-md-1">Удостоверение:</div>
+<div class="col-md-11"><form:textarea rows="6" cols="140" path="confirmation" id="confirmation" /></div>
 </div>
 <div class="row">
-<div class="col-md-12"><form:textarea rows="3" cols="110" path="declaration" id="declaration" /></div>
+<div class="col-md-1">Декларация:</div>
+<div class="col-md-11"><form:textarea rows="6" cols="140" path="declaration" id="declaration" /></div>
 </div>
 
 <div class="row">
@@ -164,6 +169,6 @@ ${fscert.branch.address}, Республика Беларусь<br>
 
 </form:form>
 
-<div id="cpview" name="cpview">
+<div id="fsview" name="fsview">
 </div>
 

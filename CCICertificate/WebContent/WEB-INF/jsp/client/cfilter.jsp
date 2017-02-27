@@ -20,7 +20,7 @@
 	}
 </script>
 
-<form:form id="ffilter" method="POST" commandName="viewfilter">
+<form:form id="clientfilter" method="POST" commandName="viewfilter">
 
 	<fieldset>
 		<legend class="grp_title">Основные данные</legend>
@@ -43,7 +43,7 @@
 			<tr>
 				<td>Код ОКПО</td>
 				<td><form:input path="viewclient.okpo" id="okpo"
-						size="20" /><a
+						size="18" /><a
 					href="javascript:clearelement($('#okpo'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
@@ -56,19 +56,19 @@
 		<table class="filter">
 			<tr>
 				<td>Телефон</td>
-				<td><form:input path="viewclient.work_phone" id="work_phone" /><a
+				<td><form:input size="12" path="viewclient.work_phone" id="work_phone" /><a
 					href="javascript:clearelement($('#work_phone'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 				<td>Мобильный телефон</td>
-				<td><form:input path="viewclient.cell_phone" id="cell_phone" /><a
+				<td><form:input size="12" path="viewclient.cell_phone" id="cell_phone" /><a
 					href="javascript:clearelement($('#cell_phone'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 			</tr>
 			<tr>
 				<td>Адрес электронной почты</td>
-				<td><form:input path="viewclient.email" id="email" /><a
+				<td><form:input size="12" path="viewclient.email" id="email" /><a
 					href="javascript:clearelement($('#email'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>

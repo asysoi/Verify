@@ -21,7 +21,9 @@ import org.springframework.stereotype.Repository;
 import cci.model.Client;
 import cci.model.cert.Country;
 import cci.repository.SQLBuilder;
+import cci.service.SQLQueryUnit;
 import cci.web.controller.client.ViewClient;
+import cci.web.controller.fscert.ViewFSCertificate;
 
 @Repository
 public class JDBCClientDAO implements ClientDAO {
@@ -40,17 +42,22 @@ public class JDBCClientDAO implements ClientDAO {
 	public List<ViewClient> findViewNextPage(int page, int pagesize,
 			String orderby, String order, SQLBuilder builder) {
 
+		SQLQueryUnit filter = builder.getSQLUnitWhereClause();
+	    Map<String, Object> params = filter.getParams();
+	    LOG.info("Client SQLQueryUnit : " + filter);
+	    
 		String sql = " SELECT client.* "
 				+ " FROM (SELECT t.*, ROW_NUMBER() OVER " + " (ORDER BY t."
 				+ orderby + " " + order + ", t.ID " + order + ") rw "
-				+ " FROM CLIENT_VIEW t " + builder.getWhereClause() + " )"
+				+ " FROM CLIENT_VIEW t " + filter.getClause() + " )"
 				+ " client " + " WHERE client.rw > " + ((page - 1) * pagesize)
 				+ " AND client.rw <= " + (page * pagesize);
 
-		System.out.println("Next page : " + sql);
+		LOG.info("Next clients page : " + sql);
 
-		return this.template.getJdbcOperations().query(sql,
-				new BeanPropertyRowMapper<ViewClient>(ViewClient.class));
+	    return this.template.query(sql,	params, 
+	    		new BeanPropertyRowMapper<ViewClient>(ViewClient.class));
+		
 	}
 
 	// ---------------------------------------------------------------
@@ -58,17 +65,15 @@ public class JDBCClientDAO implements ClientDAO {
 	// ---------------------------------------------------------------
 	public int getViewPageCount(SQLBuilder builder) {
 		long start = System.currentTimeMillis();
-
+		
+        SQLQueryUnit qunit = builder.getSQLUnitWhereClause();
 		String sql = "SELECT count(*) FROM CLIENT_VIEW "
-				+ builder.getWhereClause();
+				+ qunit.getClause();
 
-		int count = this.template.getJdbcOperations().queryForInt(sql);
-
-		System.out.println(sql);
-		System.out.println("Query time: "
-				+ (System.currentTimeMillis() - start));
-
-		return count;
+		Integer count = this.template.queryForObject(sql, qunit.getParams(), Integer.class);
+		
+		LOG.info(sql);
+		return count.intValue();
 	}
 
 	// ---------------------------------------------------------------
@@ -175,10 +180,14 @@ public class JDBCClientDAO implements ClientDAO {
 	// ---------------------------------------------------------------
 	public List<ViewClient> getClients(String orderby, String order,
 			SQLBuilder builder) {
-		String sql = " SELECT * FROM CLIENT_VIEW " 
-				+ builder.getWhereClause() + " ORDER BY " +  orderby + " " + order;
+		
+		SQLQueryUnit filter = builder.getSQLUnitWhereClause();
+	    Map<String, Object> params = filter.getParams();
 
-		return this.template.getJdbcOperations().query(sql,
-				new BeanPropertyRowMapper<ViewClient>(ViewClient.class));
+		String sql = " SELECT * FROM CLIENT_VIEW " 
+				+ filter.getClause() + " ORDER BY " +  orderby + " " + order;
+
+	    return this.template.query(sql,	params, 
+	    		new BeanPropertyRowMapper<ViewClient>(ViewClient.class));
 	}
 }

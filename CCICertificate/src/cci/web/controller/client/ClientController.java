@@ -164,7 +164,7 @@ public class ClientController {
 		cmanager.setOrderby(orderby);
 		cmanager.setOrder(order);
 		cmanager.setOnfilter(onfilter);
-		cmanager.setUrl("clients.do");
+		cmanager.setUrl("sclients.do");
 
 		Filter filter = null;
 		if (onfilter) {
