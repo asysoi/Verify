@@ -141,6 +141,7 @@ public class ClientController {
 			@RequestParam(value = "orderby", required = false) String orderby,
 			@RequestParam(value = "order", required = false) String order,
 			@RequestParam(value = "filter", required = false) Boolean onfilter,
+			@RequestParam(value = "type", defaultValue = "client", required = false) String clienttype,
 			ModelMap model) {
 
 		System.out
@@ -197,6 +198,7 @@ public class ClientController {
 		model.addAttribute("first_page", cmanager.getFirstPageLink());
 		model.addAttribute("pages", cmanager.getPagesList());
 		model.addAttribute("sizes", cmanager.getSizesList());
+		model.addAttribute("clienttype", clienttype);
 
 		return "client/clients";
 	}

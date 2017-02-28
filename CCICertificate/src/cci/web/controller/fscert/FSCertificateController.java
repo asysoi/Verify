@@ -21,7 +21,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import cci.config.fscert.ExportFSCertConfig;
+import cci.model.Client;
+import cci.model.fscert.Exporter;
 import cci.model.fscert.FSCertificate;
+import cci.model.fscert.Producer;
 import cci.repository.SQLBuilder;
 import cci.repository.fscert.SQLBuilderFSCertificate;
 import cci.service.FieldType;
@@ -29,6 +32,7 @@ import cci.service.Filter;
 import cci.service.cert.CertFilter;
 import cci.service.cert.CertService;
 import cci.service.cert.XSLWriter;
+import cci.service.client.ClientService;
 import cci.service.fscert.FSCertificateService;
 import cci.service.fscert.FSFilter;
 import cci.web.controller.ViewManager;
@@ -46,6 +50,10 @@ public class FSCertificateController {
 	
 	@Autowired
 	private CertService certService;
+	
+	@Autowired
+	private ClientService clientService;
+
 
 	// ---------------------------------------------------------------------------------------
 	//  Main Request - Get List of FS Certificates
@@ -279,7 +287,7 @@ public class FSCertificateController {
 				response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
 
 				response.setHeader("Content-Disposition",
-						"attachment; filename=certificates.xlsx");
+						"attachment; filename=fscertificates.xlsx");
 				(new XSLWriter()).makeWorkbook(certs,
 						vmanager.getDownloadconfig().getHeaders(),  
 						vmanager.getDownloadconfig().getFields(), "Лист Сертификатов").write(
@@ -328,7 +336,7 @@ public class FSCertificateController {
 	}
 
 	// ---------------------------------------------------------------------------------------
-	//   EDIT FS Certificate as HTML page 
+	//   SAVE/ FS Certificate as HTML page 
 	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "fsedit.do",  method = RequestMethod.POST)
 	public String save(FSCertificate fscert,
@@ -354,10 +362,50 @@ public class FSCertificateController {
 			return "editfscertificate";
 	}
 
+	// ---------------------------------------------------------------------------------------
+	//   Link Exporter to FS certificate  
+	// ---------------------------------------------------------------------------------------
+	@RequestMapping(value = "selclient.do",  method = RequestMethod.GET)
+	public void linkClientToFSCertificate(
+			@RequestParam(value = "id", required = true) Long certid,
+			@RequestParam(value = "clienttype", required = true) String clienttype,
+			HttpSession session, HttpServletResponse response, ModelMap model) {
+		
+			try {
+				  LOG.info("Exporter ID: " + certid);
+				  FSCertificate cert = (FSCertificate)model.get("fscert");
+				  Client client = clientService.readClient(certid.longValue());
+				 
+				  if (client!=null && cert!=null) {
+					  if ("exporter".equals(clienttype)) {
+						Exporter exporter = new Exporter();
+						exporter.init(client);
+						cert.setExporter(exporter);
+					  } else if ("producer".equals(clienttype)) {
+						Producer producer = new Producer();
+						producer.init(client);
+						cert.setProducer(producer);
+					  } 
+				
+					  response.setContentType("text/html; charset=UTF-8");
+					  response.setCharacterEncoding("UTF-8");
+					  response.getWriter().println(client.getName() + "; " + client.getAddress());
+					  response.flushBuffer();
+					  LOG.info("Linked exporter to certificate: " + cert);
+				  } else {	 
+					  model.addAttribute("error", "Сертификат или экспортер не найдены");
+				  }
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				LOG.info("Ошибка: " + ex.getMessage());
+				model.addAttribute("error", ex.getMessage());
+			}
+	}
+	
 	
 	
 	// ---------------------------------------------------------------------------------------
-	// Fillin lists 
+	// Fill in lists 
 	// ---------------------------------------------------------------------------------------
 	@ModelAttribute("countries")
 	public Map<String, String> populateCompanyList() {

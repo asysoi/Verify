@@ -6,49 +6,6 @@
 <spring:url value="resources/css/cci.css" var="CCICss" />
 <link href="${CCICss}" rel="stylesheet" />
 
-<style>
-.ccidropdown {
-    position: relative;
-    display: inline-block;
-}
-
-.ccidropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
-    padding: 5px 15px 5px 15px;
-    z-index: 1;
-}
-
-.ccidropdown:hover .ccidropdown-content {
-    display: block;
-}
-
-.ccidropdown:hover {
-    color: #428bca;
-    cursor: pointer;
-}
-
-ul.cci {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    background-color: #f1f1f1;
-}
-
-li.cci a.cci {
-    display: block;
-    padding: 3px 3px;
-    text-decoration: none;
-}
-
-li.cci a.cci:hover {
-    background-color: #428bca;
-    color: white;
-}
-</style>
-
 <script>
 	function clear() {
 		$('input').val('');
@@ -322,7 +279,7 @@ li.cci a.cci:hover {
 				<div class="ccidropdown-content"> 
 				<ul class="cci">
 					<li class="cci"><a class="cci" href="javascript:editCertificate('${cert.id}')"><i class="glyphicon glyphicon-edit"></i></a></li>
-					<li class="cci"><a class="cci" href="javascript:openCertificate('${cert.id}')"><i class="glyphicon glyphicon-open"></i></a></li>
+						<li class="cci"><a class="cci" href="javascript:openCertificate('${cert.id}')"><i class="glyphicon glyphicon-eye-open"></i></a></li>
 					<li class="cci"><a class="cci" href="javascript:printCertificate('${cert.id}')"><i class="glyphicon glyphicon-print"></i></a></li>
 				</ul> </div> </div>
 				</td>

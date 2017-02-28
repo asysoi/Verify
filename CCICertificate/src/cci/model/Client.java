@@ -40,6 +40,37 @@ public class Client {
 	private String bunp;
 	private String address;
 	
+	
+	
+	public void init(Client client) {
+		this.id = client.getId();
+		this.name = client.getName();
+		this.codecountry = client.getCodecountry();
+		this.cindex = client.getCindex();
+		this.city = client.getCity();
+		this.line = client.getLine();
+		this.office = client.getOffice();
+		this.building = client.getBuilding();
+		this.work_phone = client.getWork_phone();
+		this.cell_phone = client.getCell_phone();
+		this.email = client.getEmail();
+		this.unp = client.getUnp();
+		this.okpo = client.getOkpo();
+		this.account = client.getAccount();
+		this.bname = client.getBname();
+		this.bindex = client.getBindex();
+		this.bcodecountry = client.getBcodecountry();
+		this.bcity = client.getBcity();
+		this.bline = client.getBline();
+		this.boffice = client.getBoffice();
+		this.bbuilding = client.getBbuilding();
+		this.bwork_phone = client.getBwork_phone();
+		this.bcell_phone = client.getBcell_phone();
+		this.bemail = client.getBemail();
+		this.bunp = client.getBunp();
+		this.address = client.getAddress();
+	}
+	
 	@XmlTransient	
 	public String getAddress() {
 		return address;

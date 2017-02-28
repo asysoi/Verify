@@ -6,11 +6,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
 
-<style>
-div.row {
-   margin: 10px;
-}
-</style>
+<link href="${CCICss}" rel="stylesheet" />
 
 <script>
 	$(function() {
@@ -39,8 +35,8 @@ div.row {
 		element.val('');
 	}
 
-	function openClients() {
-        link="sclients.do?pagesize=5";
+	function openClients(clienttype) {
+        link="sclients.do?pagesize=5&clienttype="+clienttype;
 		$("#fsview").load(link);
 		$("#fsview").dialog("option", "title", 'Список компаний');
 		$("#fsview").dialog("option", "width", 1200);
@@ -86,13 +82,13 @@ ${fscert.branch.address}, Республика Беларусь<br>
 </div>
 					
 <div class="row">
-<div class="col-md-1"><a href="javascript:openClients()">Экспортер: </a></div>
+<div class="col-md-1"><a href="javascript:openClients('eхporter')">Экспортер: </a></div>
 <div class="col-md-6" id="exporter">${fscert.exporter.name}, ${fscert.exporter.address}</div>
 </div>
 
 <div class="row">
-<div class="col-md-1">Производитель:</div>
-<div class="col-md-10">${fscert.producer.name}, ${fscert.producer.address}</div>
+<div class="col-md-1"><a href="javascript:openClients('producer')">Производитель:</a></div>
+<div class="col-md-10" id="producer">${fscert.producer.name}, ${fscert.producer.address}</div>
 </div>	
 
 <div class="row">

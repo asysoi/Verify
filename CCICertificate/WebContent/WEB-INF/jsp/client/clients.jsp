@@ -1,5 +1,4 @@
-﻿<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+﻿<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
@@ -209,7 +208,22 @@
     	}
     	iframe.src = "clientsecport.do";
 	}
-
+	
+	function linkClient(clientid, clienttype) {
+		url = "selclient.do?id=" + clientid+"&clienttype="+clienttype;
+		$.ajaxSetup({async:false});
+		$.get(url, function(data, status) {
+			 alert("Data: " + data);
+			 alert("Clienttype: " + clienttype);
+			 if (clienttype == 'exporter') { 
+			     $("#exporter").text(data);
+			 } else if (clienttype == 'producer') {
+				 $("#producer").text(data);
+			 }
+		});	
+		$("#fsview").dialog("close");
+	}
+	
 </script>
 
 
@@ -248,7 +262,14 @@
 
 		<c:forEach items="${clients}" var="client">
 			<tr>
-				<td><a href="javascript:editClient('${client.id}')">${client.name}</a></td>
+				<td>
+				<div class="ccidropdown"><span>${client.name}</span>
+				<div class="ccidropdown-content"> 
+				<ul class="cci">
+					<li class="cci"><a class="cci" href="javascript:editClient('${client.id}')"><i class="glyphicon glyphicon-edit"></i></a></li>
+					<li class="cci"><a class="cci" href="javascript:linkClient('${client.id}','${clienttype}')"><i class="glyphicon glyphicon-paperclip"></i></a></li>
+				</ul> </div> </div>
+				</td>
 				<td>${client.address}</td>
                 <td>${client.unp}</td>
                 <td>${client.bname}</td>
