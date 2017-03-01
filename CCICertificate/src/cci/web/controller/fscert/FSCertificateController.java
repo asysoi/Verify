@@ -411,10 +411,10 @@ public class FSCertificateController {
 	
 	
 	// ---------------------------------------------------------------------------------------
-	//   Link Exporter to FS certificate  
+	//   Reload Template of certification field
 	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "rldconfirm.do",  method = RequestMethod.GET)
-	public void linkClientToFSCertificate(
+	public void reloadConfirmationField(
 			@RequestParam(value = "lang", required = true) String lang,
 			HttpSession session, HttpServletResponse response, ModelMap model) {
 			
@@ -422,6 +422,10 @@ public class FSCertificateController {
 				  FSCertificate cert = (FSCertificate)model.get("fscert");
 				  
 				  String template = fsCertService.getTemplate("confirmation", lang);
+				  String replacement = cert.getProducer() != null ? 
+						           cert.getProducer().getName() != null ? 
+						           cert.getProducer().getName() + ", " + cert.getProducer().getAddress() : "" : "";
+				  template.replaceAll("\\[producer\\]", replacement);				  
 				  cert.setConfirmation(template);
 				 
 				  response.setContentType("text/html; charset=UTF-8");
@@ -436,7 +440,7 @@ public class FSCertificateController {
 			}
 	}
 	
-	
+
 	// ---------------------------------------------------------------------------------------
 	// Fill in lists 
 	// ---------------------------------------------------------------------------------------

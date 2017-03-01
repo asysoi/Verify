@@ -14,6 +14,7 @@ import cci.model.fscert.FSCertificate;
 import cci.model.owncert.OwnCertificate;
 import cci.repository.SQLBuilder;
 import cci.repository.fscert.FSCertificateDAO;
+import cci.repository.fscert.FSTranslate;
 import cci.service.owncert.OwnCertificateService;
 import cci.web.controller.fscert.ViewFSCertificate;
 
@@ -25,7 +26,7 @@ public class FSCertificateService {
 	@Autowired
 	private FSCertificateDAO fscertificateDAO;
 	
-	private Map templates;
+	private FSTranslate templates;
 
 	// ------------------------------------------------------------------------------
 	//  This method returns count of pages in certificate list 
@@ -99,12 +100,15 @@ public class FSCertificateService {
 	// ------------------------------------------------------------------------------
 	//  Return string template for various needs 
 	// ------------------------------------------------------------------------------
-	public String getTemplate(String string, String lang) {
+	public String getTemplate(String key, String lang) {
 		String template = null;
 		
         if (templates == null) {
         	templates = fscertificateDAO.loadTemplates();
         }
+        
+        template = (String)((Map) templates.get(key)).get(lang) ;
+        
 		return template;
 	}
 

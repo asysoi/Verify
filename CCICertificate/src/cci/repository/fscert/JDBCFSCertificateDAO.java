@@ -176,15 +176,13 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 	// ---------------------------------------------------------------
 	// Загрузка шаблонов из базы данных
 	// ---------------------------------------------------------------
-	public Map loadTemplates() {
-        Map fstemplates = new HashMap();
+	public FSTranslate loadTemplates() {
+        FSTranslate fstranslate = new FSTranslate();
 		String sql = "select * from fs_template";
-        
-		return this.template.query(sql,	
-				new BeanPropertyRowMapper<ViewFSCertificate>(ViewFSCertificate.class));
-
-        
-		return fstemplates;
+		
+		fstranslate =template.query(sql, new  FSResultSetExtractor());
+		
+		return fstranslate;
 	}
 
 

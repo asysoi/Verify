@@ -33,6 +33,6 @@ public interface FSCertificateDAO {
 
 	public FSCertificate findFSCertificateByID(int id) throws Exception;
 
-	public Map loadTemplates();
+	public FSTranslate loadTemplates();
 	
 }
