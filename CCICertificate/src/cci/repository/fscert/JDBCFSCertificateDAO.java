@@ -1,6 +1,7 @@
 package cci.repository.fscert;
 
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -170,6 +171,22 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 		return cert;
 
 	}
+	
+
+	// ---------------------------------------------------------------
+	// Загрузка шаблонов из базы данных
+	// ---------------------------------------------------------------
+	public Map loadTemplates() {
+        Map fstemplates = new HashMap();
+		String sql = "select * from fs_template";
+        
+		return this.template.query(sql,	
+				new BeanPropertyRowMapper<ViewFSCertificate>(ViewFSCertificate.class));
+
+        
+		return fstemplates;
+	}
+
 
 	
 	// ------------------------------------------------------------------------------------------------------
@@ -507,7 +524,7 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 		//            UPDATE FS Certificate WEB or REST service 
 		//--------------------------------------------------------------------
 		//--------------------------------------------------------------------
-		public FSCertificate updateFSCertificate(FSCertificate cert, String branch_id) throws Exception {
+		public FSCertificate updateFSCertificate(FSCertificate cert) throws Exception {
 			
 	 		if (cert.getId() == 0) cert.setId(getFSCertificateIdByNUmber(cert.getCertnumber()));
 			if (cert.getBranch()!= null && cert.getBranch().getId() == 0 ) cert.getBranch().setId(findOrCreateBranchID(cert.getBranch()));
@@ -632,7 +649,7 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 		//            DELETE FS certificate by certificate number 
 		//--------------------------------------------------------------------
 		//--------------------------------------------------------------------
-		public String deleteFSCertificate(String certnumber, String branch_id) throws Exception {
+		public String deleteFSCertificate(String certnumber) throws Exception {
 	        String rnumber = null;
 	        long id = getFSCertificateIdByNUmber(certnumber);
 	        
@@ -652,10 +669,4 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 	    	LOG.info("Certificate " + rnumber + " deleted !");
 			return rnumber;
 		}
-
-
-
-
-
-	
 }

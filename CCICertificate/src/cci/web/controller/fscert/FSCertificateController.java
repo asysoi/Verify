@@ -356,6 +356,12 @@ public class FSCertificateController {
 		    	fscert.setSigner(storedCert.getSigner());
 		    	fscert.setBlanks(storedCert.getBlanks());
 		    	fscert.setProducts(storedCert.getProducts());
+		    	try {
+		    		fsCertService.save(fscert);
+					model.remove("error");		    		
+		    	} catch (Exception ex) {
+					model.addAttribute("error", ex.getMessage());
+		    	}
 		    	model.addAttribute("fscert", fscert);
 		    	storedCert = null;
 		    }
@@ -402,6 +408,33 @@ public class FSCertificateController {
 			}
 	}
 	
+	
+	
+	// ---------------------------------------------------------------------------------------
+	//   Link Exporter to FS certificate  
+	// ---------------------------------------------------------------------------------------
+	@RequestMapping(value = "rldconfirm.do",  method = RequestMethod.GET)
+	public void linkClientToFSCertificate(
+			@RequestParam(value = "lang", required = true) String lang,
+			HttpSession session, HttpServletResponse response, ModelMap model) {
+			
+			try {
+				  FSCertificate cert = (FSCertificate)model.get("fscert");
+				  
+				  String template = fsCertService.getTemplate("confirmation", lang);
+				  cert.setConfirmation(template);
+				 
+				  response.setContentType("text/html; charset=UTF-8");
+				  response.setCharacterEncoding("UTF-8");
+  			      response.getWriter().println(cert.getConfirmation());
+				  response.flushBuffer();
+				  
+			} catch (Exception ex) {
+					ex.printStackTrace();
+					LOG.info("Ошибка: " + ex.getMessage());
+					model.addAttribute("error", ex.getMessage());
+			}
+	}
 	
 	
 	// ---------------------------------------------------------------------------------------

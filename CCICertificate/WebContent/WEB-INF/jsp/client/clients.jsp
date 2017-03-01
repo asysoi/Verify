@@ -19,7 +19,7 @@
 		url = $("#clientfilter").attr("action");
 		$.ajaxSetup({async:false});
 		$.post(url, $("#clientfilter").serialize());
-  	    goToList('sclients.do?page=1&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}');
+  	    goToList('sclients.do?page=1&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}&clienttype=${clienttype}');
 		$("#clpview").dialog("close");
 	}
 	
@@ -31,7 +31,7 @@
 		url = $("#fclient").attr("action");
 		$.ajaxSetup({async:false});
 		$.post(url, $("#fclient").serialize());
-  	    goToList('sclients.do?page=1&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}');
+  	    goToList('sclients.do?page=1&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}&clienttype=${clienttype}');
 		$("#clview").dialog("close");
 	}
 	
@@ -41,7 +41,7 @@
 			url = $("#fclient").attr("action");
 			$.ajaxSetup({async:false});
 			$.post(url, $("#fclient").serialize());
-			goToList('sclients.do?page=1&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}');
+			goToList('sclients.do?page=1&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}&clienttype=${clienttype}');
 			$("#clview").dialog("close");
 		} 
 	}
@@ -78,7 +78,7 @@
 	}
 
 	function swithFilter() {
-		goToList('sclients.do?page=1&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}');
+		goToList('sclients.do?page=1&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}&clienttype=${clienttype}');
 		
 		if (document.getElementById("filter").checked) {
 			$("#filterlink").html('<a href="javascript: setFilter();">&nbsp;Фильтр</a>');
@@ -213,8 +213,7 @@
 		url = "selclient.do?id=" + clientid+"&clienttype="+clienttype;
 		$.ajaxSetup({async:false});
 		$.get(url, function(data, status) {
-			 alert("Data: " + data);
-			 alert("Clienttype: " + clienttype);
+			 console.log("Clienttype: " + clienttype);
 			 if (clienttype == 'exporter') { 
 			     $("#exporter").text(data);
 			 } else if (clienttype == 'producer') {
@@ -241,7 +240,7 @@
 				   &nbsp; Строк в списке: 
 				   <c:forEach items="${sizes}" var="item"> 
 	           	   &nbsp;	
-	               <a  href="javascript: goToList('sclients.do?page=1&pagesize=${item}&orderby=${cmanager.orderby}&order=${cmanager.order}');">${item}</a>
+	               <a  href="javascript: goToList('sclients.do?page=1&pagesize=${item}&orderby=${cmanager.orderby}&order=${cmanager.order}&clienttype=${clienttype}');">${item}</a>
 				</c:forEach>
 			</td>
 
@@ -288,16 +287,9 @@
 					items="${pages}" var="item">
 	           	   &nbsp;	
 	               <a
-						href="javascript: goToList('sclients.do?page=${item}&pagesize=${cmanager.pagesize}
-
-&orderby=
-
-${cmanager.orderby}
-
-&order=${cmanager.order}');"
-						<c:if test="${item==cmanager.page}">style="border-style: solid; border-width: 
-
-1px;"</c:if>>
+						href="javascript: goToList('sclients.do?page=${item}&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}
+										&order=${cmanager.order}&clienttype=${clienttype}');"
+						<c:if test="${item==cmanager.page}">style="border-style: solid; border-width:1px;"</c:if>>
 						${item} </a>
 				</c:forEach> &nbsp; [Клиентов: &nbsp;${cmanager.pagecount}]</td>
 			<td style="width: 20%; text-align: right"><a

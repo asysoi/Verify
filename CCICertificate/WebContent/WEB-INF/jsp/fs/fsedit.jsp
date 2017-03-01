@@ -47,9 +47,15 @@
 		$("#fsview").dialog("open");
 	}
 	
-	function updateClients(link) {
-    	$("#fsview").load(link);
+	function reloadConfirmation() {
+		url = "rldconfirm.do?lang=ru";
+		$.ajaxSetup({async:false});
+		$.get(url, function(data, status) {
+		     $("#confirmation").text(data);
+		});	
 	}
+	
+	
 	
 </script>
 
@@ -82,7 +88,7 @@ ${fscert.branch.address}, Республика Беларусь<br>
 </div>
 					
 <div class="row">
-<div class="col-md-1"><a href="javascript:openClients('eхporter')">Экспортер: </a></div>
+<div class="col-md-1"><a href="javascript:openClients('exporter')">Экспортер: </a></div>
 <div class="col-md-6" id="exporter">${fscert.exporter.name}, ${fscert.exporter.address}</div>
 </div>
 
@@ -92,7 +98,7 @@ ${fscert.branch.address}, Республика Беларусь<br>
 </div>	
 
 <div class="row">
-<div class="col-md-1">Удостоверение:</div>
+<div class="col-md-1">Удостоверение:<br><li class="cci"><a href="javascript:reloadConfirmation()" title="Сгенерировать из шаблона"><i class="glyphicon glyphicon-reload"></i></a></div>
 <div class="col-md-11"><form:textarea rows="6" cols="140" path="confirmation" id="confirmation" /></div>
 </div>
 <div class="row">

@@ -31,12 +31,12 @@ public class FSCertificateRestFulService {
 
 	@Transactional(propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
 	public FSCertificate updateFSCertificate(FSCertificate certificate, String branch_id) throws Exception {
-		return fscertificateDAO.updateFSCertificate(certificate, branch_id);
+		return fscertificateDAO.updateFSCertificate(certificate);
 	}
 
 	@Transactional(propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
 	public String deleteFSCertificate(String certnumber, String branch_id) throws Exception {
-		return fscertificateDAO.deleteFSCertificate(certnumber, branch_id);
+		return fscertificateDAO.deleteFSCertificate(certnumber);
 	}
 	
 }

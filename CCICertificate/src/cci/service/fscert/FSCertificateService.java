@@ -2,10 +2,13 @@ package cci.service.fscert;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import cci.model.fscert.FSCertificate;
 import cci.model.owncert.OwnCertificate;
@@ -21,6 +24,8 @@ public class FSCertificateService {
     
 	@Autowired
 	private FSCertificateDAO fscertificateDAO;
+	
+	private Map templates;
 
 	// ------------------------------------------------------------------------------
 	//  This method returns count of pages in certificate list 
@@ -76,6 +81,31 @@ public class FSCertificateService {
 	// ------------------------------------------------------------------------------
 	public FSCertificate getFSCertificateById(int id) throws Exception {
 		return fscertificateDAO.findFSCertificateByID(id);
+	}
+
+	// ------------------------------------------------------------------------------
+	//  Add or update FS certificate
+	// ------------------------------------------------------------------------------
+	@Transactional(propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
+	public void save(FSCertificate fscert)  throws Exception {
+        if (fscert.getId() == 0) {
+        	fscertificateDAO.saveFSCertificate(fscert);
+        } else {
+        	fscertificateDAO.updateFSCertificate(fscert);
+        }
+		
+	}
+
+	// ------------------------------------------------------------------------------
+	//  Return string template for various needs 
+	// ------------------------------------------------------------------------------
+	public String getTemplate(String string, String lang) {
+		String template = null;
+		
+        if (templates == null) {
+        	templates = fscertificateDAO.loadTemplates();
+        }
+		return template;
 	}
 
 }

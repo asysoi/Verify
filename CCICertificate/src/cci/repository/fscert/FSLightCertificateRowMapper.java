@@ -8,7 +8,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ResultSetExtractor;
 
 public class FSLightCertificateRowMapper implements ResultSetExtractor {
-
+    private String dateformat = "dd.MM.yyyy";
 	@Override
 	public Object extractData(ResultSet rs) throws SQLException, DataAccessException {
 		StringBuffer str = new StringBuffer();
@@ -17,7 +17,7 @@ public class FSLightCertificateRowMapper implements ResultSetExtractor {
 		while (rs.next()) {
 			str.append(rs.getString("certnumber"));
 			str.append(";");
-			str.append((new SimpleDateFormat("MM.dd.yyyy")).format(rs.getDate("datecert")));
+			str.append((new SimpleDateFormat(dateformat)).format(rs.getDate("datecert")));
 			str.append("\n");
 		}
 		return str.toString();

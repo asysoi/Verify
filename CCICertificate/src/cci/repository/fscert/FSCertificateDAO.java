@@ -1,6 +1,7 @@
 package cci.repository.fscert;
 
 import java.util.List;
+import java.util.Map;
 
 import cci.model.fscert.FSCertificate;
 import cci.model.owncert.OwnCertificate;
@@ -13,13 +14,13 @@ public interface FSCertificateDAO {
 	// --------------------  FS Certificate methods RESTFUL ---------------------------- //	
 	public FSCertificate saveFSCertificate(FSCertificate certificate) throws Exception;
 
-	public FSCertificate updateFSCertificate(FSCertificate certificate, String branch_id) throws Exception;
+	public FSCertificate updateFSCertificate(FSCertificate certificate) throws Exception;
 
 	public FSCertificate getFSCertificateByNumber(String number) throws Exception;
 
 	public String getFSCertificates(FSFilter filter) throws Exception;
 
-	public String deleteFSCertificate(String certnumber, String branch_id) throws Exception;
+	public String deleteFSCertificate(String certnumber) throws Exception;
 	
 
 	// --------------------  FS Certificate methods Web    ---------------------------- //
@@ -31,5 +32,7 @@ public interface FSCertificateDAO {
 	public List<ViewFSCertificate> getCertificates(String[] fields, String orderby, String order, SQLBuilder builder);
 
 	public FSCertificate findFSCertificateByID(int id) throws Exception;
+
+	public Map loadTemplates();
 	
 }

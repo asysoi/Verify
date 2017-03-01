@@ -141,7 +141,7 @@ public class ClientController {
 			@RequestParam(value = "orderby", required = false) String orderby,
 			@RequestParam(value = "order", required = false) String order,
 			@RequestParam(value = "filter", required = false) Boolean onfilter,
-			@RequestParam(value = "type", defaultValue = "client", required = false) String clienttype,
+			@RequestParam(value = "clienttype", defaultValue = "client", required = false) String clienttype,
 			ModelMap model) {
 
 		System.out

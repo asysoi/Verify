@@ -235,3 +235,33 @@ and id in (select id_fscert from fs_product where tovar like '%ВГА%')
 and id in (select id from cci_employee where name like '%о%')
 and certnumber like '%009%';
 	  
+
+
+======================================================================================
+--------------------------------------------------------
+--  File created - среда-Март-01-2017   
+--------------------------------------------------------
+--------------------------------------------------------
+--  DDL for Table FS_TEMPLATE
+--------------------------------------------------------
+
+  CREATE TABLE "BELTPP"."FS_TEMPLATE" 
+   (	"KEY" VARCHAR2(50 BYTE), 
+	"RU" VARCHAR2(1024 BYTE), 
+	"EN" VARCHAR2(1024 BYTE)
+   ) SEGMENT CREATION IMMEDIATE 
+  PCTFREE 10 PCTUSED 40 INITRANS 1 MAXTRANS 255 
+ NOCOMPRESS LOGGING
+  STORAGE(INITIAL 65536 NEXT 1048576 MINEXTENTS 1 MAXEXTENTS 2147483645
+  PCTINCREASE 0 FREELISTS 1 FREELIST GROUPS 1
+  BUFFER_POOL DEFAULT FLASH_CACHE DEFAULT CELL_FLASH_CACHE DEFAULT)
+  TABLESPACE "USERS" ;
+REM INSERTING into BELTPP.FS_TEMPLATE
+SET DEFINE OFF;
+Insert into BELTPP.FS_TEMPLATE (KEY,RU,EN) values ('submission','Выдан для предоставления в','For submission to ');
+Insert into BELTPP.FS_TEMPLATE (KEY,RU,EN) values ('confirmation','Настоящим удостоверяем, основываясь на представленных сведениях, что товары, перечисленные ниже, производятся [producer],  не имеют ограничений для обращения на территории Республики Беларусь. Насколько нам известно, нет никаких запретов на экспорт этих товаров','Referring to the information provided, the undersigned hereby declares that the products listed below are manufactured by [producer] and are available for free sale in the Republic of Belarus. To the best of our knowledge, there are no prohibitions against the export of these products.');
+Insert into BELTPP.FS_TEMPLATE (KEY,RU,EN) values ('listofproducts','Перечень товаров:','List of products');
+Insert into BELTPP.FS_TEMPLATE (KEY,RU,EN) values ('listscount','Продолжение перечня товаров смотри в приложении на [listscount] листах','For a continued list of products see Annex (total sheets - [listscount])   ');
+Insert into BELTPP.FS_TEMPLATE (KEY,RU,EN) values ('declaration','Данный сертификат не является явной или подразумеваемой гарантией для какого-либо товара вышеуказанного производителя и (или) экспортера. Сертификат не должен использоваться для целей рекламы или подобных целей, не является документом по оценке соответствия и не подтверждает происхождение товара из Республики Беларусь.','This certificate should not be interpreted as a guarantee, explicit or implied for any of the products of the manufacturer and (or) exporter mentioned above. Neither should it be used for advertising or similar purposes. This certificate is not a compliance verification document. This certificate is not a certificate of origin.');
+Insert into BELTPP.FS_TEMPLATE (KEY,RU,EN) values ('valid','Срок действия с [datestart]  по [dateexpiry] включительно.','Valid from [datestart] till [dateexpiry] inclusive.');
+

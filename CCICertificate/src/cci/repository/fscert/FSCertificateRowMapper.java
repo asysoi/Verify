@@ -14,18 +14,18 @@ import cci.model.fscert.Producer;
 import cci.model.fscert.Signer;
 
 public class FSCertificateRowMapper implements RowMapper {
-
+    private String dateformat = "dd.MM.yyyy";
 	public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
         FSCertificate cert = new FSCertificate(); 
 		cert.setId(rs.getLong("ID"));
 		cert.setCertnumber(rs.getString("CERTNUMBER"));
 		cert.setParentnumber(rs.getString("PARENTNUMBER"));
-		cert.setDateissue((new SimpleDateFormat("MM.dd.yyyy")).format(rs.getDate("dateissue")));
-		cert.setDateexpiry((new SimpleDateFormat("MM.dd.yyyy")).format(rs.getDate("dateexpiry")));
+		cert.setDateissue((new SimpleDateFormat(dateformat)).format(rs.getDate("dateissue")));
+		cert.setDateexpiry((new SimpleDateFormat(dateformat)).format(rs.getDate("dateexpiry")));
 		cert.setConfirmation(rs.getString("confirmation"));
 		cert.setDeclaration(rs.getString("declaration"));
 		cert.setCodecountrytarget(rs.getString("codecountrytarget"));
-		cert.setDatecert((new SimpleDateFormat("MM.dd.yyyy")).format(rs.getDate("datecert")));
+		cert.setDatecert((new SimpleDateFormat(dateformat)).format(rs.getDate("datecert")));
 		cert.setListscount(Integer.valueOf(rs.getInt("LISTSCOUNT")));
 		cert.setOtd_id(rs.getInt("OTD_ID"));
 		
