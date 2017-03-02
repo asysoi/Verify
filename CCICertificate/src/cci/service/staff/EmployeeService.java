@@ -1,24 +1,24 @@
 package cci.service.staff;
 
 import java.util.List;
+
 import java.util.Locale;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import cci.model.Employee;
 import cci.repository.SQLBuilder;
 import cci.repository.staff.EmployeeDAO;
-import cci.web.controller.client.ViewClient;
-import cci.web.controller.fscert.ViewFSCertificate;
 import cci.web.controller.staff.ViewEmployee;
 
+@Component
 public class EmployeeService {
     private static final Logger LOG=Logger.getLogger(EmployeeService.class);
     
 	@Autowired
 	private EmployeeDAO employeeDAO;
-
 	
 	// ------------------------------------------------------------------------------
 	//  This method returns count of pages in certificate list 
@@ -38,34 +38,21 @@ public class EmployeeService {
 	// ------------------------------------------------------------------------------
 	//  This method returns a current page of the certificate's list
 	// ------------------------------------------------------------------------------
-	public List<ViewFSCertificate> readCertificatesPage(String[] fields, int page, int pagesize, int pagecount,
-			String orderby, String order, SQLBuilder builder) {
+	public List<ViewEmployee> readEmployeesPage(int page, int pagesize, String orderby, String order,
+			SQLBuilder builder) {
 		Locale.setDefault(new Locale("en", "en"));
 
-		List<ViewFSCertificate> certs = null;
+		List<ViewEmployee> employees = null;
 
 		try {
-			certs = employeeDAO.findViewNextPage(fields, page, pagesize, pagecount, orderby,
-					order, builder);
+			employees = employeeDAO.findViewNextPage(page, pagesize, orderby, order,
+					builder);
 		} catch (Exception ex) {
 			LOG.info(ex.getMessage());
 		}
-		return certs;
+		return employees;
 	}
-
-	
-	
-	public List<ViewClient> readClientsPage(int page, int pagesize, String orderby, String order, SQLBuilder builder) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public List<ViewEmployee> readEmployeesPage(int page, int pagesize, String orderby, String order,
-			SQLBuilder builder) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
+		
 	public Employee readEmployeeView(Long id) {
 		// TODO Auto-generated method stub
 		return null;

@@ -55,7 +55,7 @@
 				<li class="dropdown"><a href="#" class="dropdown-toggle"
 					data-toggle="dropdown">Кадры<b class="caret"></b></a>
 					<ul class="dropdown-menu">
-						<li><a href="#">Сотрудники</a></li>					
+						<li><a href="employees.do">Сотрудники</a></li>					
 						<li><a href="#">Приказы</a></li>
 						<li><a href="#">Документы</a></li>
 

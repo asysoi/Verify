@@ -27,7 +27,7 @@ import cci.web.controller.fscert.ViewFSCertificate;
 
 @Repository
 public class JDBCClientDAO implements ClientDAO {
-	//public static Logger LOG=LogManager.getLogger(JDBCClientDAO.class);
+
 	public static Logger LOG=Logger.getLogger(JDBCClientDAO.class);
 	private NamedParameterJdbcTemplate template;
 

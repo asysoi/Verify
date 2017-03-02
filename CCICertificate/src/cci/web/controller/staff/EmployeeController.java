@@ -104,8 +104,8 @@ public class EmployeeController {
 		model.addAttribute("pages", viewmanager.getPagesList());
 		model.addAttribute("sizes", viewmanager.getSizesList());
 
-		model.addAttribute("jspName", "employee/employee_include.jsp");
-		return "window";
+		model.addAttribute("jspName", "staff/employees_include.jsp");
+		return "listemployees";
 	}
 
 	  
@@ -188,7 +188,7 @@ public class EmployeeController {
 		model.addAttribute("sizes", viewmanager.getSizesList());
 		model.addAttribute("employeetype", employeetype);
 
-		return "employee/employee";
+		return "employee/employees";
 	}
 
 
