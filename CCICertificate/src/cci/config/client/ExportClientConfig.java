@@ -5,7 +5,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ExportClientConfig {
+public class ExportClientConfig  {
 	private String[] headernames = new String[] { "Наименование компании", "Cтрана", "Город", "Улица"
 			, "Индекс", "Номер офиса", "Номер дома", "Телефон", "Мобильный телефон", "Email", "УНП"
 			, "ОКПО", "Наименование банка", "Страна банка", "Город Банка", "Улица Банка", "Индекс Банка"

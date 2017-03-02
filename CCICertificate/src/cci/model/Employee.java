@@ -12,11 +12,21 @@ import org.springframework.stereotype.Component;
 @XmlRootElement(name = "employee")
 @Component
 @XmlType(propOrder = {"name", "job"})
-
 public class Employee {
 	private long id;
 	private String name;
 	private String job;
+	private Department department;
+	private String runame;
+	private String rujob;
+	private String enname;
+	private String enjob;
+	private String firstname;
+	private String lastname;
+	private String middlename;
+	private String email;
+	private String phone;
+	private String bday;
 	
 	@XmlTransient
 	public long getId() {

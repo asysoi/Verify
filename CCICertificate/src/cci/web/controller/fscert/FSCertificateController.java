@@ -425,7 +425,7 @@ public class FSCertificateController {
 				  String replacement = cert.getProducer() != null ? 
 						           cert.getProducer().getName() != null ? 
 						           cert.getProducer().getName() + ", " + cert.getProducer().getAddress() : "" : "";
-				  template.replaceAll("\\[producer\\]", replacement);				  
+				  template = template.replaceAll("\\[producer\\]", replacement);				  
 				  cert.setConfirmation(template);
 				 
 				  response.setContentType("text/html; charset=UTF-8");
@@ -439,7 +439,34 @@ public class FSCertificateController {
 					model.addAttribute("error", ex.getMessage());
 			}
 	}
+
 	
+	// ---------------------------------------------------------------------------------------
+	//   Reload Declaration from template
+	// ---------------------------------------------------------------------------------------
+	@RequestMapping(value = "rlddecl.do",  method = RequestMethod.GET)
+	public void reloadDeclarationField(
+			@RequestParam(value = "lang", required = true) String lang,
+			HttpSession session, HttpServletResponse response, ModelMap model) {
+			
+			try {
+				  FSCertificate cert = (FSCertificate)model.get("fscert");
+				  
+				  String template = fsCertService.getTemplate("declaration", lang);
+				  cert.setConfirmation(template);
+				 
+				  response.setContentType("text/html; charset=UTF-8");
+				  response.setCharacterEncoding("UTF-8");
+  			      response.getWriter().println(cert.getConfirmation());
+				  response.flushBuffer();
+				  
+			} catch (Exception ex) {
+					ex.printStackTrace();
+					LOG.info("Ошибка: " + ex.getMessage());
+					model.addAttribute("error", ex.getMessage());
+			}
+	}
+
 
 	// ---------------------------------------------------------------------------------------
 	// Fill in lists 

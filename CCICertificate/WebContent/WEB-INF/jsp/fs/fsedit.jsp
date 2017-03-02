@@ -57,6 +57,15 @@
 		});	
 	}
 	
+	function reloadDeclaration() {
+		url = "rlddecl.do?lang=ru";
+		$.ajaxSetup({async:false});
+		$.get(url, function(data, status) {
+			 console.log(data); 
+			 console.log($("#declaration").text());
+		     $("#declaration").val(data);
+		});	
+	}
 	
 	
 </script>
@@ -100,11 +109,13 @@ ${fscert.branch.address}, Республика Беларусь<br>
 </div>	
 
 <div class="row">
-<div class="col-md-1">Удостоверение:<br><a href="javascript:reloadConfirmation()" title="Сгенерировать из шаблона"><i class="glyphicon glyphicon-refresh" align="center"></i></a></div>
+<div class="col-md-1">Удостоверение:<p align="center"><a href="javascript:reloadConfirmation()" title="Сгенерировать из шаблона">
+     <i class="glyphicon glyphicon-refresh" align="center"></i></a></p></div>
 <div class="col-md-11"><form:textarea rows="6" cols="140" path="confirmation" id="confirmation" /></div>
 </div>
 <div class="row">
-<div class="col-md-1">Декларация:</div>
+<div class="col-md-1">Декларация:<p align="center"><a href="javascript:reloadDeclaration()" title="Сгенерировать из шаблона">
+     <i class="glyphicon glyphicon-refresh" align="center"></i></a></p></div>
 <div class="col-md-11"><form:textarea rows="6" cols="140" path="declaration" id="declaration" /></div>
 </div>
 
