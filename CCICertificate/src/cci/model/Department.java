@@ -5,7 +5,7 @@ public class Department {
 	private String name;
 	private String code;
 	private Department parent;
-	private Long otd_id;
+	private Long id_otd;
 
 	public Long getId() {
 		return id;
@@ -39,12 +39,14 @@ public class Department {
 		this.parent = parent;
 	}
 
-	public Long getOtd_id() {
-		return otd_id;
+	public Long getId_otd() {
+		return id_otd;
 	}
 
-	public void setOtd_id(Long otd_id) {
-		this.otd_id = otd_id;
+	public void setId_otd(Long id_otd) {
+		this.id_otd = id_otd;
 	}
+
+	
 
 }

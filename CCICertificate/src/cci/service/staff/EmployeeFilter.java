@@ -14,14 +14,15 @@ public class EmployeeFilter extends Filter {
 	public static Logger LOG = Logger.getLogger(EmployeeFilter.class);
 
 	public EmployeeFilter() {
-		String[] fields = new String[] { "ID", "NAME", "JOB", "DEPARTMENTNAME", "OTD_ID", 
-				"PHONE", "EMAIL", "BDAY", "LASTNAME", "FIRSTNAME", "MIDDLENAME"};
+		String[] fields = new String[] { "ID", "NAME", "JOB", "DEPARTMENTNAME", "ID_OTD", "ID_DEPARTMENT",  
+				"PHONE", "EMAIL", "BDAY", "LASTNAME", "FIRSTNAME", "MIDDLENAME", "BDAYFROM", "BDAYTO"};
 
-		String[] dbfields = new String[] {"ID", "RUNAME", "RUJOB", "NAME", "OTD_ID", 
-				"PHONE", "EMAIL", "BDAY", "LASTNAME", "FIRSTNAME", "MIDDLENAME"};
+		String[] dbfields = new String[] {"ID", "RUNAME", "RUJOB", "NAME", "ID_OTD", "ID_DEPARTMENT", 
+				"PHONE", "EMAIL", "BDAY", "LASTNAME", "FIRSTNAME", "MIDDLENAME", "BDAY", "BDAY"};
 
-		FieldType[] types = new FieldType[] { FieldType.ID, FieldType.STRING, FieldType.STRING, FieldType.STRING, FieldType.NUMBER,  
-		            FieldType.STRING, FieldType.STRING, FieldType.DATE, FieldType.STRING,FieldType.STRING,FieldType.STRING };
+		FieldType[] types = new FieldType[] { FieldType.ID, FieldType.STRING, FieldType.STRING, FieldType.STRING, FieldType.NUMBER, FieldType.NUMBER,   
+		            FieldType.STRING, FieldType.STRING, FieldType.DATE, FieldType.STRING,FieldType.STRING,FieldType.STRING, 
+		            FieldType.DATE, FieldType.DATE };
 
 		this.init(fields, dbfields, types);
 	}

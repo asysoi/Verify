@@ -97,7 +97,7 @@
 	function setFilter(link) {
         link="employeefilter.do?&pagesize=${viewmanager.pagesize}&orderby=${viewmanager.orderby}&order=${viewmanager.order}";
 		$("#pview").load(link);
-		$("#pview").dialog("option", "title", 'Фильтр поиска сотрудника');
+		$("#pview").dialog("option", "title", 'Фильтр выбора сотрудника');
 		$("#pview").dialog("option", "width", 770);
 		$("#pview").dialog("option", "height", 500);
 		$("#pview").dialog("option", "modal", true);
@@ -114,7 +114,7 @@
 	function viewEmployee(id) {
         link = "clientview.do?id=" + id;
 		$("#clview").load(link);        
-		$("#clview").dialog("option", "title", 'Компания');
+		$("#clview").dialog("option", "title", 'Сотрудник БелТПП');
 		$("#clview").dialog("option", "width", 650);
 		$("#clview").dialog("option", "height", 480);
 		$("#clview").dialog("option", "modal", true);
@@ -132,7 +132,7 @@
 	function editEmployee(id) {
         link = "clientedit.do?id=" + id;
 		$("#clview").load(link);        
-		$("#clview").dialog("option", "title", 'Компания');
+		$("#clview").dialog("option", "title", 'Сотрудник БелТПП');
 		$("#clview").dialog("option", "width", 820);
 		$("#clview").dialog("option", "height", 570);
 		$("#clview").dialog("option", "modal", true);
@@ -152,7 +152,7 @@
 	function addEmployee(id) {
         link = "clientadd.do";
 		$("#clview").load(link);        
-		$("#clview").dialog("option", "title", 'Компания');
+		$("#clview").dialog("option", "title", 'Новый Сотрудник БелТПП');
 		$("#clview").dialog("option", "width", 820);
 		$("#clview").dialog("option", "height", 570);
 		$("#clview").dialog("option", "modal", true);
@@ -172,7 +172,7 @@
 	function downloadEmployees() {
 		link = "сlientconfig.do";
 		$("#pview").load(link);
-		$("#pview").dialog("option", "title", 'Экспорт списка клиентов');
+		$("#pview").dialog("option", "title", 'Экспорт списка сотрудников БелТПП');
 		$("#pview").dialog("option", "width", 850);
 		$("#pview").dialog("option", "height", 520);
 		$("#pview").dialog("option", "modal", true);

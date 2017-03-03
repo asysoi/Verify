@@ -3,11 +3,13 @@ package cci.service.staff;
 import java.util.List;
 
 import java.util.Locale;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import cci.model.Department;
 import cci.model.Employee;
 import cci.repository.SQLBuilder;
 import cci.repository.staff.EmployeeDAO;
@@ -17,6 +19,8 @@ import cci.web.controller.staff.ViewEmployee;
 public class EmployeeService {
     private static final Logger LOG=Logger.getLogger(EmployeeService.class);
     
+	private Map<String, Department> departments = null;
+	
 	@Autowired
 	private EmployeeDAO employeeDAO;
 	
@@ -76,6 +80,22 @@ public class EmployeeService {
 	public List readEmployees(String orderby, String order, SQLBuilder builder) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	
+	// ------------------------------------------------------------------------------
+	//  This method returns a current page of the certificate's list
+	// ------------------------------------------------------------------------------
+	public Map<String, Department> getDepartmentsList() {
+		if (departments == null) {
+			Locale.setDefault(new Locale("en", "en"));
+			try {
+				departments = employeeDAO.getDepartmentsList();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
+		return departments;
 	}
 
 }

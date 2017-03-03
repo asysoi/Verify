@@ -280,9 +280,9 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	}
 
 	// ---------------------------------------------------------------
-	// Get list of departments -> PS
+	// Get list of branches -> PS
 	// ---------------------------------------------------------------
-	public Map<String, String> getDepartmentsList() {
+	public Map<String, String> getBranchesList() {
 		String sql = "SELECT id, otd_name from C_OTD Order by otd_name";
 
         return template.query(sql, new ResultSetExtractor<Map<String, String>>(){

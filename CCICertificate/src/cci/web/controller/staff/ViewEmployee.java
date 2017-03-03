@@ -4,7 +4,10 @@ import cci.model.Employee;
 
 public class ViewEmployee extends Employee {
 	private String departmentname;
+	private Integer id_department;
 	private String otd_name;
+	private String bdayfrom;
+	private String bdayto;
 	private String id_otd;
 
 	public String getOtd_name() {
@@ -29,6 +32,31 @@ public class ViewEmployee extends Employee {
 
 	public void setDepartmentname(String departmentname) {
 		this.departmentname = departmentname;
+	}
+
+	
+	public Integer getId_department() {
+		return id_department;
+	}
+
+	public void setId_department(Integer id_department) {
+		this.id_department = id_department;
+	}
+
+	public String getBdayfrom() {
+		return bdayfrom;
+	}
+
+	public void setBdayfrom(String bdayfrom) {
+		this.bdayfrom = bdayfrom;
+	}
+
+	public String getBdayto() {
+		return bdayto;
+	}
+
+	public void setBdayto(String bdayto) {
+		this.bdayto = bdayto;
 	}
 
 }

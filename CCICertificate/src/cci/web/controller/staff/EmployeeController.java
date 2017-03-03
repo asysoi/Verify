@@ -16,12 +16,14 @@ import cci.model.Employee;
 import cci.repository.SQLBuilder;
 import cci.repository.staff.SQLBuilderEmployee;
 import cci.service.Filter;
+import cci.service.cert.CertService;
 import cci.service.cert.XSLWriter;
 import cci.service.staff.EmployeeFilter;
 import cci.service.staff.EmployeeService;
 import cci.web.controller.ViewManager;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -37,6 +39,8 @@ public class EmployeeController {
 	@Autowired
 	private EmployeeService employeeService;
 
+	@Autowired
+	private CertService certService;
 
 	// ---------------------------------------------------------------
 	// Get Employee List
@@ -133,7 +137,7 @@ public class EmployeeController {
 			@RequestParam(value = "employeetype", defaultValue = "employee", required = false) String employeetype,
 			ModelMap model) {
 
-		LOG.info("=========================== GET STAFF LIST =================================== >");
+		LOG.info("=========================== GET STAFF LIST SELECTION =================================== >");
 		
 		ViewManager viewmanager = (ViewManager) model.get("viewmanager");
 
@@ -188,11 +192,8 @@ public class EmployeeController {
 		model.addAttribute("sizes", viewmanager.getSizesList());
 		model.addAttribute("employeetype", employeetype);
 
-		return "employee/employees";
+		return "staff/employees";
 	}
-
-
-	
 	
 	// ---------------------------------------------------------------
 	// Get Employee Filter Window
@@ -213,7 +214,7 @@ public class EmployeeController {
 				((EmployeeFilter) fc).getViewemployee(),
 				((EmployeeFilter) fc).getCondition());
 		model.addAttribute("viewfilter", vf);
-		return "staff/cfilter";
+		return "staff/efilter";
 	}
 
 	// ---------------------------------------------------------------
@@ -236,7 +237,7 @@ public class EmployeeController {
 		fc.loadCondition(viewfilter.getCondition());
 
 		model.addAttribute("employeefilter", fc);
-		return "staff/cfilter";
+		return "staff/efilter";
 	}
 
 	// ---------------------------------------------------------------
@@ -344,4 +345,20 @@ public class EmployeeController {
 			e.printStackTrace();
 		}
 	}
+	
+
+	// ---------------------------------------------------------------------------------------
+	// Fill in lists 
+	// ---------------------------------------------------------------------------------------
+	@ModelAttribute("branches")
+	public Map<String, String> populateBranchesList() {
+		return certService.getBranchesList();
+	}
+	
+	@ModelAttribute("departments")
+	public Map<String, String> populateDepartmentsList() {
+		return employeeService.getDepartmentsList();
+	}
+
+	
 }

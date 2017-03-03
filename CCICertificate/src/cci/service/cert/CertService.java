@@ -25,7 +25,7 @@ public class CertService {
 	@Autowired
 	XMLService xmlService;
 	
-	private Map<String, String> departments = null;
+	private Map<String, String> branches = null;
 	private List<String> forms = null;
 	private Map<String, String> countries = null;
 	private Map<String, String> acl = null;
@@ -180,16 +180,16 @@ public class CertService {
 	// ------------------------------------------------------------------------------
 	//
 	// ------------------------------------------------------------------------------
-	public Map<String, String> getDepartmentsList() {
-		if (departments == null) {
+	public Map<String, String> getBranchesList() {
+		if (branches == null) {
 			Locale.setDefault(new Locale("en", "en"));
 			try {
-				departments = certificateDAO.getDepartmentsList();
+				branches = certificateDAO.getBranchesList();
 			} catch (Exception ex) {
 				ex.printStackTrace();
 			}
 		}
-		return departments;
+		return branches;
 	}
 
 	// ------------------------------------------------------------------------------

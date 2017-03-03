@@ -1,5 +1,8 @@
 package cci.repository.staff;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -7,10 +10,13 @@ import javax.sql.DataSource;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import cci.model.Department;
 import cci.repository.SQLBuilder;
 import cci.repository.client.JDBCClientDAO;
 import cci.service.SQLQueryUnit;
@@ -66,4 +72,28 @@ public class JDBCEmployeeDAO implements EmployeeDAO {
 		LOG.info(sql);
 		return count.intValue();
 	}
+
+	// ---------------------------------------------------------------
+	// Get list of CCI departments  
+	// ---------------------------------------------------------------
+	public Map<String, Department> getDepartmentsList() {
+		String sql = "SELECT * CCI_DEPARTMENT Order by id_otd";
+
+        return template.query(sql, new ResultSetExtractor<Map<String, Department>>(){
+			
+		    public Map<String, Department> extractData(ResultSet rs) throws SQLException,DataAccessException {
+		        HashMap<String,Department> mapRet= new HashMap<String,Department>();
+		        while(rs.next()){
+		        	Department department  = new Department();
+		        	department.setId(rs.getLong("id"));
+		        	department.setName(rs.getString("name"));
+		        	department.setCode(rs.getString("code"));
+		        	Department parent = new Department();
+		        	parent.setId(rs.getLong("parent"));
+		        	department.setParent(parent);
+		            mapRet.put(Integer.toString(rs.getInt("id")), department);
+		        }
+		        return mapRet;
+		    }
+		});	}
 }
