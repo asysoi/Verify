@@ -478,7 +478,7 @@ public class FSCertificateController {
 
 	@ModelAttribute("departments")
 	public Map<String, String> populateDepartmentssList() {
-		return certService.getDepartmentsList();
+		return certService.getBranchesList();
 	}
 	
 }

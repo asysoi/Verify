@@ -337,7 +337,7 @@ public class OwnCertificateController {
 		
 	@ModelAttribute("departments")
 	public Map<String, String> populateDepartmentssList() {
-		return certService.getDepartmentsList();
+		return certService.getBranchesList();
 	}
 
 	

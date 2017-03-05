@@ -21,8 +21,8 @@
 						"${employeefilter.viewemployee.bdayfrom}");
 				$("#bdayto").datepicker("setDate",
 						"${employeefilter.viewemployee.bdayto}");
-				$("#departmentname")
-  	  					.val('${employeefilter.viewemployee.departmentname}');
+				$("#id_department")
+  	  					.val('${employeefilter.viewemployee.id_department}');
 				$("#id_otd")
 						.val('${employeefilter.viewemployee.id_otd}');
 			});
@@ -116,7 +116,7 @@
 				<td>
 				      <form:select path="viewemployee.id_department"
 						items="${departments}" id="id_department" />
-					  <a href="javascript:clearelement($('#id_otd'));"> 
+					  <a href="javascript:clearelement($('#id_department'));"> 
 					  <img src="resources/images/delete-16.png" alt="удл." />	</a>
 			    </td>
 			

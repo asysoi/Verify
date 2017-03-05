@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import cci.config.staff.ExportEmployeeConfig;
+import cci.model.Department;
 import cci.model.Employee;
 import cci.repository.SQLBuilder;
 import cci.repository.staff.SQLBuilderEmployee;
@@ -22,8 +23,10 @@ import cci.service.staff.EmployeeFilter;
 import cci.service.staff.EmployeeService;
 import cci.web.controller.ViewManager;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -357,7 +360,19 @@ public class EmployeeController {
 	
 	@ModelAttribute("departments")
 	public Map<String, String> populateDepartmentsList() {
-		return employeeService.getDepartmentsList();
+		Map<String, String> deplist = null;
+		try {
+			Map<String, Department> departments  = employeeService.getDepartmentsList();
+			deplist= new HashMap();
+		
+			for (Map.Entry<String, Department> entry : departments.entrySet()) {
+				deplist.put(entry.getKey(), entry.getValue().getName());
+			}
+		} catch (Exception ex) {
+			LOG.info("Departments List loading error: " + ex.getMessage());
+		}
+		
+		return  deplist;
 	}
 
 	

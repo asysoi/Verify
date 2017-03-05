@@ -76,8 +76,8 @@ public class JDBCEmployeeDAO implements EmployeeDAO {
 	// ---------------------------------------------------------------
 	// Get list of CCI departments  
 	// ---------------------------------------------------------------
-	public Map<String, Department> getDepartmentsList() {
-		String sql = "SELECT * CCI_DEPARTMENT Order by id_otd";
+	public Map<String, Department> getDepartmentsList() throws Exception{
+		String sql = "SELECT * FROM CCI_DEPARTMENT Order by id_otd";
 
         return template.query(sql, new ResultSetExtractor<Map<String, Department>>(){
 			
@@ -88,10 +88,27 @@ public class JDBCEmployeeDAO implements EmployeeDAO {
 		        	department.setId(rs.getLong("id"));
 		        	department.setName(rs.getString("name"));
 		        	department.setCode(rs.getString("code"));
-		        	Department parent = new Department();
-		        	parent.setId(rs.getLong("parent"));
-		        	department.setParent(parent);
+		        	Long parentid = rs.getLong("id_parent");
+		        	department.setId_otd(rs.getLong("id_otd"));
+		        	
+		        	if (parentid != null) {
+			        	Department parent = new Department();
+			        	parent.setId(parentid);
+			        	department.setParent(parent);
+		        	} else {
+		        		department.setParent(null);
+		        	}
 		            mapRet.put(Integer.toString(rs.getInt("id")), department);
+		        }
+		        
+		        for (Map.Entry<String, Department> dep : mapRet.entrySet()) {
+		        	if (dep.getValue().getParent() != null) {
+		        		String idparent = Long.toString(dep.getValue().getParent().getId());
+		        		
+		        		if (mapRet.containsKey(idparent)) {
+		        			dep.getValue().setParent(mapRet.get(idparent));
+		        		}
+		        	}
 		        }
 		        return mapRet;
 		    }

@@ -99,7 +99,7 @@
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Фильтр выбора сотрудника');
 		$("#pview").dialog("option", "width", 770);
-		$("#pview").dialog("option", "height", 500);
+		$("#pview").dialog("option", "height", 400);
 		$("#pview").dialog("option", "modal", true);
 		$("#pview").dialog("option", "resizable", false );
 		$("#pview").dialog({ buttons: [ { text: "Применить",  click : function() { submit(); } },  

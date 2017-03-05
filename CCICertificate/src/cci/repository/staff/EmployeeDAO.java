@@ -11,6 +11,6 @@ public interface EmployeeDAO {
 
 	int getViewPageCount(SQLBuilder builder);
 	List<ViewEmployee> findViewNextPage(int page, int pagesize, String orderby, String order, SQLBuilder builder);
-	Map<String, Department> getDepartmentsList();
+	Map<String, Department> getDepartmentsList() throws Exception;
 
 }
