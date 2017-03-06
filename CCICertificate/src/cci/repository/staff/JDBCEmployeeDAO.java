@@ -16,9 +16,13 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import cci.model.Client;
 import cci.model.Department;
+import cci.model.Employee;
+import cci.model.fscert.FSCertificate;
 import cci.repository.SQLBuilder;
 import cci.repository.client.JDBCClientDAO;
+import cci.repository.fscert.FSCertificateRowMapper;
 import cci.service.SQLQueryUnit;
 import cci.web.controller.staff.ViewEmployee;
 
@@ -112,5 +116,29 @@ public class JDBCEmployeeDAO implements EmployeeDAO {
 		        }
 		        return mapRet;
 		    }
-		});	}
+		});	
+     }
+
+	// ---------------------------------------------------------------
+	// Get employee by ID  
+	// ---------------------------------------------------------------
+	public Employee findEmployeeByID(Long id) throws Exception {
+		String sql = "select * from EMPLOYEE_VIEW WHERE id = ?";
+		
+		Employee employee = template.getJdbcOperations()
+				.queryForObject(
+						sql,
+						new Object[] { id },
+						new EmployeeRowMapper<Employee>());
+		return employee;
+	}
+
+	@Override
+	public Employee updateEmployee(Employee employee) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
+	
 }

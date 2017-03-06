@@ -15,6 +15,9 @@
 
 	$("document").ready(
 			function() {
+				
+				fillindepartment( ${employeefilter.viewemployee.id_otd} );
+				
 				$(".datepicker").datepicker("option", "dateFormat",
 						'dd.mm.yy');
 				$("#bdayfrom").datepicker("setDate",
@@ -31,6 +34,23 @@
 
  function clearelement(element) {
 	element.val('');
+ }
+ 
+ function fillindepartment(id_otd) {
+	 $('#id_department option').remove();
+	 <c:forEach items="${departments}" var="deplist">
+	     if ( id_otd == ${deplist.key} ) {
+	        <c:forEach items="${deplist.value}" var="listElement" >
+	            $('#id_department').append('<option value="${listElement.key}">${listElement.value}</option>');
+	        </c:forEach>
+	     }
+	   </c:forEach>
+	$("#id_department")
+			.val('${employeefilter.viewemployee.id_department}');
+ }
+ 
+ function selectBranch() {
+	 fillindepartment($("#id_otd").val());	 
  }
  
 </script>
@@ -106,8 +126,10 @@
 				<td>Отделение</td>
 				<td>
 				      <form:select path="viewemployee.id_otd"
-						items="${branches}" id="id_otd" />
-					  <a href="javascript:clearelement($('#id_otd'));"> 
+						items="${branches}" id="id_otd" 
+						onChange="javaScript:selectBranch();"
+						/>
+					  <a href="javascript:clearelement($('#id_otd')); javascript:clearelement($('#id_department'));"> 
 					  <img src="resources/images/delete-16.png" alt="удл." />	</a>
 			    </td>
 			</tr>
@@ -115,7 +137,7 @@
 				<td>Подразделение</td>
 				<td>
 				      <form:select path="viewemployee.id_department"
-						items="${departments}" id="id_department" />
+						 id="id_department"/>
 					  <a href="javascript:clearelement($('#id_department'));"> 
 					  <img src="resources/images/delete-16.png" alt="удл." />	</a>
 			    </td>

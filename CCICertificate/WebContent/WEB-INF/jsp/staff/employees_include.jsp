@@ -26,12 +26,12 @@
 	}
 	
 	function resetEmployee() {
-		$('#fclient')[0].reset();
+		$('#femployee')[0].reset();
 	}
 
 	function saveEmployee() {
-		url = $("#fclient").attr("action");
-		$.post(url, $("#fclient").serialize());
+		url = $("#femployee").attr("action");
+		$.post(url, $("#femployee").serialize());
 		
 		$( document ).ajaxComplete(function(event,request, settings ) {
 			  goToList('employees.do?page=1&pagesize=${viewmanager.pagesize}&orderby=${viewmanager.orderby}&order=${viewmanager.order}');
@@ -43,8 +43,8 @@
         var x;
 		if (confirm("Сохранить сделанные изменения?") == true) {
 		
-			url = $("#fclient").attr("action");
-			$.post(url, $("#fclient").serialize());
+			url = $("#femployee").attr("action");
+			$.post(url, $("#femployee").serialize());
 		
 			$( document ).ajaxComplete(function(event,request, settings ) {
 				  goToList('employees.do?page=1&pagesize=${viewmanager.pagesize}&orderby=${viewmanager.orderby}&order=${viewmanager.order}');
@@ -110,27 +110,9 @@
 		$("#pview").dialog( "option", "position", { my: "center",  at: "center", of:window} );
 		$("#pview").dialog("open");
 	}
-
-	function viewEmployee(id) {
-        link = "clientview.do?id=" + id;
-		$("#clview").load(link);        
-		$("#clview").dialog("option", "title", 'Сотрудник БелТПП');
-		$("#clview").dialog("option", "width", 650);
-		$("#clview").dialog("option", "height", 480);
-		$("#clview").dialog("option", "modal", true);
-		$("#clview").dialog("option", "resizable", false);
-		$("#clview").dialog({
-			buttons : [ 	{ text : "Закрыть",	click : function() {$(this).dialog("close");}} ]
-		});
-
-		$("#clview").dialog("option", "position", {
-			my : "center top", at : "center", of :  listwindow });
-
-		$("#clview").dialog("open");
-	}
 	
 	function editEmployee(id) {
-        link = "clientedit.do?id=" + id;
+        link = "employeeedit.do?id=" + id;
 		$("#clview").load(link);        
 		$("#clview").dialog("option", "title", 'Сотрудник БелТПП');
 		$("#clview").dialog("option", "width", 820);
@@ -149,8 +131,29 @@
 	}
 	
 
+	
+
+	function viewEmployee(id) {
+        link = "employeeview.do?id=" + id;
+		$("#clview").load(link);        
+		$("#clview").dialog("option", "title", 'Сотрудник БелТПП');
+		$("#clview").dialog("option", "width", 650);
+		$("#clview").dialog("option", "height", 480);
+		$("#clview").dialog("option", "modal", true);
+		$("#clview").dialog("option", "resizable", false);
+		$("#clview").dialog({
+			buttons : [ 	{ text : "Закрыть",	click : function() {$(this).dialog("close");}} ]
+		});
+
+		$("#clview").dialog("option", "position", {
+			my : "center top", at : "center", of :  listwindow });
+
+		$("#clview").dialog("open");
+	}
+	
+
 	function addEmployee(id) {
-        link = "clientadd.do";
+        link = "employeeadd.do";
 		$("#clview").load(link);        
 		$("#clview").dialog("option", "title", 'Новый Сотрудник БелТПП');
 		$("#clview").dialog("option", "width", 820);
@@ -213,7 +216,7 @@
 	    	iframe.style.display = 'none';
 	    	document.body.appendChild(iframe);
     	}
-    	iframe.src = "clientsecport.do";
+    	iframe.src = "employeesecport.do";
 		
 	}
 
@@ -262,7 +265,6 @@
 				<div class="ccidropdown-content"> 
 				<ul class="cci">
 					<li class="cci"><a class="cci" href="javascript:editEmployee('${employee.id}')"><i class="glyphicon glyphicon-edit"></i></a></li>
-						<li class="cci"><a class="cci" href="javascript:openEmployee('${employee.id}')"><i class="glyphicon glyphicon-eye-open"></i></a></li>
 					<li class="cci"><a class="cci" href="javascript:printEmployee('${employee.id}')"><i class="glyphicon glyphicon-print"></i></a></li>
 				</ul> </div> </div>
 				

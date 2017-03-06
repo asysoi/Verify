@@ -8,7 +8,10 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import cci.model.Client;
 import cci.model.Department;
 import cci.model.Employee;
 import cci.repository.SQLBuilder;
@@ -56,23 +59,68 @@ public class EmployeeService {
 		}
 		return employees;
 	}
+	
+	// ------------------------------------------------------------------------------
+	//  This method returns a current page of the certificate's list
+	// ------------------------------------------------------------------------------
+	public Map<String, Department> getDepartmentsList() {
+			if (departments == null) {
+				Locale.setDefault(new Locale("en", "en"));
+				try {
+					departments = employeeDAO.getDepartmentsList();
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+			return departments;
+	}
 		
-	public Employee readEmployeeView(Long id) {
+	// ------------------------------------------------------------------------------
+	//  This method read employee record for editing
+	// ------------------------------------------------------------------------------
+	public Employee readEmployee(Long id) {
+
+		Employee employee = null;
+		try {
+			employee = employeeDAO.findEmployeeByID(id);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return employee;
+	}
+	
+
+	// ------------------------------------------------------------------------------
+	//  This method add employee into DB
+	// ------------------------------------------------------------------------------
+	@Transactional(propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
+	public Employee saveEmployee(Employee employee) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public void saveEmployee(Employee employee) {
-		// TODO Auto-generated method stub
-		
+	// ------------------------------------------------------------------------------
+	//  This method update employee in DB
+	// ------------------------------------------------------------------------------
+	@Transactional(propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
+	public Employee updateEmployee(Employee employee) {
+		Locale.setDefault(new Locale("en", "en"));
+        Employee remployee = null;
+		try {
+			remployee = employeeDAO.updateEmployee(employee);
+		} catch (Exception ex) {
+ 		   ex.printStackTrace();
+		}
+		return remployee;
 	}
 
-	public void updateEmployee(Employee employee) {
-		// TODO Auto-generated method stub
-		
-	}
+	
+	
 
-	public Employee readEmployee(Long id) {
+	
+	
+	
+	public Employee readEmployeeView(Long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -83,19 +131,6 @@ public class EmployeeService {
 	}
 
 	
-	// ------------------------------------------------------------------------------
-	//  This method returns a current page of the certificate's list
-	// ------------------------------------------------------------------------------
-	public Map<String, Department> getDepartmentsList() {
-		if (departments == null) {
-			Locale.setDefault(new Locale("en", "en"));
-			try {
-				departments = employeeDAO.getDepartmentsList();
-			} catch (Exception ex) {
-				ex.printStackTrace();
-			}
-		}
-		return departments;
-	}
+	
 
 }
