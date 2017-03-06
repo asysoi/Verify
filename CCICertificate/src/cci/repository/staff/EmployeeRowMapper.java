@@ -33,10 +33,10 @@ public class EmployeeRowMapper<T> implements RowMapper {
 		        employee.setMiddlename(rs.getString("MIDDLENAME"));
 		        employee.setEmail(rs.getString("EMAIL"));
 		        employee.setPhone(rs.getString("PHONE"));
-		        employee.setBday((new SimpleDateFormat(dateformat)).format(rs.getDate("BDAY")));
+		        employee.setBday(rs.getDate("BDAY") == null 
+		        		? null : (new SimpleDateFormat(dateformat)).format(rs.getDate("BDAY")));
 		        employee.setActive(rs.getString("ACTIVE").charAt(0));
 		        
-				
 				if (rs.getLong("ID_DEPARTMENT") != 0) {
 				   Department dep = new Department();
 				   dep.setId(rs.getLong("ID_DEPARTMENT"));
