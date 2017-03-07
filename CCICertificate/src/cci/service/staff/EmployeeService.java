@@ -95,9 +95,9 @@ public class EmployeeService {
 	//  This method add employee into DB
 	// ------------------------------------------------------------------------------
 	@Transactional(propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
-	public Employee saveEmployee(Employee employee) {
-
-		return null;
+	public Employee saveEmployee(Employee employee) throws Exception {
+		
+		return employeeDAO.saveEmployee(employee);
 	}
 
 	// ------------------------------------------------------------------------------

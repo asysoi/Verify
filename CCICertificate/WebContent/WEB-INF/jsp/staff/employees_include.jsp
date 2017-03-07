@@ -98,16 +98,17 @@
         link="employeefilter.do?&pagesize=${viewmanager.pagesize}&orderby=${viewmanager.orderby}&order=${viewmanager.order}";
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Фильтр выбора сотрудника');
-		$("#pview").dialog("option", "width", 750);
+		$("#pview").dialog("option", "width", 690);
 		$("#pview").dialog("option", "height", 470);
 		$("#pview").dialog("option", "modal", true);
 		$("#pview").dialog("option", "resizable", false );
 		$("#pview").dialog({ buttons: [ { text: "Применить",  click : function() { submit(); } },  
 				               { text: "Очистить Все ", click: function() { clear(); } },
  				               { text: "Отменить изменения", click: function() { reset(); } },
-				               { text: "Отмена", click: function() { $( this ).dialog( "close" ); } }
+				               { text: "Отмена", click: function() { $( this ).html(""); $( this ).dialog( "close" ); } }
                   	                                               ] });
-		$("#pview").dialog( "option", "position", { my: "center",  at: "center", of:window} );
+		$("#pview").dialog( "option", "position", { my: "center",  at: "center", of:window});
+		$("#pview").dialog({close: function(event, ui){ $( this ).html("");}});
 		$("#pview").dialog("open");
 	}
 	
@@ -115,13 +116,13 @@
         link = "employeeedit.do?id=" + id;
 		$("#clview").load(link);        
 		$("#clview").dialog("option", "title", 'Сотрудник БелТПП');
-		$("#clview").dialog("option", "width", 750);
-		$("#clview").dialog("option", "height", 470);
+		$("#clview").dialog("option", "width", 690);
+		$("#clview").dialog("option", "height", 590);
 		$("#clview").dialog("option", "modal", true);
 		$("#clview").dialog("option", "resizable", false);
 		$("#clview").dialog({ buttons: [ { text: "Сохранить",  click : function() { updateEmployee(); } },  
 		    				               { text: "Очистить Все ", click: function() { clear(); } },
-		     				               { text: "Отмена", click: function() { $( this ).dialog( "close" ); } }
+		     				               { text: "Отмена", click: function() {  $( this ).dialog( "close" ); } }
 		                      	                                               ] });
 
 		$("#clview").dialog("option", "position", {
@@ -138,11 +139,11 @@
 		$("#clview").load(link);        
 		$("#clview").dialog("option", "title", 'Сотрудник БелТПП');
 		$("#clview").dialog("option", "width", 650);
-		$("#clview").dialog("option", "height", 470);
+		$("#clview").dialog("option", "height", 530);
 		$("#clview").dialog("option", "modal", true);
 		$("#clview").dialog("option", "resizable", false);
 		$("#clview").dialog({
-			buttons : [ 	{ text : "Закрыть",	click : function() {$(this).dialog("close");}} ]
+			buttons : [ 	{ text : "Закрыть",	click : function() { $(this).dialog("close");}} ]
 		});
 
 		$("#clview").dialog("option", "position", {
@@ -156,13 +157,13 @@
         link = "employeeadd.do";
 		$("#clview").load(link);        
 		$("#clview").dialog("option", "title", 'Новый Сотрудник БелТПП');
-		$("#clview").dialog("option", "width", 750);
-		$("#clview").dialog("option", "height", 470);
+		$("#clview").dialog("option", "width", 690);
+		$("#clview").dialog("option", "height", 590);
 		$("#clview").dialog("option", "modal", true);
 		$("#clview").dialog("option", "resizable", false);
 		$("#clview").dialog({ buttons: [ { text: "Сохранить",  click : function() { saveEmployee(); } },  
 		    				               { text: "Очистить Все ", click: function() { clear(); } },
-		     				               { text: "Отмена", click: function() { $( this ).dialog( "close" ); } }
+		     				               { text: "Отмена", click: function() {  $( this ).dialog( "close" ); } }
 		                      	                                               ] });
 
 		$("#clview").dialog("option", "position", {
@@ -184,7 +185,7 @@
 			buttons : [ { text : "Загрузить",	click : function() {download();}}, 
  				{ text : "Очистить Все ", click : function() {clearconfig(); }}, 
  				{ text : "Выбрать Все ", click : function() {selectall(); }}, 
-				{ text : "Закрыть",	click : function() {$(this).dialog("close");}
+				{ text : "Закрыть",	click : function() { $(this).dialog("close");}
 			} ]
 		});
 

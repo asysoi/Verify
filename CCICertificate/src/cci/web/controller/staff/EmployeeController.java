@@ -257,6 +257,7 @@ public class EmployeeController {
 				LOG.info(employee);
 				employeeService.saveEmployee(employee);
 			} catch(Exception ex) {
+				ex.printStackTrace();
 				model.addAttribute("error", ex.getMessage());
 			}
 			return "staff/employeeform";

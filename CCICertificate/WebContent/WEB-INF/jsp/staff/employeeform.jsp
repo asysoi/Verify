@@ -16,7 +16,7 @@ $(function() {
 	$("document").ready(
 			function() {
 				
-				fillindepartment( ${editemployee.department.id_otd } );
+				fillindepartment( ${editemployee.department.id_otd} );
 				
 				$(".datepicker").datepicker("option", "dateFormat",
 						'dd.mm.yy');
@@ -49,8 +49,6 @@ $(function() {
 	        </c:forEach>
 	     }
 	   </c:forEach>
-	$("#id_department")
-			.val('${editemployee.department.id}');
 	$("#id_department").width($("#id_otd").width());
  }
  
@@ -61,9 +59,9 @@ $(function() {
 </script>
 
 <form:form id="femployee" method="POST" commandName="editemployee">
-
+    <form:hidden path="id"/>  
 	<fieldset>
-		<legend class="grp_title">Основные данные</legend>
+		<legend class="grp_title">Персональные данные</legend>
 		<table class="filter">
 			<tr>
 				<td>Фамилия</td>
@@ -80,9 +78,10 @@ $(function() {
 				</a></td>
 			</tr>
 			<tr>
-				<td>Должность</td>
-				<td><form:input path="job" id="job" /><a
-					href="javascript:clearelement($('#job'));"> <img
+				<td>Отчество</td>
+				<td><form:input path="middlename" id="middlename"
+						size="18" /><a
+					href="javascript:clearelement($('#middlename'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 			</tr>
@@ -93,7 +92,44 @@ $(function() {
 					href="javascript:clearelement($('.datepicker'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
-				</tr>
+			</tr>
+			</table>
+	</fieldset>
+	
+	<fieldset>
+		<legend class="grp_title">Подпись и должность</legend>
+		<table class="filter">
+			<tr>
+				<td>ФИО</td>
+				<td><form:input path="name" id="name"
+						size="25" /><a
+					href="javascript:clearelement($('#name'));"> <img
+						src="resources/images/delete-16.png" alt="удл." />
+				</a></td>
+			</tr>
+			<tr>
+				<td>Должность</td>
+				<td><form:input path="job" id="job"
+						size="40" /><a
+					href="javascript:clearelement($('#job'));"> <img
+						src="resources/images/delete-16.png" alt="удл." />
+				</a></td>
+			</tr>	
+			<tr>
+				<td>ФИО(English)</td>
+				<td><form:input path="enname" id="enname"
+						size="25" /><a
+					href="javascript:clearelement($('#enname'));"> <img
+						src="resources/images/delete-16.png" alt="удл." />
+				</a></td>
+			</tr>
+			<tr>
+				<td>Должность(English)</td>
+				<td><form:input path="enjob" id="enjob" size="40" /><a
+					href="javascript:clearelement($('#enjob'));"> <img
+						src="resources/images/delete-16.png" alt="удл." />
+				</a></td>
+			</tr>
 		</table>
 	</fieldset>
 

@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
 
 import cci.model.Client;
@@ -134,10 +136,36 @@ public class JDBCEmployeeDAO implements EmployeeDAO {
 		return employee;
 	}
 
-	@Override
-	public Employee updateEmployee(Employee employee) {
-		// TODO Auto-generated method stub
-		return null;
+	
+	// ---------------------------------------------------------------
+	// Update existing employee  
+	// ---------------------------------------------------------------
+	public Employee updateEmployee(Employee employee) throws Exception{
+		String sql = "update cci_employee set "
+				+ "name = :name, job = :job, firstname = :firstname,"
+				+ "middlename = :middlename, lastname=:lastname, enname=:enname,"
+				+ "enjob=:enjob, phone=:phone, email=:email, bday=TO_DATE(:bday,'DD.MM.YY'), "
+				+ "id_department = :department.id  WHERE id = :id";
+
+		SqlParameterSource parameters = new BeanPropertySqlParameterSource(employee);
+		template.update(sql, parameters);
+		return employee;
+	}
+
+	// ---------------------------------------------------------------
+	// Save new employee  
+	// ---------------------------------------------------------------
+	public Employee saveEmployee(Employee employee) throws Exception {
+        LOG.info("\n\nEmployee save starting............................");
+		String sql = "insert into cci_employee( "
+				+ "name, job, firstname, middlename, lastname, enname,"
+				+ "enjob, phone, email, bday, id_department) "   
+				+ "values ( :name, :job, :firstname, :middlename, :lastname, :enname,"
+				+ ":enjob, :phone, :email, TO_DATE(:bday,'DD.MM.YY'), :department.id) ";
+
+		SqlParameterSource parameters = new BeanPropertySqlParameterSource(employee);
+		template.update(sql, parameters);
+		return employee;
 	}
 	
 	

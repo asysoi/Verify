@@ -15,4 +15,5 @@ public interface EmployeeDAO {
 	Map<String, Department> getDepartmentsList() throws Exception;
 	Employee findEmployeeByID(Long id) throws Exception;
 	Employee updateEmployee(Employee employee) throws Exception;
+	Employee saveEmployee(Employee employee) throws Exception;
 }
