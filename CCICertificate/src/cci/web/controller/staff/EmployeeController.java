@@ -26,8 +26,6 @@ import cci.web.controller.ViewManager;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -44,6 +42,8 @@ public class EmployeeController {
 
 	@Autowired
 	private CertService certService;
+	
+	Map<String, Map<String, String>> deplist = null; 
 
 	// ---------------------------------------------------------------
 	// Get Employee List
@@ -201,7 +201,7 @@ public class EmployeeController {
 	// ---------------------------------------------------------------
 	// Get Employee Filter Window
 	// ---------------------------------------------------------------
-	@RequestMapping(value = "employeefilter.do", method = RequestMethod.GET)
+	@RequestMapping(value="employeefilter.do", method = RequestMethod.GET)
 	public String openFilter(@ModelAttribute("employeefilter") EmployeeFilter fc,
 			ModelMap model) {
 
@@ -243,40 +243,67 @@ public class EmployeeController {
 		return "staff/efilter";
 	}
 	
-	// ---------------------------------------------------------------
-	// Edit Employee POST
-	// ---------------------------------------------------------------
-	@RequestMapping(value = "employeeedit.do", method = RequestMethod.POST)
-	public String updateEmployee(@ModelAttribute("employee") Employee employee,
-			BindingResult result, SessionStatus status, ModelMap model) {
 
-		employeeService.updateEmployee(employee);
+	
+	
+	
+	// ---------------------------------------------------------------
+	// Add Employee POST
+	// ---------------------------------------------------------------
+	@RequestMapping(value = "employeeadd.do", method = RequestMethod.POST)
+	public String addEmployee(@ModelAttribute("editemployee") Employee employee,
+				BindingResult result, SessionStatus status, ModelMap model) {
+			try {
+				LOG.info(employee);
+				employeeService.saveEmployee(employee);
+			} catch(Exception ex) {
+				model.addAttribute("error", ex.getMessage());
+			}
+			return "staff/employeeform";
+	}
+
+	// ---------------------------------------------------------------
+	// Add Employee GET
+	// ---------------------------------------------------------------
+	@RequestMapping(value = "employeeadd.do", method = RequestMethod.GET)
+	public String addEmployeeInit(ModelMap model) {
+		Employee employee = new Employee();
+		model.addAttribute("editemployee", employee);
 		return "staff/employeeform";
 	}
 
 	// ---------------------------------------------------------------
 	// Edit Employee GET
 	// ---------------------------------------------------------------
-	@RequestMapping(value = "employeeedit.do", method = RequestMethod.GET)
-	public String updateEmployeeInit(
-			@RequestParam(value = "id", required = true) Long id, ModelMap model) {
+	@RequestMapping(value="employeeedit.do", method = RequestMethod.GET)		
+	public String updateEmployeeForm(@RequestParam(value = "id", required = true) 
+							Long idemployee, ModelMap model) {
+		try {
+		   Employee employee = employeeService.readEmployee(idemployee);
+		   model.addAttribute("editemployee", employee);
+		} catch (Exception ex) {
+		   model.addAttribute("error", ex.getMessage());
+		}
+  	    return "staff/employeeform";
+	}
+	
+	// ---------------------------------------------------------------
+	// Edit Employee POST
+	// ---------------------------------------------------------------
+	@RequestMapping(value="employeeedit.do", method = RequestMethod.POST)
+	public String updateEmployee(@ModelAttribute("editemployee") Employee employee,
+			BindingResult result, SessionStatus status, ModelMap model) {
 
-		Employee employee = employeeService.readEmployee(id);
-		LOG.info(employee);
-
-		model.addAttribute("employee", employee);
+		employeeService.updateEmployee(employee);
 		return "staff/employeeform";
 	}
-
-
-
-	
-	
-	
-	
-	
 	
 
+	
+	
+	
+	
+	
 	// ---------------------------------------------------------------
 	// View Employee
 	// ---------------------------------------------------------------
@@ -287,29 +314,6 @@ public class EmployeeController {
 		model.addAttribute("employee", employee);
 
 		return "staff/employeeview";
-	}
-
-	// ---------------------------------------------------------------
-	// Add Employee POST
-	// ---------------------------------------------------------------
-	@RequestMapping(value = "employeeadd.do", method = RequestMethod.POST)
-	public String addEmployee(@ModelAttribute("employee") Employee employee,
-			BindingResult result, SessionStatus status, ModelMap model) {
-
-		// status.setComplete();
-		employeeService.saveEmployee(employee);
-		return "staff/employeeform";
-	}
-
-	// ---------------------------------------------------------------
-	// Add Employee GET
-	// ---------------------------------------------------------------
-	@RequestMapping(value = "employeeadd.do", method = RequestMethod.GET)
-	public String addEmployeeInit(ModelMap model) {
-
-		Employee employee = new Employee();
-		model.addAttribute("employee", employee);
-		return "staff/employeeform";
 	}
 
 	// ---------------------------------------------------------------
@@ -368,30 +372,31 @@ public class EmployeeController {
 	}
 	
 	@ModelAttribute("departments")
+	// -------------------------------------------------------
 	// Create list of departments divided by otd_id
-	//
+	// -------------------------------------------------------
 	public Map<String, Map<String, String>> populateDepartmentsList() {
-		Map<String, Map<String, String>> deplist = null;
-		try {
-			Map<String, Department> departments  = employeeService.getDepartmentsList();
-			Map<String, String> otdlist = null;
-			deplist= new HashMap();
+		if (deplist == null) {
+			try {
+				Map<String, Department> departments  = employeeService.getDepartmentsList();
+				Map<String, String> otdlist = null;
+				deplist= new HashMap();
 		
-			for (Map.Entry<String, Department> dep : departments.entrySet()) {
-				String otd_id = dep.getValue().getId_otd().toString();
-				if (deplist.containsKey(otd_id)) {
-				   otdlist = deplist.get(otd_id);
-				} else {
-				   otdlist = new HashMap<String, String>();
-				   deplist.put(otd_id, otdlist);
+				for (Map.Entry<String, Department> dep : departments.entrySet()) {
+					String otd_id = dep.getValue().getId_otd().toString();
+					if (deplist.containsKey(otd_id)) {
+						otdlist = deplist.get(otd_id);
+					} else {
+						otdlist = new HashMap<String, String>();
+						deplist.put(otd_id, otdlist);
+					}
+					otdlist.put(dep.getKey(), dep.getValue().getName());
 				}
-				
-				otdlist.put(dep.getKey(), dep.getValue().getName());
+			} catch (Exception ex) {
+				LOG.info("Departments List loading error: " + ex.getMessage());
 			}
-		} catch (Exception ex) {
-			LOG.info("Departments List loading error: " + ex.getMessage());
+			LOG.info(deplist);
 		}
-		LOG.info(deplist);
 		return  deplist;
 	}
 

@@ -35,7 +35,12 @@
  function clearelement(element) {
 	element.val('');
  }
- 
+
+ function cleardepertment() {
+	$("#id_otd").val('');
+	$('#id_department option').remove();
+ }
+
  function fillindepartment(id_otd) {
 	 $('#id_department option').remove();
 	 <c:forEach items="${departments}" var="deplist">
@@ -47,6 +52,7 @@
 	   </c:forEach>
 	$("#id_department")
 			.val('${employeefilter.viewemployee.id_department}');
+	$("#id_department").width($("#id_otd").width());
  }
  
  function selectBranch() {
@@ -119,7 +125,7 @@
 	</fieldset>
 
 	<fieldset>
-		<legend class="grp_title">Адрес</legend>
+		<legend class="grp_title">Структурное подразделение</legend>
 
 		<table class="filter">
 			<tr>
@@ -129,7 +135,7 @@
 						items="${branches}" id="id_otd" 
 						onChange="javaScript:selectBranch();"
 						/>
-					  <a href="javascript:clearelement($('#id_otd')); javascript:clearelement($('#id_department'));"> 
+					  <a href="javascript:cleardepertment();"> 
 					  <img src="resources/images/delete-16.png" alt="удл." />	</a>
 			    </td>
 			</tr>
@@ -137,7 +143,7 @@
 				<td>Подразделение</td>
 				<td>
 				      <form:select path="viewemployee.id_department"
-						 id="id_department"/>
+						 id="id_department" size="5"/>
 					  <a href="javascript:clearelement($('#id_department'));"> 
 					  <img src="resources/images/delete-16.png" alt="удл." />	</a>
 			    </td>

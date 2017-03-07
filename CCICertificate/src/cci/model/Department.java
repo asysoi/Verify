@@ -47,6 +47,12 @@ public class Department {
 		this.id_otd = id_otd;
 	}
 
+	@Override
+	public String toString() {
+		return "Department [id=" + id + ", name=" + name + ", code=" + code + ", parent=" + parent + ", id_otd="
+				+ id_otd + "]";
+	}
+
 	
 
 }

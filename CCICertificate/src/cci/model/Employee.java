@@ -52,6 +52,9 @@ public class Employee {
 	}
 	
 	public Department getDepartment() {
+		if (department == null) {
+			department = new Department();
+		}
 		return department;
 	}
 	public void setDepartment(Department department) {

@@ -98,8 +98,8 @@
         link="employeefilter.do?&pagesize=${viewmanager.pagesize}&orderby=${viewmanager.orderby}&order=${viewmanager.order}";
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Фильтр выбора сотрудника');
-		$("#pview").dialog("option", "width", 770);
-		$("#pview").dialog("option", "height", 400);
+		$("#pview").dialog("option", "width", 750);
+		$("#pview").dialog("option", "height", 470);
 		$("#pview").dialog("option", "modal", true);
 		$("#pview").dialog("option", "resizable", false );
 		$("#pview").dialog({ buttons: [ { text: "Применить",  click : function() { submit(); } },  
@@ -115,8 +115,8 @@
         link = "employeeedit.do?id=" + id;
 		$("#clview").load(link);        
 		$("#clview").dialog("option", "title", 'Сотрудник БелТПП');
-		$("#clview").dialog("option", "width", 820);
-		$("#clview").dialog("option", "height", 570);
+		$("#clview").dialog("option", "width", 750);
+		$("#clview").dialog("option", "height", 470);
 		$("#clview").dialog("option", "modal", true);
 		$("#clview").dialog("option", "resizable", false);
 		$("#clview").dialog({ buttons: [ { text: "Сохранить",  click : function() { updateEmployee(); } },  
@@ -138,7 +138,7 @@
 		$("#clview").load(link);        
 		$("#clview").dialog("option", "title", 'Сотрудник БелТПП');
 		$("#clview").dialog("option", "width", 650);
-		$("#clview").dialog("option", "height", 480);
+		$("#clview").dialog("option", "height", 470);
 		$("#clview").dialog("option", "modal", true);
 		$("#clview").dialog("option", "resizable", false);
 		$("#clview").dialog({
@@ -156,11 +156,11 @@
         link = "employeeadd.do";
 		$("#clview").load(link);        
 		$("#clview").dialog("option", "title", 'Новый Сотрудник БелТПП');
-		$("#clview").dialog("option", "width", 820);
-		$("#clview").dialog("option", "height", 570);
+		$("#clview").dialog("option", "width", 750);
+		$("#clview").dialog("option", "height", 470);
 		$("#clview").dialog("option", "modal", true);
 		$("#clview").dialog("option", "resizable", false);
-		$("#clview").dialog({ buttons: [ { text: "Сохранить",  click : function() { saveClient(); } },  
+		$("#clview").dialog({ buttons: [ { text: "Сохранить",  click : function() { saveEmployee(); } },  
 		    				               { text: "Очистить Все ", click: function() { clear(); } },
 		     				               { text: "Отмена", click: function() { $( this ).dialog( "close" ); } }
 		                      	                                               ] });

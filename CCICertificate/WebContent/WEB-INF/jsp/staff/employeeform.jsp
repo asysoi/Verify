@@ -16,16 +16,16 @@ $(function() {
 	$("document").ready(
 			function() {
 				
-				fillindepartment( ${employeefilter.viewemployee.id_otd} );
+				fillindepartment( ${editemployee.department.id_otd } );
 				
 				$(".datepicker").datepicker("option", "dateFormat",
 						'dd.mm.yy');
 				$("#bday").datepicker("setDate",
-						"${employee.bday}");
+						"${editemployee.bday}");
 				$("#id_department")
-  	  					.val('${employee.department.id}');
+  	  					.val('${editemployee.department.id}');
 				$("#id_otd")
-						.val('${employee.department.id_otd}');
+						.val('${editemployee.department.id_otd}');
 			});
 
  });
@@ -33,6 +33,12 @@ $(function() {
  function clearelement(element) {
 	element.val('');
  }
+ 
+ function cleardepertment() {
+		$("#id_otd").val('');
+		$('#id_department option').remove();
+ }
+
  
  function fillindepartment(id_otd) {
 	 $('#id_department option').remove();
@@ -44,7 +50,8 @@ $(function() {
 	     }
 	   </c:forEach>
 	$("#id_department")
-			.val('${employee.department.id}');
+			.val('${editemployee.department.id}');
+	$("#id_department").width($("#id_otd").width());
  }
  
  function selectBranch() {
@@ -53,7 +60,7 @@ $(function() {
  
 </script>
 
-<form:form id="femployee" method="POST" commandName="employee">
+<form:form id="femployee" method="POST" commandName="editemployee">
 
 	<fieldset>
 		<legend class="grp_title">Основные данные</legend>
@@ -107,14 +114,14 @@ $(function() {
 			</tr>
 			<tr>
 				<td>Статус</td>
-				<td><form:checkbox path="active" value="${employee.active}" id="active" /><a
+				<td><form:checkbox path="active" value="${editemployee.active}" id="active" /><a
 					href="javascript:clearelement($('#active'));"></td>
 			</tr>
 		</table>
 	</fieldset>
 
 	<fieldset>
-		<legend class="grp_title">Адрес</legend>
+		<legend class="grp_title">Структурное подразделение</legend>
 
 		<table class="filter">
 			<tr>
@@ -124,7 +131,7 @@ $(function() {
 						items="${branches}" id="id_otd" 
 						onChange="javaScript:selectBranch();"
 						/>
-					  <a href="javascript:clearelement($('#id_otd')); javascript:clearelement($('#id_department'));"> 
+					  <a href="javascript:cleardepertment();"> 
 					  <img src="resources/images/delete-16.png" alt="удл." />	</a>
 			    </td>
 			</tr>
@@ -132,7 +139,7 @@ $(function() {
 				<td>Подразделение</td>
 				<td>
 				      <form:select path="department.id"
-						 id="id_department"/>
+						 id="id_department" size="5"/>
 					  <a href="javascript:clearelement($('#id_department'));"> 
 					  <img src="resources/images/delete-16.png" alt="удл." />	</a>
 			    </td>

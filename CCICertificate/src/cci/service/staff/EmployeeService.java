@@ -78,11 +78,12 @@ public class EmployeeService {
 	// ------------------------------------------------------------------------------
 	//  This method read employee record for editing
 	// ------------------------------------------------------------------------------
-	public Employee readEmployee(Long id) {
-
+	public Employee readEmployee(Long id) throws Exception{
+		Locale.setDefault(new Locale("en", "en"));
 		Employee employee = null;
 		try {
 			employee = employeeDAO.findEmployeeByID(id);
+			LOG.info(employee);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -95,7 +96,7 @@ public class EmployeeService {
 	// ------------------------------------------------------------------------------
 	@Transactional(propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
 	public Employee saveEmployee(Employee employee) {
-		// TODO Auto-generated method stub
+
 		return null;
 	}
 
