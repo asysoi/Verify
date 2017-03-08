@@ -67,6 +67,17 @@
 		});	
 	}
 	
+	function openEmployees(employeetype) {
+        link="selemployees.do?pagesize=5&employeetype="+employeetype;
+		$("#fsview").load(link);
+		$("#fsview").dialog("option", "title", 'Список сотрудников');
+		$("#fsview").dialog("option", "width", 1200);
+		$("#fsview").dialog("option", "height", 520);
+		$("#fsview").dialog("option", "modal", true);
+		$("#fsview").dialog("option", "resizable", true );
+		$("#fsview").dialog( "option", "position", { my: "center",  at: "center", of:window} );
+		$("#fsview").dialog("open");
+	}
 	
 </script>
 
@@ -134,11 +145,11 @@ ${fscert.branch.address}, Республика Беларусь<br>
 </div>
 
 <div class="row">
-		  <div class="col-md-1">Эксперт: </div>
+		  <div class="col-md-1"><a href="javascript:openEmployees('expert')">Эксперт:</a></div>
 		  <div class="col-md-10">${fscert.expert.job} ${fscert.expert.name}</div>
 </div>
 <div class="row">
-		  <div class="col-md-1">Подпись: </div>
+		  <div class="col-md-1"><a href="javascript:openEmployees('signer')">Подпись:</a></div>
 		  <div class="col-md-10">${fscert.signer.job} ${fscert.signer.name}</div>
 </div>				
 

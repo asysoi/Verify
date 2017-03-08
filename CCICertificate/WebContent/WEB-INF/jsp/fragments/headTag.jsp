@@ -17,6 +17,8 @@
     <spring:url value="/resources/css/dashboard.css" var="dashCss"/>
     <link href="${dashCss}" rel="stylesheet"/>
     
+    <spring:url value="/resources/cci/cci.js" var="jCCI"/>
+    <script src="${jCCI}"></script>
 
     <spring:url value="/resources/jquery/jquery-1.11.1.js" var="jQuery"/>
     <script src="${jQuery}"></script>

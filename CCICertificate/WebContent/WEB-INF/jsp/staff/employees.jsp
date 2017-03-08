@@ -2,6 +2,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <spring:url value="resources/css/cci.css" var="CCICss" />
 <link href="${CCICss}" rel="stylesheet" />
@@ -19,9 +20,10 @@
 
 	function submit() {
 		url = $("#ffilter").attr("action");
+		$.ajaxSetup({async:false});
 		$.post(url, $("#ffilter").serialize());
 		$( document ).ajaxComplete(function(event,request, settings ) {
-			  goToList('employees.do?page=1&pagesize=${employeemanager.pagesize}&orderby=${employeemanager.orderby}&order=${employeemanager.order}');
+			  goToList('selemployees.do?page=1&pagesize=${employeemanager.pagesize}&orderby=${employeemanager.orderby}&order=${employeemanager.order}');
 			  $("#pview").dialog("close");
 		});
 	}
@@ -33,10 +35,11 @@
 	function saveEmployee() {
 		if (checkRequired()) {
 			url = $("#femployee").attr("action");
+			$.ajaxSetup({async:false});
 			$.post(url, $("#femployee").serialize());
 		
 			$( document ).ajaxComplete(function(event,request, settings ) {
-				  goToList('employees.do?page=1&pagesize=${employeemanager.pagesize}&orderby=${employeemanager.orderby}&order=${employeemanager.order}');
+				  goToList('selemployees.do?page=1&pagesize=${employeemanager.pagesize}&orderby=${employeemanager.orderby}&order=${employeemanager.order}');
 				  $("#clview").dialog("close");
 			});
 		} 
@@ -47,10 +50,11 @@
 		if (confirm("Сохранить сделанные изменения?") == true) {
 		
 			url = $("#femployee").attr("action");
+			$.ajaxSetup({async:false});
 			$.post(url, $("#femployee").serialize());
 		
 			$( document ).ajaxComplete(function(event,request, settings ) {
-				  goToList('employees.do?page=1&pagesize=${employeemanager.pagesize}&orderby=${employeemanager.orderby}&order=${employeemanager.order}');
+				  goToList('selemployees.do?page=1&pagesize=${employeemanager.pagesize}&orderby=${employeemanager.orderby}&order=${employeemanager.order}');
 				  $("#clview").dialog("close");
 			});
 		} 
@@ -84,11 +88,11 @@
 			url = url + "&filter="
 			        + document.getElementById("filter").checked;
    	    }
-  		document.location.href = url;
+		$("#fsview").load(url);
 	}
 
 	function swithFilter() {
-		goToList('employees.do?page=1&pagesize=${employeemanager.pagesize}&orderby=${employeemanager.orderby}&order=${employeemanager.order}');
+		goToList('selemployees.do?page=1&pagesize=${employeemanager.pagesize}&orderby=${employeemanager.orderby}&order=${employeemanager.order}');
 		
 		if (document.getElementById("filter").checked) {
 			$("#filterlink").html('<a href="javascript: setFilter();">&nbsp;Фильтр</a>');
@@ -221,14 +225,27 @@
 	    	document.body.appendChild(iframe);
     	}
     	iframe.src = "employeesecport.do";
-		
 	}
-
+	
+	
+	function linkEmployee(eid, etype) {
+		url = "selemployee.do?id=" + eid + "&employeetype=" + etype;
+		$.ajaxSetup({async:false});
+		$.get(url, function(data, status) {
+			 console.log("Employee type: " + clienttype);
+			 if (etype == 'expert') { 
+			     $("#expert").text(data);
+			 } else if (etype == 'producer') {
+				 $("#signer").text(data);
+			 }
+		});	
+		$("#fsview").dialog("close");
+	}
+	
 </script>
 
 
 <div id="listwindow" class="main">
-	<h3>Список сотрудников</h3>
 	<table style="width: 100%">
 		<tr>
 
@@ -243,7 +260,7 @@
 				   &nbsp; Строк в списке: 
 				   <c:forEach items="${sizes}" var="item"> 
 	           	   &nbsp;	
-	               <a  href="javascript: goToList('employees.do?page=1&pagesize=${item}&orderby=${employeemanager.orderby}&order=${employeemanager.order}');">${item}</a>
+	               <a  href="javascript: goToList('selemployees.do?page=1&pagesize=${item}&orderby=${employeemanager.orderby}&order=${employeemanager.order}');">${item}</a>
 				</c:forEach>
 			</td>
 
@@ -269,13 +286,13 @@
 				<div class="ccidropdown-content"> 
 				<ul class="cci">
 					<li class="cci"><a class="cci" href="javascript:editEmployee('${employee.id}')"><i class="glyphicon glyphicon-edit"></i></a></li>
-					<li class="cci"><a class="cci" href="javascript:printEmployee('${employee.id}')"><i class="glyphicon glyphicon-print"></i></a></li>
+					<li class="cci"><a class="cci" href="javascript:linkEmployee('${employee.id}','${employeetype}')"><i class="glyphicon glyphicon-paperclip"></i></a></li>
 				</ul> </div> </div>
 				
 				</td>
 				<td>${employee.job}</td>
                 <td>${employee.departmentname}</td>
-                <td>${employee.otd_name}</td>
+                <td>${fn:substring(employee.otd_name, 0, 15)}...</td>
                 <td>${employee.phone}</td>
 			</tr>
 		</c:forEach>
@@ -291,7 +308,7 @@
 					items="${pages}" var="item">
 	           	   &nbsp;	
 	               <a
-						href="javascript: goToList('employees.do?page=${item}&pagesize=${employeemanager.pagesize}
+						href="javascript: goToList('selemployees.do?page=${item}&pagesize=${employeemanager.pagesize}
 
 &orderby=
 

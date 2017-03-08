@@ -102,7 +102,7 @@ public class EmployeeController {
 				viewmanager.getOrderby(), viewmanager.getOrder(), builder);
 		viewmanager.setElements(employees);
 
-		model.addAttribute("viewmanager", viewmanager);
+		model.addAttribute("employeemanager", viewmanager);
 		model.addAttribute("employees", employees);
 		model.addAttribute("next_page", viewmanager.getNextPageLink());
 		model.addAttribute("prev_page", viewmanager.getPrevPageLink());
@@ -123,7 +123,7 @@ public class EmployeeController {
 		viewmanager.setOrdnames(new String[] { "name", "job", "departmentname", "otd_name",
 				"phone" });
 		viewmanager.setWidths(new int[] { 25, 25, 25, 15, 10 });
-		model.addAttribute("viewmanager", viewmanager);
+		model.addAttribute("employeemanager", viewmanager);
 		return viewmanager;
 	}
 
@@ -142,7 +142,7 @@ public class EmployeeController {
 
 		LOG.info("=========================== GET STAFF LIST SELECTION =================================== >");
 		
-		ViewManager viewmanager = (ViewManager) model.get("viewmanager");
+		ViewManager viewmanager = (ViewManager) model.get("employeemanager");
 
 		if (viewmanager == null) {
 			viewmanager = initViewManager(model);
@@ -160,7 +160,7 @@ public class EmployeeController {
 		viewmanager.setOrderby(orderby);
 		viewmanager.setOrder(order);
 		viewmanager.setOnfilter(onfilter);
-		viewmanager.setUrl("semployees.do");
+		viewmanager.setUrl("selemployees.do");
 
 		Filter filter = null;
 		if (onfilter) {
@@ -185,7 +185,7 @@ public class EmployeeController {
 				viewmanager.getOrderby(), viewmanager.getOrder(), builder);
 		viewmanager.setElements(employees);
 
-		model.addAttribute("viewmanager", viewmanager);
+		model.addAttribute("employeemanager", viewmanager);
 		model.addAttribute("employees", employees);
 		model.addAttribute("next_page", viewmanager.getNextPageLink());
 		model.addAttribute("prev_page", viewmanager.getPrevPageLink());

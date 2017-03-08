@@ -6,8 +6,21 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <script>
-$(function() {
 
+function refreshName() {
+	var name = $("#lastname").val().trim() + " "
+	   + ($("#firstname").val().trim() == "" ? "" : ($("#firstname").val().trim().charAt(0) + "."))
+	   + ($("#middlename").val().trim() == "" ? "" : ($("#middlename").val().trim().charAt(0) + "."));
+	$("#name").val(name);
+} 
+
+function translit(source, target) {
+	target.val(transliterate(source.val()));
+}
+
+
+$(function() {
+	
 	$(".datepicker").datepicker({
 		changeMonth : true,
 		changeYear : true
@@ -55,7 +68,7 @@ $(function() {
  function selectBranch() {
 	 fillindepartment($("#id_otd").val());	 
  }
- 
+
 </script>
 
 <form:form id="femployee" method="POST" commandName="editemployee">
@@ -66,7 +79,7 @@ $(function() {
 			<tr>
 				<td>Фамилия</td>
 				<td><form:input path="lastname" id="lastname"
-						size="18" /><a
+						size="18" class="required"/><a
 					href="javascript:clearelement($('#lastname'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
@@ -102,10 +115,14 @@ $(function() {
 			<tr>
 				<td>ФИО</td>
 				<td><form:input path="name" id="name"
-						size="25" /><a
-					href="javascript:clearelement($('#name'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+						size="25" class="required" readonly="true"/>
+						<a	href="javascript:refreshName();"> 
+						<i class="glyphicon glyphicon-refresh"></i>
+				        </a>
+						<a	href="javascript:clearelement($('#name'));"> 
+						<img src="resources/images/delete-16.png" alt="удл." />
+				        </a>
+				</td>
 			</tr>
 			<tr>
 				<td>Должность</td>
@@ -118,15 +135,18 @@ $(function() {
 			<tr>
 				<td>ФИО(English)</td>
 				<td><form:input path="enname" id="enname"
-						size="25" /><a
-					href="javascript:clearelement($('#enname'));"> <img
+						size="25" />
+						<a	href="javascript:translit($('#name'), $('#enname'));"> 
+						<i class="glyphicon glyphicon-refresh"></i>
+				        </a>
+						<a	href="javascript:clearelement($('#enname'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 			</tr>
 			<tr>
 				<td>Должность(English)</td>
-				<td><form:input path="enjob" id="enjob" size="40" /><a
-					href="javascript:clearelement($('#enjob'));"> <img
+				<td><form:input path="enjob" id="enjob" size="40" />
+				<a href="javascript:clearelement($('#enjob'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 			</tr>
