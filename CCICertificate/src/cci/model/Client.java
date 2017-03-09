@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @XmlRootElement(name = "client")
 @Component
-@XmlType(propOrder = {"name", "codecountry" , "cindex", "city", "line", "office", "building", 
+@XmlType(propOrder = {"name", "enname","codecountry" , "cindex", "city", "encity", "line", "enline", "office", "building", 
 		"work_phone", "cell_phone", "email", "unp", "okpo", "account", "bname", "bindex", "bcodecountry"
 		,"bcity", "bline", "boffice", "bbuilding", "bwork_phone", "bcell_phone", "bemail", "bunp"})
 
@@ -39,8 +39,12 @@ public class Client {
 	private String bemail;
 	private String bunp;
 	private String address;
-	
-	
+	private String enaddress;
+	private String enname;
+	private String encity;		
+	private String enline;
+	private long version;
+	private int locked;
 	
 	public void init(Client client) {
 		this.id = client.getId();
@@ -69,6 +73,12 @@ public class Client {
 		this.bemail = client.getBemail();
 		this.bunp = client.getBunp();
 		this.address = client.getAddress();
+		this.enaddress = client.getEnaddress();
+		this.enname = client.getEnname();
+		this.encity = client.getEncity();		
+		this.enline = client.getEnline();
+		this.version = client.getVersion();
+		this.locked = client.getLocked();
 	}
 	
 	@XmlTransient	
@@ -230,6 +240,57 @@ public class Client {
 		this.bcodecountry = bcodecountry;
 	}
 	
+	@XmlTransient
+	public String getEnaddress() {
+		return enaddress;
+	}
+
+	public void setEnaddress(String enaddress) {
+		this.enaddress = enaddress;
+	}
+
+	public String getEnname() {
+		return enname;
+	}
+
+	public void setEnname(String enname) {
+		this.enname = enname;
+	}
+
+	public String getEncity() {
+		return encity;
+	}
+
+	public void setEncity(String encity) {
+		this.encity = encity;
+	}
+
+	public String getEnline() {
+		return enline;
+	}
+
+	public void setEnline(String enline) {
+		this.enline = enline;
+	}
+
+	@XmlTransient
+	public long getVersion() {
+		return version;
+	}
+
+	public void setVersion(long version) {
+		this.version = version;
+	}
+
+	@XmlTransient
+	public int getLocked() {
+		return locked;
+	}
+
+	public void setLocked(int locked) {
+		this.locked = locked;
+	}
+
 	@Override
 	public String toString() {
 		return "Client [id=" + id + ", name=" + name + ", codecountry=" + codecountry + ", cindex=" + cindex + ", city="
@@ -238,8 +299,11 @@ public class Client {
 				+ ", account=" + account + ", bname=" + bname + ", bindex=" + bindex + ", bcodecountry=" + bcodecountry
 				+ ", bcity=" + bcity + ", bline=" + bline + ", boffice=" + boffice + ", bbuilding=" + bbuilding
 				+ ", bwork_phone=" + bwork_phone + ", bcell_phone=" + bcell_phone + ", bemail=" + bemail + ", bunp="
-				+ bunp + "]";
+				+ bunp + ", address=" + address + ", enaddress=" + enaddress + ", enname=" + enname + ", encity="
+				+ encity + ", enline=" + enline + ", version=" + version + ", locked=" + locked + "]";
 	}
+
+	
 	
 	
 }

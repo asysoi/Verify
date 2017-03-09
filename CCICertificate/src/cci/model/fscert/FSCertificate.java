@@ -19,7 +19,7 @@ import cci.model.cert.Product;
 @XmlRootElement(name = "fscertificate")
 @Component
 @XmlType(propOrder = {"certnumber","parentnumber", "dateissue", "dateexpiry", "confirmation", "declaration", "codecountrytarget", "datecert", "listscount", 
-		"branch", "exporter", "producer", "expert", "signer", "products", "blanks"})
+		"language", "branch", "exporter", "producer", "expert", "signer", "products", "blanks"})
 
 public class FSCertificate {
 	private long id;
@@ -40,6 +40,7 @@ public class FSCertificate {
 	private List<FSProduct> products;
 	private List<FSBlank> blanks;
 	private int otd_id;
+	private String language="RU";
 	
 	public void init() {
 		branch = new Branch();
@@ -207,13 +208,22 @@ public class FSCertificate {
 		this.blanks = blanks;
 	}
 
+	public String getLanguage() {
+		return language;
+	}
+
+	public void setLanguage(String language) {
+		this.language = language;
+	}
+
+	@Override
 	public String toString() {
 		return "FSCertificate [id=" + id + ", certnumber=" + certnumber + ", parentnumber=" + parentnumber
 				+ ", dateissue=" + dateissue + ", dateexpiry=" + dateexpiry + ", confirmation=" + confirmation
 				+ ", declaration=" + declaration + ", codecountrytarget=" + codecountrytarget + ", listscount="
 				+ listscount + ", datecert=" + datecert + ", branch=" + branch + ", exporter=" + exporter
 				+ ", producer=" + producer + ", expert=" + expert + ", signer=" + signer + ", products=" + products
-				+ ", blanks=" + blanks + ", otd_id=" + otd_id + "]";
+				+ ", blanks=" + blanks + ", otd_id=" + otd_id + ", language=" + language + "]";
 	}
 
-	}
+}

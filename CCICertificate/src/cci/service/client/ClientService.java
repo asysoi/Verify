@@ -24,7 +24,7 @@ public class ClientService {
 	@Autowired
 	private ClientDAO clientDAO;
 
-	private Map<String, String> countries = null;
+	private Map<String, Map<String, String>> countries = null;
 
 	// ---------------------------------------------------------------
 	// Get Clients page
@@ -62,7 +62,7 @@ public class ClientService {
 	// ---------------------------------------------------------------
 	// Get Countries list
 	// ---------------------------------------------------------------
-	public Map<String, String> getCountriesList() {
+	public Map<String, String> getCountriesList(String lang) {
 		if (countries == null) {
 			Locale.setDefault(new Locale("en", "en"));
 			try {
@@ -71,7 +71,7 @@ public class ClientService {
 				ex.printStackTrace();
 			}
 		}
-		return countries;
+		return countries.get(lang);
 	}
 
 	// ---------------------------------------------------------------

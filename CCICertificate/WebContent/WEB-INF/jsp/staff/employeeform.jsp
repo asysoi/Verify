@@ -183,10 +183,9 @@ $(function() {
 			<tr>
 				<td>Отделение</td>
 				<td>
-				      <form:select path="department.id_otd"
+		          <form:select path="department.id_otd"
 						items="${branches}" id="id_otd" 
-						onChange="javaScript:selectBranch();"
-						/>
+						onChange="javaScript:selectBranch();"/>
 					  <a href="javascript:cleardepertment();"> 
 					  <img src="resources/images/delete-16.png" alt="удл." />	</a>
 			    </td>
@@ -195,7 +194,7 @@ $(function() {
 				<td>Подразделение</td>
 				<td>
 				      <form:select path="department.id"
-						 id="id_department" size="5"/>
+						 id="id_department" class="required" size="5"/>
 					  <a href="javascript:clearelement($('#id_department'));"> 
 					  <img src="resources/images/delete-16.png" alt="удл." />	</a>
 			    </td>

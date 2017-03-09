@@ -338,7 +338,7 @@ public class CertificateController {
 		String fconf = absoluteDiskPath + "/config/pages.xml";
 		String fpath = absoluteDiskPath + "/fonts/";
 		
-		CountryConverter.setCountrymap(certService.getCountriesList());
+		CountryConverter.setCountrymap(certService.getCountriesList("RU"));
 		
 		try {
 		   builder.createPdf(fout, cert, fconf, fpath);
@@ -466,7 +466,7 @@ public class CertificateController {
 	// ---------------------------------------------------------------------------------------
 	@ModelAttribute("countries")
 	public Map<String, String> populateCompanyList() {
-		return certService.getCountriesList();
+		return certService.getCountriesList("RU");
 	}
 
 	@ModelAttribute("departments")

@@ -213,11 +213,11 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 			LOG.info(cert);
 			
 			String sql = "insert into fs_cert(certnumber, parentnumber, dateissue, dateexpiry, confirmation, declaration, codecountrytarget, "
-					    + " datecert, listscount, otd_id, id_branch, id_exporter, id_producer, id_expert, id_signer) "
+					    + " datecert, listscount, language, otd_id, id_branch, id_exporter, id_producer, id_expert, id_signer) "
 					    + " values (:certnumber, :parentnumber, "
 					    + " TO_DATE(:dateissue,'DD.MM.YY'), "
 					    + " TO_DATE(:dateexpiry,'DD.MM.YY'), "
-					    + " :confirmation, :declaration, :codecountrytarget,  TO_DATE(:datecert,'DD.MM.YY'), :listscount, :otd_id "
+					    + " :confirmation, :declaration, :codecountrytarget,  TO_DATE(:datecert,'DD.MM.YY'), :listscount, :language, :otd_id "
 					    + ((cert.getBranch() != null) ?  ", :branch.id " : ", :branch")
 					    + ((cert.getExporter() != null) ?  ", :exporter.id " : ", :exporter ")
 					    + ((cert.getProducer() != null) ?  ", :producer.id " : ", :producer ")
@@ -535,7 +535,8 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 			
 			String sql = "UPDATE fs_cert SET parentnumber = :parentnumber, dateissue = TO_DATE(:dateissue,'DD.MM.YY'), "
 					    + " dateexpiry = TO_DATE(:dateexpiry,'DD.MM.YY'), confirmation = :confirmation, " 
-					    + " declaration = :declaration, codecountrytarget=:codecountrytarget, datecert=TO_DATE(:datecert,'DD.MM.YY'), listscount = :listscount, "
+					    + " declaration = :declaration, codecountrytarget=:codecountrytarget, datecert=TO_DATE(:datecert,'DD.MM.YY'), "
+					    + " listscount = :listscount, language=:language, "
 					    + " id_branch = " + ((cert.getBranch() != null) ?  ":branch.id, " : ":branch,")  
 					    + " id_exporter = " + ((cert.getExporter() != null) ?  ":exporter.id, " : ":exporter, ") 
 					    + " id_producer = " + ((cert.getProducer() != null) ?  ":producer.id, " : ":producer, ")

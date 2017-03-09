@@ -30,6 +30,25 @@ public class Employee {
 	private String bday;
 	private char active;
 	
+	public void init(Employee emp) {
+		id = emp.getId();
+		name = emp.getName();
+		job = emp.getJob();
+		department = emp.getDepartment();
+		runame = emp.getRuname();
+		rujob = emp.getRujob();
+		enname = emp.getEnname();
+		enjob = emp.getEnjob();
+		firstname = emp.getFirstname();
+		lastname = emp.getLastname();
+		middlename = emp.getMiddlename();
+		email = emp.getEmail();
+		phone = emp.getPhone();
+		bday = emp.getBday();
+		active = emp.getActive();	
+	}
+	
+
 	@XmlTransient
 	public long getId() {
 		return id;

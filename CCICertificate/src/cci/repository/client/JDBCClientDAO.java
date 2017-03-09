@@ -1,5 +1,6 @@
 ﻿package cci.repository.client;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -79,18 +80,24 @@ public class JDBCClientDAO implements ClientDAO {
 	// ---------------------------------------------------------------
 	// Get list of countries
 	// ---------------------------------------------------------------
-	public Map<String, String> getCountriesList() {
+	public Map<String, Map<String,String>> getCountriesList() {
 		String sql = "SELECT * from C_COUNTRY ORDER BY NAME";
 
-		Map<String, String> countries = new LinkedHashMap<String, String>();
-
+		Map<String, Map<String,String>> countries = new HashMap<String, Map<String,String>>();
+		Map<String, String> countriesru = new LinkedHashMap<String, String>();
+		Map<String, String> countriesen = new LinkedHashMap<String, String>();
+		
 		List<Country> list = template.getJdbcOperations().query(sql,
 				new BeanPropertyRowMapper<Country>(Country.class));
-
-		for (Country cntry : list) {
-			countries.put(cntry.getCode(), cntry.getName());
+		
+		for (Country cntry:list) {
+			countriesru.put(cntry.getCode(), cntry.getName());
+			countriesen.put(cntry.getCode(), cntry.getEnname());
 		}
-		System.out.println("Got country list");
+		countries.put("RU",countriesru);
+		countries.put("EN",countriesen);
+		
+		LOG.debug("Got country list");		
 		return countries;
 	}
 
@@ -138,19 +145,19 @@ public class JDBCClientDAO implements ClientDAO {
 				+ "(id, "
 				+ "name, city, line,cindex,office,building,work_phone,cell_phone,"
 				+ "unp, okpo, bname,bcity,bline,bindex,boffice,bbuilding,account,"
-				+ "bunp, email, bemail,codecountry,bcodecountry) "
+				+ "bunp, email, bemail,codecountry,bcodecountry, enname, encity, enline, version) "
 				+ "values (id_client_seq.nextval, "
 				+ ":name,:city,:line,:cindex,:office,:building,:work_phone,:cell_phone,"
 				+ ":unp, :okpo, :bname,:bcity,:bline,:bindex,:boffice,:bbuilding,:account,"
-				+ ":bunp,:email,:bemail,:codecountry,:bcodecountry) ";
+				+ ":bunp,:email,:bemail,:codecountry,:bcodecountry, :enname, :encity, :enline, :version) ";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(client);
 
 		try {
 			template.update(sql, parameters);
-			
+			client.setVersion(client.getVersion() + 1);
 		} catch (Exception ex) {
-			System.out.println("Error - client save: " + ex.toString());
+			LOG.info("Error - client save: " + ex.toString());
 		}
 	}
 
@@ -164,12 +171,14 @@ public class JDBCClientDAO implements ClientDAO {
 				+ "unp=:unp, okpo=:okpo, bname=:bname, bcity=:bcity, bline=:bline,"
 				+ "bindex=:bindex, boffice=:boffice, bbuilding=:bbuilding, account=:account,"
 				+ "bunp=:bunp, email=:email, bemail=:bemail, codecountry=:codecountry,"
-				+ "bcodecountry=:bcodecountry  WHERE id = :id";
+				+ "bcodecountry=:bcodecountry, enname=:enname, encity=:encity, enline=:enline, version = :version + 1 "
+				+ "WHERE id = :id and version=:version";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(client);
 
 		try {
 			template.update(sql, parameters);
+			client.setVersion(client.getVersion() + 1);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

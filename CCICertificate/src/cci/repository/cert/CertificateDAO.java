@@ -33,7 +33,7 @@ public interface CertificateDAO {
 	
 	public Map<String,String> getACL();
 
-	public Map<String, String> getCountriesList();
+	public Map<String, Map<String,String>> getCountriesList();
 
 	public List<String> getFormsList();
 

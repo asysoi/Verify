@@ -22,10 +22,8 @@
 		url = $("#ffilter").attr("action");
 		$.ajaxSetup({async:false});
 		$.post(url, $("#ffilter").serialize());
-		$( document ).ajaxComplete(function(event,request, settings ) {
-			  goToList('selemployees.do?page=1&pagesize=${employeemanager.pagesize}&orderby=${employeemanager.orderby}&order=${employeemanager.order}');
-			  $("#pview").dialog("close");
-		});
+  	    goToList('selemployees.do?page=1&pagesize=${employeemanager.pagesize}&orderby=${employeemanager.orderby}&order=${employeemanager.order}');
+		$("#pview").dialog("close");
 	}
 	
 	function resetEmployee() {
@@ -37,26 +35,19 @@
 			url = $("#femployee").attr("action");
 			$.ajaxSetup({async:false});
 			$.post(url, $("#femployee").serialize());
-		
-			$( document ).ajaxComplete(function(event,request, settings ) {
-				  goToList('selemployees.do?page=1&pagesize=${employeemanager.pagesize}&orderby=${employeemanager.orderby}&order=${employeemanager.order}');
-				  $("#clview").dialog("close");
-			});
+  		    goToList('selemployees.do?page=1&pagesize=${employeemanager.pagesize}&orderby=${employeemanager.orderby}&order=${employeemanager.order}');
+			$("#clview").dialog("close");
 		} 
 	}
 	
 	function updateEmployee() {
         var x;
 		if (confirm("Сохранить сделанные изменения?") == true) {
-		
 			url = $("#femployee").attr("action");
 			$.ajaxSetup({async:false});
 			$.post(url, $("#femployee").serialize());
-		
-			$( document ).ajaxComplete(function(event,request, settings ) {
-				  goToList('selemployees.do?page=1&pagesize=${employeemanager.pagesize}&orderby=${employeemanager.orderby}&order=${employeemanager.order}');
-				  $("#clview").dialog("close");
-			});
+ 		    goToList('selemployees.do?page=1&pagesize=${employeemanager.pagesize}&orderby=${employeemanager.orderby}&order=${employeemanager.order}');
+  		    $("#clview").dialog("close");
 		} 
 			
 	}
@@ -232,10 +223,11 @@
 		url = "selemployee.do?id=" + eid + "&employeetype=" + etype;
 		$.ajaxSetup({async:false});
 		$.get(url, function(data, status) {
-			 console.log("Employee type: " + clienttype);
+			 console.log("Employee type: " + etype);
+			 console.log("Employee date: " + data);
 			 if (etype == 'expert') { 
 			     $("#expert").text(data);
-			 } else if (etype == 'producer') {
+			 } else if (etype == 'signer') {
 				 $("#signer").text(data);
 			 }
 		});	

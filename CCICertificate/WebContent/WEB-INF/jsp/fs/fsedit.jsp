@@ -23,6 +23,8 @@
 					});
 					$(".datepicker").datepicker("option", "dateFormat",
 							'dd.mm.yy');
+		  		    $("#language")
+						    .val('${fscert.language}');
 		  		    $("#codecountrytarget")
 							.val('${fscert.codecountrytarget}');
 					$("#otd_id")
@@ -48,7 +50,7 @@
 	}
 	
 	function reloadConfirmation() {
-		url = "rldconfirm.do?lang=ru";
+		url = "rldconfirm.do?lang=" + $("#language").val();
 		$.ajaxSetup({async:false});
 		$.get(url, function(data, status) {
 			 console.log(data); 
@@ -58,7 +60,7 @@
 	}
 	
 	function reloadDeclaration() {
-		url = "rlddecl.do?lang=ru";
+		url = "rlddecl.do?lang=" + $("#language").val();
 		$.ajaxSetup({async:false});
 		$.get(url, function(data, status) {
 			 console.log(data); 
@@ -107,6 +109,9 @@ ${fscert.branch.address}, Республика Беларусь<br>
 <div class="row">
 <div class="col-md-6">Выдан для представления в: <form:select path="codecountrytarget"						
 						items="${countries}" id="codecountrytarget" /></div>
+<div class="col-md-6">Язык сертификата: <form:select path="language"						
+						items="${languages}" id="language" /></div>
+						
 </div>
 					
 <div class="row">
@@ -146,11 +151,11 @@ ${fscert.branch.address}, Республика Беларусь<br>
 
 <div class="row">
 		  <div class="col-md-1"><a href="javascript:openEmployees('expert')">Эксперт:</a></div>
-		  <div class="col-md-10">${fscert.expert.job} ${fscert.expert.name}</div>
+		  <div class="col-md-10" id="expert">${fscert.expert.job} ${fscert.expert.name}</div>
 </div>
 <div class="row">
 		  <div class="col-md-1"><a href="javascript:openEmployees('signer')">Подпись:</a></div>
-		  <div class="col-md-10">${fscert.signer.job} ${fscert.signer.name}</div>
+		  <div class="col-md-10" id="signer">${fscert.signer.job} ${fscert.signer.name}</div>
 </div>				
 
 

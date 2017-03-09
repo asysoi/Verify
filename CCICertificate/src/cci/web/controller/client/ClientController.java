@@ -246,7 +246,7 @@ public class ClientController {
 
 		fc.loadViewclient(viewfilter.getViewclient());
 		fc.loadCondition(viewfilter.getCondition());
-
+		
 		model.addAttribute("clientfilter", fc);
 		return "client/cfilter";
 	}
@@ -363,7 +363,7 @@ public class ClientController {
 	// Get Countries List
 	// ---------------------------------------------------------------
 	@ModelAttribute("countries")
-	public Map<String, String> populateCompanyList() {
-		return clientService.getCountriesList();
+	public Map<String, String> populateCountryList() {
+		return clientService.getCountriesList("RU");
 	}
 }

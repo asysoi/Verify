@@ -16,8 +16,8 @@ public class FSResultSetExtractor<T> implements ResultSetExtractor<FSTranslate> 
 		
 		while (rs.next()) {
 		     Map row  = new HashMap();
-		     row.put("ru", rs.getString("ru"));
-		     row.put("en", rs.getString("en"));
+		     row.put("RU", rs.getString("RU"));
+		     row.put("EN", rs.getString("EN"));
 		     fstranslate.put(rs.getString("key"), row);
 		}
 		return fstranslate;

@@ -5,8 +5,7 @@ import cci.model.Client;
 public class ViewClient extends Client {
 	private String country;
 	private String bcountry;
-	private String address;
-	
+		
 	public String getCountry() {
 		return country;
 	}
@@ -19,11 +18,10 @@ public class ViewClient extends Client {
 	public void setBcountry(String bcountry) {
 		this.bcountry = bcountry;
 	}
+	@Override
+	public String toString() {
+		return "ViewClient [" + super.toString() + "country=" + country + ", bcountry=" + bcountry + "]";
+	}
 	
-	public String getAddress() {
-		return address;
-	}
-	public void setAddress(String address) {
-		this.address = address;
-	}
+	
 }

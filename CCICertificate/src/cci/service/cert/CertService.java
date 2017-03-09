@@ -1,6 +1,7 @@
 ﻿package cci.service.cert;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -27,8 +28,9 @@ public class CertService {
 	
 	private Map<String, String> branches = null;
 	private List<String> forms = null;
-	private Map<String, String> countries = null;
+	private Map<String, Map<String,String>> countries = null;
 	private Map<String, String> acl = null;
+	private Map<String, String> languages = null;
 
 	// ------------------------------------------------------------------------------
 	//
@@ -195,7 +197,7 @@ public class CertService {
 	// ------------------------------------------------------------------------------
 	//
 	// ------------------------------------------------------------------------------
-	public Map<String, String> getCountriesList() {
+	public Map<String, String> getCountriesList(String lang) {
 		if (countries == null) {
 			Locale.setDefault(new Locale("en", "en"));
 			try {
@@ -204,7 +206,7 @@ public class CertService {
 				ex.printStackTrace();
 			}
 		}
-		return countries;
+		return countries.get(lang);
 	}
 
 	// ------------------------------------------------------------------------------
@@ -241,7 +243,7 @@ public class CertService {
 	}
 
 	// ------------------------------------------------------------------------------
-	//
+	//  
 	// ------------------------------------------------------------------------------
 	public List<Report> makeReports(String[] fields, SQLBuilder builder,
 			Boolean onfilter) {
@@ -254,7 +256,19 @@ public class CertService {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
 		return reports;
+	}
+
+	
+	// ------------------------------------------------------------------------------
+	//  
+	// ------------------------------------------------------------------------------
+	public Map<String, String> getLanguageList() {
+        if (languages == null) {
+           languages = new HashMap<String, String>();
+           languages.put("RU", "Русский");
+           languages.put("EN", "Английский");
+        }
+		return languages;
 	}
 }

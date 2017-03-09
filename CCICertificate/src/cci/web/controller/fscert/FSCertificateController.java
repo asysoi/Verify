@@ -22,9 +22,12 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import cci.config.fscert.ExportFSCertConfig;
 import cci.model.Client;
+import cci.model.Employee;
+import cci.model.fscert.Expert;
 import cci.model.fscert.Exporter;
 import cci.model.fscert.FSCertificate;
 import cci.model.fscert.Producer;
+import cci.model.fscert.Signer;
 import cci.repository.SQLBuilder;
 import cci.repository.fscert.SQLBuilderFSCertificate;
 import cci.service.FieldType;
@@ -35,6 +38,7 @@ import cci.service.cert.XSLWriter;
 import cci.service.client.ClientService;
 import cci.service.fscert.FSCertificateService;
 import cci.service.fscert.FSFilter;
+import cci.service.staff.EmployeeService;
 import cci.web.controller.ViewManager;
 import cci.web.controller.cert.CertificateController;
 
@@ -53,6 +57,9 @@ public class FSCertificateController {
 	
 	@Autowired
 	private ClientService clientService;
+	
+	@Autowired
+	private EmployeeService employeeService;
 
 
 	// ---------------------------------------------------------------------------------------
@@ -408,6 +415,47 @@ public class FSCertificateController {
 			}
 	}
 	
+
+	// ---------------------------------------------------------------------------------------
+	//   Link Exporter to FS certificate  
+	// ---------------------------------------------------------------------------------------
+	@RequestMapping(value = "selemployee.do",  method = RequestMethod.GET)
+	public void linkEmployeeToFSCertificate(
+			@RequestParam(value = "id", required = true) Long eid,
+			@RequestParam(value = "employeetype", required = true) String etype,
+			HttpSession session, HttpServletResponse response, ModelMap model) {
+		
+			try {
+				  LOG.info("Employee ID: " + eid);
+				  FSCertificate cert = (FSCertificate)model.get("fscert");
+				  Employee emp = employeeService.readEmployee(eid.longValue());
+				 
+				  if (emp!=null && cert!=null) {
+					  if ("expert".equals(etype)) {
+						Expert expert = new Expert();
+						expert.init(emp);
+						cert.setExpert(expert);
+					  } else if ("signer".equals(etype)) {
+						Signer signer = new Signer();
+						signer.init(emp);
+						cert.setSigner(signer);
+					  } 
+				
+					  response.setContentType("text/html; charset=UTF-8");
+					  response.setCharacterEncoding("UTF-8");
+					  response.getWriter().println(emp.getJob() + " " + emp.getName());
+					  response.flushBuffer();
+					  LOG.info("Linked employee to certificate: " + cert);
+				  } else {	 
+					  model.addAttribute("error", "Сертификат или сотрудник не найдены");
+				  }
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				LOG.info("Ошибка: " + ex.getMessage());
+				model.addAttribute("error", ex.getMessage());
+			}
+	}
+
 	
 	
 	// ---------------------------------------------------------------------------------------
@@ -472,13 +520,23 @@ public class FSCertificateController {
 	// Fill in lists 
 	// ---------------------------------------------------------------------------------------
 	@ModelAttribute("countries")
-	public Map<String, String> populateCompanyList() {
-		return certService.getCountriesList();
+	public Map<String, String> populateCountryRuList() {
+		return certService.getCountriesList("RU");
 	}
 
+	@ModelAttribute("countriesen")
+	public Map<String, String> populateCountryEnList() {
+		return certService.getCountriesList("EN");
+	}
+	
 	@ModelAttribute("departments")
 	public Map<String, String> populateDepartmentssList() {
 		return certService.getBranchesList();
 	}
 	
+	@ModelAttribute("languages")
+	public Map<String, String> populateLanguageList() {
+		return certService.getLanguageList();
+	}
+
 }

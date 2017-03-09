@@ -320,17 +320,23 @@ public class JDBCCertificateDAO implements CertificateDAO {
 	// ---------------------------------------------------------------
 	// Get list of countries -> PS
 	// ---------------------------------------------------------------
-	public Map<String, String> getCountriesList() {
+	public Map<String, Map<String,String>> getCountriesList() {
 		String sql = "SELECT * from C_COUNTRY ORDER BY NAME";
 
-		Map<String, String> countries = new LinkedHashMap<String, String>();
+		Map<String, Map<String,String>> countries = new HashMap<String, Map<String,String>>();
+		Map<String, String> countriesru = new LinkedHashMap<String, String>();
+		Map<String, String> countriesen = new LinkedHashMap<String, String>();
 		
 		List<Country> list = template.getJdbcOperations().query(sql,
 				new BeanPropertyRowMapper<Country>(Country.class));
 		
 		for (Country cntry:list) {
-			countries.put(cntry.getCode(), cntry.getName());
+			countriesru.put(cntry.getCode(), cntry.getName());
+			countriesen.put(cntry.getCode(), cntry.getEnname());
 		}
+		countries.put("RU",countriesru);
+		countries.put("EN",countriesen);
+		
 		LOG.debug("Got country list");		
 		return countries;
 	}

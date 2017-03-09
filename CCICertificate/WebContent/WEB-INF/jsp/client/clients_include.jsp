@@ -13,12 +13,12 @@
 	}
 
 	function reset() {
-		$('#ffilter')[0].reset();
+		$('#clientfilter')[0].reset();
 	}
 
 	function submit() {
-		url = $("#ffilter").attr("action");
-		$.post(url, $("#ffilter").serialize());
+		url = $("#clientfilter").attr("action");
+		$.post(url, $("#clientfilter").serialize());
 		$( document ).ajaxComplete(function(event,request, settings ) {
 			  goToList('clients.do?page=1&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}');
 			  $("#pview").dialog("close");
@@ -41,7 +41,7 @@
 	
 	function updateClient() {
         var x;
-		if (confirm("Сохранить сделанные изменения?") == true) {
+		//if (confirm("Сохранить сделанные изменения?") == true) {
 		
 			url = $("#fclient").attr("action");
 			$.post(url, $("#fclient").serialize());
@@ -50,7 +50,7 @@
 				  goToList('clients.do?page=1&pagesize=${cmanager.pagesize}&orderby=${cmanager.orderby}&order=${cmanager.order}');
 				  $("#clview").dialog("close");
 			});
-		} 
+		//} 
 			
 	}
 	

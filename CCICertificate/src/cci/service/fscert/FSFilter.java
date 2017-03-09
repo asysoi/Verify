@@ -26,19 +26,19 @@ public class FSFilter extends Filter {
 										"DECLARATION","CODECOUNTRYTARGET","DATECERT","LISTSCOUNT", "BRANCHNAME","BRANCHADDRESS", 
 										"EXPORTERNAME", "EXPORTERADDRESS", "PRODUCERNAME", "PRODUCERADDRESS",
 										"EXPERTNAME", "SIGNERNAME", "PRODUCTNAME", "BLANKNUMBER", "OTD_ID",
-										"DATECERTFROM", "DATECERTTO", "COUNTFROM", "COUNTTO", "STR_OTD_ID"};
+										"DATECERTFROM", "DATECERTTO", "COUNTFROM", "COUNTTO", "STR_OTD_ID", "LANGUAGE"};
 		
 		String[] dbfields = new String[] {"ID", "CERTNUMBER", "PARENTNUMBER", "DATEISSUE", "DATEEXPIRY","CONFIRMATION",
 										"DECLARATION","CODECOUNTRYTARGET","DATECERT","LISTSCOUNT","NAME","ADDRESS", 
 										"NAME", "ADDRESS", "NAME", "ADDRESS",
 										"NAME", "NAME", "TOVAR", "BLANKNUMBER", "OTD_ID", 
-										"DATECERT", "DATECERT", "LISTSCOUNT", "LISTSCOUNT", "OTD_ID"};
+										"DATECERT", "DATECERT", "LISTSCOUNT", "LISTSCOUNT", "OTD_ID", "LANGUAGE"};
 		
 		FieldType[] types = new FieldType[] { FieldType.ID, FieldType.STRING,FieldType.STRING,FieldType.DATE,FieldType.DATE,FieldType.STRING,
 										FieldType.STRING, FieldType.STRING, FieldType.DATE,FieldType.NUMBER, FieldType.STRING, FieldType.STRING,  
 										FieldType.STRING, FieldType.STRING, FieldType.STRING, FieldType.STRING, 
 				 				        FieldType.STRING, FieldType.STRING, FieldType.TEXT,FieldType.STRING, FieldType.NUMBER, 
-				 				        FieldType.DATE, FieldType.DATE, FieldType.NUMBER, FieldType.NUMBER, FieldType.NUMBER };
+				 				        FieldType.DATE, FieldType.DATE, FieldType.NUMBER, FieldType.NUMBER, FieldType.NUMBER, FieldType.STRING};
 		
 		this.init(fields, dbfields, types);
 	}

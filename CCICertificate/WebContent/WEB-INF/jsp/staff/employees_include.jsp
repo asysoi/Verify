@@ -2,6 +2,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <spring:url value="resources/css/cci.css" var="CCICss" />
 <link href="${CCICss}" rel="stylesheet" />
@@ -177,7 +178,7 @@
 	
 
 	function downloadEmployees() {
-		link = "сlientconfig.do";
+		link = "employeeconfig.do";
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Экспорт списка сотрудников БелТПП');
 		$("#pview").dialog("option", "width", 850);
@@ -275,7 +276,7 @@
 				</td>
 				<td>${employee.job}</td>
                 <td>${employee.departmentname}</td>
-                <td>${employee.otd_name}</td>
+                <td>${fn:substring(employee.otd_name, 0, 15)}...</td>
                 <td>${employee.phone}</td>
 			</tr>
 		</c:forEach>

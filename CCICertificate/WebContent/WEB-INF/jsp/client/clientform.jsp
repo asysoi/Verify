@@ -27,12 +27,20 @@
 
 	<fieldset>
 		<legend class="grp_title">Основные данные</legend>
-
+        <form:hidden path="id" id="id" />
+        <form:hidden path="version" id="version" />
 		<table class="filter">
 			<tr>
 				<td>Наименование</td>
-				<td><form:input path="name" id="name" /><a
+				<td><form:input path="name" id="name" size="25"/><a
 					href="javascript:clearelement($('#name'));"> <img
+						src="resources/images/delete-16.png" alt="удл." />
+				</a></td>
+			</tr>
+			<tr>
+				<td>Name</td>
+				<td><form:input path="enname" id="enname" size="25"/><a
+					href="javascript:clearelement($('#enname'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 			</tr>
@@ -88,27 +96,44 @@
 			<tr>
 				<td>Страна</td>
 				<td><form:select path="codecountry"
-						items="${countries}" id="codecountry" /><a
+						items="${countries}" id="codecountry"/><a
 					href="javascript:clearelement($('#codecountry'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
+			</tr>
+			<tr>	
 				<td>Индекс</td>
 				<td><form:input path="cindex" id="cindex" /><a
 					href="javascript:clearelement($('#cindex'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
-			</tr>
-			<tr>
+			<tr>	
 				<td>Город</td>
 				<td><form:input path="city" id="city" /><a
 					href="javascript:clearelement($('#city'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
+				<td>City</td>
+				<td><form:input path="encity" id="encity" /><a
+					href="javascript:clearelement($('#encity'));"> <img
+						src="resources/images/delete-16.png" alt="удл." />
+				</a></td>
+				
+			</tr>
+			<tr>	
 				<td>Улица</td>
-				<td><form:input path="line" id="line" /><a
+				<td><form:input path="line" id="line" size="25"/><a
 					href="javascript:clearelement($('#line'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
+			</tr>
+			<tr>	
+				<td>Street</td>
+				<td><form:input path="enline" id="enline" /><a
+					href="javascript:clearelement($('#enline'));"> <img
+						src="resources/images/delete-16.png" alt="удл." />
+				</a></td>
+				
 			</tr>
 			<tr>
 				<td>Номер дома</td>
@@ -154,18 +179,20 @@
 					href="javascript:clearelement($('#bcodecountry'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
+			</tr>
+			<tr>	
 				<td>Индекс</td>
 				<td><form:input path="bindex" id="bindex" /><a
 					href="javascript:clearelement($('#bindex'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
-			</tr>
-			<tr>
 				<td>Город</td>
 				<td><form:input path="bcity" id="bcity" /><a
 					href="javascript:clearelement($('#city'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
+			</tr>
+			<tr>
 				<td>Улица</td>
 				<td><form:input path="bline" id="bline" /><a
 					href="javascript:clearelement($('#bline'));"> <img

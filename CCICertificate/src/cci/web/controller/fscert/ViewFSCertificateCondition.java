@@ -28,6 +28,7 @@ public class ViewFSCertificateCondition {
     private String datecertto="<=";
     private String countfrom=">=";
     private String countto="<=";
+    private String language="=";
     
     
 	public String getId() {
@@ -179,5 +180,11 @@ public class ViewFSCertificateCondition {
 	}
 	public void setCountto(String countto) {
 		this.countto = countto;
+	}
+	public String getLanguage() {
+		return language;
+	}
+	public void setLanguage(String language) {
+		this.language = language;
 	}
 }
