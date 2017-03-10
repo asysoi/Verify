@@ -14,11 +14,6 @@ function refreshName() {
 	$("#name").val(name);
 } 
 
-function translit(source, target) {
-	target.val(transliterate(source.val()));
-}
-
-
 $(function() {
 	
 	$(".datepicker").datepicker({

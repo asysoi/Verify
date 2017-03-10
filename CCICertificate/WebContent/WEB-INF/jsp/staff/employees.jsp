@@ -219,8 +219,8 @@
 	}
 	
 	
-	function linkEmployee(eid, etype) {
-		url = "selemployee.do?id=" + eid + "&employeetype=" + etype;
+	function linkEmployee(eid, etype, lang) {
+		url = "selemployee.do?id=" + eid + "&employeetype=" + etype+"&lang="+$("#language").val();
 		$.ajaxSetup({async:false});
 		$.get(url, function(data, status) {
 			 console.log("Employee type: " + etype);

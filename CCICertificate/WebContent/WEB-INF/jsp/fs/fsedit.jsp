@@ -38,7 +38,7 @@
 	}
 
 	function openClients(clienttype) {
-        link="sclients.do?pagesize=5&clienttype="+clienttype;
+        link="sclients.do?pagesize=5&clienttype="+clienttype+"&lang="+$("#language").val();
 		$("#fsview").load(link);
 		$("#fsview").dialog("option", "title", 'Список компаний');
 		$("#fsview").dialog("option", "width", 1200);
@@ -116,12 +116,18 @@ ${fscert.branch.address}, Республика Беларусь<br>
 					
 <div class="row">
 <div class="col-md-1"><a href="javascript:openClients('exporter')">Экспортер: </a></div>
-<div class="col-md-6" id="exporter">${fscert.exporter.name}, ${fscert.exporter.address}</div>
+<div class="col-md-6" id="exporter">
+<c:if test="${fscert.language == 'EN'}">  ${fscert.exporter.enname}, ${fscert.exporter.enaddress}</c:if>
+<c:if test="${fscert.language == 'RU'}">  ${fscert.exporter.name}, ${fscert.exporter.address}</c:if>
+</div>
 </div>
 
 <div class="row">
 <div class="col-md-1"><a href="javascript:openClients('producer')">Производитель:</a></div>
-<div class="col-md-10" id="producer">${fscert.producer.name}, ${fscert.producer.address}</div>
+<div class="col-md-10" id="producer">
+<c:if test="${fscert.language == 'RU'}">${fscert.producer.name}, ${fscert.producer.address}</c:if>
+<c:if test="${fscert.language == 'EN'}">${fscert.producer.enname}, ${fscert.producer.enaddress}</c:if>
+</div>
 </div>	
 
 <div class="row">
@@ -151,11 +157,17 @@ ${fscert.branch.address}, Республика Беларусь<br>
 
 <div class="row">
 		  <div class="col-md-1"><a href="javascript:openEmployees('expert')">Эксперт:</a></div>
-		  <div class="col-md-10" id="expert">${fscert.expert.job} ${fscert.expert.name}</div>
+		  <div class="col-md-10" id="expert">
+		  <c:if test="${fscert.language == 'RU'}">${fscert.expert.job} ${fscert.expert.name}</c:if>
+		  <c:if test="${fscert.language == 'EN'}">${fscert.expert.enjob} ${fscert.expert.enname}</c:if>
+		  </div>
 </div>
 <div class="row">
 		  <div class="col-md-1"><a href="javascript:openEmployees('signer')">Подпись:</a></div>
-		  <div class="col-md-10" id="signer">${fscert.signer.job} ${fscert.signer.name}</div>
+		  <div class="col-md-10" id="signer">
+		  <c:if test="${fscert.language == 'RU'}">${fscert.signer.job} ${fscert.signer.name}</c:if>
+		  <c:if test="${fscert.language == 'EN'}">${fscert.signer.enjob} ${fscert.signer.enname}</c:if>		  
+		  </div>
 </div>				
 
 

@@ -37,4 +37,10 @@ transliterate = (
 		            return text;
 		        }
 		    }
-		)();
+)();
+
+function translit(source, target) {
+	target.val(transliterate(source.val()));
+}
+
+

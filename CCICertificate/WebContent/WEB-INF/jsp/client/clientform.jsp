@@ -13,9 +13,7 @@
 						.val('${client.codecountry}');
 					$("#bcodecountry")
 						.val('${client.bcodecountry}');
-
 				});
-
 	});
 
 	function clearelement(element) {
@@ -39,8 +37,11 @@
 			</tr>
 			<tr>
 				<td>Name</td>
-				<td><form:input path="enname" id="enname" size="25"/><a
-					href="javascript:clearelement($('#enname'));"> <img
+				<td><form:input path="enname" id="enname" size="25"/>
+				<a	href="javascript:translit($('#name'), $('#enname'));"> 
+				<i class="glyphicon glyphicon-refresh"></i>
+		        </a>
+				<a	href="javascript:clearelement($('#enname'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 			</tr>
@@ -94,13 +95,15 @@
 
 		<table class="filter">
 			<tr>
-				<td>Страна</td>
-				<td><form:select path="codecountry"
+				<td>Страна <form:select path="codecountry"
 						items="${countries}" id="codecountry"/><a
 					href="javascript:clearelement($('#codecountry'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+				</a>
+				</td>
 			</tr>
+	    </table>		
+	    <table class="filter">		
 			<tr>	
 				<td>Индекс</td>
 				<td><form:input path="cindex" id="cindex" /><a
@@ -111,26 +114,29 @@
 				<td>Город</td>
 				<td><form:input path="city" id="city" /><a
 					href="javascript:clearelement($('#city'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
+						src="resources/images/delete-16.png" alt="удл." />   
 				</a></td>
 				<td>City</td>
-				<td><form:input path="encity" id="encity" /><a
-					href="javascript:clearelement($('#encity'));"> <img
+				<td><form:input path="encity" id="encity" />
+				<a	href="javascript:translit($('#city'), $('#encity'));"> 
+				<i class="glyphicon glyphicon-refresh"></i>
+				</a>
+				<a href="javascript:clearelement($('#encity'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
-				
 			</tr>
 			<tr>	
 				<td>Улица</td>
-				<td><form:input path="line" id="line" size="25"/><a
+				<td><form:input path="line" id="line"/><a
 					href="javascript:clearelement($('#line'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
-			</tr>
-			<tr>	
 				<td>Street</td>
-				<td><form:input path="enline" id="enline" /><a
-					href="javascript:clearelement($('#enline'));"> <img
+				<td><form:input path="enline" id="enline" />
+				<a	href="javascript:translit($('#line'), $('#enline'));"> 
+				<i class="glyphicon glyphicon-refresh"></i>
+				</a>
+				<a href="javascript:clearelement($('#enline'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 				
@@ -172,14 +178,18 @@
 				<td></td>
 				<td></td>				
 			</tr>
+		</table>
+		<table class="filter">	
 			<tr>
-				<td>Страна</td>
-				<td><form:select path="bcodecountry"
+				<td>Страна
+				<form:select path="bcodecountry"
 						items="${countries}" id="bcodecountry" /><a
 					href="javascript:clearelement($('#bcodecountry'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 			</tr>
+		</table>
+		<table class="filter">		
 			<tr>	
 				<td>Индекс</td>
 				<td><form:input path="bindex" id="bindex" /><a

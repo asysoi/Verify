@@ -382,6 +382,7 @@ public class FSCertificateController {
 	public void linkClientToFSCertificate(
 			@RequestParam(value = "id", required = true) Long certid,
 			@RequestParam(value = "clienttype", required = true) String clienttype,
+			@RequestParam(value = "lang", required = true) String lang,
 			HttpSession session, HttpServletResponse response, ModelMap model) {
 		
 			try {
@@ -402,7 +403,11 @@ public class FSCertificateController {
 				
 					  response.setContentType("text/html; charset=UTF-8");
 					  response.setCharacterEncoding("UTF-8");
-					  response.getWriter().println(client.getName() + "; " + client.getAddress());
+					  if ("EN".equals(lang)) {
+					      response.getWriter().println(client.getEnname() + "; " + client.getEnaddress());
+					  } else {
+						  response.getWriter().println(client.getName() + "; " + client.getAddress());
+					  }
 					  response.flushBuffer();
 					  LOG.info("Linked exporter to certificate: " + cert);
 				  } else {	 
@@ -423,6 +428,7 @@ public class FSCertificateController {
 	public void linkEmployeeToFSCertificate(
 			@RequestParam(value = "id", required = true) Long eid,
 			@RequestParam(value = "employeetype", required = true) String etype,
+			@RequestParam(value = "lang", required = true) String lang,
 			HttpSession session, HttpServletResponse response, ModelMap model) {
 		
 			try {
@@ -443,7 +449,11 @@ public class FSCertificateController {
 				
 					  response.setContentType("text/html; charset=UTF-8");
 					  response.setCharacterEncoding("UTF-8");
-					  response.getWriter().println(emp.getJob() + " " + emp.getName());
+					  if ("EN".equals(lang)) {
+					      response.getWriter().println(emp.getEnjob() + " " + emp.getEnname());
+					  } else {
+						  response.getWriter().println(emp.getJob() + " " + emp.getName());
+					  }
 					  response.flushBuffer();
 					  LOG.info("Linked employee to certificate: " + cert);
 				  } else {	 
