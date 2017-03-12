@@ -21,14 +21,14 @@
 <td > </td>
 <td width="90%">
 <p align="right"><b>${fscert.blanks[0].blanknumber}</b></p>
-<h2 align="center">БЕЛОРУССКАЯ ТОРГОВО-ПРОМЫШЛЕННАЯ ПАЛАТА</h2>
-<h2 align="center">BELARUSIAN CHAMBER OF COMMERCE AND INDUSTRY</h2>
+<h4 align="center">БЕЛОРУССКАЯ ТОРГОВО-ПРОМЫШЛЕННАЯ ПАЛАТА</h4>
+<h4 align="center">BELARUSIAN CHAMBER OF COMMERCE AND INDUSTRY</h4>
 
-<h3 align="center"><b>${fscert.branch.name}</b></h3>
-<h3 align="center"><b>${fscert.branch.cindex}, ${fscert.branch.line}, ${fscert.branch.building}, ${fscert.branch.city}, Республика Беларусь</b></h3>
+<h4 align="center"><b>${fscert.branch.name}</b></h4>
+<h4 align="center"><b>${fscert.branch.cindex}, ${fscert.branch.line}, ${fscert.branch.building}, ${fscert.branch.city}, Республика Беларусь</b></h4>
 
-<h2 align="center"><b>СЕРТИФИКАТ СВОБОДНОЙ ПРОДАЖИ</b></h2>
-<h2 align="center"><b>CERTIFICATE OF FREE SALE</b></h2>
+<h4 align="center"><b>СЕРТИФИКАТ СВОБОДНОЙ ПРОДАЖИ</b></h4>
+<h4 align="center"><b>CERTIFICATE OF FREE SALE</b></h4>
 <table style="width:100%">
 <tr>
 <td align="left"> №  ${fscert.certnumber}</td> 

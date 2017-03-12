@@ -74,6 +74,7 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
         
         
         if (pagesize < pagecount) {
+        	/*
         	sql = "select " + flist 
 				+ " from certview where id in "
 				+ " (select  a.id "
@@ -87,8 +88,17 @@ public class JDBCOwnCertificateDAO implements OwnCertificateDAO {
 				+ ") bb LIMIT :lowposition "   
 				+ ") b on a.id = b.id where b.id is null)" 
 				+ " ORDER by " +  orderby + " " + order + ", id " + order;
+        	*/
+        	sql = "select " + flist
+    				+ " from certview "
+    				+  filter.getClause()
+    				+ " ORDER by " +  orderby + " " + order + ", id " + order  
+    				+ " LIMIT :lowposition, :pagesize ";    
+
        		params.put("highposition", Integer.valueOf(page * pagesize));
     		params.put("lowposition", Integer.valueOf((page - 1) * pagesize));
+    		params.put("pagesize", Integer.valueOf(pagesize));
+    		
         } else {
         	sql = "select " + flist 
     				+ " from certview "

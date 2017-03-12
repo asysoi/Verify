@@ -58,4 +58,8 @@ public class MainController {
 		}
 	}
 	
+	@RequestMapping(value = "/members.do", method = RequestMethod.GET)
+	public String members() {
+		return "listmembers";
+	}
 }

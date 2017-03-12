@@ -266,7 +266,7 @@
 				<div class="ccidropdown-content"> 
 				<ul class="cci">
 					<li class="cci"><a class="cci" href="javascript:editClient('${client.id}')"><i class="glyphicon glyphicon-edit"></i></a></li>
-					<li class="cci"><a class="cci" href="javascript:linkClient('${client.id}','${clienttype})"><i class="glyphicon glyphicon-paperclip"></i></a></li>
+					<li class="cci"><a class="cci" href="javascript:linkClient('${client.id}','${clienttype}')"><i class="glyphicon glyphicon-paperclip"></i></a></li>
 				</ul> </div> </div>
 				</td>
 				<td>${client.address}</td>

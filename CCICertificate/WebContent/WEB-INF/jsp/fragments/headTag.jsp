@@ -37,7 +37,15 @@
 
     <spring:url value="/resources/jquery-ui-1.10.3/themes/base/jquery-ui.css" var="jQueryUiCss"/>
     <link href="${jQueryUiCss}" rel="stylesheet"></link>
+
+    <spring:url value="/resources/jqgrid/css/ui.jqgrid.css" var="jqGridCss"/>
+    <link href="${jqGridCss}" rel="stylesheet"></link>
     
+    <spring:url value="/resources/jqgrid/js/i18n/grid.locale-ru.js" var="jqGridLocale"/>
+    <script src="${jqGridLocale}"></script>
+            
+    <spring:url value="/resources/jqgrid/js/jquery.jqGrid.min.js" var="jqGrid"/>
+    <script src="${jqGrid}"></script>
     
     <script>
   		

@@ -96,11 +96,11 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
         	sql = "select " + flist 
 				+ " from fscertview where id in "
 				+ " (select  a.id "
-				+ " from (SELECT id FROM (select id from fs_cert "
+				+ " from (SELECT id FROM (select id from fscertview "
 				+  filter.getClause()
 				+ " ORDER by " +  orderby + " " + order + ", id " + order  
 				+ ") where rownum <= :highposition "    
-				+ ") a left join (SELECT id FROM (select id from fs_cert "
+				+ ") a left join (SELECT id FROM (select id from fscertview "
 				+  filter.getClause()
 				+ " ORDER by " +  orderby + " " + order + ", id " + order
 				+ ") where rownum <= :lowposition "   

@@ -31,6 +31,65 @@
 							.val('${fscert.otd_id}');
 				});
 
+		jQuery("#products").jqGrid({
+    		url: "fsgoods.do",
+    		editurl: "fsgoodsupdate.do",
+    		datatype: "xml",
+    		mtype: "GET",
+			height: 200,
+			width : null,
+			shrinkToFit : false,
+   			colModel:[
+   				{label:'Номер',name:'numerator', index:'numerator', width:250, editable: true},
+   	    		{label:'Наименование товара', name:'tovar', index:'tovar', width:880, editable: true }
+		   	],
+		    //rowNum: 10,
+		    //rowList:[10,20,50],
+		   	sortname: 'numerator',
+		   	sortorder: 'asc',
+   			viewrecords: true,
+   			pager: '#pagerproducts',
+    	    //gridview: true,
+    		autoencode: true,
+   			caption: "Товары",
+   			onSelectRow: editRow
+		});
+		
+		$('#products').jqGrid('navGrid', "#pagerproducts", {                
+    		search: false, 
+    		add: false,
+    		edit: false,
+    		del: false,
+    		refresh: false,
+    		view: false
+		});
+		
+        $('#products').inlineNav('#pagerproducts',
+             { 
+                 edit: true, 
+                 add: true, 
+                 del: true, 
+                 cancel: true,
+                 editParams: {
+                     keys: true,
+                 },
+                 addParams: {
+                     keys: true
+                 }
+             });
+		
+		var lastSelection;
+		
+		function editRow(id) {
+			 var grid = $("#products");
+             if (id && id !== lastSelection) {
+                 grid.jqGrid('restoreRow',lastSelection);
+                 lastSelection = id;
+             }
+             grid.jqGrid('editRow',id, {keys: true} );
+        };
+        
+        
 	});
 
 	function clearelement(element) {
@@ -172,15 +231,9 @@ ${fscert.branch.address}, Республика Беларусь<br>
 
 
 <div class="row">
-		        <div class="col-md-12">Товарные позиции: <br> 
-				 <table> 
-				    <c:forEach items="${fscert.products}" var="product">
-				        <tr> 
-				        <td> ${product.numerator}. </td>
-				        <td> ${product.tovar} </td>
-				        </tr>
-			       </c:forEach>
-				</table>
+		        <div class="col-md-12">
+		            <table id="products"></table>
+		            <div id="pagerproducts"></div> 
 				</div>
 </div>
 

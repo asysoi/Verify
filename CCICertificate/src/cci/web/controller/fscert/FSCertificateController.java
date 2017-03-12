@@ -1,9 +1,11 @@
 package cci.web.controller.fscert;
 
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -26,6 +28,7 @@ import cci.model.Employee;
 import cci.model.fscert.Expert;
 import cci.model.fscert.Exporter;
 import cci.model.fscert.FSCertificate;
+import cci.model.fscert.FSProduct;
 import cci.model.fscert.Producer;
 import cci.model.fscert.Signer;
 import cci.repository.SQLBuilder;
@@ -60,6 +63,101 @@ public class FSCertificateController {
 	
 	@Autowired
 	private EmployeeService employeeService;
+
+	// ---------------------------------------------------------------------------------------
+	//  Main Request - Get List of FS Certificates
+	// ---------------------------------------------------------------------------------------
+	@RequestMapping(value = "fsgrid.do", method = RequestMethod.GET)
+	public void listCertsForGrid (	
+			@RequestParam(value = "page", required = false) int page,
+			@RequestParam(value = "rows", required = false) int rows,
+			@RequestParam(value = "sidx", defaultValue = "datecert", required = false) String sidx,
+			@RequestParam(value = "sord", required = false) String sord,
+			@RequestParam(value = "certnumber", required = false) String certnumber,
+			@RequestParam(value = "exportername", required = false) String exportername,
+			@RequestParam(value = "exporteraddress", required = false) String exporteraddress,
+			@RequestParam(value = "producername", required = false) String producername,
+			@RequestParam(value = "produceraddress", required = false) String produceraddress,
+			@RequestParam(value = "datecert", required = false) String datecert,
+			Authentication aut,
+			HttpSession session, HttpServletResponse response, HttpServletRequest request,
+			ModelMap model) {
+		
+		LOG.info(request.getQueryString());
+		
+		Filter filter= new FSFilter();
+		if (certnumber != null) {
+		      filter.setConditionValue("CERTNUMBER", "CERTNUMBER", "like", 
+		    		  certnumber, FieldType.STRING);
+		}
+		
+		if (exportername != null) {
+		      filter.setConditionValue("EXPORTERNAME", "NAME", "like", 
+		    		  exportername, FieldType.STRING);
+		}
+		if (exporteraddress != null) {
+		      filter.setConditionValue("EXPORTERADDRESS", "ADDRESS", "like", 
+		    		  exporteraddress, FieldType.STRING);
+		}
+		
+		if (producername != null) {
+		      filter.setConditionValue("PRODUCERNAME", "NAME", "like", 
+		    		  producername, FieldType.STRING);
+		}
+		if (produceraddress != null) {
+		      filter.setConditionValue("PRODUCERADDRESS", "ADDRESS", "like", 
+		    		  produceraddress, FieldType.STRING);
+		}
+		if (datecert != null) {
+		      filter.setConditionValue("DATECERTFROM", "DATECERT", ">=", 
+		    		  datecert, FieldType.DATE);
+		}
+		
+		SQLBuilder builder = new SQLBuilderFSCertificate();
+		builder.setFilter(filter);
+		
+		int itemscount = fsCertService.getViewPageCount(builder);
+		int pagecount = itemscount/rows + 1;
+		
+		List<ViewFSCertificate> certs = fsCertService.readCertificatesPage(
+				new String[] {"*"},
+				page, rows, itemscount,  
+				sidx, sord, builder);
+		
+		try {
+    	   response.setContentType("text/xml;charset=utf-8"); 
+		   response.setCharacterEncoding("UTF-8");
+	       response.getWriter().println(createXMLFromList(certs, page,pagecount ,itemscount));
+		   response.flushBuffer();
+		} catch (Exception ex) {
+		   ex.printStackTrace();
+		   model.addAttribute("error", ex.getMessage());
+		}
+	}
+
+	private String createXMLFromList(List<ViewFSCertificate> certs, int page, int pagecount, int itemscount) {
+		String xml;
+		xml = "<?xml version='1.0' encoding='utf-8'?>";
+		xml +=  "<rows>";
+		xml += "<page>"+ page + "</page>";
+		xml += "<total>"+pagecount+"</total>";
+		xml += "<records>"+itemscount+"</records>";
+
+		if (certs != null) {
+			for (ViewFSCertificate row : certs) {
+				xml += "<row id='"+ row.getId() + "'>";            
+				xml += "<cell>"+row.getCertnumber()+"</cell>";
+				xml += "<cell><![CDATA["+row.getExportername()+"]]></cell>";
+				xml += "<cell><![CDATA["+row.getExporteraddress()+"]]></cell>";
+				xml += "<cell><![CDATA["+row.getProducername()+"]]></cell>";
+				xml += "<cell><![CDATA["+row.getProduceraddress()+"]]></cell>";
+				xml += "<cell>"+row.getDatecert()+"</cell>";
+				xml += "</row>";
+			}
+		}
+		xml +=  "</rows>";
+		return xml;
+	}
 
 
 	// ---------------------------------------------------------------------------------------
@@ -404,9 +502,9 @@ public class FSCertificateController {
 					  response.setContentType("text/html; charset=UTF-8");
 					  response.setCharacterEncoding("UTF-8");
 					  if ("EN".equals(lang)) {
-					      response.getWriter().println(client.getEnname() + "; " + client.getEnaddress());
+					      response.getWriter().println(getValue(client.getEnname()) + "; " + getValue(client.getEnaddress()));
 					  } else {
-						  response.getWriter().println(client.getName() + "; " + client.getAddress());
+						  response.getWriter().println(getValue(client.getName()) + "; " + getValue(client.getAddress()));
 					  }
 					  response.flushBuffer();
 					  LOG.info("Linked exporter to certificate: " + cert);
@@ -450,9 +548,9 @@ public class FSCertificateController {
 					  response.setContentType("text/html; charset=UTF-8");
 					  response.setCharacterEncoding("UTF-8");
 					  if ("EN".equals(lang)) {
-					      response.getWriter().println(emp.getEnjob() + " " + emp.getEnname());
+					      response.getWriter().println(getValue(emp.getEnjob()) + " " + getValue(emp.getEnname()));
 					  } else {
-						  response.getWriter().println(emp.getJob() + " " + emp.getName());
+						  response.getWriter().println(getValue(emp.getJob()) + " " + getValue(emp.getName()));
 					  }
 					  response.flushBuffer();
 					  LOG.info("Linked employee to certificate: " + cert);
@@ -467,7 +565,14 @@ public class FSCertificateController {
 	}
 
 	
-	
+	// --------------------------------------------------------------------------------------
+	//   Get empty or value string
+	// --------------------------------------------------------------------------------------
+	private String getValue(Object obj) {
+        String ret;
+		return (obj == null ? "" : obj.toString());
+	}
+
 	// ---------------------------------------------------------------------------------------
 	//   Reload Template of certification field
 	// ---------------------------------------------------------------------------------------
@@ -525,6 +630,92 @@ public class FSCertificateController {
 			}
 	}
 
+	
+	// ---------------------------------------------------------------------------------------
+	//   Reload Declaration from template
+	// ---------------------------------------------------------------------------------------
+	@RequestMapping(value = "fsgoods.do",  method = RequestMethod.GET)
+	public void getgoods(
+			HttpSession session, HttpServletResponse response, ModelMap model) {
+			
+			try {
+					  FSCertificate cert = (FSCertificate)model.get("fscert");
+					  
+					  response.setContentType("text/html; charset=UTF-8");
+					  response.setCharacterEncoding("UTF-8");
+	  			      response.getWriter().println(goodstoxml(cert));
+					  response.flushBuffer();
+					  
+			} catch (Exception ex) {
+						LOG.info("Ошибка: " + ex.getMessage());
+						model.addAttribute("error", ex.getMessage());
+			}
+	}
+	
+	private String goodstoxml(FSCertificate cert ) {
+		String xml;
+		xml = "<?xml version='1.0' encoding='utf-8'?>";
+		xml +=  "<rows>";
+		if (cert != null) {
+			for (FSProduct row : cert.getProducts()) {
+				xml += "<row id='"+ row.getId() + "'>";            
+				xml += "<cell>"+(row.getNumerator() == null ? "" : row.getNumerator())+"</cell>";
+				xml += "<cell><![CDATA["+row.getTovar()+"]]></cell>";
+				xml += "</row>";
+			}
+		}
+		xml +=  "</rows>";
+		return xml;
+	}
+
+	@RequestMapping(value = "fsgoodsupdate.do",  method = RequestMethod.POST)
+	public void updatePOSTgoods(
+			@RequestParam(value = "id", required = false) String id,
+			@RequestParam(value = "numerator", required = false) String numerator,
+			@RequestParam(value = "tovar", required = false) String tovar,
+			HttpSession session, HttpServletResponse response, HttpServletRequest request, ModelMap model) {
+		
+		    LOG.info("POST: " + "id: " + id + " numerator: " + numerator + " tovar: " + tovar);
+		    
+			try {
+				  FSCertificate cert = (FSCertificate)model.get("fscert");
+				  if (id == null) {
+					 FSProduct product  = new FSProduct();
+					 product.setNumerator(numerator);
+					 product.setTovar(tovar);
+					 product.setId_fscert(cert.getId());
+					 product.setId(getlastProductId(cert.getProducts())+1);
+					 cert.getProducts().add(product);
+				  } else {
+					  for (FSProduct product : cert.getProducts()) {
+					    if (product.getId() == Integer.valueOf(id).intValue()) {
+						   if (numerator== null && tovar==null) {
+							   cert.getProducts().remove(product);   
+						   } else {
+						      product.setNumerator(numerator);
+						      product.setTovar(tovar);
+						   }   
+						   break;
+					    }
+					  }
+				  }
+			} catch (Exception ex) {
+						LOG.info("Ошибка: " + ex.getMessage());
+						model.addAttribute("error", ex.getMessage());
+			}
+	}
+
+
+
+	private long getlastProductId(List<FSProduct> products) {
+        long ret=0;
+        for (FSProduct product : products) {
+        	if (ret < product.getId()) {
+        		ret = product.getId();
+        	}
+        }
+		return ret;
+	}
 
 	// ---------------------------------------------------------------------------------------
 	// Fill in lists 
