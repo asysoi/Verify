@@ -8,10 +8,6 @@
 
 <link href="${CCICss}" rel="stylesheet" />
 
-<style type="text/css">
-  .uuui-pg-table tr td {text-align: right;}
-</style>
-
 <script>
 	$(function() {
 
@@ -56,7 +52,6 @@
     	    gridview: true,
     		autoencode: true,
    			caption: "Товары",
-    		//toppager: true,
    			ondblClickRow : editRow
 		});
 		
@@ -82,54 +77,51 @@
             position: "last"
         }).navButtonAdd('#pagerproducts',{
 		    caption: '',	
-            buttonicon: 'ui-icon-del',
-            onClickButton: function(id) {
-            	alert("Delete: " + id);
-                jQuery("#products").trigger('reloadGrid');
+            buttonicon: 'ui-icon-trash',
+            onClickButton: function(event) {
+            	 console.log(event);
+            	 var grid = $("#products");
+            	 var id = grid.jqGrid('getGridParam','selrow');
+            	 
+     		     if (id) { 
+                    $.ajaxSetup({async:false});
+             		$.get("fsdelproduct.do?id="+id);
+     		     } else {} 
+     		    	alert("Продукт не выбран.");
+                 }  
+                 grid.trigger('reloadGrid');
             },
             title: "Удалить продукт",
             position: "last"
         });
 		
-		
-		/*
-        $('#products').inlineNav('#pagerproducts',
-             {   edit: true, 
-                 add: true, 
-                 del: true, 
-                 cancel: true,
-                 editParams: {
-                     keys: true,
-                 },
-                 addParams: {
-                     keys: true
-                 }
-             });*/
-		
 		var lastSelection;
-		
 		function editRow(id) {
 			 var grid = $("#products");
              if (id && id !== lastSelection) {
                  grid.jqGrid('restoreRow',lastSelection);
                  lastSelection = id;
-                 grid.jqGrid('editRow',id, {keys: true} );
              }
-            
-             
-             //if (id && id != lastSelection) {
-             //    jQuery("#products").restoreRow(lastSelection);
-             //    jQuery("#products").editRow(id, true);
-             //    lastSelection = id;
-             //}
+             grid.jqGrid('editRow',id, {keys: true} );
         };
         
 		grid = $("#products");
 		grid.jqGrid('gridResize', {minWidth: 450, minHeight: 150});
 		//$('#pagerproducts_center').hide();
 		$("#pagerproducts_left", "#pagerproducts").width(150);
-        
-      
+		
+		jQuery("#getselected").click(function(){
+		    var selr = jQuery('#products').jqGrid('getGridParam','selrow');
+		    if(selr) alert(selr);
+		    else alert("No selected row");
+		    return false;
+		});
+		
+		jQuery("#setselection").click(function(){
+		    jQuery('#products').jqGrid('setSelection','10259');
+		    return false;
+		});
+
 	});
 
 	function clearelement(element) {
@@ -276,6 +268,8 @@ ${fscert.branch.address}, Республика Беларусь<br>
 		            <div id="pagerproducts"></div> 
 				</div>
 </div>
+
+<button id="getselected">Get Selected Rows</button><button id="setselection">Select Row 10259</button>
 
 <div class="row">
 	<div class="col-md-12">Бланки сертификата: <br>

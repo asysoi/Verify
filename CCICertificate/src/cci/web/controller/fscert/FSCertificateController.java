@@ -632,7 +632,7 @@ public class FSCertificateController {
 
 	
 	// ---------------------------------------------------------------------------------------
-	//   Reload Declaration from template
+	//   Handling Goods List: Adding, Deleting
 	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "fsgoods.do",  method = RequestMethod.GET)
 	public void getgoods(
@@ -748,6 +748,35 @@ public class FSCertificateController {
 				  model.addAttribute("error", ex.getMessage());
 			}
 	}
+	
+	@RequestMapping(value = "fsdelproduct.do",  method = RequestMethod.GET)
+	public void delgoods(
+			@RequestParam(value = "id", required = false) String id,
+			HttpSession session, HttpServletResponse response, HttpServletRequest request, ModelMap model) {
+			try {
+				  if (id != null) {
+					 int iid = Integer.valueOf(id).intValue(); 
+				     FSCertificate cert = (FSCertificate)model.get("fscert");
+				     
+				     for(int index = 0; index < cert.getProducts().size(); index++) {
+				    	 FSProduct product = cert.getProducts().get(index);
+				    	 
+				    	 if (product.getId() == iid) {
+				    		 cert.getProducts().remove(index);
+				    		 for(int i = index; i < cert.getProducts().size(); i++) {
+				    			 product = cert.getProducts().get(index);
+				    			 product.setNumerator(product.getNumerator() - 1);
+				    		 }
+				    		 break;
+				    	 }
+				     }
+				  }
+			} catch (Exception ex) {
+				  LOG.info("Ошибка: " + ex.getMessage());
+				  model.addAttribute("error", ex.getMessage());
+			}
+	}
+
 	
 	// ---------------------------------------------------------------------------------------
 	// Fill in lists 
