@@ -679,12 +679,12 @@ public class FSCertificateController {
 		    
 			try {
 				  FSCertificate cert = (FSCertificate)model.get("fscert");
-				  if (id == null) {
+				  if ("[object Object]".equals(id)) {
 					 FSProduct product  = new FSProduct();
-					 product.setNumerator(numerator);
 					 product.setTovar(tovar);
 					 product.setId_fscert(cert.getId());
 					 product.setId(getlastProductId(cert.getProducts())+1);
+					 product.setNumerator(getlastNumerator(cert.getProducts())+1);
 					 cert.getProducts().add(product);
 				  } else {
 					  for (FSProduct product : cert.getProducts()) {
@@ -692,7 +692,6 @@ public class FSCertificateController {
 						   if (numerator== null && tovar==null) {
 							   cert.getProducts().remove(product);   
 						   } else {
-						      product.setNumerator(numerator);
 						      product.setTovar(tovar);
 						   }   
 						   break;
@@ -705,7 +704,15 @@ public class FSCertificateController {
 			}
 	}
 
-
+	private long getlastNumerator(List<FSProduct> products) {
+        long ret=0;
+        for (FSProduct product : products) {
+        	if (ret < product.getNumerator()) {
+        		ret = product.getNumerator();
+        	}
+        }
+		return ret;
+	}
 
 	private long getlastProductId(List<FSProduct> products) {
         long ret=0;
@@ -717,6 +724,26 @@ public class FSCertificateController {
 		return ret;
 	}
 
+	@RequestMapping(value = "fsaddproduct.do",  method = RequestMethod.GET)
+	public void updatePOSTgoods(
+			HttpSession session, HttpServletResponse response, HttpServletRequest request, ModelMap model) {
+		    
+			try {
+				  FSCertificate cert = (FSCertificate)model.get("fscert");
+ 				  FSProduct product  = new FSProduct();
+				  product.setTovar("");
+				  product.setId_fscert(cert.getId());
+				  product.setId(getlastProductId(cert.getProducts())+1);
+				  product.setNumerator(getlastNumerator(cert.getProducts())+1);
+				  cert.getProducts().add(product);
+			} catch (Exception ex) {
+						LOG.info("Ошибка: " + ex.getMessage());
+						model.addAttribute("error", ex.getMessage());
+			}
+	}
+
+	
+	
 	// ---------------------------------------------------------------------------------------
 	// Fill in lists 
 	// ---------------------------------------------------------------------------------------

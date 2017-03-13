@@ -1,3 +1,5 @@
+ 
+
 table.purchase {
 border-collapse: collapse;
 width: 100%;
@@ -213,3 +215,6 @@ div.row {
    margin: 10px;
 }
 
+.ui-jqgrid tr.jqgrow td {font-size:11px !important; }
+.ui-paging-info { font-size:11px !important;}
+.ui-paging-pager { font-size:11px !important;}

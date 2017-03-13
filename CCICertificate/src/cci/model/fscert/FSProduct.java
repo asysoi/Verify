@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class FSProduct {
 	private Long id;
 	private Long id_fscert;
-	private String numerator;
+	private Long numerator;
 	private String tovar;
 	
 	@XmlTransient
@@ -30,10 +30,10 @@ public class FSProduct {
 	public void setId_fscert(Long id_fscert) {
 		this.id_fscert = id_fscert;
 	}
-	public String getNumerator() {
+	public Long getNumerator() {
 		return numerator;
 	}
-	public void setNumerator(String numerator) {
+	public void setNumerator(Long numerator) {
 		this.numerator = numerator;
 	}
 	public String getTovar() {

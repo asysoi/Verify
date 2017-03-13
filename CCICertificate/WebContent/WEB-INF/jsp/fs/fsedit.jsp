@@ -40,16 +40,16 @@
 			width : null,
 			shrinkToFit : false,
    			colModel:[
-   				{label:'Номер',name:'numerator', index:'numerator', width:250, editable: true},
-   	    		{label:'Наименование товара', name:'tovar', index:'tovar', width:880, editable: true }
+   				{label:'Номер',name:'numerator', index:'numerator', width:250},
+   	    		{label:'Наименование товара', name:'tovar', index:'tovar', width:880, editable: true, edittype:'text' }
 		   	],
-		    //rowNum: 10,
-		    //rowList:[10,20,50],
+		    rowNum: 10,
+		    rowList:[10,20,50],
 		   	sortname: 'numerator',
 		   	sortorder: 'asc',
    			viewrecords: true,
-   			pager: '#pagerproducts',
-    	    //gridview: true,
+   			pager: jQuery('#pagerproducts'),
+    	    gridview: true,
     		autoencode: true,
    			caption: "Товары",
    			onSelectRow: editRow
@@ -58,15 +58,29 @@
 		$('#products').jqGrid('navGrid', "#pagerproducts", {                
     		search: false, 
     		add: false,
-    		edit: false,
+    		edit: false,	
     		del: false,
     		refresh: false,
     		view: false
-		});
+		}).navButtonAdd('#pagerproducts',{
+		    caption: '',	
+            buttonicon: 'ui-icon-circle-plus',
+            onClickButton: function(id) {
+            	var datarow = { numerator: "", tovar: ""};
+                var lastsel = id;
+                $.ajaxSetup({async:false});
+        		$.get("fsaddproduct.do");
+                jQuery("#products").trigger('reloadGrid');
+                // var ret = jQuery("#products").addRowData(lastsel, datarow, "last");
+            },
+            title: "Добавить продукт",
+            position: "last"
+        });
 		
+		
+		/*
         $('#products').inlineNav('#pagerproducts',
-             { 
-                 edit: true, 
+             {   edit: true, 
                  add: true, 
                  del: true, 
                  cancel: true,
@@ -76,7 +90,7 @@
                  addParams: {
                      keys: true
                  }
-             });
+             });*/
 		
 		var lastSelection;
 		
