@@ -86,7 +86,7 @@
      		     if (id) { 
                     $.ajaxSetup({async:false});
              		$.get("fsdelproduct.do?id="+id);
-     		     } else {} 
+     		     } else { 
      		    	alert("Продукт не выбран.");
                  }  
                  grid.trigger('reloadGrid');
@@ -109,18 +109,6 @@
 		grid.jqGrid('gridResize', {minWidth: 450, minHeight: 150});
 		//$('#pagerproducts_center').hide();
 		$("#pagerproducts_left", "#pagerproducts").width(150);
-		
-		jQuery("#getselected").click(function(){
-		    var selr = jQuery('#products').jqGrid('getGridParam','selrow');
-		    if(selr) alert(selr);
-		    else alert("No selected row");
-		    return false;
-		});
-		
-		jQuery("#setselection").click(function(){
-		    jQuery('#products').jqGrid('setSelection','10259');
-		    return false;
-		});
 
 	});
 
@@ -268,8 +256,6 @@ ${fscert.branch.address}, Республика Беларусь<br>
 		            <div id="pagerproducts"></div> 
 				</div>
 </div>
-
-<button id="getselected">Get Selected Rows</button><button id="setselection">Select Row 10259</button>
 
 <div class="row">
 	<div class="col-md-12">Бланки сертификата: <br>
