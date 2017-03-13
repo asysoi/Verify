@@ -8,6 +8,10 @@
 
 <link href="${CCICss}" rel="stylesheet" />
 
+<style type="text/css">
+  .uuui-pg-table tr td {text-align: right;}
+</style>
+
 <script>
 	$(function() {
 
@@ -36,15 +40,15 @@
     		editurl: "fsgoodsupdate.do",
     		datatype: "xml",
     		mtype: "GET",
-			height: 200,
+    		height: '20%',
 			width : null,
 			shrinkToFit : false,
    			colModel:[
-   				{label:'Номер',name:'numerator', index:'numerator', width:250},
-   	    		{label:'Наименование товара', name:'tovar', index:'tovar', width:880, editable: true, edittype:'text' }
+   				{label:'Номер',name:'numerator', index:'numerator', width:250, editable: true, sortable:false, editrules:{number:true}},
+   	    		{label:'Наименование товара', name:'tovar', index:'tovar', width:880, editable: true, sortable:false}
 		   	],
 		    rowNum: 10,
-		    rowList:[10,20,50],
+		    rowList:[5,10,20,50],
 		   	sortname: 'numerator',
 		   	sortorder: 'asc',
    			viewrecords: true,
@@ -52,7 +56,8 @@
     	    gridview: true,
     		autoencode: true,
    			caption: "Товары",
-   			onSelectRow: editRow
+    		//toppager: true,
+   			ondblClickRow : editRow
 		});
 		
 		$('#products').jqGrid('navGrid', "#pagerproducts", {                
@@ -64,16 +69,25 @@
     		view: false
 		}).navButtonAdd('#pagerproducts',{
 		    caption: '',	
-            buttonicon: 'ui-icon-circle-plus',
+            buttonicon: 'ui-icon-plus',
             onClickButton: function(id) {
-            	var datarow = { numerator: "", tovar: ""};
                 var lastsel = id;
                 $.ajaxSetup({async:false});
         		$.get("fsaddproduct.do");
                 jQuery("#products").trigger('reloadGrid');
+            	// var datarow = { numerator: "", tovar: ""};                
                 // var ret = jQuery("#products").addRowData(lastsel, datarow, "last");
             },
             title: "Добавить продукт",
+            position: "last"
+        }).navButtonAdd('#pagerproducts',{
+		    caption: '',	
+            buttonicon: 'ui-icon-del',
+            onClickButton: function(id) {
+            	alert("Delete: " + id);
+                jQuery("#products").trigger('reloadGrid');
+            },
+            title: "Удалить продукт",
             position: "last"
         });
 		
@@ -99,11 +113,23 @@
              if (id && id !== lastSelection) {
                  grid.jqGrid('restoreRow',lastSelection);
                  lastSelection = id;
+                 grid.jqGrid('editRow',id, {keys: true} );
              }
-             grid.jqGrid('editRow',id, {keys: true} );
+            
+             
+             //if (id && id != lastSelection) {
+             //    jQuery("#products").restoreRow(lastSelection);
+             //    jQuery("#products").editRow(id, true);
+             //    lastSelection = id;
+             //}
         };
         
+		grid = $("#products");
+		grid.jqGrid('gridResize', {minWidth: 450, minHeight: 150});
+		//$('#pagerproducts_center').hide();
+		$("#pagerproducts_left", "#pagerproducts").width(150);
         
+      
 	});
 
 	function clearelement(element) {

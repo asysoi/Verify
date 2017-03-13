@@ -117,7 +117,7 @@ public class FSCertificateController {
 		builder.setFilter(filter);
 		
 		int itemscount = fsCertService.getViewPageCount(builder);
-		int pagecount = itemscount/rows + 1;
+		int pagecount = itemscount/rows + (itemscount%rows > 0 ? 1 : 0);
 		
 		List<ViewFSCertificate> certs = fsCertService.readCertificatesPage(
 				new String[] {"*"},
@@ -636,6 +636,10 @@ public class FSCertificateController {
 	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "fsgoods.do",  method = RequestMethod.GET)
 	public void getgoods(
+			@RequestParam(value = "page", required = false) int page,
+			@RequestParam(value = "rows", required = false) int rows,
+			@RequestParam(value = "sidx", defaultValue = "datecert", required = false) String sidx,
+			@RequestParam(value = "sord", required = false) String sord,
 			HttpSession session, HttpServletResponse response, ModelMap model) {
 			
 			try {
@@ -643,7 +647,7 @@ public class FSCertificateController {
 					  
 					  response.setContentType("text/html; charset=UTF-8");
 					  response.setCharacterEncoding("UTF-8");
-	  			      response.getWriter().println(goodstoxml(cert));
+	  			      response.getWriter().println(goodstoxml(cert, page, rows));
 					  response.flushBuffer();
 					  
 			} catch (Exception ex) {
@@ -652,15 +656,26 @@ public class FSCertificateController {
 			}
 	}
 	
-	private String goodstoxml(FSCertificate cert ) {
+	private String goodstoxml(FSCertificate cert, int page, int rows ) {
 		String xml;
 		xml = "<?xml version='1.0' encoding='utf-8'?>";
 		xml +=  "<rows>";
-		if (cert != null) {
-			for (FSProduct row : cert.getProducts()) {
+		if (cert != null && cert.getProducts()!=null) {
+			int itemscount = cert.getProducts().size();
+			int pagecount = itemscount/rows + (itemscount%rows > 0 ? 1 : 0);
+			if (page > pagecount) {
+				page = pagecount;
+			}
+			xml += "<page>"+ page + "</page>";
+			xml += "<total>"+pagecount+"</total>";
+			xml += "<records>"+itemscount+"</records>";
+			
+			for (int index = (page-1) * rows; 
+					index < page * rows && index < itemscount; index++ ) {
+				FSProduct row = cert.getProducts().get(index);
 				xml += "<row id='"+ row.getId() + "'>";            
 				xml += "<cell>"+(row.getNumerator() == null ? "" : row.getNumerator())+"</cell>";
-				xml += "<cell><![CDATA["+row.getTovar()+"]]></cell>";
+				xml += "<cell><![CDATA["+(row.getTovar() == null ? "" : row.getTovar())+"]]></cell>";
 				xml += "</row>";
 			}
 		}
@@ -679,25 +694,18 @@ public class FSCertificateController {
 		    
 			try {
 				  FSCertificate cert = (FSCertificate)model.get("fscert");
-				  if ("[object Object]".equals(id)) {
-					 FSProduct product  = new FSProduct();
-					 product.setTovar(tovar);
-					 product.setId_fscert(cert.getId());
-					 product.setId(getlastProductId(cert.getProducts())+1);
-					 product.setNumerator(getlastNumerator(cert.getProducts())+1);
-					 cert.getProducts().add(product);
-				  } else {
-					  for (FSProduct product : cert.getProducts()) {
-					    if (product.getId() == Integer.valueOf(id).intValue()) {
+				  for (FSProduct product : cert.getProducts()) {
+					    if (product.getId() == Long.valueOf(id).longValue()) {
 						   if (numerator== null && tovar==null) {
 							   cert.getProducts().remove(product);   
 						   } else {
+							  product.setNumerator(Long.valueOf(numerator).longValue()); 
 						      product.setTovar(tovar);
 						   }   
 						   break;
 					    }
-					  }
-				  }
+				   }
+				  
 			} catch (Exception ex) {
 						LOG.info("Ошибка: " + ex.getMessage());
 						model.addAttribute("error", ex.getMessage());
@@ -707,7 +715,7 @@ public class FSCertificateController {
 	private long getlastNumerator(List<FSProduct> products) {
         long ret=0;
         for (FSProduct product : products) {
-        	if (ret < product.getNumerator()) {
+        	if (product.getNumerator() != null && ret < product.getNumerator()) {
         		ret = product.getNumerator();
         	}
         }
@@ -717,7 +725,7 @@ public class FSCertificateController {
 	private long getlastProductId(List<FSProduct> products) {
         long ret=0;
         for (FSProduct product : products) {
-        	if (ret < product.getId()) {
+        	if (product.getId() != null && ret < product.getId()) {
         		ret = product.getId();
         	}
         }
@@ -727,7 +735,6 @@ public class FSCertificateController {
 	@RequestMapping(value = "fsaddproduct.do",  method = RequestMethod.GET)
 	public void updatePOSTgoods(
 			HttpSession session, HttpServletResponse response, HttpServletRequest request, ModelMap model) {
-		    
 			try {
 				  FSCertificate cert = (FSCertificate)model.get("fscert");
  				  FSProduct product  = new FSProduct();
@@ -737,12 +744,10 @@ public class FSCertificateController {
 				  product.setNumerator(getlastNumerator(cert.getProducts())+1);
 				  cert.getProducts().add(product);
 			} catch (Exception ex) {
-						LOG.info("Ошибка: " + ex.getMessage());
-						model.addAttribute("error", ex.getMessage());
+				  LOG.info("Ошибка: " + ex.getMessage());
+				  model.addAttribute("error", ex.getMessage());
 			}
 	}
-
-	
 	
 	// ---------------------------------------------------------------------------------------
 	// Fill in lists 
