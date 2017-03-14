@@ -1,5 +1,6 @@
 package cci.web.controller.fscert;
 
+import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
@@ -27,6 +28,7 @@ import cci.model.Client;
 import cci.model.Employee;
 import cci.model.fscert.Expert;
 import cci.model.fscert.Exporter;
+import cci.model.fscert.FSBlank;
 import cci.model.fscert.FSCertificate;
 import cci.model.fscert.FSProduct;
 import cci.model.fscert.Producer;
@@ -660,6 +662,7 @@ public class FSCertificateController {
 		String xml;
 		xml = "<?xml version='1.0' encoding='utf-8'?>";
 		xml +=  "<rows>";
+		
 		if (cert != null && cert.getProducts()!=null) {
 			int itemscount = cert.getProducts().size();
 			int pagecount = itemscount/rows + (itemscount%rows > 0 ? 1 : 0);
@@ -670,8 +673,12 @@ public class FSCertificateController {
 			xml += "<total>"+pagecount+"</total>";
 			xml += "<records>"+itemscount+"</records>";
 			
+			if (page == 0) { 
+				page++;
+			}
+			
 			for (int index = (page-1) * rows; 
-					index < page * rows && index < itemscount; index++ ) {
+					itemscount > 0 && index < page * rows && index < itemscount; index++ ) {
 				FSProduct row = cert.getProducts().get(index);
 				xml += "<row id='"+ row.getId() + "'>";            
 				xml += "<cell>"+(row.getNumerator() == null ? "" : row.getNumerator())+"</cell>";
@@ -682,7 +689,8 @@ public class FSCertificateController {
 		xml +=  "</rows>";
 		return xml;
 	}
-
+	
+    //=====================================================================
 	@RequestMapping(value = "fsgoodsupdate.do",  method = RequestMethod.POST)
 	public void updatePOSTgoods(
 			@RequestParam(value = "id", required = false) String id,
@@ -696,16 +704,17 @@ public class FSCertificateController {
 				  FSCertificate cert = (FSCertificate)model.get("fscert");
 				  for (FSProduct product : cert.getProducts()) {
 					    if (product.getId() == Long.valueOf(id).longValue()) {
-						   if (numerator== null && tovar==null) {
+						   if (numerator == null && tovar==null) {
 							   cert.getProducts().remove(product);   
 						   } else {
-							  product.setNumerator(Long.valueOf(numerator).longValue()); 
+							  if (numerator != null) { 
+								  product.setNumerator(Long.valueOf(numerator).longValue());
+							  }
 						      product.setTovar(tovar);
 						   }   
 						   break;
 					    }
 				   }
-				  
 			} catch (Exception ex) {
 						LOG.info("Ошибка: " + ex.getMessage());
 						model.addAttribute("error", ex.getMessage());
@@ -731,9 +740,9 @@ public class FSCertificateController {
         }
 		return ret;
 	}
-
+    //=====================================================================
 	@RequestMapping(value = "fsaddproduct.do",  method = RequestMethod.GET)
-	public void updatePOSTgoods(
+	public void addgoods(
 			HttpSession session, HttpServletResponse response, HttpServletRequest request, ModelMap model) {
 			try {
 				  FSCertificate cert = (FSCertificate)model.get("fscert");
@@ -748,7 +757,7 @@ public class FSCertificateController {
 				  model.addAttribute("error", ex.getMessage());
 			}
 	}
-	
+    //===================================================================== 
 	@RequestMapping(value = "fsdelproduct.do",  method = RequestMethod.GET)
 	public void delgoods(
 			@RequestParam(value = "id", required = false) String id,
@@ -764,7 +773,7 @@ public class FSCertificateController {
 				    	 if (product.getId() == iid) {
 				    		 cert.getProducts().remove(index);
 				    		 for(int i = index; i < cert.getProducts().size(); i++) {
-				    			 product = cert.getProducts().get(index);
+				    			 product = cert.getProducts().get(i);
 				    			 product.setNumerator(product.getNumerator() - 1);
 				    		 }
 				    		 break;
@@ -775,6 +784,238 @@ public class FSCertificateController {
 				  LOG.info("Ошибка: " + ex.getMessage());
 				  model.addAttribute("error", ex.getMessage());
 			}
+	}
+	
+	
+	//=====================================================================
+	@RequestMapping(value = "fsinsertproduct.do",  method = RequestMethod.GET)
+	public void insertgoods(
+			    @RequestParam(value = "id", required = false) String id,			
+				HttpSession session, HttpServletResponse response, HttpServletRequest request, ModelMap model) {
+				try {
+					  FSCertificate cert = (FSCertificate)model.get("fscert");
+					  int iid = Integer.valueOf(id).intValue(); 
+					  List<FSProduct> nproducts = new ArrayList();
+					  boolean beforeid = true;
+					  
+  				      for(int index = 0; index < cert.getProducts().size(); index++) {
+					    	 FSProduct product = cert.getProducts().get(index);
+					    	 
+					    	 if (beforeid) {
+					    		 if (product.getId() == iid) {
+					    			 beforeid = false;
+					 				 FSProduct nproduct  = new FSProduct();
+									 nproduct.setTovar("");
+									 nproduct.setId_fscert(cert.getId());
+					    		     nproduct.setNumerator(product.getNumerator());
+					    		     nproduct.setId(product.getId());
+					    		     nproducts.add(nproduct);
+						    		 product.setNumerator(product.getNumerator() + 1);
+						    		 product.setId(product.getId() + 1);
+						    		 nproducts.add(product);
+					    		 } else {
+					    			 nproducts.add(product);
+					    		 }
+					    	 } else {
+					    		 product.setNumerator(product.getNumerator() + 1);
+					    		 product.setId(product.getId() + 1);
+					    		 nproducts.add(product);
+					    	 }
+  				      }
+  				    cert.setProducts(nproducts);
+				} catch (Exception ex) {
+					  LOG.info("Ошибка: " + ex.getMessage());
+					  model.addAttribute("error", ex.getMessage());
+				}
+	}
+
+	
+	// ---------------------------------------------------------------------------------------
+	// ---------------------------------------------------------------------------------------	
+	//   Handling Blank List: Adding, Deleting
+	// ---------------------------------------------------------------------------------------
+	// ---------------------------------------------------------------------------------------	
+	@RequestMapping(value = "fsblanks.do",  method = RequestMethod.GET)
+	public void getblankss(
+			@RequestParam(value = "page", required = false) int page,
+			@RequestParam(value = "rows", required = false) int rows,
+			@RequestParam(value = "sidx", defaultValue = "datecert", required = false) String sidx,
+			@RequestParam(value = "sord", required = false) String sord,
+			HttpSession session, HttpServletResponse response, ModelMap model) {
+			
+			try {
+					  FSCertificate cert = (FSCertificate)model.get("fscert");
+					  
+					  response.setContentType("text/html; charset=UTF-8");
+					  response.setCharacterEncoding("UTF-8");
+	  			      response.getWriter().println(blankstoxml(cert, page, rows));
+					  response.flushBuffer();
+					  
+			} catch (Exception ex) {
+						LOG.info("Ошибка: " + ex.getMessage());
+						model.addAttribute("error", ex.getMessage());
+			}
+	}
+	
+	private String blankstoxml(FSCertificate cert, int page, int rows ) {
+		String xml;
+		xml = "<?xml version='1.0' encoding='utf-8'?>";
+		xml +=  "<rows>";
+		
+		if (cert != null && cert.getBlanks()!=null) {
+			int itemscount = cert.getBlanks().size();
+			int pagecount = itemscount/rows + (itemscount%rows > 0 ? 1 : 0);
+			if (page > pagecount) {
+				page = pagecount;
+			}
+			xml += "<page>"+ page + "</page>";
+			xml += "<total>"+pagecount+"</total>";
+			xml += "<records>"+itemscount+"</records>";
+			
+			if (page == 0) { 
+				page++;
+			}
+			
+			for (int index = (page-1) * rows; 
+					itemscount > 0 && index < page * rows && index < itemscount; index++ ) {
+				FSBlank row = cert.getBlanks().get(index);
+				xml += "<row id='"+ row.getPage() + "'>";            
+				xml += "<cell>"+(row.getPage() == null ? "" : row.getPage())+"</cell>";
+				xml += "<cell><![CDATA["+(row.getBlanknumber() == null ? "" : row.getBlanknumber())+"]]></cell>";
+				xml += "</row>";
+			}
+		}
+		xml +=  "</rows>";
+		return xml;
+	}
+	
+    //=====================================================================
+	@RequestMapping(value = "fsblankupdate.do",  method = RequestMethod.POST)
+	public void updatePOSTBlank(
+			@RequestParam(value = "id", required = false) String id,
+			@RequestParam(value = "page", required = false) String page,
+			@RequestParam(value = "blanknumber", required = false) String blanknumber,
+			HttpSession session, HttpServletResponse response, HttpServletRequest request, ModelMap model) {
+		
+		    LOG.info("POST: " + "id: " + id + " page: " + page + " blank: " + blanknumber);
+		    
+			try {
+				  FSCertificate cert = (FSCertificate)model.get("fscert");
+				  for (FSBlank blank : cert.getBlanks()) {
+					    if (blank.getPage() == Long.valueOf(id).longValue()) {
+						   if (page == null && blanknumber==null) {
+							   cert.getBlanks().remove(blank);   
+						   } else {
+							  if (page != null) { 
+								  blank.setPage(Integer.valueOf(page).intValue());
+							  }
+							  blank.setBlanknumber(blanknumber);
+						   }   
+						   break;
+					    }
+				   }
+			} catch (Exception ex) {
+				   LOG.info("Ошибка: " + ex.getMessage());
+				   model.addAttribute("error", ex.getMessage());
+			}
+	}
+
+	private int getlastPageNumber(List<FSBlank> blanks) {
+        int ret=0;
+        for (FSBlank blank : blanks) {
+        	if (blank.getPage() != null && ret < blank.getPage()) {
+        		ret = blank.getPage();
+        	}
+        }
+		return ret;
+	}
+
+    //=====================================================================
+	@RequestMapping(value = "fsaddblank.do",  method = RequestMethod.GET)
+	public void addblank(
+			HttpSession session, HttpServletResponse response, HttpServletRequest request, ModelMap model) {
+			try {
+				  FSCertificate cert = (FSCertificate)model.get("fscert");
+ 				  FSBlank blank  = new FSBlank();
+				  blank.setBlanknumber("");
+				  blank.setId_fscert(cert.getId());
+				  blank.setPage(getlastPageNumber(cert.getBlanks())+1);
+				  cert.getBlanks().add(blank);
+			} catch (Exception ex) {
+				  LOG.info("Ошибка: " + ex.getMessage());
+				  model.addAttribute("error", ex.getMessage());
+			}
+	}
+    //===================================================================== 
+	@RequestMapping(value = "fsdelblank.do",  method = RequestMethod.GET)
+	public void delblank(
+			@RequestParam(value = "id", required = false) String id,
+			HttpSession session, HttpServletResponse response, HttpServletRequest request, ModelMap model) {
+			try {
+				  if (id != null) {
+					 int iid = Integer.valueOf(id).intValue(); 
+				     FSCertificate cert = (FSCertificate)model.get("fscert");
+				     
+				     for(int index = 0; index < cert.getBlanks().size(); index++) {
+				    	 FSBlank blank = cert.getBlanks().get(index);
+				    	 
+				    	 if (blank.getPage() == iid) {
+				    		 cert.getBlanks().remove(index);
+				    		 for(int i = index; i < cert.getBlanks().size(); i++) {
+				    			 blank = cert.getBlanks().get(i);
+				    			 blank.setPage(blank.getPage() - 1);
+				    		 }
+				    		 break;
+				    	 }
+				     }
+				  }
+			} catch (Exception ex) {
+				  LOG.info("Ошибка: " + ex.getMessage());
+				  model.addAttribute("error", ex.getMessage());
+			}
+	}
+	
+	
+	//=====================================================================
+	@RequestMapping(value = "fsinsertblank.do",  method = RequestMethod.GET)
+	public void insert(
+			    @RequestParam(value = "id", required = false) String id,			
+				HttpSession session, HttpServletResponse response, HttpServletRequest request, ModelMap model) {
+				try {
+					  FSCertificate cert = (FSCertificate)model.get("fscert");
+					  int iid = Integer.valueOf(id).intValue(); 
+					  List<FSBlank> nblanks = new ArrayList();
+					  boolean beforeid = true;
+					  
+  				      for(int index = 0; index < cert.getBlanks().size(); index++) {
+					    	 FSBlank blank = cert.getBlanks().get(index);
+					    	 
+					    	 if (beforeid) {
+					    		 if (blank.getPage() == iid) {
+					    			 beforeid = false;
+					 				 FSBlank nblank  = new FSBlank();
+									 nblank.setBlanknumber("");
+									 nblank.setId_fscert(cert.getId());
+					    		     nblank.setPage(blank.getPage());
+					    		     nblank.setId(blank.getId());
+					    		     nblanks.add(nblank);
+						    		 blank.setPage(blank.getPage() + 1);
+						    		 blank.setId(blank.getId() + 1);
+						    		 nblanks.add(blank);
+					    		 } else {
+					    			 nblanks.add(blank);
+					    		 }
+					    	 } else {
+					    		 blank.setPage(blank.getPage() + 1);
+					    		 blank.setId(blank.getId() + 1);
+					    		 nblanks.add(blank);
+					    	 }
+  				      }
+  				    cert.setBlanks(nblanks);
+				} catch (Exception ex) {
+					  LOG.info("Ошибка: " + ex.getMessage());
+					  model.addAttribute("error", ex.getMessage());
+				}
 	}
 
 	

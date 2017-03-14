@@ -599,7 +599,9 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 			}
 			MapSqlParameterSource parameters = 
 					new MapSqlParameterSource().addValue("id_fscert", cert.getId()).addValue("tovars",tovars);
-		    template.update(sql, parameters);
+			if (tovars != null && tovars.length() > 0 ) {
+		        template.update(sql, parameters);
+			}
 
 			String blanks = "";
 			sql = "insert into fs_blank_denorm(id_fscert, blanknumbers) values (:id_fscert, :blanknumbers)";
@@ -608,7 +610,9 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 			}
 			parameters = 
 					new MapSqlParameterSource().addValue("id_fscert", cert.getId()).addValue("blanknumbers",blanks);
-		    template.update(sql, parameters);
+			if (blanks != null && blanks.length() > 0 ) {			
+					template.update(sql, parameters);
+			}
 		}
 
 

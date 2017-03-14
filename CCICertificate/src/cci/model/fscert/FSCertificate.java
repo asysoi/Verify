@@ -1,5 +1,6 @@
 package cci.model.fscert;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -191,6 +192,9 @@ public class FSCertificate {
 	@XmlElementWrapper(name = "products")
 	@XmlElement(name = "row")
 	public List<FSProduct> getProducts() {
+		if (products == null) {
+			products = new ArrayList<FSProduct>();
+		}
 		return products;
 	}
 
@@ -201,6 +205,9 @@ public class FSCertificate {
 	@XmlElementWrapper(name = "blanks")
 	@XmlElement(name = "blank")
 	public List<FSBlank> getBlanks() {
+		if (blanks == null) {
+			blanks = new ArrayList<FSBlank>();
+		}
 		return blanks;
 	}
 

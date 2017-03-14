@@ -48,7 +48,6 @@
     <script src="${jqGrid}"></script>
     
     <script>
-  		
   		$(function($){
   			$.datepicker.regional['ru'] = {
   				closeText: 'Закрыть',
@@ -74,8 +73,6 @@
   		$(function() {
     		$( "#menu" ).menu();
   		});
-  		
-  		
   	</script>
     
 </head>

@@ -31,6 +31,9 @@
 							.val('${fscert.otd_id}');
 				});
 
+		// Product grid  
+		var lastSelection;
+		
 		jQuery("#products").jqGrid({
     		url: "fsgoods.do",
     		editurl: "fsgoodsupdate.do",
@@ -40,7 +43,7 @@
 			width : null,
 			shrinkToFit : false,
    			colModel:[
-   				{label:'Номер',name:'numerator', index:'numerator', width:250, editable: true, sortable:false, editrules:{number:true}},
+   				{label:'Номер',name:'numerator', index:'numerator', width:250, sortable:false, editrules:{number:true}},
    	    		{label:'Наименование товара', name:'tovar', index:'tovar', width:880, editable: true, sortable:false}
 		   	],
 		    rowNum: 10,
@@ -52,7 +55,14 @@
     	    gridview: true,
     		autoencode: true,
    			caption: "Товары",
-   			ondblClickRow : editRow
+   			ondblClickRow : function editRow(id) {
+				 var grid = $("#products");
+             	 if (id && id !== lastSelection) {
+                	 grid.jqGrid('restoreRow',lastSelection);
+                 	 lastSelection = id;
+             	 }
+             	 grid.jqGrid('editRow',id, {keys: true} );
+            }
 		});
 		
 		$('#products').jqGrid('navGrid', "#pagerproducts", {                
@@ -70,10 +80,8 @@
                 $.ajaxSetup({async:false});
         		$.get("fsaddproduct.do");
                 jQuery("#products").trigger('reloadGrid');
-            	// var datarow = { numerator: "", tovar: ""};                
-                // var ret = jQuery("#products").addRowData(lastsel, datarow, "last");
             },
-            title: "Добавить продукт",
+            title: "Добавить продукт в конец списка",
             position: "last"
         }).navButtonAdd('#pagerproducts',{
 		    caption: '',	
@@ -91,25 +99,122 @@
                  }  
                  grid.trigger('reloadGrid');
             },
-            title: "Удалить продукт",
+            title: "Удалить выбранный продукт",
+            position: "last"
+        }).navButtonAdd('#pagerproducts',{
+		    caption: '',	
+            buttonicon: 'ui-icon-circle-triangle-n',
+            onClickButton: function(event) {
+            	 var grid = $("#products");
+            	 var id = grid.jqGrid('getGridParam','selrow');
+            	 
+     		     if (id) { 
+                    $.ajaxSetup({async:false});
+             		$.get("fsinsertproduct.do?id="+id);
+     		     } else { 
+     		    	alert("Продукт не выбран.");
+                 }  
+                 grid.trigger('reloadGrid');
+            },
+            title: "Вставить продукт после текущего",
             position: "last"
         });
 		
-		var lastSelection;
-		function editRow(id) {
-			 var grid = $("#products");
-             if (id && id !== lastSelection) {
-                 grid.jqGrid('restoreRow',lastSelection);
-                 lastSelection = id;
-             }
-             grid.jqGrid('editRow',id, {keys: true} );
-        };
-        
 		grid = $("#products");
 		grid.jqGrid('gridResize', {minWidth: 450, minHeight: 150});
-		//$('#pagerproducts_center').hide();
-		$("#pagerproducts_left", "#pagerproducts").width(150);
+		$("#pagerproducts_left", "#pagerproducts").width(250);
+		
+		//Blank grid
+		jQuery("#blanks").jqGrid({
+    		url: "fsblanks.do",
+    		editurl: "fsblankupdate.do",
+    		datatype: "xml",
+    		mtype: "GET",
+    		height: '20%',
+			width : null,
+			shrinkToFit : false,
+   			colModel:[
+   				{label:'Номер листа',name:'page', index:'page', width:250, sortable:false, editrules:{number:true}},
+   	    		{label:'Номер бланка', name:'blanknumber', index:'blanknumber', width:880, editable: true, sortable:false}
+		   	],
+		    rowNum: 10,
+		    rowList:[5,10,20,50],
+		   	sortname: 'page',
+		   	sortorder: 'asc',
+   			viewrecords: true,
+   			pager: jQuery('#pagerblanks'),
+    	    gridview: true,
+    		autoencode: true,
+   			caption: "Номера бланков сертификата",
+   			ondblClickRow : function editRow(id) {
+				 var grid = $("#blanks");
+             	 if (id && id !== lastSelection) {
+                	 grid.jqGrid('restoreRow',lastSelection);
+                 	 lastSelection = id;
+             	 }
+             	 grid.jqGrid('editRow',id, {keys: true} );
+            }
+		});
 
+		$('#blanks').jqGrid('navGrid', "#pagerblanks", {                
+    		search: false, 
+    		add: false,
+    		edit: false,	
+    		del: false,
+    		refresh: false,
+    		view: false
+		}).navButtonAdd('#pagerblanks',{
+		    caption: '',	
+            buttonicon: 'ui-icon-plus',
+            onClickButton: function(id) {
+                var lastsel = id;
+                $.ajaxSetup({async:false});
+        		$.get("fsaddblank.do");
+                jQuery("#blanks").trigger('reloadGrid');
+            },
+            title: "Добавить бланк в конец списка",
+            position: "last"
+        }).navButtonAdd('#pagerblanks',{
+		    caption: '',	
+            buttonicon: 'ui-icon-trash',
+            onClickButton: function(event) {
+            	 console.log(event);
+            	 var grid = $("#blanks");
+            	 var id = grid.jqGrid('getGridParam','selrow');
+            	 
+     		     if (id) { 
+                    $.ajaxSetup({async:false});
+             		$.get("fsdelblank.do?id="+id);
+     		     } else { 
+     		    	alert("Бланк не выбран.");
+                 }  
+                 grid.trigger('reloadGrid');
+            },
+            title: "Удалить выбранный бланк",
+            position: "last"
+        }).navButtonAdd('#pagerblanks',{
+		    caption: '',	
+            buttonicon: 'ui-icon-circle-triangle-n',
+            onClickButton: function(event) {
+            	 var grid = $("#blanks");
+            	 var id = grid.jqGrid('getGridParam','selrow');
+            	 
+     		     if (id) { 
+                    $.ajaxSetup({async:false});
+             		$.get("fsinsertblank.do?id="+id);
+     		     } else { 
+     		    	alert("Бланк не выбран.");
+                 }  
+                 grid.trigger('reloadGrid');
+            },
+            title: "Вставить бланк после текущего",
+            position: "last"
+        });
+		
+		grid = $("#blanks");
+		grid.jqGrid('gridResize', {minWidth: 450, minHeight: 150});
+		$("#pagerblanks_left", "#pagerblanks").width(250);
+		
 	});
 
 	function clearelement(element) {
@@ -258,16 +363,10 @@ ${fscert.branch.address}, Республика Беларусь<br>
 </div>
 
 <div class="row">
-	<div class="col-md-12">Бланки сертификата: <br>
-				 <table> 
-				    <c:forEach items="${fscert.blanks}" var="blank">
-				        <tr> 
-				        <td> ${blank.page}. </td>
-				        <td> ${blank.blanknumber} </td>
-				        </tr>
-			       </c:forEach>
-				</table>
-   </div>
+		        <div class="col-md-12">
+		            <table id="blanks"></table>
+		            <div id="pagerblanks"></div> 
+				</div>
 </div>			
 
 
