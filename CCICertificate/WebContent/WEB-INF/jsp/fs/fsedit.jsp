@@ -21,6 +21,59 @@
 					$("#fsview").dialog({
 						autoOpen : false
 					});
+					
+					$( "#dialog-message" ).dialog({
+						  autoOpen : false,
+						  height: "auto",
+					      modal: true,
+					      buttons: {
+					        Ok: function() {
+					          $( this ).dialog( "close" );
+					        }
+					      }
+					});
+					 
+					$( "#dialog-addproductlist" ).dialog({
+						  autoOpen : false,
+	            	      resizable: true,
+	            	      height: "auto",
+	            	      width: 400,
+	            	      modal: true,
+	            	      buttons: {
+	            	        "Добавить продукты": function() {
+	                         	 var grid = $("#products");
+	                             $.ajaxSetup({async:false});
+	                             $.post("fsaddproducts.do", $("#addproductlist").serialize());
+	                             grid.trigger('reloadGrid');
+	            	             $( this ).dialog( "close" );
+	            	        },
+	            	        "Закрыть": function() {
+	              	             $( this ).dialog( "close" );
+	            	        }
+	            	      }
+	            	});
+					
+					$( "#dialog-addblanklist" ).dialog({
+						  autoOpen : false,
+	            	      resizable: true,
+	            	      height: "auto",
+	            	      width: 400,
+	            	      modal: true,
+	            	      buttons: {
+	            	        "Добавить номера": function() {
+	                         	 var grid = $("#blanks");
+	                             $.ajaxSetup({async:false});
+	                             $.post("fsaddblanks.do", $("#addblanklist").serialize());
+	                             grid.trigger('reloadGrid');
+	            	             $( this ).dialog( "close" );
+	            	        },
+	            	        "Закрыть": function() {
+	              	             $( this ).dialog( "close" );
+	            	        }
+	            	      }
+	            	});
+
+					
 					$(".datepicker").datepicker("option", "dateFormat",
 							'dd.mm.yy');
 		  		    $("#language")
@@ -85,19 +138,23 @@
             position: "last"
         }).navButtonAdd('#pagerproducts',{
 		    caption: '',	
-            buttonicon: 'ui-icon-trash',
+            buttonicon: 'ui-icon-closethick',
             onClickButton: function(event) {
-            	 console.log(event);
             	 var grid = $("#products");
-            	 var id = grid.jqGrid('getGridParam','selrow');
+                 var id = grid.jqGrid('getGridParam','selrow');
+                 var recs = grid.getGridParam("reccount");
             	 
-     		     if (id) { 
-                    $.ajaxSetup({async:false});
-             		$.get("fsdelproduct.do?id="+id);
-     		     } else { 
-     		    	alert("Продукт не выбран.");
-                 }  
-                 grid.trigger('reloadGrid');
+            	 if (recs > 0 ) {
+     		     	if (id) { 
+                    	$.ajaxSetup({async:false});
+             			$.get("fsdelproduct.do?id="+id);
+     		     	} else { 
+     		     		$( "#dialog-message" ).dialog("option", "title", 'Удаление продукта');
+     		     		$("#message").text("Продукт не выбран. Выберете продукт для удаления.");
+ 						$("#dialog-message").dialog("open");
+    	            }
+        	        grid.trigger('reloadGrid');
+            	 }
             },
             title: "Удалить выбранный продукт",
             position: "last"
@@ -112,11 +169,37 @@
                     $.ajaxSetup({async:false});
              		$.get("fsinsertproduct.do?id="+id);
      		     } else { 
-     		    	alert("Продукт не выбран.");
+  		     		$( "#dialog-message" ).dialog("option", "title", 'Вставить продукт');
+ 		     		$("#message").text("Продукт не выбран. Выберете продукт для добавления перед ним нового.");
+					$("#dialog-message").dialog("open");
                  }  
                  grid.trigger('reloadGrid');
             },
-            title: "Вставить продукт после текущего",
+            title: "Вставить продукт перед текущим",
+            position: "last"
+        }).navButtonAdd('#pagerproducts',{
+		    caption: '',	
+            buttonicon: 'ui-icon-script',
+            onClickButton: function(event) {
+            	$("#productlist").val(''); 
+            	$("#dialog-addproductlist").dialog( "option", "position", { my: "center",  at: "center", of:window} );
+            	$("#dialog-addproductlist" ).dialog("open"); },
+            title: "Добавить список продуктов",
+            position: "last"
+        }).navButtonAdd('#pagerproducts',{
+		    caption: '',	
+            buttonicon: 'ui-icon-trash',
+            onClickButton: function(event) {
+            	var grid = $("#products");
+                var recs = grid.getGridParam("reccount");
+          	 
+ 	           	if (recs > 0 ) {
+	                $.ajaxSetup({async:false});
+    	    		$.get("fsdelallproducts.do");
+        	        jQuery("#products").trigger('reloadGrid');
+ 	           	}
+            },
+            title: "Удалить все продукты",
             position: "last"
         });
 		
@@ -176,19 +259,24 @@
             position: "last"
         }).navButtonAdd('#pagerblanks',{
 		    caption: '',	
-            buttonicon: 'ui-icon-trash',
+            buttonicon: 'ui-icon-closethick',
             onClickButton: function(event) {
             	 console.log(event);
             	 var grid = $("#blanks");
             	 var id = grid.jqGrid('getGridParam','selrow');
-            	 
-     		     if (id) { 
-                    $.ajaxSetup({async:false});
-             		$.get("fsdelblank.do?id="+id);
-     		     } else { 
-     		    	alert("Бланк не выбран.");
-                 }  
-                 grid.trigger('reloadGrid');
+                 var recs = grid.getGridParam("reccount");
+              	 
+  	           	if (recs > 0 ) {
+	     		     if (id) { 
+	                    $.ajaxSetup({async:false});
+    	         		$.get("fsdelblank.do?id="+id);
+     			     } else { 
+      		     		$( "#dialog-message" ).dialog("option", "title", 'Удаление бланка');
+     		     		$("#message").text("Бланк не выбран. Выберете бланк для удаления.");
+ 						$("#dialog-message").dialog("open");
+                	 }  
+                 	grid.trigger('reloadGrid');
+  	           	}
             },
             title: "Удалить выбранный бланк",
             position: "last"
@@ -203,11 +291,37 @@
                     $.ajaxSetup({async:false});
              		$.get("fsinsertblank.do?id="+id);
      		     } else { 
-     		    	alert("Бланк не выбран.");
+   		     		$("#dialog-message" ).dialog("option", "title", 'Добавление бланка');
+ 		     		$("#message").text("Бланк не выбран. Выберете бланк для вставки перед ним нового.");
+					$("#dialog-message").dialog("open");
                  }  
                  grid.trigger('reloadGrid');
             },
-            title: "Вставить бланк после текущего",
+            title: "Вставить бланк перед текущим",
+            position: "last"
+        }).navButtonAdd('#pagerblanks',{
+		    caption: '',	
+            buttonicon: 'ui-icon-script',
+            onClickButton: function(event) {
+            	$("#blanklist").val(''); 
+            	$("#dialog-addblanklist").dialog( "option", "position", { my: "center",  at: "center", of:window} );
+            	$("#dialog-addblanklist" ).dialog("open"); },
+            title: "Добавить список бланков",
+            position: "last"
+        }).navButtonAdd('#pagerblanks',{
+		    caption: '',	
+            buttonicon: 'ui-icon-trash',
+            onClickButton: function(event) {
+            	var grid = $("#blanks");
+                var recs = grid.getGridParam("reccount");
+          	 
+ 	           	if (recs > 0 ) {
+	                $.ajaxSetup({async:false});
+    	    		$.get("fsdelallblanks.do");
+        	        grid.trigger('reloadGrid');
+ 	           	}
+            },
+            title: "Удалить все бланки",
             position: "last"
         });
 		
@@ -265,6 +379,22 @@
 		$("#fsview").dialog("open");
 	}
 	
+	
+	function changeLanguage() {
+		url = "rldlang.do?lang=" + $("#language").val();
+		$.ajaxSetup({async:false});
+		$.get(url, function(data, status) {
+			 console.log(data);
+			 var obj = JSON.parse(data);
+		     $("#exporter").text(obj.exporter);
+		     $("#producer").text(obj.producer);
+		     $("#expert").text(obj.expert);
+		     $("#signer").text(obj.signer);
+		});	
+		
+		
+	}
+	
 </script>
 
 <c:if test="${not empty error}">
@@ -294,7 +424,7 @@ ${fscert.branch.address}, Республика Беларусь<br>
 <div class="col-md-6">Выдан для представления в: <form:select path="codecountrytarget"						
 						items="${countries}" id="codecountrytarget" /></div>
 <div class="col-md-6">Язык сертификата: <form:select path="language"						
-						items="${languages}" id="language" /></div>
+						items="${languages}" id="language" onChange="javaScript:changeLanguage();"/></div>
 						
 </div>
 					
@@ -376,7 +506,6 @@ ${fscert.branch.address}, Республика Беларусь<br>
  <div class="row">
  <div class="col-md-12">
 		<button type="submit">Save</button> 
-		<button type="reset">Reset</button>
 </div>
  </div>
  
@@ -387,3 +516,26 @@ ${fscert.branch.address}, Республика Беларусь<br>
 <div id="fsview" name="fsview">
 </div>
 
+<div id="dialog-addproductlist" title="Добавление продуктов">
+  <form id="addproductlist" method="POST">
+  <fieldset>
+       <label>Список продуктов:</label>
+       <p></p>
+       <p><textarea rows="8" cols="35" id="productlist" name="productlist"></textarea></p>
+  </textarea>       
+  </form>
+</div>
+
+<div id="dialog-addblanklist" title="Добавление номеров бланков">
+  <form id="addblanklist" method="POST">
+  <fieldset>
+       <label>Список номеров бланков:</label>
+       <p></p>
+       <p><textarea rows="8" cols="35" id="blanklist" name="blanklist"></textarea></p>
+  </textarea>       
+  </form>
+</div>
+
+<div id="dialog-message">
+  <label id="message"></label> 
+</div>

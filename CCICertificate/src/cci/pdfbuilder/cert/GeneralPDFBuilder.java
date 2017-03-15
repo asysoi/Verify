@@ -4,6 +4,7 @@ import java.util.List;
 
 import cci.config.cert.CTCell;
 import cci.model.cert.Product;
+import cci.pdfbuilder.PDFBuilder;
 
 public class GeneralPDFBuilder extends PDFBuilder {
 	

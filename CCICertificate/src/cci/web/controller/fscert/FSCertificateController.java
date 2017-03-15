@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.support.SessionStatus;
 import cci.config.fscert.ExportFSCertConfig;
 import cci.model.Client;
 import cci.model.Employee;
+import cci.model.cert.Certificate;
 import cci.model.fscert.Expert;
 import cci.model.fscert.Exporter;
 import cci.model.fscert.FSBlank;
@@ -33,8 +35,12 @@ import cci.model.fscert.FSCertificate;
 import cci.model.fscert.FSProduct;
 import cci.model.fscert.Producer;
 import cci.model.fscert.Signer;
+import cci.pdfbuilder.PDFBuilder;
+import cci.pdfbuilder.cert.CertificatePDFBuilder;
+import cci.pdfbuilder.fscert.FSPDFBuilder;
 import cci.repository.SQLBuilder;
 import cci.repository.fscert.SQLBuilderFSCertificate;
+import cci.service.CountryConverter;
 import cci.service.FieldType;
 import cci.service.Filter;
 import cci.service.cert.CertFilter;
@@ -587,9 +593,7 @@ public class FSCertificateController {
 				  FSCertificate cert = (FSCertificate)model.get("fscert");
 				  
 				  String template = fsCertService.getTemplate("confirmation", lang);
-				  String replacement = cert.getProducer() != null ? 
-						           cert.getProducer().getName() != null ? 
-						           cert.getProducer().getName() + ", " + cert.getProducer().getAddress() : "" : "";
+				  String replacement = cert.getProducer() != null ? getClientName(cert.getProducer(), lang) : "";
 				  template = template.replaceAll("\\[producer\\]", replacement);				  
 				  cert.setConfirmation(template);
 				 
@@ -604,8 +608,30 @@ public class FSCertificateController {
 					model.addAttribute("error", ex.getMessage());
 			}
 	}
-
 	
+	private String getClientName(Client client, String lang) {
+        String ret = "";
+        
+        if ("EN".equals(lang)) {
+        	ret = client.getEnname() + ", " + client.getEnaddress();
+        } else {
+        	ret = client.getName() + ", " + client.getAddress();        	        	
+        }
+		return  ret;
+	}
+	
+	private String getEmployeeName(Employee employee, String lang) {
+        String ret = "";
+        
+        if ("EN".equals(lang)) {
+        	ret = employee.getEnjob() + " " + employee.getEnname();
+        } else {
+        	ret = employee.getJob() + " " + employee.getName();        	        	
+        }
+		return  ret;
+	}
+	
+
 	// ---------------------------------------------------------------------------------------
 	//   Reload Declaration from template
 	// ---------------------------------------------------------------------------------------
@@ -830,6 +856,45 @@ public class FSCertificateController {
 	}
 
 	
+	    //=====================================================================
+		@RequestMapping(value = "fsaddproducts.do",  method = RequestMethod.POST)
+		public void addlistproducts(
+				@RequestParam(value = "productlist", required = false) String ids,
+				HttpSession session, HttpServletResponse response, HttpServletRequest request, ModelMap model) {
+				try {
+					  FSCertificate cert = (FSCertificate)model.get("fscert");
+	 				  
+	 				  long lastid = getlastProductId(cert.getProducts());
+	 				  long lastNumerator = getlastNumerator(cert.getProducts());
+	 				  String products[] = ids.split("\\r\\n|\\n|\\r");
+	 				  
+	 				  for (String item : products) {
+	 					 FSProduct product  = new FSProduct();
+	 				     product.setTovar(item);
+					     product.setId_fscert(cert.getId());
+					     product.setId(++lastid);
+					     product.setNumerator(++lastNumerator);
+					     cert.getProducts().add(product);
+	 				  }
+				} catch (Exception ex) {
+					  LOG.info("Ошибка: " + ex.getMessage());
+					  model.addAttribute("error", ex.getMessage());
+				}
+		}
+		
+	    //===================================================================== 
+		@RequestMapping(value = "fsdelallproducts.do",  method = RequestMethod.GET)
+		public void delallproducts(
+					HttpSession session, HttpServletResponse response, HttpServletRequest request, ModelMap model) {
+					try {
+						FSCertificate cert = (FSCertificate)model.get("fscert");
+						cert.getProducts().clear();
+					} catch (Exception ex) {
+						  LOG.info("Ошибка: " + ex.getMessage());
+						  model.addAttribute("error", ex.getMessage());
+					}
+			}
+			
 	// ---------------------------------------------------------------------------------------
 	// ---------------------------------------------------------------------------------------	
 	//   Handling Blank List: Adding, Deleting
@@ -1016,6 +1081,108 @@ public class FSCertificateController {
 					  LOG.info("Ошибка: " + ex.getMessage());
 					  model.addAttribute("error", ex.getMessage());
 				}
+	}
+
+    //=====================================================================
+	@RequestMapping(value = "fsaddblanks.do",  method = RequestMethod.POST)
+	public void addlistblanks(
+			@RequestParam(value = "blanklist", required = false) String ids,
+			HttpSession session, HttpServletResponse response, HttpServletRequest request, ModelMap model) {
+			try {
+				  FSCertificate cert = (FSCertificate)model.get("fscert");
+ 				  
+ 				  int lastpage = getlastPageNumber(cert.getBlanks());
+ 				  String items[] = ids.split("\\r\\n|\\n|\\r");
+ 				  
+ 				  for (String item : items) {
+ 					 FSBlank blank  = new FSBlank();
+ 					 blank.setBlanknumber(item);
+ 					 blank.setId_fscert(cert.getId());
+				     blank.setPage(++lastpage);
+				     cert.getBlanks().add(blank);
+ 				  }
+			} catch (Exception ex) {
+				  LOG.info("Ошибка: " + ex.getMessage());
+				  model.addAttribute("error", ex.getMessage());
+			}
+	}
+	
+    //===================================================================== 
+	@RequestMapping(value = "fsdelallblanks.do",  method = RequestMethod.GET)
+	public void delallblankss(
+				HttpSession session, HttpServletResponse response, HttpServletRequest request, ModelMap model) {
+				try {
+					FSCertificate cert = (FSCertificate)model.get("fscert");
+					cert.getBlanks().clear();
+				} catch (Exception ex) {
+					  LOG.info("Ошибка: " + ex.getMessage());
+					  model.addAttribute("error", ex.getMessage());
+				}
+		}
+			
+	// =======================================================================
+	@RequestMapping(value = "rldlang.do",  method = RequestMethod.GET)
+	public void reloadLanguage(
+			@RequestParam(value = "lang", required = true) String lang,
+			HttpSession session, HttpServletResponse response, ModelMap model) {
+			
+			try {
+				  FSCertificate cert = (FSCertificate)model.get("fscert");
+				  String json = "{\"exporter\":\"" + getClientName(cert.getExporter(), lang) + "\"," 
+				                + "\"producer\":\"" + getClientName(cert.getProducer(), lang) + "\","
+				                + "\"expert\":\"" + getEmployeeName(cert.getExpert(), lang) + "\","
+				                + "\"signer\":\"" + getEmployeeName(cert.getSigner(), lang) + "\"}";
+				  
+				  response.setContentType("text/html; charset=UTF-8");
+				  response.setCharacterEncoding("UTF-8");
+  			      response.getWriter().println(json);
+				  response.flushBuffer();
+				  
+			} catch (Exception ex) {
+					ex.printStackTrace();
+					LOG.info("Ошибка: " + ex.getMessage());
+					model.addAttribute("error", ex.getMessage());
+			}
+	}
+	
+	// ========================================================================
+	@RequestMapping(value = "fsprint.do",  method = RequestMethod.GET)
+	public String printFSCertificate(
+			@RequestParam(value = "certid", required = true) int id,
+			@RequestParam(value = "type", defaultValue="doc", required = true) String type,
+			HttpSession session, HttpServletRequest request, HttpServletResponse response, ModelMap model)  {
+		
+			String relativeWebPath = "/resources";
+			String  absoluteDiskPath= request.getSession().getServletContext().getRealPath(relativeWebPath);
+			LOG.debug("Absolute path: " + absoluteDiskPath);
+			
+			FSCertificate cert = null;
+			try {
+				cert = fsCertService.getFSCertificateById(id);
+				makepdffile(absoluteDiskPath, cert);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return "redirect:" + "/resources/out/" + cert.getCertnumber() + ".pdf";
+	}
+		
+	
+	// ---------------------------------------------------------------------------------------
+	//
+	// ---------------------------------------------------------------------------------------
+	private void makepdffile(String absoluteDiskPath, FSCertificate cert) {
+		FSPDFBuilder builder = new FSPDFBuilder();
+		String fout = absoluteDiskPath + "/out/" + cert.getCertnumber() + ".pdf";
+		String fconf = absoluteDiskPath + "/config/pages.xml";
+		String fpath = absoluteDiskPath + "/fonts/";
+		
+		// CountryConverter.setCountrymap(certService.getCountriesList("RU"));
+		
+		try {
+		   builder.createPdf(fout, cert, fconf, fpath);
+		} catch(Exception ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	

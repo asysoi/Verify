@@ -143,8 +143,6 @@
 		memo = "Воспроизведение бумажной версии сертификата. <p>" + 
 		       "Результат воспроизведения может незначительно отличаться по форме и стилю отображения," +
 		       "но полностью воспроизводит содержание документа.</p>"
-        //$('#pdf').contents().find("body").html("<div style='color:black; text-align:center; font-size:16pt;'>" + memo + "</div> ");
-        //                           $('#pdf').contents().find('body').attr('style', 'background-color: white'); 
 		url = "fscert.do?certid=" + certid;
 		var win=window.open(url,'_blank');
 		win.focus();
@@ -153,6 +151,12 @@
 	function editCertificate(certid) {
 		url = "fsedit.do?certid=" + certid;
 		//window.location.href = url;
+		var win=window.open(url, "_self");
+		win.focus();
+	}
+	
+	function printCertificate(certid) {
+		url = "fsprint.do?certid=" + certid+"&type=doc";
 		var win=window.open(url, "_self");
 		win.focus();
 	}

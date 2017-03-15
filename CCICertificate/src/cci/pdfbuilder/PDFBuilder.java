@@ -1,4 +1,4 @@
-﻿package cci.pdfbuilder.cert;
+﻿package cci.pdfbuilder;
  
 import java.io.IOException;
 import java.util.List;
@@ -35,7 +35,7 @@ public abstract class PDFBuilder {
 	private static final String CHAR_PARAGRAPH = "\n";
 	
 
-	public void createPDFPage(PdfWriter writer, Certificate certificate,
+	public void createPDFPage(PdfWriter writer, Object certificate,
 			PDFPageConfig pconfig) throws DocumentException, IOException {
 		
 		List<BoxConfig> textboxes = pconfig.getTextboxes();
@@ -291,7 +291,7 @@ public abstract class PDFBuilder {
 	}
 
 	protected PdfPTable makeTableInAbsolutePosition(PdfWriter writer,
-			Certificate cert, TableConfig tablecon) throws DocumentException,
+			Object cert, TableConfig tablecon) throws DocumentException,
 			IOException {
 
 		PdfPTable table = new PdfPTable(tablecon.getColnumber());
@@ -317,7 +317,7 @@ public abstract class PDFBuilder {
 	}
 
 	private void makeTableFooter(PdfWriter writer, PdfPTable table,
-			TableConfig tablecon, Certificate cert) throws DocumentException,
+			TableConfig tablecon, Object cert) throws DocumentException,
 			IOException {
 		List<CTCell> row = tablecon.getFooterRow();
 		
@@ -334,7 +334,7 @@ public abstract class PDFBuilder {
 	}
 
 	private void makeTableHeader(PdfWriter writer, PdfPTable table,
-			TableConfig tablecon, Certificate cert) throws DocumentException,
+			TableConfig tablecon, Object cert) throws DocumentException,
 			IOException {
 
 		float[] widths = new float[tablecon.getColnumber()];
@@ -395,13 +395,13 @@ public abstract class PDFBuilder {
 	}
 
 	private void makeTableBody(PdfPTable table, TableConfig tablecon,
-			Certificate cert) throws IOException, DocumentException {
+			Object cert) throws IOException, DocumentException {
 
 		List<CTCell> row = tablecon.getBodyRow();
 		table.getDefaultCell().setVerticalAlignment(Element.ALIGN_TOP);
 		float ht = 0f;
 
-		ProductIterator cursor = cert.getIterator();
+		ProductIterator cursor = ((Certificate) cert).getIterator();
 
 		try {
 			while (cursor.hasNext()) {
@@ -446,8 +446,9 @@ public abstract class PDFBuilder {
 		return height;
 	}
 	
-	protected String getCertificateTextByMap(Certificate certificate, String map) {
+	protected String getCertificateTextByMap(Object object, String map) {
 
+		Certificate certificate = (Certificate) object;
 		String str = "";
 
 		if ("exporter".equals(map)) {
@@ -535,7 +536,7 @@ public abstract class PDFBuilder {
 		return str;
 	}
 
-	private boolean checkfield(String field) {
+	protected boolean checkfield(String field) {
 		return (trim(field).length() > 0);
 	}
 
@@ -547,7 +548,7 @@ public abstract class PDFBuilder {
         }
 	}
 
-	private String renderString(String field, String strtermination) {
+	protected String renderString(String field, String strtermination) {
 		return (field != null && field.trim() != "") ? field.trim() + strtermination: "";
 	}
 }

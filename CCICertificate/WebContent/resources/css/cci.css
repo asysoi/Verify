@@ -218,4 +218,9 @@ div.row {
 .ui-jqgrid tr.jqgrow td {font-size:11px !important; }
 .ui-paging-info { font-size:11px !important;}
 .ui-paging-pager { font-size:11px !important;}
+.ui-th-div { font-size:12px !important;}
+.ui-state-highlight { background: #d2e4ff!important; }
+
+.ui-datepicker {z-index: 999 !important;}
+.ui-dialog {z-index: 9999 !important;}
 

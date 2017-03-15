@@ -10,6 +10,8 @@ import cci.config.cert.PDFPageConfig;
 import cci.config.cert.XMLConfigReader;
 import cci.model.cert.Certificate;
 import cci.model.cert.Product;
+import cci.pdfbuilder.PDFBuilder;
+import cci.pdfbuilder.PDFBuilderFactory;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;

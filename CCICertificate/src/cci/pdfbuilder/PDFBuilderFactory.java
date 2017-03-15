@@ -1,4 +1,12 @@
-﻿package cci.pdfbuilder.cert;
+﻿package cci.pdfbuilder;
+
+import cci.pdfbuilder.cert.APDFBuilder;
+import cci.pdfbuilder.cert.CT1PDFBuilder;
+import cci.pdfbuilder.cert.CT2PDFBuilder;
+import cci.pdfbuilder.cert.EAVPDFBuilder;
+import cci.pdfbuilder.cert.GeneralPDFBuilder;
+import cci.pdfbuilder.cert.TextilePDFBuilder;
+import cci.pdfbuilder.fscert.FSPDFBuilder;
 
 public class PDFBuilderFactory {
 	  public static final String PAGE_CT1 = "СТ-1";
@@ -15,6 +23,8 @@ public class PDFBuilderFactory {
 	  public static final String PAGE_TEXTILE = "Текстиль";
 	  public static final String PAGE_EAV = "EAV";
 	  public static final String PAGE_EAV_b = "EAV.b";
+	  public static final String PAGE_FS = "FS";
+	  public static final String PAGE_FS_b = "FS_b";
 	  
 	  	  
       public static PDFBuilder getPADFBuilder(String pagename) {
@@ -48,6 +58,10 @@ public class PDFBuilderFactory {
     		  builder = new EAVPDFBuilder();    		  
     	  }  else if (pagename.equals(PAGE_EAV_b)) {
     		  builder = new EAVPDFBuilder();    		  
+    	  }  else if (pagename.equals(PAGE_FS)) {
+    		  builder = new FSPDFBuilder();    		  
+    	  }  else if (pagename.equals(PAGE_FS_b)) {
+    		  builder = new FSPDFBuilder();    		  
     	  }  
     	  return builder;
       }
