@@ -549,6 +549,6 @@ public abstract class PDFBuilder {
 	}
 
 	protected String renderString(String field, String strtermination) {
-		return (field != null && field.trim() != "") ? field.trim() + strtermination: "";
+		return (field != null && field.trim() != "") ? field.trim() + strtermination : "";
 	}
 }

@@ -1172,14 +1172,14 @@ public class FSCertificateController {
 	// ---------------------------------------------------------------------------------------
 	private void makepdffile(String absoluteDiskPath, FSCertificate cert) {
 		FSPDFBuilder builder = new FSPDFBuilder();
-		String fout = absoluteDiskPath + "/out/" + cert.getCertnumber() + ".pdf";
-		String fconf = absoluteDiskPath + "/config/pages.xml";
-		String fpath = absoluteDiskPath + "/fonts/";
+		String fileout = absoluteDiskPath + "/out/" + cert.getCertnumber() + ".pdf";
+		String fileconf = absoluteDiskPath + "/config/pages.xml";
+		String fontpath = absoluteDiskPath + "/fonts/";
 		
-		// CountryConverter.setCountrymap(certService.getCountriesList("RU"));
+		CountryConverter.setCountrymap(certService.getCountriesList(cert.getLanguage()));
 		
 		try {
-		   builder.createPdf(fout, cert, fconf, fpath);
+		   builder.createPdf(fileout, cert, fileconf, fontpath);
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
