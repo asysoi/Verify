@@ -613,9 +613,13 @@ public class FSCertificateController {
         String ret = "";
         
         if ("EN".equals(lang)) {
-        	ret = client.getEnname() + ", " + client.getEnaddress();
+        	ret = (client.getEnname() != null ? client.getEnname() : "")   
+                  +  (client.getEnname() != null && client.getEnaddress() != null ? ", " : "") 
+                  + (client.getEnaddress() != null ? client.getEnaddress() : "");
         } else {
-        	ret = client.getName() + ", " + client.getAddress();        	        	
+        	ret = (client.getName() != null ? client.getName() : "")   
+        		  + (client.getName() != null && client.getAddress() != null ? ", " : "")
+                  + (client.getAddress() != null ? client.getAddress() : "");
         }
 		return  ret;
 	}
@@ -624,9 +628,11 @@ public class FSCertificateController {
         String ret = "";
         
         if ("EN".equals(lang)) {
-        	ret = employee.getEnjob() + " " + employee.getEnname();
+        	ret = (employee.getEnjob() != null ? employee.getEnjob() : "")  + " " 
+                  + (employee.getEnname() != null ? employee.getEnname() : "");
         } else {
-        	ret = employee.getJob() + " " + employee.getName();        	        	
+        	ret = (employee.getJob() != null ? employee.getJob() : "") 
+                 + " " + (employee.getName() != null ? employee.getName() : "");        	        	
         }
 		return  ret;
 	}

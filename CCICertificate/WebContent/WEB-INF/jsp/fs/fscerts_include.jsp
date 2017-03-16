@@ -157,7 +157,7 @@
 	
 	function printCertificate(certid) {
 		url = "fsprint.do?certid=" + certid+"&type=doc";
-		var win=window.open(url, "_self");
+		var win=window.open(url, "_blank");
 		win.focus();
 	}
 

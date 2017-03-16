@@ -210,7 +210,7 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 			if (cert.getExpert()!=null && cert.getExpert().getId() == 0 ) cert.getExpert().setId(findOrCreateEmployeeID(cert.getExpert()));
 			if (cert.getSigner()!=null && cert.getSigner().getId() == 0 ) cert.getSigner().setId(findOrCreateEmployeeID(cert.getSigner()));
 			
-			LOG.info(cert);
+			LOG.info("Save FS Certificate: " + cert);
 			
 			String sql = "insert into fs_cert(certnumber, parentnumber, dateissue, dateexpiry, confirmation, declaration, codecountrytarget, "
 					    + " datecert, listscount, language, otd_id, id_branch, id_exporter, id_producer, id_expert, id_signer) "
@@ -531,7 +531,7 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 			if (cert.getExpert()!=null && cert.getExpert().getId() == 0 ) cert.getExpert().setId(findOrCreateEmployeeID(cert.getExpert()));
 			if (cert.getSigner()!=null && cert.getSigner().getId() == 0 ) cert.getSigner().setId(findOrCreateEmployeeID(cert.getSigner()));
 			
-			LOG.info(cert);
+			LOG.info(">>>>>>>>>>> Update FS Certificate: " + cert);
 			
 			String sql = "UPDATE fs_cert SET parentnumber = :parentnumber, dateissue = TO_DATE(:dateissue,'DD.MM.YY'), "
 					    + " dateexpiry = TO_DATE(:dateexpiry,'DD.MM.YY'), confirmation = :confirmation, " 
@@ -544,7 +544,7 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 					    + " id_signer = " + ((cert.getSigner() != null) ?  ":signer.id " : ":signer ")
 					    + " WHERE certnumber = :certnumber "; 
 
-			LOG.info(sql);
+			LOG.info(">>>>>>>>>>> Update FS Certificate: " + sql);
 			
 			SqlParameterSource parameters = new BeanPropertySqlParameterSource(cert);
 			int row = template.update(sql, parameters);
