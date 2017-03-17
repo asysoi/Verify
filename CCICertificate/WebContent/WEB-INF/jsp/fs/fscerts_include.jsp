@@ -155,8 +155,14 @@
 		win.focus();
 	}
 	
-	function printCertificate(certid) {
-		url = "fsprint.do?certid=" + certid+"&type=doc";
+	function printOriginalCertificate(certid) {
+		url = "fsprint.do?certid=" + certid+"&type=org";
+		var win=window.open(url, "_blank");
+		win.focus();
+	}
+
+	function printCopyCertificate(certid) {
+		url = "fsprint.do?certid=" + certid+"&type=copy";
 		var win=window.open(url, "_blank");
 		win.focus();
 	}
@@ -283,8 +289,9 @@
 				<div class="ccidropdown-content"> 
 				<ul class="cci">
 					<li class="cci"><a class="cci" href="javascript:editCertificate('${cert.id}')"><i class="glyphicon glyphicon-edit"></i></a></li>
-						<li class="cci"><a class="cci" href="javascript:openCertificate('${cert.id}')"><i class="glyphicon glyphicon-eye-open"></i></a></li>
-					<li class="cci"><a class="cci" href="javascript:printCertificate('${cert.id}')"><i class="glyphicon glyphicon-print"></i></a></li>
+					<li class="cci"><a class="cci" href="javascript:openCertificate('${cert.id}')"><i class="glyphicon glyphicon-eye-open"></i></a></li>
+					<li class="cci"><a class="cci" href="javascript:printOriginalCertificate('${cert.id}')"><i class="glyphicon glyphicon-print"></i></a></li>
+					<li class="cci"><a class="cci" href="javascript:printCopyCertificate('${cert.id}')"><i class="glyphicon glyphicon-print"></i></a></li>
 				</ul> </div> </div>
 				</td>
 				<td>${cert.exportername}. ${cert.exporteraddress} </td>

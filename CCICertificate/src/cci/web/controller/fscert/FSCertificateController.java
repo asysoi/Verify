@@ -1165,7 +1165,7 @@ public class FSCertificateController {
 			FSCertificate cert = null;
 			try {
 				cert = fsCertService.getFSCertificateById(id);
-				makepdffile(absoluteDiskPath, cert);
+				makepdffile(absoluteDiskPath, cert, type);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -1176,7 +1176,7 @@ public class FSCertificateController {
 	// ---------------------------------------------------------------------------------------
 	//
 	// ---------------------------------------------------------------------------------------
-	private void makepdffile(String absoluteDiskPath, FSCertificate cert) {
+	private void makepdffile(String absoluteDiskPath, FSCertificate cert, String type) {
 		FSPDFBuilder builder = new FSPDFBuilder();
 		String fileout = absoluteDiskPath + "/out/" + cert.getCertnumber() + ".pdf";
 		String fileconf = absoluteDiskPath + "/config/pages.xml";
@@ -1185,7 +1185,11 @@ public class FSCertificateController {
 		CountryConverter.setCountrymap(certService.getCountriesList(cert.getLanguage()));
 		
 		try {
-		   builder.createPdf(fileout, cert, fileconf, fontpath);
+		   if (type != null && type.equals("org")) {	
+			   builder.createPdf(fileout, cert, fileconf, fontpath, true); 
+		   } else {
+		      builder.createPdf(fileout, cert, fileconf, fontpath, false);
+		   }
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}

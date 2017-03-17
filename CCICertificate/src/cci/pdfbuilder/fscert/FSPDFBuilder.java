@@ -4,18 +4,12 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.log4j.Logger;
-
-import com.itextpdf.text.Chapter;
-import com.itextpdf.text.Chunk;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
-import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
@@ -23,7 +17,6 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPRow;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfTemplate;
 import com.itextpdf.text.pdf.PdfWriter;
@@ -31,17 +24,10 @@ import com.itextpdf.text.pdf.PdfWriter;
 import cci.config.cert.PDFConfigReader;
 import cci.config.cert.PDFPageConfig;
 import cci.config.cert.XMLConfigReader;
-import cci.model.cert.Certificate;
-import cci.model.cert.Product;
 import cci.model.fscert.FSCertificate;
 import cci.model.fscert.FSProduct;
 import cci.pdfbuilder.PDFBuilder;
 import cci.pdfbuilder.PDFBuilderFactory;
-import cci.pdfbuilder.cert.CertificatePDFBuilder;
-import cci.service.CountryConverter;
-import cci.service.FilterCondition;
-import cci.service.cert.CertFilter;
-import javafx.scene.text.TextAlignment;
 
 public class FSPDFBuilder extends PDFBuilder {
 	public static Logger LOG=Logger.getLogger(FSPDFBuilder.class);
@@ -52,10 +38,10 @@ public class FSPDFBuilder extends PDFBuilder {
 	private PDFConfigReader xreader;
 	private PDFPageConfig pconfig;
 	private String fontpath;
-	private float maxHeightTable = 700f;
+	private float maxHeightTable = 680f;
 	
 	public void createPdf(String outfilename, Object cert,
-			String configFileName, String fpath) throws IOException, DocumentException {
+			String configFileName, String fpath, boolean flagOriginal) throws IOException, DocumentException {
 		fontpath = fpath;
 		// step 1
 		document = new Document(PageSize.A4, 72f, 72f, 54f, 54f);
@@ -65,21 +51,21 @@ public class FSPDFBuilder extends PDFBuilder {
 		document.open();
 		// step 4
 		xreader = XMLConfigReader.getInstance(configFileName, fontpath);
-		createContent(cert);
+		createContent(cert, flagOriginal);
 		// step 5
 		document.close();
 	}
 	
-	private void createContent(Object cert) throws DocumentException, IOException {
+	private void createContent(Object cert, boolean flagOriginal) throws DocumentException, IOException {
 		String pagename  = PDFBuilderFactory.PAGE_FS;; 
 	    pconfig = xreader.getPDFPageConfig(pagename);
-	    createPDFPage(writer, cert, pconfig);
+	    createPDFPage(writer, cert, pconfig, flagOriginal);
 	    pagename = pconfig.getNextPage();
 
 	}
 	
 	public void createPDFPage(PdfWriter writer, Object certificate,
-					PDFPageConfig pconfig) throws DocumentException, IOException {
+					PDFPageConfig pconfig, boolean flagOriginal) throws DocumentException, IOException {
 		    
 		    FSCertificate cert = (FSCertificate) certificate;
 		    BaseFont bf = BaseFont.createFont(
@@ -88,55 +74,46 @@ public class FSPDFBuilder extends PDFBuilder {
 					BaseFont.EMBEDDED);
 		    
 		    Font chFont = new Font(bf, 12, Font.BOLD);
-		    Font bigFont = new Font(bf, 13, Font.BOLD);
+		    Font bigFont = new Font(bf, 20, Font.BOLD);
 	        Font prgFont = new Font(bf, 12, Font.NORMAL);;
 	        
 	        PdfPTable table = new PdfPTable(3);
 	        table.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
-	        //table.setWidthPercentage(100);
 	        table.setTotalWidth(460f);
 	        table.setLockedWidth(true);
 	        
-	        addCellToTable(table, 3, cert.getBlanks().get(0).getBlanknumber(), Element.ALIGN_RIGHT, prgFont, 0f, 0f);
-	        addCellToTable(table, 3, "БЕЛОРУССКАЯ ТОРГОВО-ПРОМЫШЛЕННАЯ ПАЛАТА", Element.ALIGN_CENTER, chFont, 18f, 18f, 9f);
-	        addCellToTable(table, 3, "BELARUS CHAMBER OF COMMERCE AND INDUSTRY", Element.ALIGN_CENTER, chFont, 18f, 18f);
-	        
-	        addCellToTable(table, 3, cert.getBranch().getName(), Element.ALIGN_CENTER, prgFont, 54f, 54f, 8f);
-	        addCellToTable(table, 3, cert.getBranch().getAddress(), Element.ALIGN_CENTER, prgFont, 54f, 54f);
-	        addCellToTable(table, 3, "телефон: "+ cert.getBranch().getWork_phone() +"  факс: "+ cert.getBranch().getCell_phone() 
-	        		+ "  e-mail: " + cert.getBranch().getEmail(), Element.ALIGN_CENTER, prgFont, 36f, 36f);
-	        
-	        addCellToTable(table, 3, "СЕРТИФИКАТ", Element.ALIGN_CENTER, bigFont, 72f, 72f, 8f);
-	        addCellToTable(table, 3, "СВОБОДНОЙ ПРОДАЖИ", Element.ALIGN_CENTER, bigFont, 72f, 72f);
-	        addCellToTable(table, 3, "CERTIFICATE OF FREE SALE", Element.ALIGN_CENTER, bigFont, 72f, 72f);
-	        addCellToTable(table, 1, cert.getCertnumber(), Element.ALIGN_LEFT, prgFont, 0f, 0f,18f);
-	        addCellToTable(table, 1, "", Element.ALIGN_CENTER, prgFont, 0f, 0f, 18f);
-	        addCellToTable(table, 1, cert.getDatecert(), Element.ALIGN_RIGHT, prgFont, 0f, 0f, 18f);
+	        addBelCCIHeader(table, cert, chFont, 0, flagOriginal);
+	        addBranchInfo(table, cert, prgFont);
+	        addFSCertificateHeader(table, cert, bigFont, flagOriginal);
+	        addFSNumber(table, cert, prgFont);
 	        
 	        if (cert.getParentnumber() != null) {
-	        	addCellToTable(table, 3, "Дубликат сертификата от ХХХХХХ № " + cert.getParentnumber(), Element.ALIGN_LEFT, prgFont, 0f, 0f, 20f);
+	        	addCellToTable(table, 3, "Дубликат сертификата от ХХХХХХ № " + cert.getParentnumber(), Element.ALIGN_LEFT, prgFont, 0f, 0f, 14f);
 	        }
-	        addCellToTable(table, 3, "Выдан для предоставления в : " + cert.getCodecountrytarget(), Element.ALIGN_LEFT, prgFont, 0f, 0f, 20f);
+	        addCellToTable(table, 3, "Выдан для предоставления в : " + cert.getCodecountrytarget(), Element.ALIGN_LEFT, prgFont, 0f, 0f, 15f);
 	        
-	        addCellToTable(table, 3, "Экспортер : ", Element.ALIGN_LEFT, prgFont, 0f, 0f, 18f);
+	        addCellToTable(table, 3, "Экспортер : ", Element.ALIGN_LEFT, prgFont, 0f, 0f, 15f);
 	        addCellToTable(table, 3, cert.getExporter().getName() + ", " + cert.getExporter().getAddress(), 
 	        						Element.ALIGN_JUSTIFIED, prgFont, 0f, 0f);
 	        
-	        	        
-	        addCellToTable(table, 3, cert.getConfirmation(), Element.ALIGN_JUSTIFIED, prgFont, 0f, 0f, 24f);
-	        addCellToTable(table, 3, "Перечень товаров: ", Element.ALIGN_LEFT, prgFont, 0f, 0f, 24f);
+	        addCellToTable(table, 3, cert.getConfirmation(), Element.ALIGN_JUSTIFIED, prgFont, 0f, 0f, 18f);
+	        addCellToTable(table, 3, "Перечень товаров: ", Element.ALIGN_LEFT, prgFont, 0f, 0f, 18f);
+
+	        int rowIndexBeforeProduct = table.getLastCompletedRowIndex();
+	        // printHeightRows(table, rowIndexBeforeProduct);
 	        
-	        int rowIndexBeforeProduct = table.getLastCompletedRowIndex(); 
 	        for (FSProduct product : cert.getProducts() ) {
 	        	addCellToTable(table, 3, product.getNumerator() + ". " + product.getTovar(), Element.ALIGN_LEFT, prgFont, 12f, 0f);
 	        }
 	        int rowIndexAfterProduct = table.getLastCompletedRowIndex() + 1;
-	        
 	        addFooterFirstPage(table, cert, prgFont);
-	        
+
+	        int nextProductIndex = 0;
+	         
 	        float finalH = table.getTotalHeight();
+	        LOG.info(finalH);
 	        
-            if (finalH > maxHeightTable) {
+            if (finalH  > (maxHeightTable - 26f)) {
     	       float height = 0f;                  
 	           for (int i=1; i <=rowIndexBeforeProduct; i++) {
 	        	   height += table.getRowHeight(i);
@@ -146,7 +123,7 @@ public class FSPDFBuilder extends PDFBuilder {
 	           height += table.getRowHeight(rowIndexAfterProduct+2);
 	        
 	           int i = rowIndexBeforeProduct + 1;
-	           while (height < maxHeightTable) {
+	           while (height < (maxHeightTable - 26f)) {
 	        	   height += table.getRowHeight(i++);
 	           }
 	           
@@ -156,29 +133,139 @@ public class FSPDFBuilder extends PDFBuilder {
 	           
    	           for (FSProduct product : cert.getProducts() ) {
 		        	addCellToTable(table, 3, product.getNumerator() + ". " + product.getTovar(), Element.ALIGN_LEFT, prgFont, 12f, 0f);
+		        	nextProductIndex++;
 		        	if (table.getLastCompletedRowIndex() == (i-1)) { break;}
 		       }
    	           
-   	           addCellToTable(table, 3, "Смотри продолжение на ______ ", Element.ALIGN_LEFT, prgFont, 0f, 0f, 6f);
-   	           
+   	           addCellToTable(table, 3, "Смотри продолжение на ______ ", Element.ALIGN_LEFT, prgFont, 0f, 0f, 5f);
    	           addFooterFirstPage(table, cert, prgFont);
             }
+            
 	        document.add(table);
+	        // first page finished
 	        
-	        
+	        if (nextProductIndex > 0) {
+	        	
+	            document.newPage();
+	            table = new PdfPTable(3);
+		        table.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
+		        table.setTotalWidth(460f);
+		        table.setLockedWidth(true);
+	            
+		        addBelCCIHeader(table, cert, chFont, 1,flagOriginal);
+		        addBranchInfo(table, cert, prgFont);
+		        addFSCertificateHeader(table, cert, bigFont, flagOriginal);
+		        addFSNumber(table, cert, prgFont);
+		        addCellToTable(table, 3, "Продолжение перечня товаров:", Element.ALIGN_LEFT, prgFont, 0f, 0f, 15f);
+		        
+		        rowIndexBeforeProduct = table.getLastCompletedRowIndex();
+		        for (int i = nextProductIndex; i < cert.getProducts().size(); i++ ) {
+		        	FSProduct product = cert.getProducts().get(i);
+		        	addCellToTable(table, 3, product.getNumerator() + ". " + product.getTovar(), Element.ALIGN_LEFT, prgFont, 12f, 0f);
+		        	LOG.info(product.getNumerator() + ". " + product.getTovar());
+		        }
+		        rowIndexAfterProduct = table.getLastCompletedRowIndex() + 1;
+		        addFooterNextPage(table, cert, prgFont);
+		        finalH = table.getTotalHeight();
+		        LOG.info("Next page height:" + finalH);
+		        
+	            if (finalH > maxHeightTable) {
+	    	       float height = 0f;                  
+		           for (int i=1; i <=rowIndexBeforeProduct; i++) {
+		        	   height += table.getRowHeight(i);
+		           }
+		           height += table.getRowHeight(rowIndexAfterProduct);
+		        
+		           int i = rowIndexBeforeProduct + 1;
+		           while (height < maxHeightTable) {
+		        	   height += table.getRowHeight(i++);
+		           }
+		           
+		           for (int j = rowIndexAfterProduct; j > rowIndexBeforeProduct; j--) {
+		        	   table.deleteRow(j);
+		           }
+		           
+		           nextProductIndex = 0;
+			       for (int j = nextProductIndex +1; j < cert.getProducts().size(); j++ ) {
+			        	FSProduct product = cert.getProducts().get(j); 
+			        	addCellToTable(table, 3, product.getNumerator() + ". " + product.getTovar(), Element.ALIGN_LEFT, prgFont, 12f, 0f);
+			        	nextProductIndex++;
+			        	if (table.getLastCompletedRowIndex() == (i-1)) { break;}
+			       }
+	   	           
+	   	           addFooterNextPage(table, cert, prgFont);
+	            }
+		         
+		        document.add(table);
+	        }	
 	}	
 	
 	
-	
-	private void addFooterFirstPage(PdfPTable table, FSCertificate cert, Font prgFont) {
-        addCellToTable(table, 3, cert.getDeclaration(), Element.ALIGN_JUSTIFIED, prgFont, 0f, 0f, 24f);
-        addCellToTable(table, 3, "Срок действия с " + cert.getDateissue() + " по " + cert.getDateexpiry() + "  включительно.", 
-        		          		Element.ALIGN_LEFT, prgFont, 0f, 0f, 24f);
-        addCellToTable(table, 1, cert.getSigner().getJob(), Element.ALIGN_LEFT, prgFont, 0f, 0f, 48f);
-        addCellToTable(table, 1, "", Element.ALIGN_CENTER, prgFont, 0f, 0f, 486f);
-        addCellToTable(table, 1, cert.getSigner().getName(), Element.ALIGN_RIGHT, prgFont, 0f, 0f, 48f);
+	private void printHeightRows(PdfPTable table, int jjj) {
+		for (int jj = 0; jj < jjj; jj++) {
+        	LOG.info("Row " + jj + ": "+ table.getRowHeight(jj));
+        }
 	}
 
+	private void addBelCCIHeader(PdfPTable table, FSCertificate cert, Font font, int pageNumber, boolean flagOriginal) {
+		if (flagOriginal) {
+			addCellToTable(table, 3, 47.78f);
+		} else {
+			addCellToTable(table, 3, cert.getBlanks().get(pageNumber).getBlanknumber(), Element.ALIGN_RIGHT, font, 0f, 0f);
+			addCellToTable(table, 3, "БЕЛОРУССКАЯ ТОРГОВО-ПРОМЫШЛЕННАЯ ПАЛАТА", Element.ALIGN_CENTER, font, 18f, 18f, 9f);
+			addCellToTable(table, 3, "BELARUS CHAMBER OF COMMERCE AND INDUSTRY", Element.ALIGN_CENTER, font, 18f, 18f);
+		}
+	}
+
+	private void addBranchInfo(PdfPTable table, FSCertificate cert, Font font) {
+		String name = cert.getBranch().getName();
+        name = name.replaceFirst("услуг", "услуг\n");  		
+		addCellToTable(table, 3, name, Element.ALIGN_CENTER, font, 30f, 30f, 8f);
+        addCellToTable(table, 3, cert.getBranch().getAddress(), Element.ALIGN_CENTER, font, 54f, 54f);
+        addCellToTable(table, 3, "телефон: "+ cert.getBranch().getWork_phone() +"  факс: "+ cert.getBranch().getCell_phone() 
+        		+ "  e-mail: " + cert.getBranch().getEmail(), Element.ALIGN_CENTER, font, 36f, 36f);
+	}
+	
+	private void addFSCertificateHeader(PdfPTable table, FSCertificate cert, Font font, boolean flagOriginal) {
+		if (flagOriginal) {
+			addCellToTable(table, 3, 108.36f);
+		} else {
+			addCellToTable(table, 3, "СЕРТИФИКАТ", Element.ALIGN_CENTER, font, 72f, 72f, 20f);
+			addCellToTable(table, 3, "СВОБОДНОЙ ПРОДАЖИ", Element.ALIGN_CENTER, font, 72f, 72f);
+			addCellToTable(table, 3, "CERTIFICATE OF FREE SALE", Element.ALIGN_CENTER, font, 72f, 72f, 28f);
+		}
+    }
+	
+	private void addFSNumber(PdfPTable table, FSCertificate cert, Font font) {
+        addCellToTable(table, 1, cert.getCertnumber(), Element.ALIGN_LEFT, font, 0f, 0f,14f);
+        addCellToTable(table, 1, "", Element.ALIGN_CENTER, font, 0f, 0f, 14f);
+        addCellToTable(table, 1, cert.getDatecert(), Element.ALIGN_RIGHT, font, 0f, 0f, 14f);
+	}
+
+	private void addFooterFirstPage(PdfPTable table, FSCertificate cert, Font font) {
+        addCellToTable(table, 3, cert.getDeclaration(), Element.ALIGN_JUSTIFIED, font, 0f, 0f, 18f);
+        addCellToTable(table, 3, "Срок действия с " + cert.getDateissue() + " по " + cert.getDateexpiry() + "  включительно.", 
+        		          		Element.ALIGN_LEFT, font, 0f, 0f, 18f);
+        addCellToTable(table, 1, cert.getSigner().getJob(), Element.ALIGN_LEFT, font, 0f, 0f, 30f);
+        addCellToTable(table, 1, "", Element.ALIGN_CENTER, font, 0f, 0f, 30f);
+        addCellToTable(table, 1, cert.getSigner().getName(), Element.ALIGN_RIGHT, font, 0f, 0f, 30f);
+	}
+
+	private void addFooterNextPage(PdfPTable table, FSCertificate cert, Font font) {
+        addCellToTable(table, 1, cert.getSigner().getJob(), Element.ALIGN_LEFT, font, 0f, 0f, 30f);
+        addCellToTable(table, 1, "", Element.ALIGN_CENTER, font, 0f, 0f, 30f);
+        addCellToTable(table, 1, cert.getSigner().getName(), Element.ALIGN_RIGHT, font, 0f, 0f, 30f);
+	}
+
+	
+	private void addCellToTable(PdfPTable table, int colspan,  float fixedHeight) {
+        PdfPCell cell = new PdfPCell();
+        cell.setColspan(colspan);
+        cell.setBorder(PdfPCell.NO_BORDER);
+        cell.setFixedHeight(fixedHeight);
+        table.addCell(cell);
+     }
+	
 	private void addCellToTable(PdfPTable table, int colspan, String text, int alg, Font font, float left, float right, float spacingbefore) {
         PdfPCell cell = new PdfPCell();
         cell.setColspan(colspan);
