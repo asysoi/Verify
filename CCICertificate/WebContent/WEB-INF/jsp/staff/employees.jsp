@@ -74,7 +74,7 @@
 	});
 
 	function goToList(link) {
-		var url = link;
+		var url = link + "&employeetype=${employeetype}";
 		if (document.getElementById("filter").checked) {
 			url = url + "&filter="
 			        + document.getElementById("filter").checked;

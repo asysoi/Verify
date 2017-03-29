@@ -3,6 +3,7 @@
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -11,6 +12,7 @@ import org.apache.log4j.Logger;
 //import org.apache.logging.log4j.LogManager;
 //import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -25,12 +27,16 @@ import cci.config.client.ExportClientConfig;
 import cci.model.Client;
 import cci.repository.SQLBuilder;
 import cci.repository.client.SQLBuilderClient;
+import cci.repository.fscert.SQLBuilderFSCertificate;
+import cci.service.FieldType;
 import cci.service.Filter;
 import cci.service.cert.CertFilter;
 import cci.service.cert.XSLWriter;
 import cci.service.client.ClientService;
+import cci.service.fscert.FSFilter;
 import cci.service.client.ClientFilter;
 import cci.web.controller.ViewManager;
+import cci.web.controller.fscert.ViewFSCertificate;
 import cci.web.validator.ClientValidator;
 
 @Controller
@@ -48,6 +54,97 @@ public class ClientController {
 		this.clientValidator = clientValidator;
 	}
 
+	// ---------------------------------------------------------------------------------------
+	//  Main Request - Get List of Clients for Grid Rendering
+	// ---------------------------------------------------------------------------------------
+	@RequestMapping(value = "clientgrid.do", method = RequestMethod.GET)
+	public void listCertsForGrid (	
+				@RequestParam(value = "page", required = false) int page,
+				@RequestParam(value = "rows", required = false) int rows,
+				@RequestParam(value = "sidx", defaultValue = "name", required = false) String sidx,
+				@RequestParam(value = "sord", required = false) String sord,
+				@RequestParam(value = "name", required = false) String name,
+				@RequestParam(value = "address", required = false) String address,
+				@RequestParam(value = "unp", required = false) String unp,
+				@RequestParam(value = "work_phone", required = false) String work_phone,
+				@RequestParam(value = "email", required = false) String email,
+				Authentication aut,
+				HttpSession session, HttpServletResponse response, HttpServletRequest request,
+				ModelMap model) {
+			
+			LOG.info(request.getQueryString());
+			
+			Filter filter= new FSFilter();
+			if (name != null) {
+			      filter.setConditionValue("NAME", "NAME", "like", 
+			    		  name, FieldType.STRING);
+			}
+			
+			if (address != null) {
+			      filter.setConditionValue("ADDRESS", "ADDRESS", "like", 
+			    		  address, FieldType.STRING);
+			}
+			if (unp != null) {
+			      filter.setConditionValue("UNP", "UNP", "like", 
+			    		  unp, FieldType.STRING);
+			}
+			
+			if (work_phone != null) {
+			      filter.setConditionValue("WORK_PHONE", "WORK_PHONE", "like", 
+			    		  work_phone, FieldType.STRING);
+			}
+			if (email != null) {
+			      filter.setConditionValue("EMAIL", "EMAIL", "like", 
+			    		  email, FieldType.STRING);
+			}
+						
+			SQLBuilder builder = new SQLBuilderClient();
+			builder.setFilter(filter);
+			
+			int itemscount = clientService.getViewPageCount(builder);
+			int pagecount = itemscount/rows + (itemscount%rows > 0 ? 1 : 0);
+			
+			List<ViewClient> elements = clientService.readClientsPage(
+					page, rows,   
+					sidx, sord, builder);
+			
+			try {
+	    	   response.setContentType("text/xml;charset=utf-8"); 
+			   response.setCharacterEncoding("UTF-8");
+		       response.getWriter().println(createXMLFromList(elements, page,pagecount ,itemscount));
+			   response.flushBuffer();
+			} catch (Exception ex) {
+			   ex.printStackTrace();
+			   model.addAttribute("error", ex.getMessage());
+			}
+	}
+	
+
+	private String createXMLFromList(List<ViewClient> elements, int page, int pagecount, int itemscount) {
+			String xml;
+			xml = "<?xml version='1.0' encoding='utf-8'?>";
+			xml +=  "<rows>";
+			xml += "<page>"+ page + "</page>";
+			xml += "<total>"+pagecount+"</total>";
+			xml += "<records>"+itemscount+"</records>";
+
+			if (elements != null) {
+				for (ViewClient row : elements) {
+					xml += "<row id='"+ row.getId() + "'>";            
+					xml += "<cell><![CDATA["+row.getName()+"]]></cell>";
+					xml += "<cell><![CDATA["+row.getAddress()+"]]></cell>";
+					xml += "<cell><![CDATA["+row.getUnp()+"]]></cell>";
+					xml += "<cell><![CDATA["+row.getWork_phone()+"]]></cell>";
+					xml += "<cell><![CDATA["+row.getEmail()+"]]></cell>";
+					xml += "</row>";
+				}
+			}
+			xml +=  "</rows>";
+			return xml;
+	}
+	
+	
+	
 	// ---------------------------------------------------------------
 	// Get Clients List
 	// ---------------------------------------------------------------

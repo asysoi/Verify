@@ -128,7 +128,7 @@ public class EmployeeController {
 	}
 
 	// ---------------------------------------------------------------
-	// Get Employee List
+	// Get Employee List For Selection needs
 	// ---------------------------------------------------------------
 	@RequestMapping(value = "selemployees.do", method = RequestMethod.GET)
 	public String selectemployees(

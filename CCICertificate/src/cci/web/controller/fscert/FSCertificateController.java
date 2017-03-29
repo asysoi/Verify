@@ -73,7 +73,7 @@ public class FSCertificateController {
 	private EmployeeService employeeService;
 
 	// ---------------------------------------------------------------------------------------
-	//  Main Request - Get List of FS Certificates
+	//  Main Request - Get List of FS Certificates for Grid Rendering
 	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "fsgrid.do", method = RequestMethod.GET)
 	public void listCertsForGrid (	
@@ -486,15 +486,15 @@ public class FSCertificateController {
 	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "selclient.do",  method = RequestMethod.GET)
 	public void linkClientToFSCertificate(
-			@RequestParam(value = "id", required = true) Long certid,
+			@RequestParam(value = "id", required = true) Long clientid,
 			@RequestParam(value = "clienttype", required = true) String clienttype,
 			@RequestParam(value = "lang", required = true) String lang,
 			HttpSession session, HttpServletResponse response, ModelMap model) {
 		
 			try {
-				  LOG.info("Exporter ID: " + certid);
+				  LOG.info("Exporter ID: " + clientid);
 				  FSCertificate cert = (FSCertificate)model.get("fscert");
-				  Client client = clientService.readClient(certid.longValue());
+				  Client client = clientService.readClient(clientid.longValue());
 				 
 				  if (client!=null && cert!=null) {
 					  if ("exporter".equals(clienttype)) {
@@ -515,7 +515,7 @@ public class FSCertificateController {
 						  response.getWriter().println(getValue(client.getName()) + "; " + getValue(client.getAddress()));
 					  }
 					  response.flushBuffer();
-					  LOG.info("Linked exporter to certificate: " + cert);
+					  LOG.info("Linked exporter to certificate: " + cert.getId());
 				  } else {	 
 					  model.addAttribute("error", "Сертификат или экспортер не найдены");
 				  }
@@ -538,9 +538,11 @@ public class FSCertificateController {
 			HttpSession session, HttpServletResponse response, ModelMap model) {
 		
 			try {
-				  LOG.info("Employee ID: " + eid);
 				  FSCertificate cert = (FSCertificate)model.get("fscert");
 				  Employee emp = employeeService.readEmployee(eid.longValue());
+				  LOG.info("Linked Employee ID: " + eid);
+				  LOG.info("Current Expert ID: " + (cert.getExpert() == null ? "Not defined" : cert.getExpert().getId()));
+				  LOG.info("Current Signer ID: " + (cert.getSigner() == null ? "Not defined" : cert.getSigner().getId()));
 				 
 				  if (emp!=null && cert!=null) {
 					  if ("expert".equals(etype)) {
@@ -561,7 +563,9 @@ public class FSCertificateController {
 						  response.getWriter().println(getValue(emp.getJob()) + " " + getValue(emp.getName()));
 					  }
 					  response.flushBuffer();
-					  LOG.info("Linked employee to certificate: " + cert);
+					  // LOG.info("Linked employee to certificate: " + cert);
+					  LOG.info("Current Expert ID after replacmnet: " + (cert.getExpert() == null ? "Not defined" : cert.getExpert().getId()));
+					  LOG.info("Current Signer ID after replacmnet: " + (cert.getSigner() == null ? "Not defined" : cert.getSigner().getId()));
 				  } else {	 
 					  model.addAttribute("error", "Сертификат или сотрудник не найдены");
 				  }
