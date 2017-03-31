@@ -66,7 +66,7 @@ public class ClientController {
 				@RequestParam(value = "name", required = false) String name,
 				@RequestParam(value = "address", required = false) String address,
 				@RequestParam(value = "unp", required = false) String unp,
-				@RequestParam(value = "work_phone", required = false) String work_phone,
+				@RequestParam(value = "phone", required = false) String phone,
 				@RequestParam(value = "email", required = false) String email,
 				Authentication aut,
 				HttpSession session, HttpServletResponse response, HttpServletRequest request,
@@ -89,9 +89,9 @@ public class ClientController {
 			    		  unp, FieldType.STRING);
 			}
 			
-			if (work_phone != null) {
-			      filter.setConditionValue("WORK_PHONE", "WORK_PHONE", "like", 
-			    		  work_phone, FieldType.STRING);
+			if (phone != null) {
+			      filter.setConditionValue("PHONE", "PHONE", "like", 
+			    		  phone, FieldType.STRING);
 			}
 			if (email != null) {
 			      filter.setConditionValue("EMAIL", "EMAIL", "like", 
@@ -134,7 +134,7 @@ public class ClientController {
 					xml += "<cell><![CDATA["+row.getName()+"]]></cell>";
 					xml += "<cell><![CDATA["+row.getAddress()+"]]></cell>";
 					xml += "<cell><![CDATA["+row.getUnp()+"]]></cell>";
-					xml += "<cell><![CDATA["+row.getWork_phone()+"]]></cell>";
+					xml += "<cell><![CDATA["+row.getPhone()+"]]></cell>";
 					xml += "<cell><![CDATA["+row.getEmail()+"]]></cell>";
 					xml += "</row>";
 				}
@@ -222,7 +222,7 @@ public class ClientController {
 		cmanager.setHnames(new String[] { "Наименование компании", "Адрес",
 				"УНП", "Банк", "Контактный телефон" });
 		cmanager.setOrdnames(new String[] { "name", "address", "unp", "bname",
-				"work_phone" });
+				"phone" });
 		cmanager.setWidths(new int[] { 25, 20, 15, 20, 20 });
 		model.addAttribute("cmanager", cmanager);
 		return cmanager;

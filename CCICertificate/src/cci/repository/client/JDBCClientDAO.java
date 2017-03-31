@@ -17,10 +17,14 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import cci.model.Client;
+import cci.model.ClientLocale;
 import cci.model.cert.Country;
+import cci.model.fscert.FSProduct;
 import cci.repository.SQLBuilder;
 import cci.service.SQLQueryUnit;
 import cci.web.controller.client.ViewClient;
@@ -131,6 +135,11 @@ public class JDBCClientDAO implements ClientDAO {
 					new Object[] { id },
 					new BeanPropertyRowMapper<Client>(Client.class));
 			
+			if  (item != null) {
+				sql = "select * from CCI_CLIENT_LOCALE WHERE IDCLIENT = ? ";
+				item.setLocales(template.getJdbcOperations().query(sql, new Object[] { item.getId() },
+					new BeanPropertyRowMapper<ClientLocale>(ClientLocale.class)));
+			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -141,21 +150,41 @@ public class JDBCClientDAO implements ClientDAO {
 	// Save/Add Client
 	// ---------------------------------------------------------------
 	public void saveClient(Client client) {
+		long id = 0;
+		
 		String sql = "insert into cci_client "
 				+ "(id, "
-				+ "name, city, line,cindex,office,building,work_phone,cell_phone,"
-				+ "unp, okpo, bname,bcity,bline,bindex,boffice,bbuilding,account,"
-				+ "bunp, email, bemail,codecountry,bcodecountry, enname, encity, enline, version) "
+				+ "name, city, street, cindex, office, building, phone, cell, fax, "
+				+ "unp, okpo, bname, bcity, bstreet, bindex, boffice, bbuilding, account,"
+				+ "bunp, email, bemail,codecountry,bcodecountry, version) "
 				+ "values (id_client_seq.nextval, "
-				+ ":name,:city,:line,:cindex,:office,:building,:work_phone,:cell_phone,"
-				+ ":unp, :okpo, :bname,:bcity,:bline,:bindex,:boffice,:bbuilding,:account,"
-				+ ":bunp,:email,:bemail,:codecountry,:bcodecountry, :enname, :encity, :enline, :version) ";
+				+ ":name,:city,:street,:cindex,:office,:building,:phone,:cell, :fax,"
+				+ ":unp, :okpo, :bname,:bcity,:bstreet,:bindex,:boffice,:bbuilding,:account,"
+				+ ":bunp,:email,:bemail,:codecountry,:bcodecountry,:version) ";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(client);
 
 		try {
-			template.update(sql, parameters);
+
+			GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+			int row = template.update(sql, parameters, keyHolder,
+					new String[] { "id" });
+			id = keyHolder.getKey().intValue();
+
+			if (row > 0) {
+				sql = "insert into CCI_CLIENT_LOCALE(idclient, locale, name, street, city) values ("
+						+ id + ",:locale, :name, :street, :city)";
+				
+				if (client.getLocales() != null && client.getLocales().size() > 0) {
+					SqlParameterSource[] batch = SqlParameterSourceUtils
+							.createBatch(client.getLocales().toArray());
+					int[] updateCounts = template.batchUpdate(sql, batch);
+				}
+				
+				client.setId(id);
+			}
 			client.setVersion(client.getVersion() + 1);
+			
 		} catch (Exception ex) {
 			LOG.info("Error - client save: " + ex.toString());
 		}
@@ -166,19 +195,43 @@ public class JDBCClientDAO implements ClientDAO {
 	// ---------------------------------------------------------------
 	public void updateClient(Client client) {
 		String sql = "update cci_client set "
-				+ "name = :name, city =:city, line =:line, cindex=:cindex, office=:office,"
-				+ "building=:building, work_phone=:work_phone, cell_phone=:cell_phone,"
-				+ "unp=:unp, okpo=:okpo, bname=:bname, bcity=:bcity, bline=:bline,"
+				+ "name = :name, city =:city, street =:street, cindex=:cindex, office=:office,"
+				+ "building=:building, phone=:phone, cell=:cell,"
+				+ "unp=:unp, okpo=:okpo, bname=:bname, bcity=:bcity, bstreet=:bstreet,"
 				+ "bindex=:bindex, boffice=:boffice, bbuilding=:bbuilding, account=:account,"
 				+ "bunp=:bunp, email=:email, bemail=:bemail, codecountry=:codecountry,"
-				+ "bcodecountry=:bcodecountry, enname=:enname, encity=:encity, enline=:enline, version = :version + 1 "
+				+ "bcodecountry=:bcodecountry, version = :version + 1 "
 				+ "WHERE id = :id and version=:version";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(client);
+		
 
 		try {
-			template.update(sql, parameters);
-			client.setVersion(client.getVersion() + 1);
+			int row = template.update(sql, parameters);
+			
+			if (row > 0) {
+				
+				template.getJdbcOperations().update(
+						"delete from CCI_CLIENT_LOCALE where idclient = ?",
+						client.getId());
+				
+				sql = "insert into CCI_CLIENT_LOCALE(idclient, locale, name, street, city) values ("
+						+ client.getId() + ", :locale, :name, :street, :city)";
+				
+				LOG.info("Client locales: " + client.getLocales());
+				
+				if (client.getLocales() != null && client.getLocales().size() > 0) {
+					SqlParameterSource[] batch = SqlParameterSourceUtils
+							.createBatch(client.getLocales().toArray());
+					int[] updateCounts = template.batchUpdate(sql, batch);
+				}
+				
+				client.setVersion(client.getVersion() + 1);
+				
+			} else {
+				throw new RuntimeException("Не удалось изменить контрагента " + client.getName() + " по неизвестной причине.");
+			}
+			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

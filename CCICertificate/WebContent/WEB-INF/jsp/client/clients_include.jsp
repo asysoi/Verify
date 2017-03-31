@@ -261,7 +261,7 @@
 				<td>${client.address}</td>
                 <td>${client.unp}</td>
                 <td>${client.bname}</td>
-                <td>${client.work_phone}</td>
+                <td>${client.phone}</td>
 			</tr>
 		</c:forEach>
 	</table>

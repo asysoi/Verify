@@ -222,7 +222,7 @@ public class FSPDFBuilder extends PDFBuilder {
         name = name.replaceFirst("услуг", "услуг\n");  		
 		addCellToTable(table, 3, name, Element.ALIGN_CENTER, font, 30f, 30f, 8f);
         addCellToTable(table, 3, cert.getBranch().getAddress(), Element.ALIGN_CENTER, font, 54f, 54f);
-        addCellToTable(table, 3, "телефон: "+ cert.getBranch().getWork_phone() +"  факс: "+ cert.getBranch().getCell_phone() 
+        addCellToTable(table, 3, "телефон: "+ cert.getBranch().getPhone() +"  факс: "+ cert.getBranch().getCell() 
         		+ "  e-mail: " + cert.getBranch().getEmail(), Element.ALIGN_CENTER, font, 36f, 36f);
 	}
 	

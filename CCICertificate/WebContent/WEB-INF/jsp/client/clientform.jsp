@@ -68,13 +68,13 @@
 		<table class="filter">
 			<tr>
 				<td>Телефон</td>
-				<td><form:input path="work_phone" id="work_phone" /><a
-					href="javascript:clearelement($('#work_phone'));"> <img
+				<td><form:input path="phone" id="phone" /><a
+					href="javascript:clearelement($('#phone'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 				<td>Мобильный телефон</td>
-				<td><form:input path="cell_phone" id="cell_phone" /><a
-					href="javascript:clearelement($('#cell_phone'));"> <img
+				<td><form:input path="cell" id="cell" /><a
+					href="javascript:clearelement($('#cell'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 			</tr>
@@ -127,16 +127,16 @@
 			</tr>
 			<tr>	
 				<td>Улица</td>
-				<td><form:input path="line" id="line"/><a
-					href="javascript:clearelement($('#line'));"> <img
+				<td><form:input path="street" id="street"/><a
+					href="javascript:clearelement($('#street'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 				<td>Street</td>
-				<td><form:input path="enline" id="enline" />
-				<a	href="javascript:translit($('#line'), $('#enline'));"> 
+				<td><form:input path="enstreet" id="enstreet" />
+				<a	href="javascript:translit($('#street'), $('#enstreet'));"> 
 				<i class="glyphicon glyphicon-refresh"></i>
 				</a>
-				<a href="javascript:clearelement($('#enline'));"> <img
+				<a href="javascript:clearelement($('#enstreet'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 				
@@ -204,8 +204,8 @@
 			</tr>
 			<tr>
 				<td>Улица</td>
-				<td><form:input path="bline" id="bline" /><a
-					href="javascript:clearelement($('#bline'));"> <img
+				<td><form:input path="bstreet" id="bstreet" /><a
+					href="javascript:clearelement($('#bstreet'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 			</tr>

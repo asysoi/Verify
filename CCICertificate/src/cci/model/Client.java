@@ -1,28 +1,39 @@
 ﻿package cci.model;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
+
+import cci.model.fscert.FSProduct;
+import cci.web.controller.client.ClientController;
 
 @XmlRootElement(name = "client")
 @Component
-@XmlType(propOrder = {"name", "enname","codecountry" , "cindex", "city", "encity", "line", "enline", "office", "building", 
-		"work_phone", "cell_phone", "email", "unp", "okpo", "account", "bname", "bindex", "bcodecountry"
-		,"bcity", "bline", "boffice", "bbuilding", "bwork_phone", "bcell_phone", "bemail", "bunp"})
+@XmlType(propOrder = {"name", "codecountry" , "cindex", "city", "street", "office", "building", 
+		"phone", "cell", "fax", "email", "unp", "okpo", "account", "bname", "bindex", "bcodecountry"
+		,"bcity", "bstreet", "boffice", "bbuilding", "bphone", "bcell", "bemail", "bunp"})
 
 public class Client {
+	private static final Logger LOG = Logger.getLogger(Client.class);
+	
 	private long id;		
 	private String name;
 	private String codecountry;
 	private String cindex;
 	private String city;		
-	private String line;		
+	private String street;		
 	private String office;
 	private String building;
-	private String work_phone;	
-	private String cell_phone;
+	private String phone;	
+	private String cell;
+	private String fax;
 	private String email;
 	private String unp;
 	private String okpo;
@@ -31,19 +42,16 @@ public class Client {
 	private String bindex;
 	private String bcodecountry;
 	private String bcity;		
-	private String bline;		
+	private String bstreet;		
 	private String boffice;
 	private String bbuilding;
-	private String bwork_phone;	
-	private String bcell_phone;
+	private String bphone;	
+	private String bcell;
 	private String bemail;
 	private String bunp;
 	private String address;
-	private String enaddress;
-	private String enname;
-	private String encity;		
-	private String enline;
-	private long version;
+	private List<ClientLocale> locales;
+    private long version;
 	private int locked;
 	
 	public void init(Client client) {
@@ -52,11 +60,12 @@ public class Client {
 		this.codecountry = client.getCodecountry();
 		this.cindex = client.getCindex();
 		this.city = client.getCity();
-		this.line = client.getLine();
+		this.street = client.getStreet();
 		this.office = client.getOffice();
 		this.building = client.getBuilding();
-		this.work_phone = client.getWork_phone();
-		this.cell_phone = client.getCell_phone();
+		this.phone = client.getPhone();
+		this.cell = client.getCell();
+		this.fax = client.getFax();
 		this.email = client.getEmail();
 		this.unp = client.getUnp();
 		this.okpo = client.getOkpo();
@@ -65,20 +74,84 @@ public class Client {
 		this.bindex = client.getBindex();
 		this.bcodecountry = client.getBcodecountry();
 		this.bcity = client.getBcity();
-		this.bline = client.getBline();
+		this.bstreet = client.getBstreet();
 		this.boffice = client.getBoffice();
 		this.bbuilding = client.getBbuilding();
-		this.bwork_phone = client.getBwork_phone();
-		this.bcell_phone = client.getBcell_phone();
+		this.bphone = client.getBphone();
+		this.bcell = client.getBcell();
 		this.bemail = client.getBemail();
 		this.bunp = client.getBunp();
 		this.address = client.getAddress();
-		this.enaddress = client.getEnaddress();
-		this.enname = client.getEnname();
-		this.encity = client.getEncity();		
-		this.enline = client.getEnline();
 		this.version = client.getVersion();
 		this.locked = client.getLocked();
+		this.locales = cloneLocales(client.getLocales()); 
+	}
+	
+	private List<ClientLocale> cloneLocales(List<ClientLocale> locales) {
+		List<ClientLocale> clocales = null;
+		if (locales != null) {
+			clocales = new ArrayList<ClientLocale>();
+			
+			for (ClientLocale element : locales) {
+				clocales.add(element.clone());
+			}
+		}	
+		return clocales;
+	}
+
+	@XmlTransient	
+	public String getEnname() {
+	   ClientLocale locale = getLocale("EN");
+	   return locale != null ? locale.getName() : "";	
+	}
+	
+    public void setEnname(String enname) {
+    	ClientLocale locale = getLocale("EN");
+    	LOG.info("locale = " + locale);
+    	
+    	if (locale == null) {
+    		locale = new ClientLocale();
+    		locale.setLocale("EN");
+    		locales.add(locale);
+    	}
+    	
+    	locale.setName(enname);
+	}
+    
+	@XmlTransient	
+	public String getEnstreet() {
+	   ClientLocale locale = getLocale("EN");
+	   return locale != null ? locale.getStreet() : "";	
+	}
+	
+    public void setEnstreet(String enstreet) {
+    	ClientLocale locale = getLocale("EN");
+    	
+    	if (locale == null) {
+    		locale = new ClientLocale();
+    		locale.setLocale("EN");
+    		locales.add(locale);
+    	}
+    	
+    	locale.setStreet(enstreet);
+	}
+
+	@XmlTransient	
+	public String getEncity() {
+	  ClientLocale locale = getLocale("EN");
+	  return locale != null ? locale.getCity() : "";	
+	}
+	
+    public void setEncity(String encity) {
+    	ClientLocale locale = getLocale("EN");
+    	
+    	if (locale == null) {
+    		locale = new ClientLocale();
+    		locale.setLocale("EN");
+    		locales.add(locale);
+    	}
+    	
+    	locale.setCity(encity);
 	}
 	
 	@XmlTransient	
@@ -88,6 +161,7 @@ public class Client {
 	public void setAddress(String address) {
 		this.address = address;
 	}
+	
 	@XmlTransient
 	public long getId() {
 		return id;
@@ -107,11 +181,11 @@ public class Client {
 	public void setCity(String city) {
 		this.city = city;
 	}
-	public String getLine() {
-		return line;
+	public String getStreet() {
+		return street;
 	}
-	public void setLine(String line) {
-		this.line = line;
+	public void setStreet(String street) {
+		this.street = street;
 	}
 	public String getCindex() {
 		return cindex;
@@ -131,17 +205,17 @@ public class Client {
 	public void setBuilding(String building) {
 		this.building = building;
 	}
-	public String getWork_phone() {
-		return work_phone;
+	public String getPhone() {
+		return phone;
 	}
-	public void setWork_phone(String work_phone) {
-		this.work_phone = work_phone;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
-	public String getCell_phone() {
-		return cell_phone;
+	public String getCell() {
+		return cell;
 	}
-	public void setCell_phone(String cell_phone) {
-		this.cell_phone = cell_phone;
+	public void setCell(String cell) {
+		this.cell = cell;
 	}
 	public String getEmail() {
 		return email;
@@ -179,11 +253,11 @@ public class Client {
 	public void setBcity(String bcity) {
 		this.bcity = bcity;
 	}
-	public String getBline() {
-		return bline;
+	public String getBstreet() {
+		return bstreet;
 	}
-	public void setBline(String bline) {
-		this.bline = bline;
+	public void setBstreet(String bstreet) {
+		this.bstreet = bstreet;
 	}
 	public String getBindex() {
 		return bindex;
@@ -203,17 +277,17 @@ public class Client {
 	public void setBbuilding(String bbuilding) {
 		this.bbuilding = bbuilding;
 	}
-	public String getBwork_phone() {
-		return bwork_phone;
+	public String getBphone() {
+		return bphone;
 	}
-	public void setBwork_phone(String bwork_phone) {
-		this.bwork_phone = bwork_phone;
+	public void setBphone(String bphone) {
+		this.bphone = bphone;
 	}
-	public String getBcell_phone() {
-		return bcell_phone;
+	public String getBcell() {
+		return bcell;
 	}
-	public void setBcell_phone(String bcell_phone) {
-		this.bcell_phone = bcell_phone;
+	public void setBcell_phone(String bcell) {
+		this.bcell = bcell;
 	}
 	public String getBemail() {
 		return bemail;
@@ -240,39 +314,13 @@ public class Client {
 		this.bcodecountry = bcodecountry;
 	}
 	
-	@XmlTransient
-	public String getEnaddress() {
-		return enaddress;
+	public String getFax() {
+		return fax;
 	}
-
-	public void setEnaddress(String enaddress) {
-		this.enaddress = enaddress;
+	public void setFax(String fax) {
+		this.fax = fax;
 	}
-
-	public String getEnname() {
-		return enname;
-	}
-
-	public void setEnname(String enname) {
-		this.enname = enname;
-	}
-
-	public String getEncity() {
-		return encity;
-	}
-
-	public void setEncity(String encity) {
-		this.encity = encity;
-	}
-
-	public String getEnline() {
-		return enline;
-	}
-
-	public void setEnline(String enline) {
-		this.enline = enline;
-	}
-
+	
 	@XmlTransient
 	public long getVersion() {
 		return version;
@@ -282,6 +330,17 @@ public class Client {
 		this.version = version;
 	}
 
+	public List<ClientLocale> getLocales() {
+		if (locales == null) {
+			locales = new ArrayList<ClientLocale>();
+		}
+		return locales;
+	}
+
+	public void setLocales(List<ClientLocale> locales) {
+		this.locales = locales;
+	}
+	
 	@XmlTransient
 	public int getLocked() {
 		return locked;
@@ -294,16 +353,26 @@ public class Client {
 	@Override
 	public String toString() {
 		return "Client [id=" + id + ", name=" + name + ", codecountry=" + codecountry + ", cindex=" + cindex + ", city="
-				+ city + ", line=" + line + ", office=" + office + ", building=" + building + ", work_phone="
-				+ work_phone + ", cell_phone=" + cell_phone + ", email=" + email + ", unp=" + unp + ", okpo=" + okpo
+				+ city + ", street=" + street + ", office=" + office + ", building=" + building + ", phone=" + phone
+				+ ", cell=" + cell + ", fax=" + fax + ", email=" + email + ", unp=" + unp + ", okpo=" + okpo
 				+ ", account=" + account + ", bname=" + bname + ", bindex=" + bindex + ", bcodecountry=" + bcodecountry
-				+ ", bcity=" + bcity + ", bline=" + bline + ", boffice=" + boffice + ", bbuilding=" + bbuilding
-				+ ", bwork_phone=" + bwork_phone + ", bcell_phone=" + bcell_phone + ", bemail=" + bemail + ", bunp="
-				+ bunp + ", address=" + address + ", enaddress=" + enaddress + ", enname=" + enname + ", encity="
-				+ encity + ", enline=" + enline + ", version=" + version + ", locked=" + locked + "]";
+				+ ", bcity=" + bcity + ", bstreet=" + bstreet + ", boffice=" + boffice + ", bbuilding=" + bbuilding
+				+ ", bwork_phone=" + bphone + ", bcell_phone=" + bcell + ", bemail=" + bemail + ", bunp="
+				+ bunp + ", address=" + address + ", locales=" + locales + ", version=" + version + ", locked=" + locked
+				+ "]";
 	}
 
-	
-	
-	
+	public ClientLocale getLocale(String locale) {
+		ClientLocale rlocale = null;
+		
+		if (getLocales() != null) {
+			for (ClientLocale item : locales) {
+				if (locale.equals(item.getLocale())) {
+					rlocale = item;
+					break;
+				}
+			}
+		} 
+		return rlocale;
+	}
 }

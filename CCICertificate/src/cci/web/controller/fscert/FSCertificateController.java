@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import cci.config.fscert.ExportFSCertConfig;
 import cci.model.Client;
+import cci.model.ClientLocale;
 import cci.model.Employee;
 import cci.model.cert.Certificate;
 import cci.model.fscert.Expert;
@@ -509,10 +510,12 @@ public class FSCertificateController {
 				
 					  response.setContentType("text/html; charset=UTF-8");
 					  response.setCharacterEncoding("UTF-8");
-					  if ("EN".equals(lang)) {
-					      response.getWriter().println(getValue(client.getEnname()) + "; " + getValue(client.getEnaddress()));
+					  
+					  if ("RU".equals(lang)) {
+						  response.getWriter().println(getValue(client.getName()) + "; " + getValue(client.getAddress()));						  
 					  } else {
-						  response.getWriter().println(getValue(client.getName()) + "; " + getValue(client.getAddress()));
+						  ClientLocale locale = client.getLocale(lang);
+					      response.getWriter().println(getValue(locale.getName()) + "; " + getValue(locale.getAddress()));
 					  }
 					  response.flushBuffer();
 					  LOG.info("Linked exporter to certificate: " + cert.getId());
@@ -616,14 +619,15 @@ public class FSCertificateController {
 	private String getClientName(Client client, String lang) {
         String ret = "";
         
-        if ("EN".equals(lang)) {
-        	ret = (client.getEnname() != null ? client.getEnname() : "")   
-                  +  (client.getEnname() != null && client.getEnaddress() != null ? ", " : "") 
-                  + (client.getEnaddress() != null ? client.getEnaddress() : "");
-        } else {
+        if ("RU".equals(lang)) {
         	ret = (client.getName() != null ? client.getName() : "")   
-        		  + (client.getName() != null && client.getAddress() != null ? ", " : "")
-                  + (client.getAddress() != null ? client.getAddress() : "");
+          		  + (client.getName() != null && client.getAddress() != null ? ", " : "")
+                    + (client.getAddress() != null ? client.getAddress() : "");
+        } else {
+        	ClientLocale locale = client.getLocale(lang);
+        	ret = (locale.getName() != null ? locale.getName() : "")   
+                  +  (locale.getName() != null && locale.getAddress() != null ? ", " : "") 
+                  +  (locale.getAddress() != null ? client.getAddress() : "");
         }
 		return  ret;
 	}

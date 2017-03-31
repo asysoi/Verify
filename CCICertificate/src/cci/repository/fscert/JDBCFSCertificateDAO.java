@@ -319,7 +319,7 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 				if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
 				sqlwhere += " city = :city ";   
 			}
-			if (client.getLine() != null && !client.getLine().isEmpty()) {
+			if (client.getStreet() != null && !client.getStreet().isEmpty()) {
 				if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
 				sqlwhere += " line = :line ";   
 			}
