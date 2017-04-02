@@ -25,7 +25,7 @@
 <h4 align="center">BELARUSIAN CHAMBER OF COMMERCE AND INDUSTRY</h4>
 
 <h4 align="center"><b>${fscert.branch.name}</b></h4>
-<h4 align="center"><b>${fscert.branch.cindex}, ${fscert.branch.line}, ${fscert.branch.building}, ${fscert.branch.city}, Республика Беларусь</b></h4>
+<h4 align="center"><b>${fscert.branch.cindex}, ${fscert.branch.street}, ${fscert.branch.building}, ${fscert.branch.city}, Республика Беларусь</b></h4>
 
 <h4 align="center"><b>СЕРТИФИКАТ СВОБОДНОЙ ПРОДАЖИ</b></h4>
 <h4 align="center"><b>CERTIFICATE OF FREE SALE</b></h4>
@@ -38,7 +38,7 @@
 <p>Выдан для представления в: ${fcert.codecountrytarget}</p>
 
 <table><tr><td>Экспортер:</td>
-<td> ${fscert.exporter.name}, ${fscert.exporter.cindex}, ${fscert.exporter.line}, ${fscert.exporter.building}, 
+<td> ${fscert.exporter.name}, ${fscert.exporter.cindex}, ${fscert.exporter.street}, ${fscert.exporter.building}, 
 ${fscert.exporter.city}, Республика Беларусь  </td></tr>
 </table>
  

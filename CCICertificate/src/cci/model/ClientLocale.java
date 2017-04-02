@@ -5,16 +5,25 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.springframework.stereotype.Component;
 
-@XmlRootElement(name = "clientlocale")
+@XmlRootElement(name = "clientlocales")
 @Component
 @XmlType(propOrder = { "locale", "name", "city", "street" })
 
 public class ClientLocale {
+	private long id;
 	private String locale;
 	private String name;
 	private String city;
 	private String street;
 	private String address;
+	
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
 
 	public String getLocale() {
 		return locale;
@@ -58,6 +67,7 @@ public class ClientLocale {
 	
 	public ClientLocale clone() {
 		ClientLocale clocale = new ClientLocale();
+		clocale.setId(id);
 		clocale.setLocale(locale);
 		clocale.setCity(city);
 		clocale.setStreet(street);

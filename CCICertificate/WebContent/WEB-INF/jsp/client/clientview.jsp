@@ -32,9 +32,9 @@
 	<table class="filter">
 		<tr>
 			<td>Телефон:</td>
-			<td>${client.work_phone}</td>
+			<td>${client.phone}</td>
 			<td>Мобильный телефон:</td>
-			<td>${client.cell_phone}</td>
+			<td>${client.cell}</td>
 		</tr>
 		<tr>
 			<td>Адрес электронной почты:</td>
@@ -59,7 +59,7 @@
 			<td>Город:</td>
 			<td>${client.city}</td>
 			<td>Улица:</td>
-			<td>${client.line}</td>
+			<td>${client.street}</td>
 		</tr>
 		<tr>
 			<td>Номер дома:</td>
@@ -90,7 +90,7 @@
 			<td>Город:</td>
 			<td>${client.bcity}</td>
 			<td>Улица:</td>
-			<td>${client.bline}</td>
+			<td>${client.bstreet}</td>
 		</tr>
 		<tr>
 			<td>Номер дома:</td>

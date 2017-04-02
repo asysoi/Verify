@@ -28,6 +28,7 @@ import cci.config.fscert.ExportFSCertConfig;
 import cci.model.Client;
 import cci.model.ClientLocale;
 import cci.model.Employee;
+import cci.model.EmployeeLocale;
 import cci.model.cert.Certificate;
 import cci.model.fscert.Expert;
 import cci.model.fscert.Exporter;
@@ -511,11 +512,15 @@ public class FSCertificateController {
 					  response.setContentType("text/html; charset=UTF-8");
 					  response.setCharacterEncoding("UTF-8");
 					  
-					  if ("RU".equals(lang)) {
-						  response.getWriter().println(getValue(client.getName()) + "; " + getValue(client.getAddress()));						  
-					  } else {
+					  
+					  if (!"RU".equals(lang)) {
 						  ClientLocale locale = client.getLocale(lang);
-					      response.getWriter().println(getValue(locale.getName()) + "; " + getValue(locale.getAddress()));
+						  if (locale != null) {
+					        response.getWriter().println(getValue(locale.getName()) + "; " + getValue(locale.getAddress()));
+ 			        	  } else {
+ 			        		 response.getWriter().println("Не определено для выбранного языка");
+				          }
+						  response.getWriter().println("("+getValue(client.getName()) + "; " + getValue(client.getAddress())+")");
 					  }
 					  response.flushBuffer();
 					  LOG.info("Linked exporter to certificate: " + cert.getId());
@@ -619,15 +624,21 @@ public class FSCertificateController {
 	private String getClientName(Client client, String lang) {
         String ret = "";
         
-        if ("RU".equals(lang)) {
-        	ret = (client.getName() != null ? client.getName() : "")   
-          		  + (client.getName() != null && client.getAddress() != null ? ", " : "")
+        
+        ret = (client.getName() != null ? client.getName() : "")   
+         		  + (client.getName() != null && client.getAddress() != null ? ", " : "")
                     + (client.getAddress() != null ? client.getAddress() : "");
-        } else {
+        
+        if (!"RU".equals(lang)) {
         	ClientLocale locale = client.getLocale(lang);
-        	ret = (locale.getName() != null ? locale.getName() : "")   
+        	if (locale != null) {
+        	  ret = (locale.getName() != null ? locale.getName() : "")   
                   +  (locale.getName() != null && locale.getAddress() != null ? ", " : "") 
-                  +  (locale.getAddress() != null ? client.getAddress() : "");
+                  +  (locale.getAddress() != null ? client.getAddress() : "")
+                  + "(" + ret + ")";
+        	} else {
+        		ret = "Не определено для выбранного языка" + "(" + ret + ")";
+        	}
         }
 		return  ret;
 	}
@@ -635,12 +646,18 @@ public class FSCertificateController {
 	private String getEmployeeName(Employee employee, String lang) {
         String ret = "";
         
-        if ("EN".equals(lang)) {
-        	ret = (employee.getEnjob() != null ? employee.getEnjob() : "")  + " " 
-                  + (employee.getEnname() != null ? employee.getEnname() : "");
-        } else {
-        	ret = (employee.getJob() != null ? employee.getJob() : "") 
-                 + " " + (employee.getName() != null ? employee.getName() : "");        	        	
+        ret = (employee.getJob() != null ? employee.getJob() : "")  + " " 
+                  + (employee.getName() != null ? employee.getName() : "");
+        
+        if (!"RU".equals(lang)) {
+        	EmployeeLocale locale = employee.getLocale(lang);
+        	if (locale != null) {
+        		ret = (locale.getJob() != null ? locale.getJob() : "") 
+        	  		  + " " + (locale.getName() != null ? locale.getName() : "")
+        			  + "(" + ret + ")";
+        	} else {
+        		ret = "Не определено для выбранного языка" + "(" + ret + ")";
+        	}
         }
 		return  ret;
 	}

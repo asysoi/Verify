@@ -56,13 +56,13 @@
 		<table class="filter">
 			<tr>
 				<td>Телефон</td>
-				<td><form:input size="12" path="viewclient.work_phone" id="work_phone" /><a
-					href="javascript:clearelement($('#work_phone'));"> <img
+				<td><form:input size="12" path="viewclient.phone" id="phone" /><a
+					href="javascript:clearelement($('#phone'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 				<td>Мобильный телефон</td>
-				<td><form:input size="12" path="viewclient.cell_phone" id="cell_phone" /><a
-					href="javascript:clearelement($('#cell_phone'));"> <img
+				<td><form:input size="12" path="viewclient.cell" id="cell" /><a
+					href="javascript:clearelement($('#cell'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 			</tr>
@@ -99,8 +99,8 @@
 			</tr>
 			<tr>
 				<td>Улица</td>
-				<td><form:input path="viewclient.line" id="line" /><a
-					href="javascript:clearelement($('#line'));"> <img
+				<td><form:input path="viewclient.street" id="street" /><a
+					href="javascript:clearelement($('#street'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 			</tr>

@@ -404,7 +404,7 @@
 <h3 align="center"><b>СЕРТИФИКАТ СВОБОДНОЙ ПРОДАЖИ</b></h3>
 <h4 align="center"><b>${fscert.branch.name}<br>
 ${fscert.branch.address}, Республика Беларусь<br>
-телефон: ${fscert.branch.work_phone}, факс: ${fscert.branch.cell_phone}, e-mail: ${fscert.branch.email} </b></h4>
+телефон: ${fscert.branch.phone}, факс: ${fscert.branch.fax}, e-mail: ${fscert.branch.email} </b></h4>
 
 <form:form id="fscert" method="POST" modelAttribute="fscert">
 <form:hidden path="id"/>

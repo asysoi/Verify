@@ -16,11 +16,15 @@ import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import cci.model.Client;
+import cci.model.ClientLocale;
 import cci.model.Department;
 import cci.model.Employee;
+import cci.model.EmployeeLocale;
 import cci.model.fscert.FSCertificate;
 import cci.repository.SQLBuilder;
 import cci.repository.client.JDBCClientDAO;
@@ -133,6 +137,18 @@ public class JDBCEmployeeDAO implements EmployeeDAO {
 						new Object[] { id },
 						new EmployeeRowMapper<Employee>());
 		
+		if  (employee != null) {
+			sql = "select * from CCI_EMPLOYEE_LOCALE WHERE IDEMPLOYEE = ? ORDER BY LOCALE";
+			List<EmployeeLocale> locales = template.getJdbcOperations().query(sql, new Object[] { employee.getId() },
+					new BeanPropertyRowMapper<EmployeeLocale>(EmployeeLocale.class));
+			if (locales != null && locales.size() > 0) {
+			   int lid = 0;	
+			   for (EmployeeLocale locale : locales) {
+				   locale.setId(lid++);
+			   }
+			   employee.setLocales(locales);
+			}
+		}
 		return employee;
 	}
 
@@ -143,12 +159,43 @@ public class JDBCEmployeeDAO implements EmployeeDAO {
 	public Employee updateEmployee(Employee employee) throws Exception{
 		String sql = "update cci_employee set "
 				+ "name = :name, job = :job, firstname = :firstname,"
-				+ "middlename = :middlename, lastname=:lastname, enname=:enname,"
-				+ "enjob=:enjob, phone=:phone, email=:email, bday=TO_DATE(:bday,'DD.MM.YY'), "
-				+ "id_department = :department.id  WHERE id = :id";
+				+ "middlename = :middlename, lastname=:lastname, "
+				+ "phone=:phone, email=:email, bday=TO_DATE(:bday,'DD.MM.YY'), "
+				+ "id_department = :department.id, version = :version + 1  WHERE id = :id";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(employee);
-		template.update(sql, parameters);
+		
+		try {
+			int row = template.update(sql, parameters);
+			
+			if (row > 0) {
+				
+				template.getJdbcOperations().update(
+						"delete from CCI_EMPLOYEE_LOCALE where idemployee = ?",
+						employee.getId());
+				
+				sql = "insert into CCI_EMPLOYEE_LOCALE(idemployee, locale, name, job) values ("
+						+ employee.getId() + ", :locale, :name, :job)";
+				
+				LOG.info("Employee locales: " + employee.getLocales());
+				
+				if (employee.getLocales() != null && employee.getLocales().size() > 0) {
+					SqlParameterSource[] batch = SqlParameterSourceUtils
+							.createBatch(employee.getLocales().toArray());
+					int[] updateCounts = template.batchUpdate(sql, batch);
+				}
+				
+				employee.setVersion(employee.getVersion() + 1);
+				
+			} else {
+				throw new RuntimeException("Не удалось изменить сотрудника " + employee.getName() + " по неизвестной причине.");
+			}
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		
+		
 		return employee;
 	}
 
@@ -157,14 +204,41 @@ public class JDBCEmployeeDAO implements EmployeeDAO {
 	// ---------------------------------------------------------------
 	public Employee saveEmployee(Employee employee) throws Exception {
         LOG.info("\n\nEmployee save starting............................");
+        long id = 0;
 		String sql = "insert into cci_employee( "
-				+ "name, job, firstname, middlename, lastname, enname,"
-				+ "enjob, phone, email, bday, id_department) "   
-				+ "values ( :name, :job, :firstname, :middlename, :lastname, :enname,"
-				+ ":enjob, :phone, :email, TO_DATE(:bday,'DD.MM.YY'), :department.id) ";
+				+ "name, job, firstname, middlename, lastname, "
+				+ "phone, email, bday, id_department) "   
+				+ "values ( :name, :job, :firstname, :middlename, :lastname, "
+				+ ":phone, :email, TO_DATE(:bday,'DD.MM.YY'), :department.id) ";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(employee);
-		template.update(sql, parameters);
+		// template.update(sql, parameters);
+		
+		try {
+
+			GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+			int row = template.update(sql, parameters, keyHolder,
+					new String[] { "id" });
+			id = keyHolder.getKey().intValue();
+
+			if (row > 0) {
+				sql = "insert into CCI_EMPLOYEE_LOCALE(idemployee, locale, name, job) values ("
+						+ id + ",:locale, :name, :job)";
+				
+				if (employee.getLocales() != null && employee.getLocales().size() > 0) {
+					SqlParameterSource[] batch = SqlParameterSourceUtils
+							.createBatch(employee.getLocales().toArray());
+					int[] updateCounts = template.batchUpdate(sql, batch);
+				}
+				
+				employee.setId(id);
+			}
+			employee.setVersion(employee.getVersion() + 1);
+			
+		} catch (Exception ex) {
+			LOG.info("Error - client save: " + ex.toString());
+		}
+		
 		return employee;
 	}
 	

@@ -20,7 +20,7 @@ $(function () {
 	   		{name:'name',index:'name', width:200},
 	   	    {name:'address',index:'address', width:250 },
 	   	    {name:'unp',index:'unp', width:160},
-	   		{name:'work_phone',index:'work_phone', width:250},
+	   		{name:'phone',index:'phone', width:250},
 	   		{name:'email',index:'email', width:160}
   	   	    ],
  		rowNum:20,

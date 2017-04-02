@@ -12,9 +12,9 @@ public class ExportClientConfig  {
 			, "Номер офиса Банка", "Номер дома Банка", "Расчетный счет", "УНП Банка"
 			, "Email Банка" };
 
-	private String[] fieldnames = new String[] { "name", "country", "city", "line", "cindex",
-			"office","building","work_phone","cell_phone","email","unp", "okpo", "bname", "bcountry", 
-			"bcity","bline","bindex","boffice","bbuilding", "account","bunp", "bemail" 
+	private String[] fieldnames = new String[] { "name", "country", "city", "street", "cindex",
+			"office","building","phone","cell","email","unp", "okpo", "bname", "bcountry", 
+			"bcity","bstreet","bindex","boffice","bbuilding", "account","bunp", "bemail" 
 			};
 	
 	private Map<String, String> headermap = new LinkedHashMap<String, String>();

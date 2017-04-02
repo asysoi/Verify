@@ -12,8 +12,11 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import cci.config.staff.ExportEmployeeConfig;
+import cci.model.Client;
+import cci.model.ClientLocale;
 import cci.model.Department;
 import cci.model.Employee;
+import cci.model.EmployeeLocale;
 import cci.repository.SQLBuilder;
 import cci.repository.staff.SQLBuilderEmployee;
 import cci.service.Filter;
@@ -26,16 +29,19 @@ import cci.web.controller.ViewManager;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 
 @Controller
-@SessionAttributes({ "employeemanager", "employeefilter", "employee"})
+@SessionAttributes({ "employeemanager", "employeefilter", "employee", "editemployee"})
 public class EmployeeController {
 	
 	private static final Logger LOG = Logger.getLogger(EmployeeController.class);
+	private String languages;
 	
 	@Autowired
 	private EmployeeService employeeService;
@@ -355,6 +361,161 @@ public class EmployeeController {
 		}
 	}
 	
+	
+	// ---------------------------------------------------------------------------------------
+	//   Handling Goods List: Adding, Deleting
+	// ---------------------------------------------------------------------------------------
+	@RequestMapping(value = "emplocales.do",  method = RequestMethod.GET)
+	public void getgoods(
+			@RequestParam(value = "page", required = false) int page,
+			@RequestParam(value = "rows", required = false) int rows,
+			@RequestParam(value = "sidx", defaultValue = "locales", required = false) String sidx,
+			@RequestParam(value = "sord", required = false) String sord,
+			HttpSession session, HttpServletResponse response, ModelMap model) {
+			
+			try {
+					  Employee item = (Employee) model.get("editemployee");
+					  LOG.info(item);
+					  response.setContentType("text/html; charset=UTF-8");
+					  response.setCharacterEncoding("UTF-8");
+	  			      response.getWriter().println(localestoxml(item, page, rows));
+					  response.flushBuffer();
+					  
+			} catch (Exception ex) {
+						LOG.info("Ошибка: " + ex.getMessage());
+						model.addAttribute("error", ex.getMessage());
+			}
+	}
+	
+	private String localestoxml(Employee item, int page, int rows ) {
+		String xml;
+		xml = "<?xml version='1.0' encoding='utf-8'?>";
+		xml +=  "<rows>";
+		
+		if (item != null && item.getLocales() != null) {
+			int itemscount = item.getLocales().size();
+			int pagecount = itemscount/rows + (itemscount%rows > 0 ? 1 : 0);
+			if (page > pagecount) {
+				page = pagecount;
+			}
+			xml += "<page>"+ page + "</page>";
+			xml += "<total>"+pagecount+"</total>";
+			xml += "<records>"+itemscount+"</records>";
+			
+			if (page == 0) { 
+				page++;
+			}
+			
+			for (int index = (page-1) * rows; 
+					itemscount > 0 && index < page * rows && index < itemscount; index++ ) {
+				EmployeeLocale row = item.getLocales().get(index);
+				xml += "<row id='"+ row.getId() + "'>";
+				xml += "<cell><![CDATA["+(row.getLocale() == null ? "" : getLanguage(row.getLocale()))+"]]></cell>";
+				xml += "<cell><![CDATA["+(row.getName() == null ? "" : row.getName())+"]]></cell>";
+				xml += "<cell><![CDATA["+(row.getJob() == null ? "" : row.getJob())+"]]></cell>";
+				xml += "</row>";
+			}
+		}
+		xml +=  "</rows>";
+		LOG.info(xml);
+		return xml;
+	}
+	
+    private String getLanguage(String locale) {
+    	String ret = "";
+    	switch (locale) {
+    	   case "EN": ret = "Английский"; break; 
+    	   case "ES" :ret = "Испанский"; break;
+    	   case "IT": ret = "Итальянский"; break; 
+    	   case "CN": ret = "Китайский"; break; 
+    	   case "DE": ret ="Немецкий"; break; 
+    	   case "RU": ret ="Русский"; break;
+    	   case "FR": ret ="Французкий";break;
+    	   default:ret ="Русский";
+    	}
+ 	    return ret;
+	}
+
+	//=====================================================================
+	@RequestMapping(value = "emplocaleupdate.do",  method = RequestMethod.POST)
+	public void updatePOSTgoods(
+			@RequestParam(value = "id", required = false) String id,
+			@RequestParam(value = "locale", required = false) String locale,
+			@RequestParam(value = "lname", required = false) String name,
+			@RequestParam(value = "ljob", required = false) String job,
+			HttpSession session, HttpServletResponse response, HttpServletRequest request, ModelMap model) {
+		
+		    LOG.info("POST: " + "id: " + id + " locale: " + locale + " name: " + name);
+		    
+			try {
+				Employee item = (Employee)model.get("editemployee");
+				  
+				  for (EmployeeLocale element : item.getLocales()) {
+					    if (element.getId() == Long.valueOf(id).longValue()) {
+					       element.setLocale(locale);
+					       element.setName(name);
+					       element.setJob(job);
+						   break;
+					    }
+				   }
+			} catch (Exception ex) {
+						LOG.info("Ошибка: " + ex.getMessage());
+						model.addAttribute("error", ex.getMessage());
+			}
+	}
+
+
+	private long getlastElementId(List<EmployeeLocale> elements) {
+        long ret=0;
+        for (EmployeeLocale element : elements) {
+        	if (element.getId() != 0 && ret < element.getId()) {
+        		ret = element.getId();
+        	}
+        }
+		return ret;
+	}
+	
+    //=====================================================================
+	@RequestMapping(value = "emplocaleadd.do",  method = RequestMethod.GET)
+	public void addgoods(
+			HttpSession session, HttpServletResponse response, HttpServletRequest request, ModelMap model) {
+			try {
+				  Employee item = (Employee) model.get("editemployee");
+				  EmployeeLocale element  = new EmployeeLocale();
+				  element.setName("");
+				  element.setLocale("");
+				  element.setJob("");
+				  element.setId(getlastElementId(item.getLocales())+1);
+				  item.getLocales().add(element);
+			} catch (Exception ex) {
+				  LOG.info("Ошибка: " + ex.getMessage());
+				  model.addAttribute("error", ex.getMessage());
+			}
+	}
+    //===================================================================== 
+	@RequestMapping(value = "emplocaledel.do",  method = RequestMethod.GET)
+	public void delgoods(
+			@RequestParam(value = "id", required = false) String id,
+			HttpSession session, HttpServletResponse response, HttpServletRequest request, ModelMap model) {
+			try {
+				  if (id != null) {
+					 long iid = Long.valueOf(id).longValue(); 
+					 Employee item = (Employee) model.get("editemployee");
+				     
+				     for(int index = 0; index < item.getLocales().size(); index++) {
+				    	 EmployeeLocale element = item.getLocales().get(index);
+				    	 
+				    	 if (element.getId() == iid) {
+				    		 item.getLocales().remove(index);
+				    		 break;
+				    	 }
+				     }
+				  }
+			} catch (Exception ex) {
+				  LOG.info("Ошибка: " + ex.getMessage());
+				  model.addAttribute("error", ex.getMessage());
+			}
+	}
 
 	// ---------------------------------------------------------------------------------------
 	// Fill in lists 
@@ -392,6 +553,13 @@ public class EmployeeController {
 		}
 		return  deplist;
 	}
-
 	
+	@ModelAttribute("languages")
+	public String getLanguages() {
+		if (languages == null) {
+			languages = 
+			   "EN:Английский;ES:Испанский;IT:Итальянский;CN:Китайский;DE:Немецкий;RU:Русский;FR:Французкий";
+		}
+		return languages;
+	}
 }

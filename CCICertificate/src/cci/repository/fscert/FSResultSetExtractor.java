@@ -15,10 +15,19 @@ public class FSResultSetExtractor<T> implements ResultSetExtractor<FSTranslate> 
 		FSTranslate fstranslate = new FSTranslate();
 		
 		while (rs.next()) {
-		     Map row  = new HashMap();
-		     row.put("RU", rs.getString("RU"));
-		     row.put("EN", rs.getString("EN"));
-		     fstranslate.put(rs.getString("key"), row);
+			 String key = rs.getString("KEY");
+			 String locale = rs.getString("LOCALE");
+			 String text = rs.getString("TEXT");
+			 
+			 Map row;
+			 if (fstranslate.containsKey(key)) {
+		        row = (Map) fstranslate.get(key);
+			 } else {
+				row = new HashMap(); 
+			 }
+		     row.put(locale, text);
+		     
+		     fstranslate.put(key, row);
 		}
 		return fstranslate;
 	}

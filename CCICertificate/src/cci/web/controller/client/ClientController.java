@@ -1,5 +1,6 @@
 ﻿package cci.web.controller.client;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,9 @@ import org.springframework.web.bind.support.SessionStatus;
 
 import cci.config.client.ExportClientConfig;
 import cci.model.Client;
+import cci.model.ClientLocale;
+import cci.model.fscert.FSCertificate;
+import cci.model.fscert.FSProduct;
 import cci.repository.SQLBuilder;
 import cci.repository.client.SQLBuilderClient;
 import cci.repository.fscert.SQLBuilderFSCertificate;
@@ -40,11 +44,12 @@ import cci.web.controller.fscert.ViewFSCertificate;
 import cci.web.validator.ClientValidator;
 
 @Controller
-@SessionAttributes({ "clientfilter", "cmanager" })
+@SessionAttributes({ "clientfilter", "cmanager", "client"})
 public class ClientController {
 
 	private static final Logger LOG = Logger.getLogger(ClientController.class);
 	private ClientValidator clientValidator;
+	private String languages;
 
 	@Autowired
 	private ClientService clientService;
@@ -455,6 +460,170 @@ public class ClientController {
 			e.printStackTrace();
 		}
 	}
+	
+		
+	
+	// ---------------------------------------------------------------------------------------
+	//   Handling Goods List: Adding, Deleting
+	// ---------------------------------------------------------------------------------------
+	@RequestMapping(value = "clientlocales.do",  method = RequestMethod.GET)
+	public void getgoods(
+			@RequestParam(value = "page", required = false) int page,
+			@RequestParam(value = "rows", required = false) int rows,
+			@RequestParam(value = "sidx", defaultValue = "locales", required = false) String sidx,
+			@RequestParam(value = "sord", required = false) String sord,
+			HttpSession session, HttpServletResponse response, ModelMap model) {
+			
+			try {
+					  Client item = (Client) model.get("client");
+					  LOG.info(item);
+					  response.setContentType("text/html; charset=UTF-8");
+					  response.setCharacterEncoding("UTF-8");
+	  			      response.getWriter().println(localestoxml(item, page, rows));
+					  response.flushBuffer();
+					  
+			} catch (Exception ex) {
+						LOG.info("Ошибка: " + ex.getMessage());
+						model.addAttribute("error", ex.getMessage());
+			}
+	}
+	
+	private String localestoxml(Client item, int page, int rows ) {
+		String xml;
+		xml = "<?xml version='1.0' encoding='utf-8'?>";
+		xml +=  "<rows>";
+		
+		if (item != null && item.getLocales() != null) {
+			int itemscount = item.getLocales().size();
+			int pagecount = itemscount/rows + (itemscount%rows > 0 ? 1 : 0);
+			if (page > pagecount) {
+				page = pagecount;
+			}
+			xml += "<page>"+ page + "</page>";
+			xml += "<total>"+pagecount+"</total>";
+			xml += "<records>"+itemscount+"</records>";
+			
+			if (page == 0) { 
+				page++;
+			}
+			
+			for (int index = (page-1) * rows; 
+					itemscount > 0 && index < page * rows && index < itemscount; index++ ) {
+				ClientLocale row = item.getLocales().get(index);
+				xml += "<row id='"+ row.getId() + "'>";
+				xml += "<cell><![CDATA["+(row.getLocale() == null ? "" : getLanguage(row.getLocale()))+"]]></cell>";
+				xml += "<cell><![CDATA["+(row.getName() == null ? "" : row.getName())+"]]></cell>";
+				xml += "<cell><![CDATA["+(row.getCity() == null ? "" : row.getCity())+"]]></cell>";
+				xml += "<cell><![CDATA["+(row.getStreet() == null ? "" : row.getStreet())+"]]></cell>";
+				xml += "</row>";
+			}
+		}
+		xml +=  "</rows>";
+		LOG.info(xml);
+		return xml;
+	}
+	
+    private String getLanguage(String locale) {
+    	String ret = "";
+    	switch (locale) {
+    	   case "EN": ret = "Английский"; break; 
+    	   case "ES" :ret = "Испанский"; break;
+    	   case "IT": ret = "Итальянский"; break; 
+    	   case "CN": ret = "Китайский"; break; 
+    	   case "DE": ret ="Немецкий"; break; 
+    	   case "RU": ret ="Русский"; break;
+    	   case "FR": ret ="Французкий";break;
+    	   default:ret ="Русский";
+    	}
+ 	    return ret;
+	}
+
+	//=====================================================================
+	@RequestMapping(value = "clientlocaleupdate.do",  method = RequestMethod.POST)
+	public void updatePOSTgoods(
+			@RequestParam(value = "id", required = false) String id,
+			@RequestParam(value = "locale", required = false) String locale,
+			@RequestParam(value = "lname", required = false) String name,
+			@RequestParam(value = "lcity", required = false) String city,
+			@RequestParam(value = "lstreet", required = false) String street,
+			HttpSession session, HttpServletResponse response, HttpServletRequest request, ModelMap model) {
+		
+		    LOG.info("POST: " + "id: " + id + " locale: " + locale + " name: " + name);
+		    
+			try {
+				  Client item = (Client)model.get("client");
+				  
+				  for (ClientLocale element : item.getLocales()) {
+					    if (element.getId() == Long.valueOf(id).longValue()) {
+					       element.setLocale(locale);
+					       element.setName(name);
+					       element.setCity(city);
+					       element.setStreet(street);
+						   break;
+					    }
+				   }
+			} catch (Exception ex) {
+						LOG.info("Ошибка: " + ex.getMessage());
+						model.addAttribute("error", ex.getMessage());
+			}
+	}
+
+
+	private long getlastElementId(List<ClientLocale> elements) {
+        long ret=0;
+        for (ClientLocale element : elements) {
+        	if (element.getId() != 0 && ret < element.getId()) {
+        		ret = element.getId();
+        	}
+        }
+		return ret;
+	}
+	
+    //=====================================================================
+	@RequestMapping(value = "clientlocaleadd.do",  method = RequestMethod.GET)
+	public void addgoods(
+			HttpSession session, HttpServletResponse response, HttpServletRequest request, ModelMap model) {
+			try {
+				  Client item = (Client) model.get("client");
+ 				  ClientLocale element  = new ClientLocale();
+				  element.setName("");
+				  element.setLocale("");
+				  element.setCity("");
+				  element.setStreet("");
+				  element.setId(getlastElementId(item.getLocales())+1);
+				  item.getLocales().add(element);
+			} catch (Exception ex) {
+				  LOG.info("Ошибка: " + ex.getMessage());
+				  model.addAttribute("error", ex.getMessage());
+			}
+	}
+    //===================================================================== 
+	@RequestMapping(value = "clientlocaledel.do",  method = RequestMethod.GET)
+	public void delgoods(
+			@RequestParam(value = "id", required = false) String id,
+			HttpSession session, HttpServletResponse response, HttpServletRequest request, ModelMap model) {
+			try {
+				  if (id != null) {
+					 long iid = Long.valueOf(id).longValue(); 
+				     Client item = (Client) model.get("client");
+				     
+				     for(int index = 0; index < item.getLocales().size(); index++) {
+				    	 ClientLocale element = item.getLocales().get(index);
+				    	 
+				    	 if (element.getId() == iid) {
+				    		 item.getLocales().remove(index);
+				    		 break;
+				    	 }
+				     }
+				  }
+			} catch (Exception ex) {
+				  LOG.info("Ошибка: " + ex.getMessage());
+				  model.addAttribute("error", ex.getMessage());
+			}
+	}
+	
+
+	
 
 	// ---------------------------------------------------------------
 	// Get Countries List
@@ -463,4 +632,14 @@ public class ClientController {
 	public Map<String, String> populateCountryList() {
 		return clientService.getCountriesList("RU");
 	}
+	
+	@ModelAttribute("languages")
+	public String getLanguages() {
+		if (languages == null) {
+			languages = 
+			   "EN:Английский;ES:Испанский;IT:Итальянский;CN:Китайский;DE:Немецкий;RU:Русский;FR:Французкий";
+		}
+		return languages;
+	}
+	
 }

@@ -7,92 +7,164 @@
 
 <script>
 	$(function() {
+		$( "#tabs" ).tabs();
+		
 		$("document").ready(
 				function() {
 					$("#codecountry")
 						.val('${client.codecountry}');
 					$("#bcodecountry")
 						.val('${client.bcodecountry}');
-				});
+		});
+	
+		var lastSelection;
+		
+		jQuery("#locales").jqGrid({
+    		url: "clientlocales.do",
+    		editurl: "clientlocaleupdate.do",
+    		datatype: "xml",
+    		mtype: "GET",
+    		height: '20%',
+			width : null,
+			shrinkToFit : false,
+   			colModel:[
+   				{label:'Язык',name:'locale', index:'locale', width:125, editable: true, sortable:true, edittype:"select",editoptions:{value:"${languages}"}},
+   	    		{label:'Наименование', name:'lname', index:'lname', width:300, editable: true, sortable:false},
+   	    		{label:'Город', name:'lcity', index:'lcity', width:120, editable: true, sortable:false},
+   	    		{label:'Улица', name:'lstreet', index:'lstreet', width:200, editable: true, sortable:false}
+		   	],
+		    rowNum: 5,
+		    rowList:[5,10,15],
+		   	sortname: 'locale',
+		   	sortorder: 'asc',
+   			viewrecords: true,
+   			pager: jQuery('#localespager'),
+    	    gridview: true,
+    		autoencode: true,
+   			ondblClickRow : function editRow(id) {
+				 var grid = $("#locales");
+             	 if (id && id !== lastSelection) {
+                	 grid.jqGrid('restoreRow',lastSelection);
+                 	 lastSelection = id;
+             	 }
+             	 grid.jqGrid('editRow',id, {keys: true} );
+            }
+		});
+		
+		$('#locales').jqGrid('navGrid', "#localespager", {                
+    		search: false, 
+    		add: false,
+    		edit: false,	
+    		del: false,
+    		refresh: false,
+    		view: false
+		}).navButtonAdd('#localespager',{
+		    caption: '',	
+            buttonicon: 'ui-icon-plus',
+            onClickButton: function(id) {
+                var lastsel = id;
+                $.ajaxSetup({async:false});
+        		$.get("clientlocaleadd.do");
+                jQuery("#locales").trigger('reloadGrid');
+            },
+            title: "Добавить наименовния для новой страны",
+            position: "last"
+        }).navButtonAdd('#localespager',{
+		    caption: '',	
+            buttonicon: 'ui-icon-closethick',
+            onClickButton: function(event) {
+            	 var grid = $("#locales");
+                 var id = grid.jqGrid('getGridParam','selrow');
+                 var recs = grid.getGridParam("reccount");
+            	 
+            	 if (recs > 0 ) {
+     		     	if (id) { 
+                    	$.ajaxSetup({async:false});
+             			$.get("clientlocaledel.do?id="+id);
+     		     	} else { 
+     		     		$("#dialog-message" ).dialog("option", "title", 'Удаление продукта');
+     		     		$("#message").text("Строка не выбрана. Выберете строку для удаления.");
+ 						$("#dialog-message").dialog("open");
+    	            }
+        	        grid.trigger('reloadGrid');
+            	 }
+            },
+            title: "Удалить выбранную запись локализации",
+            position: "last"
+        });
+		
+		grid = $("#locales");
+		grid.jqGrid('gridResize', {minWidth: 450, minHeight: 150});
+		$("#locales_left", "#locales").width(250);
+		
 	});
 
 	function clearelement(element) {
 		element.val('');
 	}
+	
+	
+	
+	
 </script>
 
 <form:form id="fclient" method="POST" commandName="client">
 
-	<fieldset>
-		<legend class="grp_title">Основные данные</legend>
+<div id="tabs">
+  <ul>
+    <li><a href="#tabs-1">Основные данные</a></li>
+    <li><a href="#tabs-2">Контакты</a></li>
+    <li><a href="#tabs-3">Расположение</a></li>
+    <li><a href="#tabs-4">Банк</a></li>
+    <li><a href="#tabs-5">Локализация</a></li>
+  </ul>
+  
+  <div id="tabs-1">	
         <form:hidden path="id" id="id" />
         <form:hidden path="version" id="version" />
 		<table class="filter">
 			<tr>
 				<td>Наименование</td>
-				<td><form:input path="name" id="name" size="25"/><a
-					href="javascript:clearelement($('#name'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+				<td><form:input path="name" id="name" size="25"/></td>
 			</tr>
 			<tr>
 				<td>Name</td>
 				<td><form:input path="enname" id="enname" size="25"/>
 				<a	href="javascript:translit($('#name'), $('#enname'));"> 
 				<i class="glyphicon glyphicon-refresh"></i>
-		        </a>
-				<a	href="javascript:clearelement($('#enname'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+		        </a></td>
 			</tr>
 			<tr>
 				<td>Учетный номер плательшика</td>
-				<td><form:input path="unp" id="unp" /><a
-					href="javascript:clearelement($('#unp'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+				<td><form:input path="unp" id="unp" /></td>
 			</tr>
 			<tr>
 				<td>Код ОКПО</td>
 				<td><form:input path="okpo" id="okpo"
-						size="20" /><a
-					href="javascript:clearelement($('#okpo'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+						size="20" /></td>
 			</tr>
 		</table>
-	</fieldset>
+	</div>
 
-	<fieldset>
-		<legend class="grp_title">Контактная информафция</legend>
+	<div id="tabs-2">
 		<table class="filter">
 			<tr>
 				<td>Телефон</td>
-				<td><form:input path="phone" id="phone" /><a
-					href="javascript:clearelement($('#phone'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+				<td><form:input path="phone" id="phone" /></td>
 				<td>Мобильный телефон</td>
-				<td><form:input path="cell" id="cell" /><a
-					href="javascript:clearelement($('#cell'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+				<td><form:input path="cell" id="cell"/></td>
 			</tr>
 			<tr>
 				<td>Адрес электронной почты</td>
-				<td><form:input path="email" id="email" /><a
-					href="javascript:clearelement($('#email'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+				<td><form:input path="email" id="email" /></td>
 				<td></td>
 				<td></td>
 			</tr>
 		</table>
-	</fieldset>
+	</div>  
 
-	<fieldset>
-		<legend class="grp_title">Адрес</legend>
-
+    <div id="tabs-3">
+    
 		<table class="filter">
 			<tr>
 				<td>Страна <form:select path="codecountry"
@@ -106,75 +178,48 @@
 	    <table class="filter">		
 			<tr>	
 				<td>Индекс</td>
-				<td><form:input path="cindex" id="cindex" /><a
-					href="javascript:clearelement($('#cindex'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+				<td><form:input path="cindex" id="cindex" /></td>
 			<tr>	
 				<td>Город</td>
-				<td><form:input path="city" id="city" /><a
-					href="javascript:clearelement($('#city'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />   
-				</a></td>
+				<td><form:input path="city" id="city" /></td>
 				<td>City</td>
 				<td><form:input path="encity" id="encity" />
 				<a	href="javascript:translit($('#city'), $('#encity'));"> 
 				<i class="glyphicon glyphicon-refresh"></i>
 				</a>
-				<a href="javascript:clearelement($('#encity'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+				</td>
 			</tr>
 			<tr>	
 				<td>Улица</td>
-				<td><form:input path="street" id="street"/><a
-					href="javascript:clearelement($('#street'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+				<td><form:input path="street" id="street"/></td>
 				<td>Street</td>
 				<td><form:input path="enstreet" id="enstreet" />
 				<a	href="javascript:translit($('#street'), $('#enstreet'));"> 
 				<i class="glyphicon glyphicon-refresh"></i>
 				</a>
-				<a href="javascript:clearelement($('#enstreet'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+				</td>
 				
 			</tr>
 			<tr>
 				<td>Номер дома</td>
-				<td><form:input path="building" id="building" /><a
-					href="javascript:clearelement($('#building'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+				<td><form:input path="building" id="building" /></td>
 				<td>Номер офиса</td>
-				<td><form:input path="office" id="office" /><a
-					href="javascript:clearelement($('#office'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+				<td><form:input path="office" id="office" /></td>
 			</tr>
 		</table>
-	</fieldset>
+	</div>
 
-	<fieldset>
-		<legend class="grp_title">Банкие реквизиты</legend>
-
+   <div id="tabs-4">
 		<table class="filter">
 			<tr>
 				<td>Расчетный cчет</td>
-				<td><form:input path="account" id="account"/><a
-					href="javascript:clearelement($('#account'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+				<td><form:input path="account" id="account"/></td>
 				<td></td>
 				<td></td>				
 			</tr>
 			<tr>
 				<td>Наименование банка</td>
-				<td><form:input path="bname" id="bname"/><a
-					href="javascript:clearelement($('#bname'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+				<td><form:input path="bname" id="bname"/></td>
 				<td></td>
 				<td></td>				
 			</tr>
@@ -192,35 +237,27 @@
 		<table class="filter">		
 			<tr>	
 				<td>Индекс</td>
-				<td><form:input path="bindex" id="bindex" /><a
-					href="javascript:clearelement($('#bindex'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+				<td><form:input path="bindex" id="bindex" /></td>
 				<td>Город</td>
-				<td><form:input path="bcity" id="bcity" /><a
-					href="javascript:clearelement($('#city'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+				<td><form:input path="bcity" id="bcity" /></td>
 			</tr>
 			<tr>
 				<td>Улица</td>
-				<td><form:input path="bstreet" id="bstreet" /><a
-					href="javascript:clearelement($('#bstreet'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+				<td><form:input path="bstreet" id="bstreet" /></td>
 			</tr>
 			<tr>
 				<td>Номер дома</td>
-				<td><form:input path="bbuilding" id="bbuilding" /><a
-					href="javascript:clearelement($('#bbuilding'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+				<td><form:input path="bbuilding" id="bbuilding" /></td>
 				<td>Номер офиса</td>
-				<td><form:input path="boffice" id="boffice" /><a
-					href="javascript:clearelement($('#boffice'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+				<td><form:input path="boffice" id="boffice" /></td>
 			</tr>			
 		</table>
-	</fieldset>
+	</div>
+	
+	<div id="tabs-5">
+	   <table id="locales"></table>
+	   <div id="localespager"></div>
+	</div>
+</div>	
+	
 </form:form>

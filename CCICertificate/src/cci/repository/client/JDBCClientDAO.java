@@ -136,9 +136,16 @@ public class JDBCClientDAO implements ClientDAO {
 					new BeanPropertyRowMapper<Client>(Client.class));
 			
 			if  (item != null) {
-				sql = "select * from CCI_CLIENT_LOCALE WHERE IDCLIENT = ? ";
-				item.setLocales(template.getJdbcOperations().query(sql, new Object[] { item.getId() },
-					new BeanPropertyRowMapper<ClientLocale>(ClientLocale.class)));
+				sql = "select * from CCI_CLIENT_LOCALE WHERE IDCLIENT = ? ORDER BY LOCALE";
+				List<ClientLocale> locales = template.getJdbcOperations().query(sql, new Object[] { item.getId() },
+						new BeanPropertyRowMapper<ClientLocale>(ClientLocale.class));
+				if (locales != null && locales.size() > 0) {
+				   int lid = 0;	
+				   for (ClientLocale locale : locales) {
+					   locale.setId(lid++);
+				   }
+				   item.setLocales(locales);
+				}
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -186,7 +193,7 @@ public class JDBCClientDAO implements ClientDAO {
 			client.setVersion(client.getVersion() + 1);
 			
 		} catch (Exception ex) {
-			LOG.info("Error - client save: " + ex.toString());
+			LOG.info("Error - employee save: " + ex.toString());
 		}
 	}
 

@@ -178,9 +178,10 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 	// ---------------------------------------------------------------
 	public FSTranslate loadTemplates() {
         FSTranslate fstranslate = new FSTranslate();
-		String sql = "select * from fs_template";
+		String sql = 
+			"select key, locale, fs_template_LOCALE.text from fs_template_LOCALE left join FS_TEMPLATE on idkey=id";
 		
-		fstranslate =template.query(sql, new  FSResultSetExtractor());
+		fstranslate = template.query(sql, new  FSResultSetExtractor());
 		
 		return fstranslate;
 	}
@@ -283,12 +284,12 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 					
 	                LOG.info(ex.getMessage());
 					if (id == 0) {
-					  sql = "insert into fs_branch(name, codecountry, cindex, city, line, office, building," + 
-							  	"work_phone, cell_phone, email, unp, okpo, account, bname, bindex, bcodecountry," + 
-			                    "bcity, bline, boffice, bbuilding, bemail, bunp) " +  
-								"values(:name, :codecountry, :cindex, :city, :line, :office, :building," + 
-							  	":work_phone, :cell_phone, :email, :unp, :okpo, :account, :bname, :bindex, :bcodecountry," + 
-			                    ":bcity, :bline, :boffice, :bbuilding,:bemail, :bunp) ";
+					  sql = "insert into fs_branch(name, codecountry, cindex, city, street, office, building," + 
+							  	"phone, cell, email, unp, okpo, account, bname, bindex, bcodecountry," + 
+			                    "bcity, bstreet, boffice, bbuilding, bemail, bunp) " +  
+								"values(:name, :codecountry, :cindex, :city, :street, :office, :building," + 
+							  	":phone, :cell, :email, :unp, :okpo, :account, :bname, :bindex, :bcodecountry," + 
+			                    ":bcity, :bstreet, :boffice, :bbuilding,:bemail, :bunp) ";
 					  
 					  SqlParameterSource parameters = new BeanPropertySqlParameterSource(branch);
 					  GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
@@ -321,7 +322,7 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 			}
 			if (client.getStreet() != null && !client.getStreet().isEmpty()) {
 				if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
-				sqlwhere += " line = :line ";   
+				sqlwhere += " street = :street ";   
 			}
 			if (client.getCindex() != null && !client.getCindex().isEmpty()) {
 				if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
@@ -366,12 +367,12 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 				
 				LOG.info(ex.getMessage());;
 				if (id == 0) {
-				  sql = "insert into cci_client(id, name, codecountry, cindex, city, line, office, building," + 
-						  	"work_phone, cell_phone, email, unp, okpo, account, bname, bindex, bcodecountry," + 
-		                    "bcity, bline, boffice, bbuilding, bemail, bunp) " +  
-							"values(id_client_seq.nextval, :name, :codecountry, :cindex, :city, :line, :office, :building," + 
-						  	":work_phone, :cell_phone, :email, :unp, :okpo, :account, :bname, :bindex, :bcodecountry," + 
-		                    ":bcity, :bline, :boffice, :bbuilding, :bemail, :bunp) ";
+				  sql = "insert into cci_client(id, name, codecountry, cindex, city, street, office, building," + 
+						  	"phone, cell, email, unp, okpo, account, bname, bindex, bcodecountry," + 
+		                    "bcity, bstreet, boffice, bbuilding, bemail, bunp) " +  
+							"values(id_client_seq.nextval, :name, :codecountry, :cindex, :city, :street, :office, :building," + 
+						  	":phone, :cell, :email, :unp, :okpo, :account, :bname, :bindex, :bcodecountry," + 
+		                    ":bcity, :bstreet, :boffice, :bbuilding, :bemail, :bunp) ";
 				  
 				  SqlParameterSource parameters = new BeanPropertySqlParameterSource(client);
 				  GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();

@@ -266,9 +266,14 @@ public class CertService {
 	public Map<String, String> getLanguageList() {
         if (languages == null) {
            languages = new HashMap<String, String>();
-           languages.put("RU", "Русский");
-           languages.put("EN", "Английский");
-        }
+           languages.put("EN","Английский");
+           languages.put("ES","Испанский");
+           languages.put("IT","Итальянский");
+           languages.put("CN","Китайский");
+           languages.put("DE","Немецкий");
+           languages.put("RU","Русский");
+           languages.put("FR","Французкий");
+       }
 		return languages;
 	}
 }

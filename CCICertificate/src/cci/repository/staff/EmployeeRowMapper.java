@@ -24,15 +24,12 @@ public class EmployeeRowMapper<T> implements RowMapper {
 		        employee.setId(rs.getLong("ID"));
 		        employee.setName(rs.getString("NAME"));
 		        employee.setJob(rs.getString("JOB"));
-		        employee.setRuname(rs.getString("RUNAME"));
-		        employee.setRujob(rs.getString("RUJOB"));
-		        employee.setEnname(rs.getString("ENNAME"));
-		        employee.setEnjob(rs.getString("ENJOB"));
 		        employee.setFirstname(rs.getString("FIRSTNAME"));
 		        employee.setLastname(rs.getString("LASTNAME"));
 		        employee.setMiddlename(rs.getString("MIDDLENAME"));
 		        employee.setEmail(rs.getString("EMAIL"));
 		        employee.setPhone(rs.getString("PHONE"));
+		        employee.setVersion(rs.getLong("VERSION"));
 		        employee.setBday(rs.getDate("BDAY") == null 
 		        		? null : (new SimpleDateFormat(dateformat)).format(rs.getDate("BDAY")));
 		        employee.setActive(rs.getString("ACTIVE").charAt(0));

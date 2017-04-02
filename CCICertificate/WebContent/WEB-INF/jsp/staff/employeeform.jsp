@@ -15,6 +15,7 @@ function refreshName() {
 } 
 
 $(function() {
+	$( "#tabs" ).tabs();
 	
 	$(".datepicker").datepicker({
 		changeMonth : true,
@@ -24,7 +25,7 @@ $(function() {
 	$("document").ready(
 			function() {
 				
-				fillindepartment( ${editemployee.department.id_otd} );
+				fillindepartment(${editemployee.department.id_otd});
 				
 				$(".datepicker").datepicker("option", "dateFormat",
 						'dd.mm.yy');
@@ -34,8 +35,87 @@ $(function() {
   	  					.val('${editemployee.department.id}');
 				$("#id_otd")
 						.val('${editemployee.department.id_otd}');
-			});
-
+	});
+	
+	var lastSelection;
+	
+	jQuery("#locales").jqGrid({
+		url: "emplocales.do",
+		editurl: "emplocaleupdate.do",
+		datatype: "xml",
+		mtype: "GET",
+		height: '20%',
+		width : null,
+		shrinkToFit : false,
+			colModel:[
+				{label:'Язык',name:'locale', index:'locale', width:125, editable: true, sortable:true, edittype:"select",editoptions:{value:"${languages}"}},
+	    		{label:'ФИО', name:'lname', index:'lname', width:300, editable: true, sortable:false},
+	    		{label:'Должность', name:'ljob', index:'ljob', width:120, editable: true, sortable:false}
+	   	],
+	    rowNum: 5,
+	    rowList:[5,10,15],
+	   	sortname: 'locale',
+	   	sortorder: 'asc',
+			viewrecords: true,
+			pager: jQuery('#localespager'),
+	    gridview: true,
+		autoencode: true,
+			ondblClickRow : function editRow(id) {
+			 var grid = $("#locales");
+         	 if (id && id !== lastSelection) {
+            	 grid.jqGrid('restoreRow',lastSelection);
+             	 lastSelection = id;
+         	 }
+         	 grid.jqGrid('editRow',id, {keys: true} );
+        }
+	});
+	
+	$('#locales').jqGrid('navGrid', "#localespager", {                
+		search: false, 
+		add: false,
+		edit: false,	
+		del: false,
+		refresh: false,
+		view: false
+	}).navButtonAdd('#localespager',{
+	    caption: '',	
+        buttonicon: 'ui-icon-plus',
+        onClickButton: function(id) {
+            var lastsel = id;
+            $.ajaxSetup({async:false});
+    		$.get("emplocaleadd.do");
+            jQuery("#locales").trigger('reloadGrid');
+        },
+        title: "Добавить ФИО для нового языка",
+        position: "last"
+    }).navButtonAdd('#localespager',{
+	    caption: '',	
+        buttonicon: 'ui-icon-closethick',
+        onClickButton: function(event) {
+        	 var grid = $("#locales");
+             var id = grid.jqGrid('getGridParam','selrow');
+             var recs = grid.getGridParam("reccount");
+        	 
+        	 if (recs > 0 ) {
+ 		     	if (id) { 
+                	$.ajaxSetup({async:false});
+         			$.get("emplocaledel.do?id="+id);
+ 		     	} else { 
+ 		     		$("#dialog-message" ).dialog("option", "title", 'Удаление продукта');
+ 		     		$("#message").text("Строка не выбрана. Выберете строку для удаления.");
+						$("#dialog-message").dialog("open");
+	            }
+    	        grid.trigger('reloadGrid');
+        	 }
+        },
+        title: "Удалить выбранную запись локализации",
+        position: "last"
+    });
+	
+	grid = $("#locales");
+	grid.jqGrid('gridResize', {minWidth: 450, minHeight: 150});
+	$("#locales_left", "#locales").width(250);
+	
  });
 
  function clearelement(element) {
@@ -68,44 +148,38 @@ $(function() {
 
 <form:form id="femployee" method="POST" commandName="editemployee">
     <form:hidden path="id"/>  
-	<fieldset>
-		<legend class="grp_title">Персональные данные</legend>
+    
+<div id="tabs">
+  <ul>
+    <li><a href="#tabs-1">Персональные данные</a></li>
+    <li><a href="#tabs-3">Структурное подразделение</a></li>
+    <li><a href="#tabs-4">Локализация</a></li>
+  </ul>
+    
+  <div id="tabs-1">	  
 		<table class="filter">
 			<tr>
 				<td>Фамилия</td>
 				<td><form:input path="lastname" id="lastname"
-						size="18" class="required"/><a
-					href="javascript:clearelement($('#lastname'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+						size="18" class="required"/></td>
 				<td>Имя</td>
-				<td><form:input path="firstname" id="firstname"
-						size="18" /><a
-					href="javascript:clearelement($('#firstname'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+				<td><form:input path="firstname" id="firstname"	size="18" /></td>
 			</tr>
 			<tr>
 				<td>Отчество</td>
 				<td><form:input path="middlename" id="middlename"
-						size="18" /><a
-					href="javascript:clearelement($('#middlename'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+						size="18" /></td>
 			</tr>
 			<tr>
 				<td>Дата рождения</td>
 				<td><form:input path="bday" id="bday"
-						class="datepicker" size="8" placeholder="с" /> <a
+						class="datepicker" size="12" /> <a
 					href="javascript:clearelement($('.datepicker'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 			</tr>
-			</table>
-	</fieldset>
-	
-	<fieldset>
-		<legend class="grp_title">Подпись и должность</legend>
+		</table>
+		
 		<table class="filter">
 			<tr>
 				<td>ФИО</td>
@@ -114,66 +188,30 @@ $(function() {
 						<a	href="javascript:refreshName();"> 
 						<i class="glyphicon glyphicon-refresh"></i>
 				        </a>
-						<a	href="javascript:clearelement($('#name'));"> 
-						<img src="resources/images/delete-16.png" alt="удл." />
-				        </a>
+						
 				</td>
 			</tr>
 			<tr>
 				<td>Должность</td>
 				<td><form:input path="job" id="job"
-						size="40" /><a
-					href="javascript:clearelement($('#job'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+						size="40" /></td>
 			</tr>	
 			<tr>
-				<td>ФИО(English)</td>
-				<td><form:input path="enname" id="enname"
-						size="25" />
-						<a	href="javascript:translit($('#name'), $('#enname'));"> 
-						<i class="glyphicon glyphicon-refresh"></i>
-				        </a>
-						<a	href="javascript:clearelement($('#enname'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
-			</tr>
-			<tr>
-				<td>Должность(English)</td>
-				<td><form:input path="enjob" id="enjob" size="40" />
-				<a href="javascript:clearelement($('#enjob'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
-			</tr>
-		</table>
-	</fieldset>
-
-	<fieldset>
-		<legend class="grp_title">Контактная информафция</legend>
-		<table class="filter">
-			<tr>
 				<td>Телефон</td>
-				<td><form:input size="12" path="phone" id="phone" /><a
-					href="javascript:clearelement($('#phone'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
-				<td>Адрес электронной почты</td>
-				<td><form:input size="12" path="email" id="email" /><a
-					href="javascript:clearelement($('#email'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
+				<td><form:input size="12" path="phone" id="phone" /></td>
 			</tr>
 			<tr>
-				<td>Статус</td>
-				<td><form:checkbox path="active" value="${editemployee.active}" id="active" /><a
-					href="javascript:clearelement($('#active'));"></td>
+				<td>Адрес электронной почты</td>
+				<td><form:input size="12" path="email" id="email" /></td>
 			</tr>
 		</table>
-	</fieldset>
+		
+	</div>
+	
+	<div id="tabs-2">	
+	</div>
 
-	<fieldset>
-		<legend class="grp_title">Структурное подразделение</legend>
-
+	<div id="tabs-3">
 		<table class="filter">
 			<tr>
 				<td>Отделение</td>
@@ -196,7 +234,11 @@ $(function() {
 			
 			</tr>
 		</table>
-
-
-	</fieldset>
+	</div>
+	
+	<div id="tabs-4">
+	   <table id="locales"></table>
+	   <div id="localespager"></div>
+	</div>
+</div>
 </form:form>

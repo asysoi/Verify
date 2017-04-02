@@ -4,12 +4,12 @@ public class ViewClientCondition {
 	private String name="like";
 	private String codecountry="=";
 	private String city="like";		
-	private String line="like";		
+	private String street="like";		
 	private String cindex="like";
 	private String office="like";
 	private String building="like";
-	private String work_phone="like";	
-	private String cell_phone="like";
+	private String phone="like";	
+	private String cell="like";
 	private String email="like";
 	private String unp="like";
 	private String okpo="like";
@@ -17,7 +17,7 @@ public class ViewClientCondition {
 	private String bname="like";
 	private String bcodecountry="=";
 	private String bcity="like";		
-	private String bline="like";		
+	private String bstreet="like";		
 	private String bindex="like";
 	private String boffice="like";
 	private String bbuilding="like";
@@ -39,11 +39,11 @@ public class ViewClientCondition {
 	public void setCity(String city) {
 		this.city = city;
 	}
-	public String getLine() {
-		return line;
+	public String getStreet() {
+		return street;
 	}
-	public void setLine(String line) {
-		this.line = line;
+	public void setStreet(String street) {
+		this.street = street;
 	}
 	public String getCindex() {
 		return cindex;
@@ -63,17 +63,17 @@ public class ViewClientCondition {
 	public void setBuilding(String building) {
 		this.building = building;
 	}
-	public String getWork_phone() {
-		return work_phone;
+	public String getPhone() {
+		return phone;
 	}
-	public void setWork_phone(String work_phone) {
-		this.work_phone = work_phone;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
-	public String getCell_phone() {
-		return cell_phone;
+	public String getCell() {
+		return cell;
 	}
-	public void setCell_phone(String cell_phone) {
-		this.cell_phone = cell_phone;
+	public void setCell_phone(String cell) {
+		this.cell = cell;
 	}
 	public String getEmail() {
 		return email;
@@ -111,11 +111,11 @@ public class ViewClientCondition {
 	public void setBcity(String bcity) {
 		this.bcity = bcity;
 	}
-	public String getBline() {
-		return bline;
+	public String getBstreet() {
+		return bstreet;
 	}
-	public void setBline(String bline) {
-		this.bline = bline;
+	public void setBstreet(String street) {
+		this.bstreet = street;
 	}
 	public String getBindex() {
 		return bindex;

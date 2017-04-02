@@ -19,14 +19,14 @@ public class ClientFilter extends Filter {
 	public static Logger LOG = Logger.getLogger(ClientFilter.class);
 
 	public ClientFilter() {
-		String[] fields = new String[] { "ID", "NAME", "CITY", "LINE",
-				"CINDEX", "OFFICE", "BUILDING", "WORK_PHONE", "CELL_PHONE",
-				"UNP", "OKPO", "BNAME", "BCITY", "BLINE", "BINDEX", "BOFFICE",
+		String[] fields = new String[] { "ID", "NAME", "CITY", "STREET",
+				"CINDEX", "OFFICE", "BUILDING", "PHONE", "CELL",
+				"UNP", "OKPO", "BNAME", "BCITY", "BSTREET", "BINDEX", "BOFFICE",
 				"BBUILDING", "ACCOUNT", "BUNP", "EMAIL", "BEMAIL", "CODECOUNTRY", "BCODECOUNTRY" };
 
-		String[] dbfields = new String[] {"ID", "NAME", "CITY", "LINE",
-				"CINDEX", "OFFICE", "BUILDING", "WORK_PHONE", "CELL_PHONE",
-				"UNP", "OKPO", "BNAME", "BCITY", "BLINE", "BINDEX", "BOFFICE",
+		String[] dbfields = new String[] {"ID", "NAME", "CITY", "STREET",
+				"CINDEX", "OFFICE", "BUILDING", "PHONE", "CELL",
+				"UNP", "OKPO", "BNAME", "BCITY", "BSTREET", "BINDEX", "BOFFICE",
 				"BBUILDING", "ACCOUNT", "BUNP", "EMAIL", "BEMAIL", "CODECOUNTRY", "BCODECOUNTRY" };
 
 		FieldType[] types = new FieldType[] { FieldType.ID, FieldType.STRING,

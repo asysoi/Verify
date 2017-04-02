@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
@@ -18,7 +20,7 @@ import cci.web.controller.client.ClientController;
 @Component
 @XmlType(propOrder = {"name", "codecountry" , "cindex", "city", "street", "office", "building", 
 		"phone", "cell", "fax", "email", "unp", "okpo", "account", "bname", "bindex", "bcodecountry"
-		,"bcity", "bstreet", "boffice", "bbuilding", "bphone", "bcell", "bemail", "bunp"})
+		,"bcity", "bstreet", "boffice", "bbuilding", "bphone", "bcell", "bemail", "bunp", "clientlocales"})
 
 public class Client {
 	private static final Logger LOG = Logger.getLogger(Client.class);
@@ -330,6 +332,8 @@ public class Client {
 		this.version = version;
 	}
 
+	@XmlElementWrapper(name = "clientlocales")
+	@XmlElement(name = "locale")
 	public List<ClientLocale> getLocales() {
 		if (locales == null) {
 			locales = new ArrayList<ClientLocale>();
