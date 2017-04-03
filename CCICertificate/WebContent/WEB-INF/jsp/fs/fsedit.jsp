@@ -9,8 +9,15 @@
 <link href="${CCICss}" rel="stylesheet" />
 
 <script>
-	$(function() {
 
+	function save() {
+		url = $("#fscert").attr("action");
+		$.ajaxSetup({async:false});
+		$.post(url, $("#fscert").serialize());
+		location.href='fscerts	.do?page=${fsmanager.page}&pagesize=${fsmanager.pagesize}&orderby=${fsmanager.orderby}&order=${fsmanager.order}';
+	}
+	
+	$(function() {
 		$(".datepicker").datepicker({
 			changeMonth : true,
 			changeYear : true
@@ -390,16 +397,19 @@
 		     $("#producer").text(obj.producer);
 		     $("#expert").text(obj.expert);
 		     $("#signer").text(obj.signer);
-		});	
-		
-		
-	}
-	
+		});
+	}	
 </script>
 
 <c:if test="${not empty error}">
 <div id="error" class="error">${error}</div>
 </c:if>  
+
+<p align="left">
+<a href="javascript:goBack();"><i class="glyphicon glyphicon-arrow-left"></i></a>
+<a href="javascript:save();"><i class="glyphicon glyphicon-save" ></i></a>
+<a href="javascript:printOriginalFSCertificate();"><i class="glyphicon glyphicon-print" ></i></a>
+</p>
 
 <h3 align="center"><b>СЕРТИФИКАТ СВОБОДНОЙ ПРОДАЖИ</b></h3>
 <h4 align="center"><b>${fscert.branch.name}<br>
@@ -408,7 +418,6 @@ ${fscert.branch.address}, Республика Беларусь<br>
 
 <form:form id="fscert" method="POST" modelAttribute="fscert">
 <form:hidden path="id"/>
-
 <div class="container-fluid">
 
 <div class="row">
@@ -430,8 +439,11 @@ ${fscert.branch.address}, Республика Беларусь<br>
 					
 <div class="row">
 <div class="col-md-1"><a href="javascript:openClients('exporter')">Экспортер: </a></div>
-<div class="col-md-6" id="exporter">
-<c:if test="${fscert.language == 'EN'}">  ${fscert.exporter.enname}, ${fscert.exporter.enaddress}</c:if>
+<div class="col-md-10" id="exporter">
+<c:if test="${fscert.language != 'RU'}">  
+${fscert.exporter.getLocale(fscert.language).name} ${fscert.exporter.getLocale(fscert.language).address}
+(${fscert.exporter.name}, ${fscert.exporter.address})
+</c:if>
 <c:if test="${fscert.language == 'RU'}">  ${fscert.exporter.name}, ${fscert.exporter.address}</c:if>
 </div>
 </div>
@@ -439,8 +451,11 @@ ${fscert.branch.address}, Республика Беларусь<br>
 <div class="row">
 <div class="col-md-1"><a href="javascript:openClients('producer')">Производитель:</a></div>
 <div class="col-md-10" id="producer">
-<c:if test="${fscert.language == 'RU'}">${fscert.producer.name}, ${fscert.producer.address}</c:if>
-<c:if test="${fscert.language == 'EN'}">${fscert.producer.enname}, ${fscert.producer.enaddress}</c:if>
+<c:if test="${fscert.language != 'RU'}">
+${fscert.producer.getLocale(fscert.language).name}, ${fscert.producer.getLocale(fscert.language).address}
+(${fscert.producer.name}, ${fscert.producer.address})
+</c:if>
+<c:if test="${fscert.language == 'RU'}">${fscert.producer.name} ${fscert.producer.address}</c:if>
 </div>
 </div>	
 
@@ -473,14 +488,18 @@ ${fscert.branch.address}, Республика Беларусь<br>
 		  <div class="col-md-1"><a href="javascript:openEmployees('expert')">Эксперт:</a></div>
 		  <div class="col-md-10" id="expert">
 		  <c:if test="${fscert.language == 'RU'}">${fscert.expert.job} ${fscert.expert.name}</c:if>
-		  <c:if test="${fscert.language == 'EN'}">${fscert.expert.enjob} ${fscert.expert.enname}</c:if>
+		  <c:if test="${fscert.language != 'RU'}">${fscert.expert.getLocale(fscert.language).job} ${fscert.expert.getLocale(fscert.language).name}
+		  (${fscert.expert.job} ${fscert.expert.name})
+		  </c:if>
 		  </div>
 </div>
 <div class="row">
 		  <div class="col-md-1"><a href="javascript:openEmployees('signer')">Подпись:</a></div>
 		  <div class="col-md-10" id="signer">
 		  <c:if test="${fscert.language == 'RU'}">${fscert.signer.job} ${fscert.signer.name}</c:if>
-		  <c:if test="${fscert.language == 'EN'}">${fscert.signer.enjob} ${fscert.signer.enname}</c:if>		  
+		  <c:if test="${fscert.language != 'RU'}">${fscert.signer.getLocale(fscert.language).job} ${fscert.signer.getLocale(fscert.language).name}
+		  (${fscert.signer.job} ${fscert.signer.name})
+		  </c:if>		  
 		  </div>
 </div>				
 
@@ -503,10 +522,6 @@ ${fscert.branch.address}, Республика Беларусь<br>
  <form:hidden path="expert.id" id="expertid" />
  <form:hidden path="signer.id" id="signerid" />
  
- <div class="row">
- <div class="col-md-12">
-		<button type="submit">Save</button> 
-</div>
  </div>
  
 </div>

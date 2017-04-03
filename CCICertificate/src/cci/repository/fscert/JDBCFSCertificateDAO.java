@@ -18,7 +18,9 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 import cci.model.Client;
+import cci.model.ClientLocale;
 import cci.model.Employee;
+import cci.model.EmployeeLocale;
 import cci.model.cert.Certificate;
 import cci.model.fscert.Branch;
 import cci.model.fscert.Expert;
@@ -475,6 +477,7 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 			if (rcert.getBranch() != null) {
 				Branch branch = template.getJdbcOperations().queryForObject("select * from fs_branch where id = ? ",
 						new Object[] { rcert.getBranch().getId() }, new BeanPropertyRowMapper<Branch>(Branch.class));
+				loadClientLocales(branch); 
 				rcert.setBranch(branch);
 			}
 
@@ -482,6 +485,7 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 				Exporter obj = template.getJdbcOperations().queryForObject("select * from cci_client where id = ? ",
 						new Object[] { rcert.getExporter().getId() },
 						new BeanPropertyRowMapper<Exporter>(Exporter.class));
+				loadClientLocales(obj);
 				rcert.setExporter(obj);
 			}
 
@@ -489,18 +493,21 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 				Producer obj = template.getJdbcOperations().queryForObject("select * from cci_client where id = ? ",
 						new Object[] { rcert.getProducer().getId() },
 						new BeanPropertyRowMapper<Producer>(Producer.class));
+				loadClientLocales(obj);
 				rcert.setProducer(obj);
 			}
 
 			if (rcert.getExpert() != null) {
 				Expert obj = template.getJdbcOperations().queryForObject("select * from cci_employee where id = ? ",
 						new Object[] { rcert.getExpert().getId() }, new BeanPropertyRowMapper<Expert>(Expert.class));
+				loadEmployeeLocales(obj);
 				rcert.setExpert(obj);
 			}
 
 			if (rcert.getSigner() != null) {
 				Signer obj = template.getJdbcOperations().queryForObject("select * from cci_employee where id = ? ",
 						new Object[] { rcert.getSigner().getId() }, new BeanPropertyRowMapper<Signer>(Signer.class));
+				loadEmployeeLocales(obj);
 				rcert.setSigner(obj);
 			}
 
@@ -515,6 +522,32 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 			}
 		  }
 
+		}
+
+        // load employee's locales   
+		private void loadEmployeeLocales(Employee employee) {
+			if  (employee != null) {
+				String sql = "select * from CCI_EMPLOYEE_LOCALE WHERE IDEMPLOYEE = ?";
+				List<EmployeeLocale> locales = template.getJdbcOperations().query(sql, new Object[] { employee.getId() },
+						new BeanPropertyRowMapper<EmployeeLocale>(EmployeeLocale.class));
+				if (locales != null && locales.size() > 0) {
+				   employee.setLocales(locales);
+				}
+			}
+		}
+
+        // load client's locales		
+		private void loadClientLocales(Client client) {
+			if  (client != null) {
+				String sql = "select * from CCI_CLIENT_LOCALE WHERE IDCLIENT = ? ";
+				
+				List<ClientLocale> locales = template.getJdbcOperations().query(sql, new Object[] { client.getId() },
+						new BeanPropertyRowMapper<ClientLocale>(ClientLocale.class));
+				
+				if (locales != null && locales.size() > 0) {
+				   client.setLocales(locales);
+				}
+			}
 		}
 
 

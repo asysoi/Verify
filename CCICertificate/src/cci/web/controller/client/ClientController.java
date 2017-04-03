@@ -375,6 +375,7 @@ public class ClientController {
 		// clientValidator.validate(client, result);
 
 		// status.setComplete();
+		generateAddressString(client);
 		clientService.saveClient(client);
 		return "client/clientform";
 	}
@@ -398,8 +399,38 @@ public class ClientController {
 			BindingResult result, SessionStatus status, ModelMap model) {
 
 		// status.setComplete();
+		generateAddressString(client);
 		clientService.updateClient(client);
 		return "client/clientform";
+	}
+
+	private void generateAddressString(Client client) {
+        String address = "" ;
+        
+        address = client.getCindex() == null ? "" : client.getCindex();
+        address +=  client.getCity() == null ? "" : address.isEmpty() ? client.getCity() : ", " + client.getCity();
+        address +=  client.getStreet() == null ? "" : address.isEmpty() ? client.getStreet() : ", " + client.getStreet();
+        address +=  client.getBuilding() == null ? "" : address.isEmpty() ? client.getBuilding() : ", " + client.getBuilding();
+        address +=  client.getCodecountry() == null ? "" : address.isEmpty() ? getCountryNameBycode("RUF", client.getCodecountry()) : ", " + getCountryNameBycode("RUF", client.getCodecountry());
+        
+		client.setAddress(address);
+		
+		for (ClientLocale item : client.getLocales()) {
+			address = "";
+	        address = client.getCindex() == null ? "" : client.getCindex();
+	        address +=  item.getCity() == null ? "" : address.isEmpty() ? item.getCity() : ", " + item.getCity();
+	        address +=  item.getStreet() == null ? "" : address.isEmpty() ? item.getStreet() : ", " + item.getStreet();
+	        address +=  client.getBuilding() == null ? "" : address.isEmpty() ? client.getBuilding() : ", " + client.getBuilding();
+	        address +=  item.getLocale() == null ? "" : address.isEmpty() ? getCountryNameBycode("EN", client.getCodecountry()) : ", " + getCountryNameBycode("EN", client.getCodecountry());
+	        item.setAddress(address);
+		}
+	}
+
+	private Object getCountryNameBycode(String lang, String codecountry) {
+		LOG.info("Lang = " + lang + " Code: " + codecountry);
+		
+		String ret = clientService.getCountriesList(lang).get(codecountry);
+		return (ret == null) ? "" : ret; 
 	}
 
 	// ---------------------------------------------------------------

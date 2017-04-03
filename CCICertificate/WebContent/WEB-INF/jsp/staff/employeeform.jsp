@@ -113,7 +113,7 @@ $(function() {
     });
 	
 	grid = $("#locales");
-	grid.jqGrid('gridResize', {minWidth: 450, minHeight: 150});
+	grid.jqGrid('gridResize', {minWidth: 450, minHeight: 250});
 	$("#locales_left", "#locales").width(250);
 	
  });

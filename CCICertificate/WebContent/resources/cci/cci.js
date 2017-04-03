@@ -43,4 +43,45 @@ function translit(source, target) {
 	target.val(transliterate(source.val()));
 }
 
+function goBack() {
+    window.history.back();
+}
+
+/**
+ *  FS Certificate common function 
+ */
+function openFSCertificate(certid) {
+	memo = "Воспроизведение бумажной версии сертификата. <p>" + 
+	       "Результат воспроизведения может незначительно отличаться по форме и стилю отображения," +
+	       "но полностью воспроизводит содержание документа.</p>"
+	url = "fscert.do?certid=" + certid;
+	var win=window.open(url,'_blank');
+	win.focus();
+}
+
+function editFSCertificate(certid) {
+	url = "fsedit.do?certid=" + certid;
+	//window.location.href = url;
+	var win=window.open(url, "_self");
+	win.focus();
+}
+
+function printOriginalFSCertificate(certid) {
+	url = "fsprint.do?certid=" + certid+"&type=org";
+	var win=window.open(url, "_blank");
+	win.focus();
+}
+
+function printCopyFSCertificate(certid) {
+	url = "fsprint.do?certid=" + certid+"&type=copy";
+	var win=window.open(url, "_blank");
+	win.focus();
+}
+
+function printOriginalFSCertificate() {
+	url = "fsprint.do?type=org";
+	var win=window.open(url, "_blank");
+	win.focus();
+}
+
 

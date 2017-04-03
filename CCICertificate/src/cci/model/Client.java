@@ -101,6 +101,8 @@ public class Client {
 		return clocales;
 	}
 
+	
+	
 	@XmlTransient	
 	public String getEnname() {
 	   ClientLocale locale = getLocale("EN");

@@ -94,7 +94,7 @@
         });
 		
 		grid = $("#locales");
-		grid.jqGrid('gridResize', {minWidth: 450, minHeight: 150});
+		grid.jqGrid('gridResize', {minWidth: 450, minHeight: 250});
 		$("#locales_left", "#locales").width(250);
 		
 	});
@@ -125,14 +125,7 @@
 		<table class="filter">
 			<tr>
 				<td>Наименование</td>
-				<td><form:input path="name" id="name" size="25"/></td>
-			</tr>
-			<tr>
-				<td>Name</td>
-				<td><form:input path="enname" id="enname" size="25"/>
-				<a	href="javascript:translit($('#name'), $('#enname'));"> 
-				<i class="glyphicon glyphicon-refresh"></i>
-		        </a></td>
+				<td><form:input path="name" id="name" size="45"/></td>
 			</tr>
 			<tr>
 				<td>Учетный номер плательшика</td>
@@ -182,23 +175,10 @@
 			<tr>	
 				<td>Город</td>
 				<td><form:input path="city" id="city" /></td>
-				<td>City</td>
-				<td><form:input path="encity" id="encity" />
-				<a	href="javascript:translit($('#city'), $('#encity'));"> 
-				<i class="glyphicon glyphicon-refresh"></i>
-				</a>
-				</td>
 			</tr>
 			<tr>	
 				<td>Улица</td>
 				<td><form:input path="street" id="street"/></td>
-				<td>Street</td>
-				<td><form:input path="enstreet" id="enstreet" />
-				<a	href="javascript:translit($('#street'), $('#enstreet'));"> 
-				<i class="glyphicon glyphicon-refresh"></i>
-				</a>
-				</td>
-				
 			</tr>
 			<tr>
 				<td>Номер дома</td>

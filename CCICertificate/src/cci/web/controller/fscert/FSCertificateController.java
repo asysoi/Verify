@@ -518,12 +518,16 @@ public class FSCertificateController {
 						  if (locale != null) {
 					        response.getWriter().println(getValue(locale.getName()) + "; " + getValue(locale.getAddress()));
  			        	  } else {
- 			        		 response.getWriter().println("Не определено для выбранного языка");
+ 			        		response.getWriter().println("Не определено для выбранного языка");
 				          }
 						  response.getWriter().println("("+getValue(client.getName()) + "; " + getValue(client.getAddress())+")");
+					  } else {
+						  response.getWriter().println(getValue(client.getName()) + "; " + getValue(client.getAddress()));
 					  }
+					  
 					  response.flushBuffer();
 					  LOG.info("Linked exporter to certificate: " + cert.getId());
+					  
 				  } else {	 
 					  model.addAttribute("error", "Сертификат или экспортер не найдены");
 				  }
@@ -565,13 +569,21 @@ public class FSCertificateController {
 				
 					  response.setContentType("text/html; charset=UTF-8");
 					  response.setCharacterEncoding("UTF-8");
-					  if ("EN".equals(lang)) {
-					      response.getWriter().println(getValue(emp.getEnjob()) + " " + getValue(emp.getEnname()));
+					  
+					  if (!"RU".equals(lang)) {
+						  EmployeeLocale locale = emp.getLocale(lang);
+						  if (locale != null) {
+					        response.getWriter().println(getValue(locale.getJob()) + getValue(locale.getName()));
+ 			        	  } else {
+ 			        		response.getWriter().println("Не определено для выбранного языка");
+				          }
+						  response.getWriter().println("("+getValue(emp.getJob()) + " " + getValue(emp.getName())+")");
 					  } else {
 						  response.getWriter().println(getValue(emp.getJob()) + " " + getValue(emp.getName()));
 					  }
+
 					  response.flushBuffer();
-					  // LOG.info("Linked employee to certificate: " + cert);
+
 					  LOG.info("Current Expert ID after replacmnet: " + (cert.getExpert() == null ? "Not defined" : cert.getExpert().getId()));
 					  LOG.info("Current Signer ID after replacmnet: " + (cert.getSigner() == null ? "Not defined" : cert.getSigner().getId()));
 				  } else {	 
@@ -606,8 +618,11 @@ public class FSCertificateController {
 				  
 				  String template = fsCertService.getTemplate("confirmation", lang);
 				  String replacement = cert.getProducer() != null ? getClientName(cert.getProducer(), lang) : "";
-				  template = template.replaceAll("\\[producer\\]", replacement);				  
-				  cert.setConfirmation(template);
+				  
+				  if (template != null && replacement != null) {
+				      template = template.replaceAll("\\[producer\\]", replacement);
+				  }
+				  cert.setConfirmation(template == null ? "Шаблон для выбранного языка не определен" : template);
 				 
 				  response.setContentType("text/html; charset=UTF-8");
 				  response.setCharacterEncoding("UTF-8");
@@ -675,7 +690,7 @@ public class FSCertificateController {
 				  FSCertificate cert = (FSCertificate)model.get("fscert");
 				  
 				  String template = fsCertService.getTemplate("declaration", lang);
-				  cert.setConfirmation(template);
+				  cert.setConfirmation(template == null ? "Шаблон для выбранного языка не определен" : template);
 				 
 				  response.setContentType("text/html; charset=UTF-8");
 				  response.setCharacterEncoding("UTF-8");
@@ -1179,8 +1194,8 @@ public class FSCertificateController {
 	// ========================================================================
 	@RequestMapping(value = "fsprint.do",  method = RequestMethod.GET)
 	public String printFSCertificate(
-			@RequestParam(value = "certid", required = true) int id,
-			@RequestParam(value = "type", defaultValue="doc", required = true) String type,
+			@RequestParam(value = "certid", required = false) Integer id,
+			@RequestParam(value = "type", defaultValue="org", required = true) String type,
 			HttpSession session, HttpServletRequest request, HttpServletResponse response, ModelMap model)  {
 		
 			String relativeWebPath = "/resources";
@@ -1189,7 +1204,11 @@ public class FSCertificateController {
 			
 			FSCertificate cert = null;
 			try {
-				cert = fsCertService.getFSCertificateById(id);
+				if (id == null) {
+					cert = (FSCertificate) model.get("fscert");
+				} else {
+				    cert = fsCertService.getFSCertificateById(id.intValue());
+				}
 				makepdffile(absoluteDiskPath, cert, type);
 			} catch (Exception e) {
 				e.printStackTrace();

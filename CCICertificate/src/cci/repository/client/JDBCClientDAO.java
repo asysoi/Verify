@@ -90,6 +90,7 @@ public class JDBCClientDAO implements ClientDAO {
 		Map<String, Map<String,String>> countries = new HashMap<String, Map<String,String>>();
 		Map<String, String> countriesru = new LinkedHashMap<String, String>();
 		Map<String, String> countriesen = new LinkedHashMap<String, String>();
+		Map<String, String> countriesfru = new LinkedHashMap<String, String>();
 		
 		List<Country> list = template.getJdbcOperations().query(sql,
 				new BeanPropertyRowMapper<Country>(Country.class));
@@ -97,11 +98,14 @@ public class JDBCClientDAO implements ClientDAO {
 		for (Country cntry:list) {
 			countriesru.put(cntry.getCode(), cntry.getName());
 			countriesen.put(cntry.getCode(), cntry.getEnname());
+			countriesfru.put(cntry.getCode(), cntry.getFname());
 		}
 		countries.put("RU",countriesru);
 		countries.put("EN",countriesen);
+		countries.put("RUF",countriesfru);
 		
-		LOG.debug("Got country list");		
+		LOG.debug("Got country list");	
+		LOG.info(countries);		
 		return countries;
 	}
 
@@ -163,11 +167,11 @@ public class JDBCClientDAO implements ClientDAO {
 				+ "(id, "
 				+ "name, city, street, cindex, office, building, phone, cell, fax, "
 				+ "unp, okpo, bname, bcity, bstreet, bindex, boffice, bbuilding, account,"
-				+ "bunp, email, bemail,codecountry,bcodecountry, version) "
+				+ "bunp, email, bemail,codecountry,bcodecountry, version, address) "
 				+ "values (id_client_seq.nextval, "
 				+ ":name,:city,:street,:cindex,:office,:building,:phone,:cell, :fax,"
 				+ ":unp, :okpo, :bname,:bcity,:bstreet,:bindex,:boffice,:bbuilding,:account,"
-				+ ":bunp,:email,:bemail,:codecountry,:bcodecountry,:version) ";
+				+ ":bunp,:email,:bemail,:codecountry,:bcodecountry,:version, :address) ";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(client);
 
@@ -179,8 +183,8 @@ public class JDBCClientDAO implements ClientDAO {
 			id = keyHolder.getKey().intValue();
 
 			if (row > 0) {
-				sql = "insert into CCI_CLIENT_LOCALE(idclient, locale, name, street, city) values ("
-						+ id + ",:locale, :name, :street, :city)";
+				sql = "insert into CCI_CLIENT_LOCALE(idclient, locale, name, street, city, address) values ("
+						+ id + ",:locale, :name, :street, :city, :address)";
 				
 				if (client.getLocales() != null && client.getLocales().size() > 0) {
 					SqlParameterSource[] batch = SqlParameterSourceUtils
@@ -207,7 +211,7 @@ public class JDBCClientDAO implements ClientDAO {
 				+ "unp=:unp, okpo=:okpo, bname=:bname, bcity=:bcity, bstreet=:bstreet,"
 				+ "bindex=:bindex, boffice=:boffice, bbuilding=:bbuilding, account=:account,"
 				+ "bunp=:bunp, email=:email, bemail=:bemail, codecountry=:codecountry,"
-				+ "bcodecountry=:bcodecountry, version = :version + 1 "
+				+ "bcodecountry=:bcodecountry, version = :version + 1, address = :address "
 				+ "WHERE id = :id and version=:version";
 
 		SqlParameterSource parameters = new BeanPropertySqlParameterSource(client);
@@ -222,8 +226,8 @@ public class JDBCClientDAO implements ClientDAO {
 						"delete from CCI_CLIENT_LOCALE where idclient = ?",
 						client.getId());
 				
-				sql = "insert into CCI_CLIENT_LOCALE(idclient, locale, name, street, city) values ("
-						+ client.getId() + ", :locale, :name, :street, :city)";
+				sql = "insert into CCI_CLIENT_LOCALE(idclient, locale, name, street, city, address) values ("
+						+ client.getId() + ", :locale, :name, :street, :city, :address)";
 				
 				LOG.info("Client locales: " + client.getLocales());
 				

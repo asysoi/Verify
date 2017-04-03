@@ -138,35 +138,7 @@
 
 		$("#pdfview").dialog("open");
 	}
-
-	function openCertificate(certid) {
-		memo = "Воспроизведение бумажной версии сертификата. <p>" + 
-		       "Результат воспроизведения может незначительно отличаться по форме и стилю отображения," +
-		       "но полностью воспроизводит содержание документа.</p>"
-		url = "fscert.do?certid=" + certid;
-		var win=window.open(url,'_blank');
-		win.focus();
-	}
 	
-	function editCertificate(certid) {
-		url = "fsedit.do?certid=" + certid;
-		//window.location.href = url;
-		var win=window.open(url, "_self");
-		win.focus();
-	}
-	
-	function printOriginalCertificate(certid) {
-		url = "fsprint.do?certid=" + certid+"&type=org";
-		var win=window.open(url, "_blank");
-		win.focus();
-	}
-
-	function printCopyCertificate(certid) {
-		url = "fsprint.do?certid=" + certid+"&type=copy";
-		var win=window.open(url, "_blank");
-		win.focus();
-	}
-
 	
     // ---------------------------------------------------------------------------------
     // Download list to Excel файл 
@@ -288,10 +260,10 @@
 				<div class="ccidropdown"><span>${cert.certnumber}</span>
 				<div class="ccidropdown-content"> 
 				<ul class="cci">
-					<li class="cci"><a class="cci" href="javascript:editCertificate('${cert.id}')"><i class="glyphicon glyphicon-edit"></i></a></li>
-					<li class="cci"><a class="cci" href="javascript:openCertificate('${cert.id}')"><i class="glyphicon glyphicon-eye-open"></i></a></li>
-					<li class="cci"><a class="cci" href="javascript:printOriginalCertificate('${cert.id}')"><i class="glyphicon glyphicon-print"></i></a></li>
-					<li class="cci"><a class="cci" href="javascript:printCopyCertificate('${cert.id}')"><i class="glyphicon glyphicon-print"></i></a></li>
+					<li class="cci"><a class="cci" href="javascript:editFSCertificate('${cert.id}')"><i class="glyphicon glyphicon-edit"></i></a></li>
+					<li class="cci"><a class="cci" href="javascript:openFSCertificate('${cert.id}')"><i class="glyphicon glyphicon-eye-open"></i></a></li>
+					<li class="cci"><a class="cci" href="javascript:printOriginalFSCertificate('${cert.id}')"><i class="glyphicon glyphicon-print"></i></a></li>
+					<li class="cci"><a class="cci" href="javascript:printCopyFSCertificate('${cert.id}')"><i class="glyphicon glyphicon-print"></i></a></li>
 				</ul> </div> </div>
 				</td>
 				<td>${cert.exportername}. ${cert.exporteraddress} </td>

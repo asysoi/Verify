@@ -121,7 +121,7 @@
 		$("#clview").load(link);        
 		$("#clview").dialog("option", "title", 'Сотрудник БелТПП');
 		$("#clview").dialog("option", "width", 690);
-		$("#clview").dialog("option", "height", 590);
+		$("#clview").dialog("option", "height", 390);
 		$("#clview").dialog("option", "modal", true);
 		$("#clview").dialog("option", "resizable", false);
 		$("#clview").dialog({ buttons: [ { text: "Сохранить",  click : function() { updateEmployee(); } },  
@@ -162,7 +162,7 @@
 		$("#clview").load(link);        
 		$("#clview").dialog("option", "title", 'Новый Сотрудник БелТПП');
 		$("#clview").dialog("option", "width", 690);
-		$("#clview").dialog("option", "height", 590);
+		$("#clview").dialog("option", "height", 390);
 		$("#clview").dialog("option", "modal", true);
 		$("#clview").dialog("option", "resizable", false);
 		$("#clview").dialog({ buttons: [ { text: "Сохранить",  click : function() { saveEmployee(); } },  

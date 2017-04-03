@@ -127,7 +127,7 @@
 		$("#clview").load(link);        
 		$("#clview").dialog("option", "title", 'Компания');
 		$("#clview").dialog("option", "width", 820);
-		$("#clview").dialog("option", "height", 570);
+		$("#clview").dialog("option", "height", 370);
 		$("#clview").dialog("option", "modal", true);
 		$("#clview").dialog("option", "resizable", false);
 		$("#clview").dialog({ buttons: [ { text: "Сохранить",  click : function() { updateClient(); } },  
@@ -147,7 +147,7 @@
 		$("#clview").load(link);        
 		$("#clview").dialog("option", "title", 'Компания');
 		$("#clview").dialog("option", "width", 820);
-		$("#clview").dialog("option", "height", 570);
+		$("#clview").dialog("option", "height", 370);
 		$("#clview").dialog("option", "modal", true);
 		$("#clview").dialog("option", "resizable", false);
 		$("#clview").dialog({ buttons: [ { text: "Сохранить",  click : function() { saveClient(); } },  
