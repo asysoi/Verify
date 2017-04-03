@@ -79,7 +79,9 @@ function printCopyFSCertificate(certid) {
 }
 
 function printOriginalFSCertificate() {
-	url = "fsprint.do?type=org";
+	url = "fsprint.do";
+	$.ajaxSetup({async:false});
+	$.post(url, $("#fscert").serialize());
 	var win=window.open(url, "_blank");
 	win.focus();
 }

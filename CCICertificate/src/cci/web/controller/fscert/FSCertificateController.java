@@ -573,7 +573,7 @@ public class FSCertificateController {
 					  if (!"RU".equals(lang)) {
 						  EmployeeLocale locale = emp.getLocale(lang);
 						  if (locale != null) {
-					        response.getWriter().println(getValue(locale.getJob()) + getValue(locale.getName()));
+					        response.getWriter().println(getValue(locale.getJob()) + " " + getValue(locale.getName()));
  			        	  } else {
  			        		response.getWriter().println("Не определено для выбранного языка");
 				          }
@@ -639,7 +639,6 @@ public class FSCertificateController {
 	private String getClientName(Client client, String lang) {
         String ret = "";
         
-        
         ret = (client.getName() != null ? client.getName() : "")   
          		  + (client.getName() != null && client.getAddress() != null ? ", " : "")
                     + (client.getAddress() != null ? client.getAddress() : "");
@@ -649,7 +648,7 @@ public class FSCertificateController {
         	if (locale != null) {
         	  ret = (locale.getName() != null ? locale.getName() : "")   
                   +  (locale.getName() != null && locale.getAddress() != null ? ", " : "") 
-                  +  (locale.getAddress() != null ? client.getAddress() : "")
+                  +  (locale.getAddress() != null ? locale.getAddress() : "")
                   + "(" + ret + ")";
         	} else {
         		ret = "Не определено для выбранного языка" + "(" + ret + ")";
@@ -1216,6 +1215,30 @@ public class FSCertificateController {
 			return "redirect:" + "/resources/out/" + cert.getCertnumber() + ".pdf";
 	}
 		
+	// ========================================================================
+	@RequestMapping(value = "fsprint.do",  method = RequestMethod.POST)
+	public void printFSCertificate( 
+			FSCertificate fscert, ModelMap model)  {
+	    
+	    FSCertificate storedCert = (FSCertificate)model.get("fscert");
+	    
+	    if (storedCert == null) {
+		    model.addAttribute("error", "Информация о редактируемом сертификате потеряна. Перезегрузите сертификат.");		       	
+	    } else {
+	    	fscert.setId(storedCert.getId());
+	    	fscert.setCertnumber(storedCert.getCertnumber());
+	    	fscert.setBranch(storedCert.getBranch());
+	    	fscert.setExporter(storedCert.getExporter());
+	    	fscert.setProducer(storedCert.getProducer());
+	    	fscert.setExpert(storedCert.getExpert());
+	    	fscert.setSigner(storedCert.getSigner());
+	    	fscert.setBlanks(storedCert.getBlanks());
+	    	fscert.setProducts(storedCert.getProducts());
+	    	model.addAttribute("fscert", fscert);
+	    	storedCert = null;
+	    }
+	}
+	
 	
 	// ---------------------------------------------------------------------------------------
 	//

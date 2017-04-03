@@ -405,7 +405,7 @@
 <div id="error" class="error">${error}</div>
 </c:if>  
 
-<p align="left">
+<p align="right">
 <a href="javascript:goBack();"><i class="glyphicon glyphicon-arrow-left"></i></a>
 <a href="javascript:save();"><i class="glyphicon glyphicon-save" ></i></a>
 <a href="javascript:printOriginalFSCertificate();"><i class="glyphicon glyphicon-print" ></i></a>
