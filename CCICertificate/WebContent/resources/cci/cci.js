@@ -86,4 +86,7 @@ function printOriginalFSCertificate() {
 	win.focus();
 }
 
+function submitForm(formName) {
+    document.getElementById(formName).submit();
+}
 

@@ -45,18 +45,14 @@ public class MainController {
 		model.addAttribute("user", user);
 		return "login";
 	}
-
-	@RequestMapping(value = "/login.do", method = RequestMethod.POST)
+	
+	/*
+	 * @RequestMapping(value = "/logout.do", method = RequestMethod.GET)
 	public String login(@ModelAttribute("user") User user,
-			BindingResult result, SessionStatus status, Authentication aut) {
-		
-		LOG.debug("Login: User " + aut.getName() + " logged" ); 
-		if (user.getUsername().equals(user.getPassword())) {
-			return "welcome";
-		} else {
-			return "login";
-		}
-	}
+		BindingResult result, SessionStatus status, Authentication aut) {
+		return "logout";
+	}*/
+
 	
 	@RequestMapping(value = "/members.do", method = RequestMethod.GET)
 	public String members() {

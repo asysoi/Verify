@@ -111,9 +111,17 @@
         <property name="username" value="cert"/>
         <property name="password" value="123456"/>
     </bean>
- 
     
- <security:http auto-config="true" use-expressions="true">
+    <!-- Database Security 
+    <bean id="securityDAO" class="cci.repository.security.JDBCSecurityDAO">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    -->
+    
+ <!-- Security configuration  -->
+ <security:http auto-config="false" use-expressions="true">
+    <!-- security:intercept-url pattern="/admin**" access="hasRole('ROLE_ADMIN')" /-->
+	<security:access-denied-handler error-page="/403"/>
     <security:intercept-url pattern="/resources/**" access="permitAll" requires-channel="https"/> 
     <security:intercept-url pattern="/certcheck.**" access="permitAll" requires-channel="https"/>
     <security:intercept-url pattern="/login*.**" access="permitAll" requires-channel="https"/>
@@ -122,47 +130,32 @@
     <security:intercept-url pattern="/owncert*.do" access="hasAnyRole('ROLE_EXPERT','ROLE_MINSK', 'ROLE_GOMEL', 'ROLE_VITEBSK', 'ROLE_GRODNO', 'ROLE_MOGILEV', 'ROLE_BREST')"/>
     <security:intercept-url pattern="/pch*.do" access="hasRole('ROLE_ACCOUNT')"/>
     <security:intercept-url pattern="/**" access="isFullyAuthenticated()" requires-channel="https"/>
-    <security:form-login login-page="/login.do" default-target-url="/main.do"/>
-    <security:http-basic/>
-    <security:logout logout-url="/logout.do" logout-success-url="/main.do"/> 
-    <security:remember-me/> 
+    
+    <security:form-login 
+        login-processing-url="/j_spring_security_check"
+    	login-page="/login.do" 
+    	authentication-failure-url="/login.do?login_error=true"
+    	default-target-url="/main.do"
+    	username-parameter="j_username"
+		password-parameter="j_password"/>
+		
+    <security:logout
+    	delete-cookies="JSESSIONID"  
+    	logout-url="/logout.do"
+    	logout-success-url="/login.do"/>
+    <!-- security:csrf/ -->
+    <security:http-basic/> 
+    <!-- security:remember-me/ -->
  </security:http>
  
  <security:authentication-manager>
-    <security:authentication-provider>
-      <security:user-service>
-        <security:user name="admin" password="ad1012" authorities="ROLE_ADMIN" />
-        <security:user name="client" password="client" authorities="ROLE_CLIENT" />
-        <security:user name="accounter" password="accounter" authorities="ROLE_ACCOUNT" />
-        <security:user name="expert" password="ex2615" authorities="ROLE_EXPERT" />
-        <security:user name="zaburuyeva" password="sz2287" authorities="ROLE_EXPERT" />
-        <security:user name="gomel" password="go1012" authorities="ROLE_GOMEL"/>
-        <security:user name="minsk" password="mi1012" authorities="ROLE_MINSK"/>
-        <security:user name="vitebsk" password="vi1012" authorities="ROLE_VITEBSK"/>
-        <security:user name="brest" password="br1012" authorities="ROLE_BREST"/>
-        <security:user name="grodno" password="gr1012" authorities="ROLE_GRODNO"/>
-        <security:user name="mogilev" password="mo1012" authorities="ROLE_MOGILEV"/>
-        <security:user name="fil" password="if5750" authorities="ROLE_VITEBSK"/>        
-        <security:user name="butkevich" password="ub1256" authorities="ROLE_VITEBSK"/>
-        <security:user name="halansky" password="ah4284" authorities="ROLE_VITEBSK"/>
-        <security:user name="nadilu" password="ni7755" authorities="ROLE_MOGILEV"/>
-        <security:user name="hlimankov" password="mh3946" authorities="ROLE_MOGILEV"/>
-        <security:user name="stopchik" password="ns8367" authorities="ROLE_MOGILEV"/>
-        <security:user name="budko" password="ub2845" authorities="ROLE_GRODNO"/>
-        <security:user name="koritco" password="ak9935" authorities="ROLE_GRODNO"/>
-        <security:user name="salei" password="ns1907" authorities="ROLE_GRODNO"/>
-        <security:user name="mishuk" password="um2145" authorities="ROLE_MINSK"/>
-        <security:user name="vojtovich" password="av8329" authorities="ROLE_MINSK"/>
-        <security:user name="brest_gen" password="vl2413" authorities="ROLE_BREST"/>
-        <security:user name="brest_zam" password="db7821" authorities="ROLE_BREST"/>
-        <security:user name="palenova" password="np3734" authorities="ROLE_BREST"/>
-        <security:user name="manzhos" password="om2904" authorities="ROLE_BREST"/>
-        <security:user name="drozdova" password="nd3645" authorities="ROLE_GOMEL"/>
-        <security:user name="studenkov" password="as8937" authorities="ROLE_GOMEL"/>
-        <security:user name="tachiliva" password="tt4834" authorities="ROLE_EXPERT"/>
-        <security:user name="nevestenko" password="vn9851" authorities="ROLE_EXPERT"/>
-     </security:user-service>
-    </security:authentication-provider>
+   <security:authentication-provider>
+	  <security:jdbc-user-service data-source-ref="dataSource"
+		  users-by-username-query=
+		    "select username, password, enabled from users where username=?"
+		  authorities-by-username-query=
+		    "select username, authority from authorities where username =?  " />
+   </security:authentication-provider>
  </security:authentication-manager>
     
 </beans>

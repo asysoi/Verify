@@ -1,5 +1,7 @@
 ﻿<%@ taglib prefix="security" uri="http://www.springframework.org/security/tags"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+
 
 				
    <div class="container-fluid">
@@ -97,12 +99,14 @@
 				</li>
 			    </security:authorize>
 				
+				<li>
+				    <a href="logout.do">
+					<security:authorize access="isAuthenticated()">
+    				Выйти <security:authentication property="principal.username" /> 
+					</security:authorize>
+				    </a>
+				 </li>
 				
-				<li><a href="logout.do">
-				<security:authorize access="isAuthenticated()">
-    			Выйти <security:authentication property="principal.username" /> 
-				</security:authorize>
-				</a></li>
 				<li><a href="help.do">Справка</a></li>
 			</ul>
 		  </security:authorize>
@@ -110,4 +114,3 @@
 						
       </div>
     </div>
- 
