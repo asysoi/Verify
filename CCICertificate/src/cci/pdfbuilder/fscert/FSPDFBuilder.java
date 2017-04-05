@@ -218,12 +218,14 @@ public class FSPDFBuilder extends PDFBuilder {
 	}
 
 	private void addBranchInfo(PdfPTable table, FSCertificate cert, Font font) {
-		String name = cert.getBranch().getName();
-        name = name.replaceFirst("услуг", "услуг\n");  		
-		addCellToTable(table, 3, name, Element.ALIGN_CENTER, font, 30f, 30f, 8f);
-        addCellToTable(table, 3, cert.getBranch().getAddress(), Element.ALIGN_CENTER, font, 54f, 54f);
-        addCellToTable(table, 3, "телефон: "+ cert.getBranch().getPhone() +"  факс: "+ cert.getBranch().getCell() 
+		if (cert.getBranch() != null) {
+			String name = cert.getBranch().getName();
+			name = name.replaceFirst("услуг", "услуг\n");  		
+			addCellToTable(table, 3, name, Element.ALIGN_CENTER, font, 30f, 30f, 8f);
+			addCellToTable(table, 3, cert.getBranch().getAddress(), Element.ALIGN_CENTER, font, 54f, 54f);
+			addCellToTable(table, 3, "телефон: "+ cert.getBranch().getPhone() +"  факс: "+ cert.getBranch().getCell() 
         		+ "  e-mail: " + cert.getBranch().getEmail(), Element.ALIGN_CENTER, font, 36f, 36f);
+		}
 	}
 	
 	private void addFSCertificateHeader(PdfPTable table, FSCertificate cert, Font font, boolean flagOriginal) {

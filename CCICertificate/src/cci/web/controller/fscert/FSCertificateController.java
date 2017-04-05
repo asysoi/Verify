@@ -1,6 +1,8 @@
 package cci.web.controller.fscert;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
@@ -15,6 +17,8 @@ import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.web.bind.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -57,7 +61,7 @@ import cci.web.controller.cert.CertificateController;
 
 
 @Controller
-@SessionAttributes({ "fscertfilter", "fsmanager","fscert"})
+@SessionAttributes({ "fscertfilter", "fsmanager","fscert", "activeemployee"})
 public class FSCertificateController {
 	
 	private static final Logger LOG=Logger.getLogger(FSCertificateController.class);
@@ -416,6 +420,52 @@ public class FSCertificateController {
 	}
 	
 	// ---------------------------------------------------------------------------------------
+	//   Create new FS Certificate/ Fill expert name and Number generate
+	// ---------------------------------------------------------------------------------------
+	@RequestMapping(value = "fsadd.do",  method = RequestMethod.GET)
+	public String createFSCertificate( Authentication aut, ModelMap model) {
+				try {
+					 
+				     FSCertificate cert = new FSCertificate();
+				     Employee employee = (Expert) model.get("activeemployee");
+				     
+				     if (employee == null) {
+				    	 employee = fsCertService.getEmployeeByUserName(aut.getName());
+				         model.addAttribute("activeemployee", employee);
+				     }
+				     
+				     if (employee != null) {
+				    	 Expert expert = new Expert();
+				    	 expert.init(employee);
+				    	 cert.setExpert(expert);
+				     
+				    	 Signer signer = new Signer();
+				    	 signer.init(employee);
+				    	 cert.setSigner(signer);
+				    	 
+				    	 cert.setOtd_id(employee.getDepartment().getId_otd());
+				    	 cert.setDepartment(employee.getDepartment()); ;
+				     }
+				     cert.setDatecert((new SimpleDateFormat("dd.MM.yyyy")).format(new Date()));
+				     model.addAttribute("fscert", cert);
+				     LOG.info(cert); 
+				} catch (Exception ex) {
+					model.addAttribute("error", ex.getMessage());
+					return "error";
+				}
+				return "editfscertificate";
+		}
+	
+	
+	private String generateNewCertNumber(String userName, Employee expert) {
+		String number = "";
+		if (expert!= null && expert.getDepartment() != null) {
+			number = expert.getDepartment().getId_otd() + "" + expert.getDepartment().getCode();
+		}
+		return number;
+	}
+
+	// ---------------------------------------------------------------------------------------
 	//   View FS Certificate as HTML page 
 	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "fscert.do",  method = RequestMethod.GET)
@@ -638,45 +688,47 @@ public class FSCertificateController {
 	
 	private String getClientName(Client client, String lang) {
         String ret = "";
-        
-        ret = (client.getName() != null ? client.getName() : "")   
+        if (client != null) {
+        	ret = (client.getName() != null ? client.getName() : "")   
          		  + (client.getName() != null && client.getAddress() != null ? ", " : "")
                     + (client.getAddress() != null ? client.getAddress() : "");
         
-        if (!"RU".equals(lang)) {
-        	ClientLocale locale = client.getLocale(lang);
-        	if (locale != null) {
-        	  ret = (locale.getName() != null ? locale.getName() : "")   
-                  +  (locale.getName() != null && locale.getAddress() != null ? ", " : "") 
-                  +  (locale.getAddress() != null ? locale.getAddress() : "")
-                  + "(" + ret + ")";
-        	} else {
-        		ret = "Не определено для выбранного языка" + "(" + ret + ")";
+        	if (!"RU".equals(lang)) {
+        		ClientLocale locale = client.getLocale(lang);
+        		if (locale != null) {
+        			ret = (locale.getName() != null ? locale.getName() : "")   
+        					+  (locale.getName() != null && locale.getAddress() != null ? ", " : "") 
+        					+  (locale.getAddress() != null ? locale.getAddress() : "")
+        					+ "(" + ret + ")";
+        		} else {
+        			ret = "Не определено для выбранного языка" + "(" + ret + ")";
+        		}
         	}
-        }
+        }	
 		return  ret;
 	}
 	
 	private String getEmployeeName(Employee employee, String lang) {
         String ret = "";
         
-        ret = (employee.getJob() != null ? employee.getJob() : "")  + " " 
+        if (employee != null) {
+        	ret = (employee.getJob() != null ? employee.getJob() : "")  + " " 
                   + (employee.getName() != null ? employee.getName() : "");
         
-        if (!"RU".equals(lang)) {
-        	EmployeeLocale locale = employee.getLocale(lang);
-        	if (locale != null) {
-        		ret = (locale.getJob() != null ? locale.getJob() : "") 
+        	if (!"RU".equals(lang)) {
+        		EmployeeLocale locale = employee.getLocale(lang);
+        		if (locale != null) {
+        			ret = (locale.getJob() != null ? locale.getJob() : "") 
         	  		  + " " + (locale.getName() != null ? locale.getName() : "")
         			  + "(" + ret + ")";
-        	} else {
-        		ret = "Не определено для выбранного языка" + "(" + ret + ")";
+        		} else {
+        			ret = "Не определено для выбранного языка" + "(" + ret + ")";
+        		}
         	}
         }
 		return  ret;
 	}
 	
-
 	// ---------------------------------------------------------------------------------------
 	//   Reload Declaration from template
 	// ---------------------------------------------------------------------------------------

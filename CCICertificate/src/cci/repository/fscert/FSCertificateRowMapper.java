@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 
 import org.springframework.jdbc.core.RowMapper;
 
+import cci.model.Department;
 import cci.model.fscert.Branch;
 import cci.model.fscert.Expert;
 import cci.model.fscert.Exporter;
@@ -58,6 +59,12 @@ public class FSCertificateRowMapper implements RowMapper {
 			Signer obj = new Signer();
 			obj.setId(rs.getLong("ID_SIGNER"));
 			cert.setSigner(obj);	
+		}
+		
+		if (rs.getLong("IDDEPARTMENT") != 0) {
+			Department obj = new Department();
+			obj.setId(rs.getLong("IDDepartment"));
+			cert.setDepartment(obj);	
 		}
 		
 		return cert;

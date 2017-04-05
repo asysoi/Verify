@@ -3,6 +3,8 @@ package cci.repository.fscert;
 import java.util.List;
 import java.util.Map;
 
+import cci.model.Employee;
+import cci.model.fscert.Expert;
 import cci.model.fscert.FSCertificate;
 import cci.model.owncert.OwnCertificate;
 import cci.repository.SQLBuilder;
@@ -34,5 +36,7 @@ public interface FSCertificateDAO {
 	public FSCertificate findFSCertificateByID(int id) throws Exception;
 
 	public FSTranslate loadTemplates();
+
+	public Employee getEmployeeByUserName(String username);
 	
 }

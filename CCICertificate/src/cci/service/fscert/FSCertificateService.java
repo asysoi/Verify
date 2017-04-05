@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import cci.model.Employee;
+import cci.model.fscert.Expert;
 import cci.model.fscert.FSCertificate;
 import cci.model.owncert.OwnCertificate;
 import cci.repository.SQLBuilder;
@@ -25,7 +27,6 @@ public class FSCertificateService {
     
 	@Autowired
 	private FSCertificateDAO fscertificateDAO;
-	
 	private FSTranslate templates;
 
 	// ------------------------------------------------------------------------------
@@ -110,6 +111,13 @@ public class FSCertificateService {
         template = (String)((Map) templates.get(key)).get(lang) ;
         
 		return template;
+	}
+
+	// ------------------------------------------------------------------------------
+	//  Get Expert object by UserName 
+	// ------------------------------------------------------------------------------
+	public Employee getEmployeeByUserName(String username) {
+		return fscertificateDAO.getEmployeeByUserName(username);
 	}
 
 }

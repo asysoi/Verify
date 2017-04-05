@@ -59,9 +59,14 @@ function openFSCertificate(certid) {
 	win.focus();
 }
 
+function addFSCertificate() {
+	url = "fsadd.do";
+	var win=window.open(url, "_self");
+	win.focus();
+}
+
 function editFSCertificate(certid) {
 	url = "fsedit.do?certid=" + certid;
-	//window.location.href = url;
 	var win=window.open(url, "_self");
 	win.focus();
 }

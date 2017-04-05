@@ -19,6 +19,7 @@ import org.springframework.stereotype.Repository;
 
 import cci.model.Client;
 import cci.model.ClientLocale;
+import cci.model.Department;
 import cci.model.Employee;
 import cci.model.EmployeeLocale;
 import cci.model.cert.Certificate;
@@ -35,6 +36,7 @@ import cci.model.owncert.OwnCertificateExport;
 import cci.model.owncert.Product;
 import cci.repository.SQLBuilder;
 import cci.repository.owncert.OwnCertificateMapper;
+import cci.repository.staff.EmployeeRowMapper;
 import cci.service.SQLQueryUnit;
 import cci.web.controller.fscert.FSFilter;
 import cci.web.controller.fscert.ViewFSCertificate;
@@ -188,6 +190,33 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 		return fstranslate;
 	}
 
+	
+	// ---------------------------------------------------------------
+	// Получить сотрудника палаты по имени пользователя
+	// ---------------------------------------------------------------
+	public Employee getEmployeeByUserName(String username) {
+		String sql = "select * from EMPLOYEE_VIEW WHERE id = (SELECT IDEMPLOYEE from users where username=?)";
+
+		Employee employee = template.getJdbcOperations()
+				.queryForObject(
+						sql,
+						new Object[] { username },
+						new EmployeeRowMapper<Employee>());
+		
+		if  (employee != null) {
+			sql = "select * from CCI_EMPLOYEE_LOCALE WHERE IDEMPLOYEE = ? ORDER BY LOCALE";
+			List<EmployeeLocale> locales = template.getJdbcOperations().query(sql, new Object[] { employee.getId() },
+					new BeanPropertyRowMapper<EmployeeLocale>(EmployeeLocale.class));
+			if (locales != null && locales.size() > 0) {
+			   int lid = 0;	
+			   for (EmployeeLocale locale : locales) {
+				   locale.setId(lid++);
+			   }
+			   employee.setLocales(locales);
+			}
+		}
+		return employee;
+	}
 
 	
 	// ------------------------------------------------------------------------------------------------------
@@ -212,6 +241,7 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 			if (cert.getProducer()!=null && cert.getProducer().getId() == 0 ) cert.getProducer().setId(findOrCreateClientID(cert.getProducer()));
 			if (cert.getExpert()!=null && cert.getExpert().getId() == 0 ) cert.getExpert().setId(findOrCreateEmployeeID(cert.getExpert()));
 			if (cert.getSigner()!=null && cert.getSigner().getId() == 0 ) cert.getSigner().setId(findOrCreateEmployeeID(cert.getSigner()));
+			if (cert.getDepartment()!=null && cert.getDepartment().getId() == 0 ) cert.getDepartment().setId(findOrCreateDepartmentID(cert.getDepartment()));
 			
 			LOG.info("Save FS Certificate: " + cert);
 			
@@ -448,6 +478,67 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 
 			return sqlwhere;
 		}
+		
+		// ----------------------------------------------------------------------------------------------------
+  	    //  Get id of department / create department if it doesn't exist
+		// ----------------------------------------------------------------------------------------------------
+		private long findOrCreateDepartmentID(Department dep) throws Exception{
+					String where = createDepartmentWhereClause(dep);
+					
+					if (where.isEmpty()) {
+						throw new RuntimeException("Отсутствует информация о подразделении");
+					}
+					
+					String sql = "SELECT id FROM cci_department " + where ;
+					long id = 0;
+					
+					try {
+						SqlParameterSource parameters = 
+								new BeanPropertySqlParameterSource(dep);
+						
+						Department department = this.template.queryForObject(sql, 
+										parameters,
+										new BeanPropertyRowMapper<Department>(Department.class));
+						id = department.getId();
+						
+					} catch (Exception ex) {
+					   LOG.info(ex.getMessage());	
+					   if (id == 0) {
+						  sql = "insert into cci_department() " +  
+									"values( ) ";
+						  
+						  SqlParameterSource parameters = new BeanPropertySqlParameterSource(dep);
+						  GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+						  
+						  template.update(sql, parameters, keyHolder,
+								new String[] { "id" });
+						  id = keyHolder.getKey().longValue();
+					    }
+					}
+					return id;
+		}
+
+		// ------------------------------------------------------------------------
+		//  make where clause for department 
+		//-------------------------------------------------------------------------
+		private String createDepartmentWhereClause(Department dep) {
+		        String sqlwhere = "";
+					
+				if (dep.getName() != null && !dep.getName().isEmpty()) {
+						if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
+						sqlwhere += " name = :name ";   
+				}    
+				if (dep.getCode() != null && !dep.getCode().isEmpty()) {
+						if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
+						sqlwhere += " code = :code ";   
+				}
+				if (dep.getId_otd() != null && dep.getId_otd() > 0) {
+					if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
+					sqlwhere += " id_otd = :id_otd ";   
+			    }
+				if (sqlwhere.length() != 0)  sqlwhere += " AND ROWNUM = 1 ";
+				return sqlwhere;
+		}
 
 		//--------------------------------------------------------------------
 		//--------------------------------------------------------------------
@@ -510,6 +601,12 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 				loadEmployeeLocales(obj);
 				rcert.setSigner(obj);
 			}
+			
+			if (rcert.getDepartment() != null) {
+				Department obj = template.getJdbcOperations().queryForObject("select * from cci_department where id = ? ",
+						new Object[] { rcert.getDepartment().getId() }, new BeanPropertyRowMapper<Department>(Department.class));
+				rcert.setDepartment(obj);
+			}
 
 			if (rcert != null) {
 				String sql = "select * from FS_PRODUCT WHERE ID_FSCERT = ?  ORDER BY id";
@@ -520,7 +617,10 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 				rcert.setBlanks(template.getJdbcOperations().query(sql, new Object[] { rcert.getId() },
 						new BeanPropertyRowMapper<FSBlank>(FSBlank.class)));
 			}
+			
 		  }
+		  
+		  
 
 		}
 
@@ -706,4 +806,7 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 	    	LOG.info("Certificate " + rnumber + " deleted !");
 			return rnumber;
 		}
+
+
+		
 }

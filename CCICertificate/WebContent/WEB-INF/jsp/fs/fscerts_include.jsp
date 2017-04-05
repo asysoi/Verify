@@ -229,14 +229,12 @@
             </td>
 
 			<td style="width: 40%; text-align: right">
-			       <!--  a href="javascript:reportWindow();"><img src="resources/images/report_24.png" alt="Отчет"/></a -->
-				   &nbsp;
+			   	   <a href="javascript:addFSCertificate();"><img src="resources/images/addclient.png" alt="Добавить"/></a>
 				   <a href="javascript:downloadCertificates();"><img src="resources/images/exp_excel.png"alt="Загрузить"/></a>
 				   &nbsp;			        
 			       Строк в списке: <c:forEach items="${sizes}" var="item">
 	           	   &nbsp;	
-	               <a
-						href="javascript: goToList('fscerts.do?page=1&pagesize=${item}&orderby=${fsmanager.orderby}
+	               <a href="javascript: goToList('fscerts.do?page=1&pagesize=${item}&orderby=${fsmanager.orderby}
 							&order=${fsmanager.order}');">${item}</a>
 				</c:forEach>
 			</td>

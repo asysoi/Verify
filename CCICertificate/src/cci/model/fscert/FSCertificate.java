@@ -11,6 +11,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import org.springframework.stereotype.Component;
 
+import cci.model.Department;
 import cci.model.cert.Product;
 
 //------------------------------------
@@ -40,8 +41,10 @@ public class FSCertificate {
 	private Signer signer;
 	private List<FSProduct> products;
 	private List<FSBlank> blanks;
-	private int otd_id;
+	private long otd_id;
 	private String language="RU";
+	private Department department;
+	
 	
 	public void init() {
 		branch = new Branch();
@@ -49,6 +52,15 @@ public class FSCertificate {
 		producer = new Producer();
 		expert = new Expert();
 		signer = new Signer();
+	}
+
+    
+	public Department getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(Department department) {
+		this.department = department;
 	}
 
 	@XmlTransient
@@ -61,10 +73,10 @@ public class FSCertificate {
 
 	
 	@XmlTransient
-	public int getOtd_id() {
+	public long getOtd_id() {
 		return otd_id;
 	}
-	public void setOtd_id(int otd_id) {
+	public void setOtd_id(long otd_id) {
 		this.otd_id = otd_id;
 	}
 
