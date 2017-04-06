@@ -34,6 +34,7 @@ import cci.model.ClientLocale;
 import cci.model.Employee;
 import cci.model.EmployeeLocale;
 import cci.model.cert.Certificate;
+import cci.model.fscert.Branch;
 import cci.model.fscert.Expert;
 import cci.model.fscert.Exporter;
 import cci.model.fscert.FSBlank;
@@ -424,47 +425,143 @@ public class FSCertificateController {
 	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "fsadd.do",  method = RequestMethod.GET)
 	public String createFSCertificate( Authentication aut, ModelMap model) {
-				try {
-					 
-				     FSCertificate cert = new FSCertificate();
-				     Employee employee = (Expert) model.get("activeemployee");
+		try {
+				 
+			     FSCertificate cert = new FSCertificate();
+			     Employee employee = (Employee) model.get("activeemployee");
 				     
-				     if (employee == null) {
-				    	 employee = fsCertService.getEmployeeByUserName(aut.getName());
-				         model.addAttribute("activeemployee", employee);
-				     }
+			     if (employee == null) {
+			    	 employee = fsCertService.getEmployeeByUserName(aut.getName());
+			         model.addAttribute("activeemployee", employee);
+			     }
 				     
-				     if (employee != null) {
-				    	 Expert expert = new Expert();
-				    	 expert.init(employee);
-				    	 cert.setExpert(expert);
+			     if (employee != null) {
+			    	 Expert expert = new Expert();
+			    	 expert.init(employee);
+			    	 cert.setExpert(expert);
 				     
-				    	 Signer signer = new Signer();
-				    	 signer.init(employee);
-				    	 cert.setSigner(signer);
+			    	 Signer signer = new Signer();
+			    	 signer.init(employee);
+			    	 cert.setSigner(signer);
 				    	 
-				    	 cert.setOtd_id(employee.getDepartment().getId_otd());
-				    	 cert.setDepartment(employee.getDepartment()); ;
-				     }
-				     cert.setDatecert((new SimpleDateFormat("dd.MM.yyyy")).format(new Date()));
+			    	 cert.setOtd_id(employee.getDepartment().getId_otd());
+			    	 cert.setDepartment(employee.getDepartment()); 
+			    	 
+			    	 Branch branch  = fsCertService.getBranchByCode(signer.getDepartment().getCode_otd());
+			    	 cert.setBranch(branch);
+			     }
+			     cert.setDatecert((new SimpleDateFormat("dd.MM.yyyy")).format(new Date()));
 				     model.addAttribute("fscert", cert);
 				     LOG.info(cert); 
-				} catch (Exception ex) {
+			} catch (Exception ex) {
+				ex.printStackTrace();
+				model.addAttribute("error", ex.getMessage());
+				return "error";
+			}
+			return "editfscertificate";
+	}
+	
+	
+	@RequestMapping(value = "fsadd.do",  method = RequestMethod.POST)
+	public String saveNewFSCertificate(FSCertificate fscert,
+			BindingResult result, SessionStatus status, ModelMap model) {
+		    
+		    FSCertificate storedCert = (FSCertificate)model.get("fscert");
+		    
+		    if (storedCert == null) {
+			    model.addAttribute("error", "Информация о редактируемом сертификате потеряна. Перезегрузите сертификат.");		       	
+		    } else {
+		    	fscert.setBranch(storedCert.getBranch());
+		    	fscert.setExporter(storedCert.getExporter());
+		    	fscert.setProducer(storedCert.getProducer());
+		    	fscert.setExpert(storedCert.getExpert());
+		    	fscert.setSigner(storedCert.getSigner());
+		    	fscert.setBlanks(storedCert.getBlanks());
+		    	fscert.setProducts(storedCert.getProducts());
+		    	fscert.setOtd_id(storedCert.getDepartment().getId_otd());
+		    	fscert.setDepartment(storedCert.getDepartment()); 
+		    	
+		    	try {
+		    		fsCertService.save(fscert);
+					model.remove("error");		    		
+		    	} catch (Exception ex) {
 					model.addAttribute("error", ex.getMessage());
-					return "error";
-				}
-				return "editfscertificate";
-		}
-	
-	
-	private String generateNewCertNumber(String userName, Employee expert) {
-		String number = "";
-		if (expert!= null && expert.getDepartment() != null) {
-			number = expert.getDepartment().getId_otd() + "" + expert.getDepartment().getCode();
-		}
-		return number;
+		    	}
+		    	model.addAttribute("fscert", fscert);
+		    	storedCert = null;
+		    }
+			return "editfscertificate";
 	}
 
+	// ---------------------------------------------------------------------------------------
+	//   Create new FS Certificate/ Fill expert name and Number generate
+	// ---------------------------------------------------------------------------------------
+	@RequestMapping(value = "rldfsnumber.do",  method = RequestMethod.POST)	
+	private void generateNewCertNumberPost(FSCertificate fscert, 
+			HttpSession session, HttpServletResponse response, ModelMap model) {
+		
+		try {
+			String number = "BY";
+			FSCertificate storedCert = (FSCertificate) model.get("fscert");
+	    
+			if (storedCert == null) {
+				model.addAttribute("error", "Информация о редактируемом сертификате потеряна. Перезегрузите сертификат.");		       	
+			} else {
+				number += fscert.getCodecountrytarget() != null ? fscert.getCodecountrytarget().toUpperCase() : "";
+				number += "7";
+	    		    			
+				if (storedCert.getSigner() != null && storedCert.getSigner().getDepartment() != null) {
+					number += storedCert.getSigner().getDepartment().getId_otd();
+					number += storedCert.getSigner().getDepartment().getCode();
+				}
+	    	}
+            LOG.info("New Number: " + number); 
+        	response.setContentType("text/xml;charset=utf-8"); 
+        	response.setCharacterEncoding("UTF-8");
+        	response.getWriter().println(number);
+        	response.flushBuffer();
+        }  catch (Exception ex) {
+			ex.printStackTrace();
+			LOG.info("Ошибка: " + ex.getMessage());
+			model.addAttribute("error", ex.getMessage());
+	    } 
+	}
+
+	// ---------------------------------------------------------------------------------------
+		//   Create new FS Certificate/ Fill expert name and Number generate
+		// ---------------------------------------------------------------------------------------
+		@RequestMapping(value = "rldfsnumber.do",  method = RequestMethod.GET)	
+		private void generateNewCertNumberGet(FSCertificate fscert, 
+				HttpSession session, HttpServletResponse response, ModelMap model) {
+			
+			try {
+				String number = "BY";
+				FSCertificate storedCert = (FSCertificate) model.get("fscert");
+		    
+				if (storedCert == null) {
+					model.addAttribute("error", "Информация о редактируемом сертификате потеряна. Перезегрузите сертификат.");		       	
+				} else {
+					number += fscert.getCodecountrytarget() != null ? fscert.getCodecountrytarget().toUpperCase() : "";
+					number += "7";
+		    		    			
+					if (storedCert.getSigner() != null && storedCert.getSigner().getDepartment() != null) {
+						number += storedCert.getSigner().getDepartment().getId_otd();
+						number += storedCert.getSigner().getDepartment().getCode();
+					}
+		    	}
+	            LOG.info("New Number: " + number); 
+	        	response.setContentType("text/xml;charset=utf-8"); 
+	        	response.setCharacterEncoding("UTF-8");
+	        	response.getWriter().println(number);
+	        	response.flushBuffer();
+	        }  catch (Exception ex) {
+				ex.printStackTrace();
+				LOG.info("Ошибка: " + ex.getMessage());
+				model.addAttribute("error", ex.getMessage());
+		    } 
+		}
+
+	
 	// ---------------------------------------------------------------------------------------
 	//   View FS Certificate as HTML page 
 	// ---------------------------------------------------------------------------------------
@@ -590,7 +687,7 @@ public class FSCertificateController {
 	
 
 	// ---------------------------------------------------------------------------------------
-	//   Link Exporter to FS certificate  
+	//   Link Employee to FS certificate  
 	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "selemployee.do",  method = RequestMethod.GET)
 	public void linkEmployeeToFSCertificate(
@@ -602,9 +699,6 @@ public class FSCertificateController {
 			try {
 				  FSCertificate cert = (FSCertificate)model.get("fscert");
 				  Employee emp = employeeService.readEmployee(eid.longValue());
-				  LOG.info("Linked Employee ID: " + eid);
-				  LOG.info("Current Expert ID: " + (cert.getExpert() == null ? "Not defined" : cert.getExpert().getId()));
-				  LOG.info("Current Signer ID: " + (cert.getSigner() == null ? "Not defined" : cert.getSigner().getId()));
 				 
 				  if (emp!=null && cert!=null) {
 					  if ("expert".equals(etype)) {
@@ -615,27 +709,22 @@ public class FSCertificateController {
 						Signer signer = new Signer();
 						signer.init(emp);
 						cert.setSigner(signer);
+				    	Branch branch  = fsCertService.getBranchByCode(signer.getDepartment().getCode_otd());
+				    	cert.setBranch(branch);
 					  } 
 				
+					  
+					  String json = "{\"expert\":\"" + getEmployeeName(cert.getExpert(), lang) + "\","
+							  		+ "\"signer\":\"" + getEmployeeName(cert.getSigner(), lang)+ "\","
+							  		+ "\"branchname\":\"" + getBranchName(cert.getBranch(), lang)+ "\","
+							  		+ "\"branchaddress\":\"" + getBranchAddress(cert.getBranch(), lang)+ "\","
+							  		+ "\"branchcontact\":\"" + getBranchContact(cert.getBranch(), lang)
+							  		+ "\"}";
+					  
 					  response.setContentType("text/html; charset=UTF-8");
 					  response.setCharacterEncoding("UTF-8");
-					  
-					  if (!"RU".equals(lang)) {
-						  EmployeeLocale locale = emp.getLocale(lang);
-						  if (locale != null) {
-					        response.getWriter().println(getValue(locale.getJob()) + " " + getValue(locale.getName()));
- 			        	  } else {
- 			        		response.getWriter().println("Не определено для выбранного языка");
-				          }
-						  response.getWriter().println("("+getValue(emp.getJob()) + " " + getValue(emp.getName())+")");
-					  } else {
-						  response.getWriter().println(getValue(emp.getJob()) + " " + getValue(emp.getName()));
-					  }
-
+					  response.getWriter().println(json);
 					  response.flushBuffer();
-
-					  LOG.info("Current Expert ID after replacmnet: " + (cert.getExpert() == null ? "Not defined" : cert.getExpert().getId()));
-					  LOG.info("Current Signer ID after replacmnet: " + (cert.getSigner() == null ? "Not defined" : cert.getSigner().getId()));
 				  } else {	 
 					  model.addAttribute("error", "Сертификат или сотрудник не найдены");
 				  }
@@ -707,6 +796,54 @@ public class FSCertificateController {
         }	
 		return  ret;
 	}
+	
+	private String getBranchName(Client client, String lang) {
+        String ret = "";
+        
+        if (client != null) {
+        	if ("RU".equals(lang)) {
+            	ret = (client.getName() != null ? client.getName() : "");
+        	} else {
+        		ClientLocale locale = client.getLocale("EN");
+        		if (locale != null) {
+        			ret = (locale.getName() != null ? locale.getName() : "");
+        		} 
+        	}
+        }	
+		return  ret;
+	}
+	
+	private String getBranchAddress(Client client, String lang) {
+        String ret = "";
+        if (client != null) {
+        	if ("RU".equals(lang)) {
+            	ret = (client.getAddress() != null ? client.getAddress() : "");
+        	} else {
+        		ClientLocale locale = client.getLocale("EN");
+        		if (locale != null) {
+        			ret = (locale.getAddress() != null ? locale.getAddress() : "");
+        		} 
+        	}
+        }	
+		return  ret;
+	}
+	
+	private String getBranchContact(Client client, String lang) {
+        String ret = "";
+        if (client != null) {
+        	if ("RU".equals(lang)) {
+        		ret = "телефон: " + (client.getPhone() != null ? client.getPhone() : "") + ", " 	
+            	      + "факс: " + (client.getFax() != null ? client.getFax() : "") + ", "
+            	      + "e-mail: " + (client.getEmail() != null ? client.getEmail() : "") ;
+        	} else {
+        		ret = "phone: " + (client.getPhone() != null ? client.getPhone() : "") + ", " 	
+              	      + "fax: " + (client.getFax() != null ? client.getFax() : "") + ", "
+              	      + "e-mail: " + (client.getEmail() != null ? client.getEmail() : "") ;
+        	}
+        }	
+        return  ret;
+	}
+	
 	
 	private String getEmployeeName(Employee employee, String lang) {
         String ret = "";
@@ -1228,7 +1365,11 @@ public class FSCertificateController {
 				  String json = "{\"exporter\":\"" + getClientName(cert.getExporter(), lang) + "\"," 
 				                + "\"producer\":\"" + getClientName(cert.getProducer(), lang) + "\","
 				                + "\"expert\":\"" + getEmployeeName(cert.getExpert(), lang) + "\","
-				                + "\"signer\":\"" + getEmployeeName(cert.getSigner(), lang) + "\"}";
+				                + "\"signer\":\"" + getEmployeeName(cert.getSigner(), lang) + "\","
+						  		+ "\"branchname\":\"" + getBranchName(cert.getBranch(), lang) + "\","
+						  		+ "\"branchaddress\":\"" + getBranchAddress(cert.getBranch(), lang)+ "\","
+						  		+ "\"branchcontact\":\"" + getBranchContact(cert.getBranch(), lang)
+				                + "\"}";
 				  
 				  response.setContentType("text/html; charset=UTF-8");
 				  response.setCharacterEncoding("UTF-8");

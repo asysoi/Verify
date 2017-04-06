@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import cci.model.Employee;
+import cci.model.fscert.Branch;
 import cci.model.fscert.Expert;
 import cci.model.fscert.FSCertificate;
 import cci.model.owncert.OwnCertificate;
@@ -38,5 +39,7 @@ public interface FSCertificateDAO {
 	public FSTranslate loadTemplates();
 
 	public Employee getEmployeeByUserName(String username);
+
+	public Branch getBranchByCode(String code_otd);
 	
 }

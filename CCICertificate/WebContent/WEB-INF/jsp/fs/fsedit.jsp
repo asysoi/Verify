@@ -14,7 +14,7 @@
 		url = $("#fscert").attr("action");
 		$.ajaxSetup({async:false});
 		$.post(url, $("#fscert").serialize());
-		location.href='fscerts	.do?page=${fsmanager.page}&pagesize=${fsmanager.pagesize}&orderby=${fsmanager.orderby}&order=${fsmanager.order}';
+		location.href='fscerts.do?page=${fsmanager.page}&pagesize=${fsmanager.pagesize}&orderby=${fsmanager.orderby}&order=${fsmanager.order}';
 	}
 	
 	$(function() {
@@ -364,13 +364,21 @@
 		});	
 	}
 	
-	function reloadDeclaration() {
+	function reloadDeclaration() { 
 		url = "rlddecl.do?lang=" + $("#language").val();
 		$.ajaxSetup({async:false});
 		$.get(url, function(data, status) {
 			 console.log(data); 
 			 console.log($("#declaration").text());
 		     $("#declaration").val(data);
+		});	
+	}
+
+	function getListCount() {
+		url = "getlistcount.do";
+		$.ajaxSetup({async:false});
+		$.get(url, function(data, status) {
+		     $("#listcount").val(data);
 		});	
 	}
 	
@@ -391,14 +399,24 @@
 		url = "rldlang.do?lang=" + $("#language").val();
 		$.ajaxSetup({async:false});
 		$.get(url, function(data, status) {
-			 console.log(data);
+			 // console.log(data);
 			 var obj = JSON.parse(data);
 		     $("#exporter").text(obj.exporter);
 		     $("#producer").text(obj.producer);
 		     $("#expert").text(obj.expert);
 		     $("#signer").text(obj.signer);
+		     $("#branchname").text(obj.branchname);
+		     $("#branchaddress").text(obj.branchaddress);
+		     $("#branchcontact").text(obj.branchcontact);
 		});
-	}	
+	}
+	
+	function reloadFSNumber() {
+		url = "rldfsnumber.do";
+		$.ajaxSetup({async:false});
+		$("#certnumber").val('YYYYYYY');
+		$.post(url, $("#fscert").serialize(), function(txt) { $("#certnumber").val(txt);});
+	}
 </script>
 
 <c:if test="${not empty error}">
@@ -412,16 +430,21 @@
 </p>
 
 <h3 align="center"><b>СЕРТИФИКАТ СВОБОДНОЙ ПРОДАЖИ</b></h3>
-<h4 align="center"><b>${fscert.branch.name}<br>
-${fscert.branch.address}, Республика Беларусь<br>
-телефон: ${fscert.branch.phone}, факс: ${fscert.branch.fax}, e-mail: ${fscert.branch.email} </b></h4>
+<h4 align="center">
+<div id="branchname">${fscert.branch.name}</div>
+<div id="branchaddress">${fscert.branch.address}</div>
+<div id="branchcontact">телефон: ${fscert.branch.phone}, факс: ${fscert.branch.fax}, e-mail: ${fscert.branch.email}</div>
+</h4>
 
 <form:form id="fscert" method="POST" modelAttribute="fscert">
 <form:hidden path="id"/>
 <div class="container-fluid">
 
 <div class="row">
-<div class="col-md-6">Номер сертификата: <form:input path="certnumber" id="certnumber" size="15"/></div>
+<div class="col-md-6">Номер сертификата: <form:input path="certnumber" id="certnumber" size="15"/>
+<a href="javascript:reloadFSNumber()" title="Сгенерировать номер">
+     <i class="glyphicon glyphicon-refresh" align="center"></i></a>
+</div>
 <div class="col-md-6">Дата сертификата: <form:input path="datecert" id="datecert" class="datepicker" size="12"/></div> 
 </div>
 
@@ -438,7 +461,7 @@ ${fscert.branch.address}, Республика Беларусь<br>
 </div>
 					
 <div class="row">
-<div class="col-md-1"><a href="javascript:openClients('exporter')">Экспортер: </a></div>
+<div class="col-md-2"><a href="javascript:openClients('exporter')">Экспортер: </a></div>
 <div class="col-md-10" id="exporter">
 <c:if test="${fscert.language != 'RU'}">  
 ${fscert.exporter.getLocale(fscert.language).name} ${fscert.exporter.getLocale(fscert.language).address}
@@ -449,7 +472,7 @@ ${fscert.exporter.getLocale(fscert.language).name} ${fscert.exporter.getLocale(f
 </div>
 
 <div class="row">
-<div class="col-md-1"><a href="javascript:openClients('producer')">Производитель:</a></div>
+<div class="col-md-2"><a href="javascript:openClients('producer')">Производитель:</a></div>
 <div class="col-md-10" id="producer">
 <c:if test="${fscert.language != 'RU'}">
 ${fscert.producer.getLocale(fscert.language).name}, ${fscert.producer.getLocale(fscert.language).address}
@@ -460,14 +483,14 @@ ${fscert.producer.getLocale(fscert.language).name}, ${fscert.producer.getLocale(
 </div>	
 
 <div class="row">
-<div class="col-md-1">Удостоверение:<p align="center"><a href="javascript:reloadConfirmation()" title="Сгенерировать из шаблона">
+<div class="col-md-2">Удостоверение:<p align="center"><a href="javascript:reloadConfirmation()" title="Сгенерировать из шаблона">
      <i class="glyphicon glyphicon-refresh" align="center"></i></a></p></div>
-<div class="col-md-11"><form:textarea rows="6" cols="140" path="confirmation" id="confirmation" /></div>
+<div class="col-md-10"><form:textarea rows="6" cols="140" path="confirmation" id="confirmation" /></div>
 </div>
 <div class="row">
-<div class="col-md-1">Декларация:<p align="center"><a href="javascript:reloadDeclaration()" title="Сгенерировать из шаблона">
+<div class="col-md-2">Декларация:<p align="center"><a href="javascript:reloadDeclaration()" title="Сгенерировать из шаблона">
      <i class="glyphicon glyphicon-refresh" align="center"></i></a></p></div>
-<div class="col-md-11"><form:textarea rows="6" cols="140" path="declaration" id="declaration" /></div>
+<div class="col-md-10"><form:textarea rows="6" cols="140" path="declaration" id="declaration" /></div>
 </div>
 
 <div class="row">
@@ -480,8 +503,9 @@ ${fscert.producer.getLocale(fscert.language).name}, ${fscert.producer.getLocale(
 </div>
 
 <div class="row">
-<div class="col-md-12">Количество листов сертификата <form:input path="listscount" id="listscount" class="doplist" 
-						size="8" /></div>
+<div class="col-md-12">Количество листов сертификата <form:label path="listscount" id="listscount" class="doplist" 
+						size="8" />  <a href="javascript:getListCount()" title="Посчитать количество страниц">
+     <i class="glyphicon glyphicon-refresh" align="center"></i></a></div>
 </div>
 
 <div class="row">

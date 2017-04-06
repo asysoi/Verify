@@ -40,6 +40,7 @@ public class EmployeeRowMapper<T> implements RowMapper {
 				   dep.setName(rs.getString("DEPARTMENTNAME"));
 				   dep.setCode(rs.getString("DEPARTMENTCODE"));
 				   dep.setId_otd(rs.getLong("ID_OTD"));
+				   dep.setCode_otd(rs.getString("CODE_OTD"));
 				   employee.setDepartment(dep);	
 				} else {
 				   employee.setDepartment(null);	

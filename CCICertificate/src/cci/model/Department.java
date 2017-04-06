@@ -13,6 +13,15 @@ public class Department {
 	private String code;
 	private Department parent;
 	private Long id_otd;
+	private String code_otd;
+
+	public String getCode_otd() {
+		return code_otd;
+	}
+
+	public void setCode_otd(String code_otd) {
+		this.code_otd = code_otd;
+	}
 
 	@XmlTransient
 	public Long getId() {
@@ -59,6 +68,7 @@ public class Department {
 	@Override
 	public String toString() {
 		return "Department [id=" + id + ", name=" + name + ", code=" + code + ", parent=" + parent + ", id_otd="
-				+ id_otd + "]";
+				+ id_otd + ", code_otd=" + code_otd + "]";
 	}
+
 }

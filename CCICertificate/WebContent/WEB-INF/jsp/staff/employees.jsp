@@ -223,13 +223,13 @@
 		url = "selemployee.do?id=" + eid + "&employeetype=" + etype+"&lang="+$("#language").val();
 		$.ajaxSetup({async:false});
 		$.get(url, function(data, status) {
-			 console.log("Employee type: " + etype);
-			 console.log("Employee date: " + data);
-			 if (etype == 'expert') { 
-			     $("#expert").text(data);
-			 } else if (etype == 'signer') {
-				 $("#signer").text(data);
-			 }
+			 console.log(data);
+			 var obj = JSON.parse(data);
+		     $("#expert").text(obj.expert);
+		     $("#signer").text(obj.signer);
+		     $("#branchname").text(obj.branchname);
+		     $("#branchaddress").text(obj.branchaddress);
+		     $("#branchcontact").text(obj.branchcontact);
 		});	
 		$("#fsview").dialog("close");
 	}

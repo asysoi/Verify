@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import cci.model.Employee;
+import cci.model.fscert.Branch;
 import cci.model.fscert.Expert;
 import cci.model.fscert.FSCertificate;
 import cci.model.owncert.OwnCertificate;
@@ -118,6 +119,14 @@ public class FSCertificateService {
 	// ------------------------------------------------------------------------------
 	public Employee getEmployeeByUserName(String username) {
 		return fscertificateDAO.getEmployeeByUserName(username);
+	}
+
+
+	// ------------------------------------------------------------------------------
+	//  Get Branch object by Branch code 
+	// ------------------------------------------------------------------------------
+	public Branch getBranchByCode(String code_otd) {
+		return fscertificateDAO.getBranchByCode(code_otd);
 	}
 
 }

@@ -489,7 +489,7 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 						throw new RuntimeException("Отсутствует информация о подразделении");
 					}
 					
-					String sql = "SELECT id FROM cci_department " + where ;
+					String sql = "SELECT id FROM department_view " + where ;
 					long id = 0;
 					
 					try {
@@ -504,8 +504,8 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 					} catch (Exception ex) {
 					   LOG.info(ex.getMessage());	
 					   if (id == 0) {
-						  sql = "insert into cci_department() " +  
-									"values( ) ";
+						  sql = "insert into cci_department(name, code, id_otd)" +   
+                                 " select :name, :code, id from c_otd where code = :code_otd ";
 						  
 						  SqlParameterSource parameters = new BeanPropertySqlParameterSource(dep);
 						  GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
@@ -534,7 +534,7 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 				}
 				if (dep.getId_otd() != null && dep.getId_otd() > 0) {
 					if (sqlwhere.length() == 0) { 	sqlwhere += " WHERE ";	} else {sqlwhere += " AND ";}
-					sqlwhere += " id_otd = :id_otd ";   
+					sqlwhere += " code_otd = :code_otd ";   
 			    }
 				if (sqlwhere.length() != 0)  sqlwhere += " AND ROWNUM = 1 ";
 				return sqlwhere;
@@ -603,7 +603,7 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 			}
 			
 			if (rcert.getDepartment() != null) {
-				Department obj = template.getJdbcOperations().queryForObject("select * from cci_department where id = ? ",
+				Department obj = template.getJdbcOperations().queryForObject("select * from department_view where id = ? ",
 						new Object[] { rcert.getDepartment().getId() }, new BeanPropertyRowMapper<Department>(Department.class));
 				rcert.setDepartment(obj);
 			}
@@ -639,7 +639,12 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
         // load client's locales		
 		private void loadClientLocales(Client client) {
 			if  (client != null) {
-				String sql = "select * from CCI_CLIENT_LOCALE WHERE IDCLIENT = ? ";
+				String sql = "";
+				if (client instanceof Branch) {
+					sql = "select * from FS_BRANCH_LOCALE WHERE IDBRANCH = ? ";
+				} else {
+				    sql = "select * from CCI_CLIENT_LOCALE WHERE IDCLIENT = ? ";
+				}
 				
 				List<ClientLocale> locales = template.getJdbcOperations().query(sql, new Object[] { client.getId() },
 						new BeanPropertyRowMapper<ClientLocale>(ClientLocale.class));
@@ -805,6 +810,19 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 	    	rnumber = certnumber;
 	    	LOG.info("Certificate " + rnumber + " deleted !");
 			return rnumber;
+		}
+
+		//--------------------------------------------------------------------
+		//--------------------------------------------------------------------	
+		//    Get Branch by branch code         
+		//--------------------------------------------------------------------
+		//--------------------------------------------------------------------
+		public Branch getBranchByCode(String code_otd) {
+			Branch branch = null;
+			branch = template.getJdbcOperations().queryForObject("select * from fs_branch where code = ? ",
+						new Object[] { code_otd }, new BeanPropertyRowMapper<Branch>(Branch.class));
+			loadClientLocales(branch); 
+			return branch;
 		}
 
 
