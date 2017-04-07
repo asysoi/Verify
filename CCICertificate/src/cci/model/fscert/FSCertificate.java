@@ -110,7 +110,11 @@ public class FSCertificate {
 	}
 
 	public void setDateissue(String dateissue) {
-		this.dateissue = dateissue.replace("00:00:00.0", "");
+		if (dateissue != null) {
+		    this.dateissue = dateissue.replace("00:00:00.0", "");
+		} else {
+			this.dateissue = dateissue;
+		}
 	}
 
 	public String getDateexpiry() {
@@ -118,7 +122,11 @@ public class FSCertificate {
 	}
 
 	public void setDateexpiry(String dateexpiry) {
-		this.dateexpiry = dateexpiry.replace("00:00:00.0", "");
+		if (dateexpiry != null) {
+		    this.dateexpiry = dateexpiry.replace("00:00:00.0", "");
+		} else {
+			this.dateexpiry = dateexpiry;
+		}
 	}
 
 	public String getConfirmation() {
@@ -158,7 +166,11 @@ public class FSCertificate {
 	}
 
 	public void setDatecert(String datecert) {
-		this.datecert = datecert.replace("00:00:00.0", "");
+		if (datecert != null) {
+		    this.datecert = datecert.replace("00:00:00.0", "");
+		} else {
+			this.datecert = datecert;
+		}
 	}
 	
 	public Branch getBranch() {

@@ -496,72 +496,67 @@ public class FSCertificateController {
 	// ---------------------------------------------------------------------------------------
 	//   Create new FS Certificate/ Fill expert name and Number generate
 	// ---------------------------------------------------------------------------------------
-	@RequestMapping(value = "rldfsnumber.do",  method = RequestMethod.POST)	
-	private void generateNewCertNumberPost(FSCertificate fscert, 
+	@RequestMapping(value = "rldfsnumber.do",  method = RequestMethod.GET)	
+	private void generateNewCertNumberPost(
+			@RequestParam(value = "codecountry", required = true) String codecountry, 
 			HttpSession session, HttpServletResponse response, ModelMap model) {
 		
+		
 		try {
-			String number = "BY";
-			FSCertificate storedCert = (FSCertificate) model.get("fscert");
-	    
-			if (storedCert == null) {
-				model.addAttribute("error", "Информация о редактируемом сертификате потеряна. Перезегрузите сертификат.");		       	
-			} else {
-				number += fscert.getCodecountrytarget() != null ? fscert.getCodecountrytarget().toUpperCase() : "";
-				number += "7";
-	    		    			
-				if (storedCert.getSigner() != null && storedCert.getSigner().getDepartment() != null) {
-					number += storedCert.getSigner().getDepartment().getId_otd();
-					number += storedCert.getSigner().getDepartment().getCode();
-				}
-	    	}
-            LOG.info("New Number: " + number); 
-        	response.setContentType("text/xml;charset=utf-8"); 
-        	response.setCharacterEncoding("UTF-8");
-        	response.getWriter().println(number);
-        	response.flushBuffer();
-        }  catch (Exception ex) {
-			ex.printStackTrace();
-			LOG.info("Ошибка: " + ex.getMessage());
-			model.addAttribute("error", ex.getMessage());
-	    } 
-	}
-
-	// ---------------------------------------------------------------------------------------
-		//   Create new FS Certificate/ Fill expert name and Number generate
-		// ---------------------------------------------------------------------------------------
-		@RequestMapping(value = "rldfsnumber.do",  method = RequestMethod.GET)	
-		private void generateNewCertNumberGet(FSCertificate fscert, 
-				HttpSession session, HttpServletResponse response, ModelMap model) {
-			
-			try {
-				String number = "BY";
-				FSCertificate storedCert = (FSCertificate) model.get("fscert");
-		    
-				if (storedCert == null) {
+			  FSCertificate storedCert = (FSCertificate)model.get("fscert");
+			  String number = "BY";
+			  
+			   if (storedCert == null) {
 					model.addAttribute("error", "Информация о редактируемом сертификате потеряна. Перезегрузите сертификат.");		       	
 				} else {
-					number += fscert.getCodecountrytarget() != null ? fscert.getCodecountrytarget().toUpperCase() : "";
+					number += codecountry != null  && !codecountry.equals("null") ? codecountry : "";
 					number += "7";
 		    		    			
 					if (storedCert.getSigner() != null && storedCert.getSigner().getDepartment() != null) {
 						number += storedCert.getSigner().getDepartment().getId_otd();
 						number += storedCert.getSigner().getDepartment().getCode();
 					}
-		    	}
-	            LOG.info("New Number: " + number); 
-	        	response.setContentType("text/xml;charset=utf-8"); 
-	        	response.setCharacterEncoding("UTF-8");
-	        	response.getWriter().println(number);
-	        	response.flushBuffer();
-	        }  catch (Exception ex) {
-				ex.printStackTrace();
-				LOG.info("Ошибка: " + ex.getMessage());
-				model.addAttribute("error", ex.getMessage());
-		    } 
+		      }
+			  
+			  response.setContentType("text/html; charset=UTF-8");
+			  response.setCharacterEncoding("UTF-8");
+		      response.getWriter().println(number);
+			  response.flushBuffer();
+				  
+		} catch (Exception ex) {
+			 ex.printStackTrace();
+			 LOG.info("Ошибка: " + ex.getMessage());
+			 model.addAttribute("error", ex.getMessage());
 		}
-
+	}
 	
+	// ---------------------------------------------------------------------------------------
+	//   Reload Template of certification field
+	// ---------------------------------------------------------------------------------------
+	@RequestMapping(value = "getlistcount.do",  method = RequestMethod.GET)
+	public void getListCount(
+			HttpSession session, HttpServletResponse response, ModelMap model) {
+				
+			try {
+				  FSCertificate cert = (FSCertificate)model.get("fscert");
+					 
+				  response.setContentType("text/html; charset=UTF-8");
+				  response.setCharacterEncoding("UTF-8");
+			      response.getWriter().println(""+clculateListCount());
+				  response.flushBuffer();
+					  
+			} catch (Exception ex) {
+	  			 ex.printStackTrace();
+				 LOG.info("Ошибка: " + ex.getMessage());
+				 model.addAttribute("error", ex.getMessage());
+			}
+	}
+	
+	
+	private int clculateListCount() {
+		return 1;
+	}
+
 	// ---------------------------------------------------------------------------------------
 	//   View FS Certificate as HTML page 
 	// ---------------------------------------------------------------------------------------
@@ -1413,7 +1408,7 @@ public class FSCertificateController {
 	public void printFSCertificate( 
 			FSCertificate fscert, ModelMap model)  {
 	    
-	    FSCertificate storedCert = (FSCertificate)model.get("fscert");
+	    FSCertificate storedCert = (FSCertificate) model.get("fscert");
 	    
 	    if (storedCert == null) {
 		    model.addAttribute("error", "Информация о редактируемом сертификате потеряна. Перезегрузите сертификат.");		       	
@@ -1443,12 +1438,17 @@ public class FSCertificateController {
 		String fontpath = absoluteDiskPath + "/fonts/";
 		
 		CountryConverter.setCountrymap(certService.getCountriesList(cert.getLanguage()));
+		String country = CountryConverter.getCountryNameByCode(cert.getCodecountrytarget());
+		
+		if (cert.getParentnumber() != null && ! cert.getParentnumber().isEmpty()) {
+			FSCertificate parent =  fsCertService.getFSCertificateByNumber(cert.getParentnumber());
+		}
 		
 		try {
 		   if (type != null && type.equals("org")) {	
-			   builder.createPdf(fileout, cert, fileconf, fontpath, true); 
+			  builder.createPdf(fileout, cert, fileconf, fontpath, country, true); 
 		   } else {
-		      builder.createPdf(fileout, cert, fileconf, fontpath, false);
+		      builder.createPdf(fileout, cert, fileconf, fontpath, country, false);
 		   }
 		} catch(Exception ex) {
 			ex.printStackTrace();

@@ -10,6 +10,20 @@
 
 <script>
 
+	function reloadFSNumber() {
+		url = "rldfsnumber.do?codecountry="+$("#codecountrytarget").val() ;
+			$.get(url, function(data, status) {
+	    	$("#certnumber").val(data);
+		});	
+	}
+
+	function getListCount() {
+		url = "getlistcount.do";
+		$.get(url, function(data, status) {
+	     	$("#listscount").text(data);
+		});	
+	}
+
 	function save() {
 		url = $("#fscert").attr("action");
 		$.ajaxSetup({async:false});
@@ -373,14 +387,6 @@
 		     $("#declaration").val(data);
 		});	
 	}
-
-	function getListCount() {
-		url = "getlistcount.do";
-		$.ajaxSetup({async:false});
-		$.get(url, function(data, status) {
-		     $("#listcount").val(data);
-		});	
-	}
 	
 	function openEmployees(employeetype) {
         link="selemployees.do?pagesize=5&employeetype="+employeetype;
@@ -410,13 +416,6 @@
 		     $("#branchcontact").text(obj.branchcontact);
 		});
 	}
-	
-	function reloadFSNumber() {
-		url = "rldfsnumber.do";
-		$.ajaxSetup({async:false});
-		$("#certnumber").val('YYYYYYY');
-		$.post(url, $("#fscert").serialize(), function(txt) { $("#certnumber").val(txt);});
-	}
 </script>
 
 <c:if test="${not empty error}">
@@ -442,7 +441,7 @@
 
 <div class="row">
 <div class="col-md-6">Номер сертификата: <form:input path="certnumber" id="certnumber" size="15"/>
-<a href="javascript:reloadFSNumber()" title="Сгенерировать номер">
+<a href="javascript:reloadFSNumber();" title="Сгенерировать номер">
      <i class="glyphicon glyphicon-refresh" align="center"></i></a>
 </div>
 <div class="col-md-6">Дата сертификата: <form:input path="datecert" id="datecert" class="datepicker" size="12"/></div> 
@@ -461,7 +460,7 @@
 </div>
 					
 <div class="row">
-<div class="col-md-2"><a href="javascript:openClients('exporter')">Экспортер: </a></div>
+<div class="col-md-2"><a href="javascript:openClients('exporter');">Экспортер: </a></div>
 <div class="col-md-10" id="exporter">
 <c:if test="${fscert.language != 'RU'}">  
 ${fscert.exporter.getLocale(fscert.language).name} ${fscert.exporter.getLocale(fscert.language).address}

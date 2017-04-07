@@ -1,4 +1,4 @@
-package cci.repository.staff;
+package cci.repository.fscert;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,7 +7,6 @@ import java.text.SimpleDateFormat;
 import org.springframework.jdbc.core.RowMapper;
 
 import cci.model.Department;
-import cci.model.Employee;
 import cci.model.fscert.Branch;
 import cci.model.fscert.Expert;
 import cci.model.fscert.Exporter;
@@ -15,12 +14,12 @@ import cci.model.fscert.FSCertificate;
 import cci.model.fscert.Producer;
 import cci.model.fscert.Signer;
 
-public class EmployeeRowMapper<T> implements RowMapper {
+public class ExpertRowMapper<T> implements RowMapper {
 
 	private String dateformat = "dd.MM.yyyy";
 	
-	public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
-		        Employee employee = new Employee(); 
+	public Expert mapRow(ResultSet rs, int rowNum) throws SQLException {
+		        Expert employee = new Expert(); 
 		        employee.setId(rs.getLong("ID"));
 		        employee.setName(rs.getString("NAME"));
 		        employee.setJob(rs.getString("JOB"));

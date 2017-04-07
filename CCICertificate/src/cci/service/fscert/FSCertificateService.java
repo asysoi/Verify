@@ -59,6 +59,7 @@ public class FSCertificateService {
 					order, builder);
 			
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			LOG.info(ex.getMessage());
 		}
 		return certs;
@@ -127,6 +128,11 @@ public class FSCertificateService {
 	// ------------------------------------------------------------------------------
 	public Branch getBranchByCode(String code_otd) {
 		return fscertificateDAO.getBranchByCode(code_otd);
+	}
+
+	public FSCertificate getFSCertificateByNumber(String parentnumber) {
+		
+		return null;
 	}
 
 }

@@ -38,10 +38,10 @@ public class FSPDFBuilder extends PDFBuilder {
 	private PDFConfigReader xreader;
 	private PDFPageConfig pconfig;
 	private String fontpath;
-	private float maxHeightTable = 680f;
+	private float maxHeightTable = 685f;
 	
 	public void createPdf(String outfilename, Object cert,
-			String configFileName, String fpath, boolean flagOriginal) throws IOException, DocumentException {
+			String configFileName, String fpath, String countryname, boolean flagOriginal) throws IOException, DocumentException {
 		fontpath = fpath;
 		// step 1
 		document = new Document(PageSize.A4, 72f, 72f, 54f, 54f);
@@ -51,22 +51,23 @@ public class FSPDFBuilder extends PDFBuilder {
 		document.open();
 		// step 4
 		xreader = XMLConfigReader.getInstance(configFileName, fontpath);
-		createContent(cert, flagOriginal);
+		createContent(cert, countryname, flagOriginal);
 		// step 5
 		document.close();
 	}
 	
-	private void createContent(Object cert, boolean flagOriginal) throws DocumentException, IOException {
+	private void createContent(Object cert, String countryname, boolean flagOriginal) throws DocumentException, IOException {
 		String pagename  = PDFBuilderFactory.PAGE_FS;; 
 	    pconfig = xreader.getPDFPageConfig(pagename);
-	    createPDFPage(writer, cert, pconfig, flagOriginal);
+	    createPDFPage(writer, cert, pconfig, countryname, flagOriginal);
 	    pagename = pconfig.getNextPage();
 
 	}
 	
-	public void createPDFPage(PdfWriter writer, Object certificate,
-					PDFPageConfig pconfig, boolean flagOriginal) throws DocumentException, IOException {
-		    
+	public int createPDFPage(PdfWriter writer, Object certificate,
+					PDFPageConfig pconfig, String countryname, boolean flagOriginal) throws DocumentException, IOException {
+		
+		    int pagecount = 1;
 		    FSCertificate cert = (FSCertificate) certificate;
 		    BaseFont bf = BaseFont.createFont(
 					fontpath + "ARIAL.ttf", 
@@ -90,7 +91,7 @@ public class FSPDFBuilder extends PDFBuilder {
 	        if (cert.getParentnumber() != null) {
 	        	addCellToTable(table, 3, "Дубликат сертификата от ХХХХХХ № " + cert.getParentnumber(), Element.ALIGN_LEFT, prgFont, 0f, 0f, 14f);
 	        }
-	        addCellToTable(table, 3, "Выдан для предоставления в : " + cert.getCodecountrytarget(), Element.ALIGN_LEFT, prgFont, 0f, 0f, 15f);
+	        addCellToTable(table, 3, "Выдан для предоставления в : " + countryname, Element.ALIGN_LEFT, prgFont, 0f, 0f, 15f);
 	        
 	        addCellToTable(table, 3, "Экспортер : ", Element.ALIGN_LEFT, prgFont, 0f, 0f, 15f);
 	        addCellToTable(table, 3, cert.getExporter().getName() + ", " + cert.getExporter().getAddress(), 
@@ -147,6 +148,7 @@ public class FSPDFBuilder extends PDFBuilder {
 	        if (nextProductIndex > 0) {
 	        	
 	            document.newPage();
+	            pagecount++;
 	            table = new PdfPTable(3);
 		        table.getDefaultCell().setBorder(PdfPCell.NO_BORDER);
 		        table.setTotalWidth(460f);
@@ -197,7 +199,8 @@ public class FSPDFBuilder extends PDFBuilder {
 	            }
 		         
 		        document.add(table);
-	        }	
+	        }
+	        return pagecount;
 	}	
 	
 	
@@ -221,10 +224,10 @@ public class FSPDFBuilder extends PDFBuilder {
 		if (cert.getBranch() != null) {
 			String name = cert.getBranch().getName();
 			name = name.replaceFirst("услуг", "услуг\n");  		
-			addCellToTable(table, 3, name, Element.ALIGN_CENTER, font, 30f, 30f, 8f);
-			addCellToTable(table, 3, cert.getBranch().getAddress(), Element.ALIGN_CENTER, font, 54f, 54f);
+			addCellToTable(table, 3, name, Element.ALIGN_CENTER, font, 20f, 20f, 8f);
+			addCellToTable(table, 3, cert.getBranch().getAddress(), Element.ALIGN_CENTER, font, 20f, 20f);
 			addCellToTable(table, 3, "телефон: "+ cert.getBranch().getPhone() +"  факс: "+ cert.getBranch().getCell() 
-        		+ "  e-mail: " + cert.getBranch().getEmail(), Element.ALIGN_CENTER, font, 36f, 36f);
+        		+ "  e-mail: " + cert.getBranch().getEmail(), Element.ALIGN_CENTER, font, 30f, 30f);
 		}
 	}
 	
@@ -310,7 +313,7 @@ public class FSPDFBuilder extends PDFBuilder {
 
     
      private void rrrrr() throws DocumentException, FileNotFoundException {
-    	 String TARGET = "temp.pdf";
+    	    String TARGET = "temp.pdf";
     	    Document document = new Document(PageSize.A4);
     	    PdfWriter writer = 
     	        PdfWriter.getInstance(document, new FileOutputStream(TARGET));

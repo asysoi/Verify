@@ -589,15 +589,15 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 			}
 
 			if (rcert.getExpert() != null) {
-				Expert obj = template.getJdbcOperations().queryForObject("select * from cci_employee where id = ? ",
-						new Object[] { rcert.getExpert().getId() }, new BeanPropertyRowMapper<Expert>(Expert.class));
+				Expert obj = template.getJdbcOperations().queryForObject("select * from employee_view where id = ? ",
+						new Object[] { rcert.getExpert().getId() }, new ExpertRowMapper<Expert>());
 				loadEmployeeLocales(obj);
 				rcert.setExpert(obj);
 			}
 
 			if (rcert.getSigner() != null) {
-				Signer obj = template.getJdbcOperations().queryForObject("select * from cci_employee where id = ? ",
-						new Object[] { rcert.getSigner().getId() }, new BeanPropertyRowMapper<Signer>(Signer.class));
+				Signer obj = template.getJdbcOperations().queryForObject("select * from employee_view where id = ? ",
+						new Object[] { rcert.getSigner().getId() }, new SignerRowMapper<Signer>());
 				loadEmployeeLocales(obj);
 				rcert.setSigner(obj);
 			}
