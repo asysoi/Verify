@@ -243,10 +243,10 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 			if (cert.getSigner()!=null && cert.getSigner().getId() == 0 ) cert.getSigner().setId(findOrCreateEmployeeID(cert.getSigner()));
 			if (cert.getDepartment()!=null && cert.getDepartment().getId() == 0 ) cert.getDepartment().setId(findOrCreateDepartmentID(cert.getDepartment()));
 			
-			LOG.info("Save FS Certificate: " + cert);
+			LOG.info("Save FS Certificate: " + cert.getCertnumber());
 			
 			String sql = "insert into fs_cert(certnumber, parentnumber, dateissue, dateexpiry, confirmation, declaration, codecountrytarget, "
-					    + " datecert, listscount, language, otd_id, id_branch, id_exporter, id_producer, id_expert, id_signer) "
+					    + " datecert, listscount, language, otd_id, id_branch, id_exporter, id_producer, id_expert, id_signer, iddepartment) "
 					    + " values (:certnumber, :parentnumber, "
 					    + " TO_DATE(:dateissue,'DD.MM.YY'), "
 					    + " TO_DATE(:dateexpiry,'DD.MM.YY'), "
@@ -255,7 +255,8 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 					    + ((cert.getExporter() != null) ?  ", :exporter.id " : ", :exporter ")
 					    + ((cert.getProducer() != null) ?  ", :producer.id " : ", :producer ")
 					    + ((cert.getExpert() != null) ?  ", :expert.id " : ", :expert ")
-					    + ((cert.getSigner() != null) ?  ", :signer.id " : ", :signer ")	
+					    + ((cert.getSigner() != null) ?  ", :signer.id " : ", :signer ")
+					    + ((cert.getDepartment() != null) ?  ", :department.id " : ", :department ")
 					    + ")";
 			LOG.info(sql);
 			
@@ -489,7 +490,7 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 						throw new RuntimeException("Отсутствует информация о подразделении");
 					}
 					
-					String sql = "SELECT id FROM department_view " + where ;
+					String sql = "SELECT id FROM cci_department " + where ;
 					long id = 0;
 					
 					try {
@@ -603,7 +604,7 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 			}
 			
 			if (rcert.getDepartment() != null) {
-				Department obj = template.getJdbcOperations().queryForObject("select * from department_view where id = ? ",
+				Department obj = template.getJdbcOperations().queryForObject("select * from cci_department where id = ? ",
 						new Object[] { rcert.getDepartment().getId() }, new BeanPropertyRowMapper<Department>(Department.class));
 				rcert.setDepartment(obj);
 			}
@@ -670,9 +671,9 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 			if (cert.getExpert()!=null && cert.getExpert().getId() == 0 ) cert.getExpert().setId(findOrCreateEmployeeID(cert.getExpert()));
 			if (cert.getSigner()!=null && cert.getSigner().getId() == 0 ) cert.getSigner().setId(findOrCreateEmployeeID(cert.getSigner()));
 			
-			LOG.info(">>>>>>>>>>> Update FS Certificate: " + cert);
+			LOG.info(">>>>>>>>>>> Update FS Certificate: " + cert.getCertnumber());
 			
-			String sql = "UPDATE fs_cert SET parentnumber = :parentnumber, dateissue = TO_DATE(:dateissue,'DD.MM.YY'), "
+			String sql = "UPDATE fs_cert SET certnumber=:certnumber, parentnumber = :parentnumber, dateissue = TO_DATE(:dateissue,'DD.MM.YY'), "
 					    + " dateexpiry = TO_DATE(:dateexpiry,'DD.MM.YY'), confirmation = :confirmation, " 
 					    + " declaration = :declaration, codecountrytarget=:codecountrytarget, datecert=TO_DATE(:datecert,'DD.MM.YY'), "
 					    + " listscount = :listscount, language=:language, "
@@ -680,8 +681,9 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 					    + " id_exporter = " + ((cert.getExporter() != null) ?  ":exporter.id, " : ":exporter, ") 
 					    + " id_producer = " + ((cert.getProducer() != null) ?  ":producer.id, " : ":producer, ")
 					    + " id_expert =  " + ((cert.getExpert() != null) ?  ":expert.id, " : ":expert, ")
-					    + " id_signer = " + ((cert.getSigner() != null) ?  ":signer.id " : ":signer ")
-					    + " WHERE certnumber = :certnumber "; 
+					    + " id_signer = " + ((cert.getSigner() != null) ?  ":signer.id, " : ":signer, ")
+					    + " iddepartment = " + ((cert.getDepartment() != null) ?  ":department.id " : " :department ")
+					    + " WHERE id = :id "; 
 
 			LOG.info(">>>>>>>>>>> Update FS Certificate: " + sql);
 			

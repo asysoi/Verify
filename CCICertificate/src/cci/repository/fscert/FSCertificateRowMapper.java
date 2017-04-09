@@ -21,12 +21,18 @@ public class FSCertificateRowMapper implements RowMapper {
 		cert.setId(rs.getLong("ID"));
 		cert.setCertnumber(rs.getString("CERTNUMBER"));
 		cert.setParentnumber(rs.getString("PARENTNUMBER"));
-		cert.setDateissue((new SimpleDateFormat(dateformat)).format(rs.getDate("dateissue")));
-		cert.setDateexpiry((new SimpleDateFormat(dateformat)).format(rs.getDate("dateexpiry")));
+		if (rs.getDate("dateissue") != null) {
+		    cert.setDateissue((new SimpleDateFormat(dateformat)).format(rs.getDate("dateissue")));
+		}
+		if (rs.getDate("dateexpiry") != null) {
+			cert.setDateexpiry((new SimpleDateFormat(dateformat)).format(rs.getDate("dateexpiry")));
+		}
+		if (rs.getDate("datecert") != null) {
+		    cert.setDatecert((new SimpleDateFormat(dateformat)).format(rs.getDate("datecert")));
+		}
 		cert.setConfirmation(rs.getString("confirmation"));
 		cert.setDeclaration(rs.getString("declaration"));
 		cert.setCodecountrytarget(rs.getString("codecountrytarget"));
-		cert.setDatecert((new SimpleDateFormat(dateformat)).format(rs.getDate("datecert")));
 		cert.setListscount(Integer.valueOf(rs.getInt("LISTSCOUNT")));
 		cert.setOtd_id(rs.getInt("OTD_ID"));
 		cert.setLanguage(rs.getString("LANGUAGE"));

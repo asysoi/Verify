@@ -453,12 +453,12 @@ public class FSCertificateController {
 			     cert.setDatecert((new SimpleDateFormat("dd.MM.yyyy")).format(new Date()));
 				     model.addAttribute("fscert", cert);
 				     LOG.info(cert); 
-			} catch (Exception ex) {
+		} catch (Exception ex) {
 				ex.printStackTrace();
 				model.addAttribute("error", ex.getMessage());
-				return "error";
-			}
-			return "editfscertificate";
+				return "window";
+		}
+		return "editfscertificate";
 	}
 	
 	
@@ -478,8 +478,10 @@ public class FSCertificateController {
 		    	fscert.setSigner(storedCert.getSigner());
 		    	fscert.setBlanks(storedCert.getBlanks());
 		    	fscert.setProducts(storedCert.getProducts());
-		    	fscert.setOtd_id(storedCert.getDepartment().getId_otd());
-		    	fscert.setDepartment(storedCert.getDepartment()); 
+		    	fscert.setDepartment(storedCert.getDepartment());
+		    	if (storedCert.getDepartment() != null) {
+		    		fscert.setOtd_id(storedCert.getDepartment().getId_otd());
+		    	}
 		    	
 		    	try {
 		    		fsCertService.save(fscert);
@@ -490,7 +492,7 @@ public class FSCertificateController {
 		    	model.addAttribute("fscert", fscert);
 		    	storedCert = null;
 		    }
-			return "editfscertificate";
+			return "  ";
 	}
 
 	// ---------------------------------------------------------------------------------------
@@ -586,8 +588,8 @@ public class FSCertificateController {
 			     model.addAttribute("fscert", cert);
 			     LOG.info(cert); 
 			} catch (Exception ex) {
+				ex.printStackTrace();
 				model.addAttribute("error", ex.getMessage());
-				return "error";
 			}
 			return "editfscertificate";
 	}
@@ -596,8 +598,9 @@ public class FSCertificateController {
 	//   SAVE/ FS Certificate as HTML page 
 	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "fsedit.do",  method = RequestMethod.POST)
-	public String save(FSCertificate fscert,
-			BindingResult result, SessionStatus status, ModelMap model) {
+	public void save(FSCertificate fscert,
+			BindingResult result, HttpSession session, 
+			HttpServletResponse response, SessionStatus status, ModelMap model) {
 		    
 		    FSCertificate storedCert = (FSCertificate)model.get("fscert");
 		    
@@ -605,7 +608,7 @@ public class FSCertificateController {
 			    model.addAttribute("error", "Информация о редактируемом сертификате потеряна. Перезегрузите сертификат.");		       	
 		    } else {
 		    	fscert.setId(storedCert.getId());
-		    	fscert.setCertnumber(storedCert.getCertnumber());
+		    	// fscert.setCertnumber(storedCert.getCertnumber());
 		    	fscert.setBranch(storedCert.getBranch());
 		    	fscert.setExporter(storedCert.getExporter());
 		    	fscert.setProducer(storedCert.getProducer());
@@ -613,16 +616,28 @@ public class FSCertificateController {
 		    	fscert.setSigner(storedCert.getSigner());
 		    	fscert.setBlanks(storedCert.getBlanks());
 		    	fscert.setProducts(storedCert.getProducts());
+		    	fscert.setDepartment(storedCert.getDepartment());
+		    	
 		    	try {
 		    		fsCertService.save(fscert);
-					model.remove("error");		    		
+			    	model.addAttribute("fscert", fscert);
+			    	storedCert = null;
 		    	} catch (Exception ex) {
 					model.addAttribute("error", ex.getMessage());
+					String json = "{\"error\":\"" +  ex.getMessage()
+					  		+ "\"}";
+					try {		  
+						response.setContentType("text/html; charset=UTF-8");
+					    response.setStatus(400);
+						response.setCharacterEncoding("UTF-8");
+						response.getWriter().println(json);
+						response.flushBuffer();
+					} catch (Exception wex) {
+						wex.printStackTrace();
+						LOG.info("Ошибка: " + wex.getMessage());
+					}
 		    	}
-		    	model.addAttribute("fscert", fscert);
-		    	storedCert = null;
 		    }
-			return "editfscertificate";
 	}
 
 	// ---------------------------------------------------------------------------------------
@@ -1440,15 +1455,16 @@ public class FSCertificateController {
 		CountryConverter.setCountrymap(certService.getCountriesList(cert.getLanguage()));
 		String country = CountryConverter.getCountryNameByCode(cert.getCodecountrytarget());
 		
+		FSCertificate parent=null;
 		if (cert.getParentnumber() != null && ! cert.getParentnumber().isEmpty()) {
-			FSCertificate parent =  fsCertService.getFSCertificateByNumber(cert.getParentnumber());
+			parent =  fsCertService.getFSCertificateByNumber(cert.getParentnumber());
 		}
 		
 		try {
 		   if (type != null && type.equals("org")) {	
-			  builder.createPdf(fileout, cert, fileconf, fontpath, country, true); 
+			  builder.createPdf(fileout, cert, fileconf, fontpath, country, parent, true); 
 		   } else {
-		      builder.createPdf(fileout, cert, fileconf, fontpath, country, false);
+		      builder.createPdf(fileout, cert, fileconf, fontpath, country, parent, false);
 		   }
 		} catch(Exception ex) {
 			ex.printStackTrace();

@@ -25,10 +25,28 @@
 	}
 
 	function save() {
-		url = $("#fscert").attr("action");
-		$.ajaxSetup({async:false});
-		$.post(url, $("#fscert").serialize());
-		location.href='fscerts.do?page=${fsmanager.page}&pagesize=${fsmanager.pagesize}&orderby=${fsmanager.orderby}&order=${fsmanager.order}';
+		$.ajax({
+			  type:    "POST",
+			  url:     "fsedit.do",
+			  data:    $("#fscert").serialize(),
+			  success: function(data) {
+				  location.href='fscerts.do?page=${fsmanager.page}&pagesize=${fsmanager.pagesize}&orderby=${fsmanager.orderby}&order=${fsmanager.order}';
+			  },
+ 		      error:  function(jqXHR, textStatus, errorThrown) {
+ 		    	 alert(jqXHR.responseText); 
+ 		 		 var obj = JSON.parse(jqXHR.responseText);
+ 		 		 // if (typeof obj.error !== 'undefined' && obj.error !== null) { 
+ 		 		 //  	alert(obj.error);
+ 		 		 // }
+			  }
+			});
+		
+		
+		
+		
+		//$.post(url, , function(data, status) {
+		//};
+		
 	}
 	
 	$(function() {
@@ -405,7 +423,6 @@
 		url = "rldlang.do?lang=" + $("#language").val();
 		$.ajaxSetup({async:false});
 		$.get(url, function(data, status) {
-			 // console.log(data);
 			 var obj = JSON.parse(data);
 		     $("#exporter").text(obj.exporter);
 		     $("#producer").text(obj.producer);

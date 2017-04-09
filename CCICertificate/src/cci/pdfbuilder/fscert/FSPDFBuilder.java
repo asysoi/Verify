@@ -41,7 +41,7 @@ public class FSPDFBuilder extends PDFBuilder {
 	private float maxHeightTable = 685f;
 	
 	public void createPdf(String outfilename, Object cert,
-			String configFileName, String fpath, String countryname, boolean flagOriginal) throws IOException, DocumentException {
+			String configFileName, String fpath, String countryname, FSCertificate parent, boolean flagOriginal) throws IOException, DocumentException {
 		fontpath = fpath;
 		// step 1
 		document = new Document(PageSize.A4, 72f, 72f, 54f, 54f);
@@ -51,21 +51,21 @@ public class FSPDFBuilder extends PDFBuilder {
 		document.open();
 		// step 4
 		xreader = XMLConfigReader.getInstance(configFileName, fontpath);
-		createContent(cert, countryname, flagOriginal);
+		createContent(cert, countryname, parent, flagOriginal);
 		// step 5
 		document.close();
 	}
 	
-	private void createContent(Object cert, String countryname, boolean flagOriginal) throws DocumentException, IOException {
+	private void createContent(Object cert, String countryname, FSCertificate parent, boolean flagOriginal) throws DocumentException, IOException {
 		String pagename  = PDFBuilderFactory.PAGE_FS;; 
 	    pconfig = xreader.getPDFPageConfig(pagename);
-	    createPDFPage(writer, cert, pconfig, countryname, flagOriginal);
+	    createPDFPage(writer, cert, pconfig, countryname, parent, flagOriginal);
 	    pagename = pconfig.getNextPage();
 
 	}
 	
 	public int createPDFPage(PdfWriter writer, Object certificate,
-					PDFPageConfig pconfig, String countryname, boolean flagOriginal) throws DocumentException, IOException {
+					PDFPageConfig pconfig, String countryname, FSCertificate parent, boolean flagOriginal) throws DocumentException, IOException {
 		
 		    int pagecount = 1;
 		    FSCertificate cert = (FSCertificate) certificate;
@@ -88,8 +88,9 @@ public class FSPDFBuilder extends PDFBuilder {
 	        addFSCertificateHeader(table, cert, bigFont, flagOriginal);
 	        addFSNumber(table, cert, prgFont);
 	        
-	        if (cert.getParentnumber() != null) {
-	        	addCellToTable(table, 3, "Дубликат сертификата от ХХХХХХ № " + cert.getParentnumber(), Element.ALIGN_LEFT, prgFont, 0f, 0f, 14f);
+	        if (cert.getParentnumber() != null && parent != null) {
+	        	addCellToTable(table, 3, "Дубликат сертификата от " + parent.getDatecert() 
+	        	              + "  № " + parent.getCertnumber(), Element.ALIGN_LEFT, prgFont, 0f, 0f, 14f);
 	        }
 	        addCellToTable(table, 3, "Выдан для предоставления в : " + countryname, Element.ALIGN_LEFT, prgFont, 0f, 0f, 15f);
 	        
@@ -214,7 +215,9 @@ public class FSPDFBuilder extends PDFBuilder {
 		if (flagOriginal) {
 			addCellToTable(table, 3, 47.78f);
 		} else {
-			addCellToTable(table, 3, cert.getBlanks().get(pageNumber).getBlanknumber(), Element.ALIGN_RIGHT, font, 0f, 0f);
+			if  (cert.getBlanks() != null) {
+			  addCellToTable(table, 3, cert.getBlanks().get(pageNumber).getBlanknumber(), Element.ALIGN_RIGHT, font, 0f, 0f);
+			}
 			addCellToTable(table, 3, "БЕЛОРУССКАЯ ТОРГОВО-ПРОМЫШЛЕННАЯ ПАЛАТА", Element.ALIGN_CENTER, font, 18f, 18f, 9f);
 			addCellToTable(table, 3, "BELARUS CHAMBER OF COMMERCE AND INDUSTRY", Element.ALIGN_CENTER, font, 18f, 18f);
 		}
