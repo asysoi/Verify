@@ -130,9 +130,11 @@ public class FSCertificateService {
 		return fscertificateDAO.getBranchByCode(code_otd);
 	}
 
-	public FSCertificate getFSCertificateByNumber(String parentnumber) {
-		
-		return null;
+	// ------------------------------------------------------------------------------
+	//  Method for FS Certificate Export
+	// ------------------------------------------------------------------------------	
+	public FSCertificate getFSCertificateByNumber(String parentnumber) throws Exception {
+		return fscertificateDAO.getFSCertificateByNumber(parentnumber);
 	}
 
 }

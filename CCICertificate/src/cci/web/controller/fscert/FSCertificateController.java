@@ -753,6 +753,35 @@ public class FSCertificateController {
         String ret;
 		return (obj == null ? "" : obj.toString());
 	}
+	
+	//---------------------------------------------------------------------------------------
+	// Get list of Cert Numbers for autocomplet
+	//---------------------------------------------------------------------------------------
+	@RequestMapping(value = "parentlist.do",  method = RequestMethod.GET)
+	public void getListOfCertNumber(
+			@RequestParam(value = "term", required = true) String lang,
+			HttpSession session, HttpServletResponse response, ModelMap model) {
+			
+			try {
+				  FSCertificate cert = (FSCertificate)model.get("fscert");
+				  String json = "[{\"id\":\"" +"1\"" + ", \"label\":\"" + "0000\"" + ", \"value\":\"" + "0000" + "\"}," 
+				                + "{\"id\":\"" +"2\"" + ", \"label\":\"" + "1111\"" + ", \"value\":\"" + "1111" + "\"},"
+				                + "{\"id\":\"" +"3\"" + ", \"label\":\"" + "2222\"" + ", \"value\":\"" + "2222" + "\"},"
+				                + "{\"id\":\"" +"4\"" + ", \"label\":\"" + "3333\"" + ", \"value\":\"" + "3333" + "\"},"
+				                + "{\"id\":\"" +"5\"" + ", \"label\":\"" + "4444\"" + ", \"value\":\"" + "4444" + "\"}"
+				                + "]";
+				  
+				  response.setContentType("text/html; charset=UTF-8");
+				  response.setCharacterEncoding("UTF-8");
+  			      response.getWriter().println(json);
+				  response.flushBuffer();
+				  
+			} catch (Exception ex) {
+					ex.printStackTrace();
+					LOG.info("Ошибка: " + ex.getMessage());
+					model.addAttribute("error", ex.getMessage());
+			}
+	}
 
 	// ---------------------------------------------------------------------------------------
 	//   Reload Template of certification field
@@ -1455,12 +1484,12 @@ public class FSCertificateController {
 		CountryConverter.setCountrymap(certService.getCountriesList(cert.getLanguage()));
 		String country = CountryConverter.getCountryNameByCode(cert.getCodecountrytarget());
 		
-		FSCertificate parent=null;
-		if (cert.getParentnumber() != null && ! cert.getParentnumber().isEmpty()) {
-			parent =  fsCertService.getFSCertificateByNumber(cert.getParentnumber());
-		}
 		
 		try {
+		   FSCertificate parent=null;
+		   if (cert.getParentnumber() != null && !cert.getParentnumber().isEmpty()) {
+				parent =  fsCertService.getFSCertificateByNumber(cert.getParentnumber());
+		   }
 		   if (type != null && type.equals("org")) {	
 			  builder.createPdf(fileout, cert, fileconf, fontpath, country, parent, true); 
 		   } else {

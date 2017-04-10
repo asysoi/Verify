@@ -41,7 +41,7 @@ public class FSPDFBuilder extends PDFBuilder {
 	private float maxHeightTable = 685f;
 	
 	public void createPdf(String outfilename, Object cert,
-			String configFileName, String fpath, String countryname, FSCertificate parent, boolean flagOriginal) throws IOException, DocumentException {
+		String configFileName, String fpath, String countryname, FSCertificate parent, boolean flagOriginal) throws IOException, DocumentException {
 		fontpath = fpath;
 		// step 1
 		document = new Document(PageSize.A4, 72f, 72f, 54f, 54f);

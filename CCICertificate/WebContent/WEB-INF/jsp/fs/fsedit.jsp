@@ -33,23 +33,35 @@
 				  location.href='fscerts.do?page=${fsmanager.page}&pagesize=${fsmanager.pagesize}&orderby=${fsmanager.orderby}&order=${fsmanager.order}';
 			  },
  		      error:  function(jqXHR, textStatus, errorThrown) {
- 		    	 alert(jqXHR.responseText); 
- 		 		 var obj = JSON.parse(jqXHR.responseText);
- 		 		 // if (typeof obj.error !== 'undefined' && obj.error !== null) { 
- 		 		 //  	alert(obj.error);
- 		 		 // }
+ 		    	 //var obj = JSON.parse("" + jqXHR.responseText);
+ 		    	 popupMessage("Ошибка сохранениия сертификата", jqXHR.responseText);
 			  }
 			});
-		
-		
-		
-		
-		//$.post(url, , function(data, status) {
-		//};
-		
 	}
 	
+	function popupMessage(title, data) {
+		$( "#dialog-message" ).dialog("option", "title", title);
+  		$("#message").text(data);
+		$("#dialog-message").dialog("open");
+	}
+	
+	
 	$(function() {
+		
+		$("#parentnumber").autocomplete({
+		   source: "parentlist.do",
+		   
+/*		   source: function( request, response ) {
+		        $.ajax( {
+		          source: "parentlist.do",
+		          success: function( data ) {
+		            response( data );
+		          }
+		        } );
+		      }, */
+		      minLength: 2
+		} );
+		
 		$(".datepicker").datepicker({
 			changeMonth : true,
 			changeYear : true
@@ -136,7 +148,7 @@
 			shrinkToFit : false,
    			colModel:[
    				{label:'Номер',name:'numerator', index:'numerator', width:250, sortable:false, editrules:{number:true}},
-   	    		{label:'Наименование товара', name:'tovar', index:'tovar', width:880, editable: true, sortable:false}
+   	    		{label:'Наименование товара', name:'tovar', index:'tovar', width:720, editable: true, sortable:false}
 		   	],
 		    rowNum: 10,
 		    rowList:[5,10,20,50],
@@ -257,7 +269,7 @@
 			shrinkToFit : false,
    			colModel:[
    				{label:'Номер листа',name:'page', index:'page', width:250, sortable:false, editrules:{number:true}},
-   	    		{label:'Номер бланка', name:'blanknumber', index:'blanknumber', width:880, editable: true, sortable:false}
+   	    		{label:'Номер бланка', name:'blanknumber', index:'blanknumber', width:720, editable: true, sortable:false}
 		   	],
 		    rowNum: 10,
 		    rowList:[5,10,20,50],
@@ -447,9 +459,19 @@
 
 <h3 align="center"><b>СЕРТИФИКАТ СВОБОДНОЙ ПРОДАЖИ</b></h3>
 <h4 align="center">
+
+<c:if test="${fscert.language == 'RU'}">  
 <div id="branchname">${fscert.branch.name}</div>
 <div id="branchaddress">${fscert.branch.address}</div>
 <div id="branchcontact">телефон: ${fscert.branch.phone}, факс: ${fscert.branch.fax}, e-mail: ${fscert.branch.email}</div>
+</c:if>
+
+<c:if test="${fscert.language != 'RU'}">
+<div id="branchname">${fscert.branch.getLocale(fscert.language).name}</div>
+<div id="branchaddress">${fscert.branch.getLocale(fscert.language).address}</div>
+<div id="branchcontact">phone: ${fscert.branch.phone}, fax: ${fscert.branch.fax}, e-mail: ${fscert.branch.email}</div>
+</c:if>
+
 </h4>
 
 <form:form id="fscert" method="POST" modelAttribute="fscert">
@@ -465,7 +487,7 @@
 </div>
 
 <div class="row">
-<div class="col-md-12">Дубликат сертификата: <form:input path="parentnumber" id="parentnumber" /></div>				
+<div class="col-md-12 ui-widget" >Дубликат сертификата: <form:input path="parentnumber" id="parentnumber" /></div>				
 </div>
 
 <div class="row">
@@ -479,8 +501,7 @@
 <div class="row">
 <div class="col-md-2"><a href="javascript:openClients('exporter');">Экспортер: </a></div>
 <div class="col-md-10" id="exporter">
-<c:if test="${fscert.language != 'RU'}">  
-${fscert.exporter.getLocale(fscert.language).name} ${fscert.exporter.getLocale(fscert.language).address}
+<c:if test="${fscert.language != 'RU'}">${fscert.exporter.getLocale(fscert.language).name} ${fscert.exporter.getLocale(fscert.language).address}
 (${fscert.exporter.name}, ${fscert.exporter.address})
 </c:if>
 <c:if test="${fscert.language == 'RU'}">  ${fscert.exporter.name}, ${fscert.exporter.address}</c:if>
@@ -501,12 +522,12 @@ ${fscert.producer.getLocale(fscert.language).name}, ${fscert.producer.getLocale(
 <div class="row">
 <div class="col-md-2">Удостоверение:<p align="center"><a href="javascript:reloadConfirmation()" title="Сгенерировать из шаблона">
      <i class="glyphicon glyphicon-refresh" align="center"></i></a></p></div>
-<div class="col-md-10"><form:textarea rows="6" cols="140" path="confirmation" id="confirmation" /></div>
+<div class="col-md-10"><form:textarea rows="5" cols="110" path="confirmation" id="confirmation" /></div>
 </div>
 <div class="row">
 <div class="col-md-2">Декларация:<p align="center"><a href="javascript:reloadDeclaration()" title="Сгенерировать из шаблона">
      <i class="glyphicon glyphicon-refresh" align="center"></i></a></p></div>
-<div class="col-md-10"><form:textarea rows="6" cols="140" path="declaration" id="declaration" /></div>
+<div class="col-md-10"><form:textarea rows="5" cols="110" path="declaration" id="declaration" /></div>
 </div>
 
 <div class="row">

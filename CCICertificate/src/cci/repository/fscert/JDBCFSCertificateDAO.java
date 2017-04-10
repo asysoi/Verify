@@ -540,7 +540,7 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 				if (sqlwhere.length() != 0)  sqlwhere += " AND ROWNUM = 1 ";
 				return sqlwhere;
 		}
-
+ 
 		//--------------------------------------------------------------------
 		//--------------------------------------------------------------------
 		//            GET FS Certificate WEB or REST service 
@@ -826,7 +826,5 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 			loadClientLocales(branch); 
 			return branch;
 		}
-
-
 		
 }
