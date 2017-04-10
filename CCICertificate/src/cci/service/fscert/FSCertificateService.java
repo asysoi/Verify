@@ -137,4 +137,13 @@ public class FSCertificateService {
 		return fscertificateDAO.getFSCertificateByNumber(parentnumber);
 	}
 
+	
+	// ------------------------------------------------------------------------------
+	//  GetList cert numbers for autocomplete
+	// ------------------------------------------------------------------------------	
+	public String getListCertNumber(String term) {
+		// TODO Auto-generated method stub
+		return fscertificateDAO.getListCertNumber(term);
+	}
+
 }

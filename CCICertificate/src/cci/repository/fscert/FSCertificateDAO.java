@@ -41,5 +41,7 @@ public interface FSCertificateDAO {
 	public Employee getEmployeeByUserName(String username);
 
 	public Branch getBranchByCode(String code_otd);
+
+	public String getListCertNumber(String term);
 	
 }

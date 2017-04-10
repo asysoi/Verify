@@ -20,7 +20,7 @@
     <spring:url value="/resources/cci/cci.js" var="jCCI"/>
     <script src="${jCCI}"></script>
 
-    <spring:url value="/resources/jquery/jquery-3.2.0.min.js" var="jQuery"/>
+    <spring:url value="/resources/jquery/jquery-1.11.1.js" var="jQuery"/>
     <script src="${jQuery}"></script>
     
     <spring:url value="/resources/bootstrap3/js/bootstrap.min.js" var="jBootStrap"/>

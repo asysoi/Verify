@@ -225,5 +225,5 @@ div.row {
 .ui-dialog {z-index: 9999 !important;}
 
 .ui-autocomplete-loading { 
-   background: white url("resources/images/ui-anim_basic_16x16.gif") right center no-repeat;
+   background: white url("/resources/images/ui-anim_basic_16x16.gif") right center no-repeat;
 }

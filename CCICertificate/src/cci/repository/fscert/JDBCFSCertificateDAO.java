@@ -826,5 +826,35 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 			loadClientLocales(branch); 
 			return branch;
 		}
+
+
+		//--------------------------------------------------------------------
+		//--------------------------------------------------------------------	
+		//   get JSON string for autocomplete         
+		//--------------------------------------------------------------------
+		//--------------------------------------------------------------------
+		public String getListCertNumber(String term) {
+			String sql = "select id, certnumber from FS_CERT WHERE CERTNUMBER LIKE :number AND rownum < 10 ";
+			Map<String, Object> params = new HashMap();
+			params.put("number", term +"%");
+
+			List<ViewFSCertificate> certs = this.template.query(sql, params, 
+					new BeanPropertyRowMapper<ViewFSCertificate>(ViewFSCertificate.class));
+			
+			String json = "[";
+			String data = "";
+			for (FSCertificate cert : certs) {
+				if (! data.isEmpty()) { data += ", "; }
+			    data += "{" + jdecor("id") + ":" + jdecor("" + cert.getId()) + ", " 
+			                + jdecor("label") + ":" + jdecor(cert.getCertnumber()) + ", "
+			                + jdecor("value") + ":" + jdecor(cert.getCertnumber()) +"}";
+			}
+			json += data + "]";
+			return json;
+		}
+
+		private String jdecor(String str) {
+			return "\"" + str + "\"";
+		}
 		
 }
