@@ -50,16 +50,7 @@
 		
 		$("#parentnumber").autocomplete({
 		   source: "parentlist.do",
-		   
-/*		   source: function( request, response ) {
-		        $.ajax( {
-		          source: "parentlist.do",
-		          success: function( data ) {
-		            response( data );
-		          }
-		        } );
-		      }, */
-		      minLength: 2
+	       minLength: 2
 		} );
 		
 		$(".datepicker").datepicker({
@@ -387,7 +378,8 @@
 	}
 
 	function openClients(clienttype) {
-        link="sclients.do?pagesize=5&clienttype="+clienttype+"&lang="+$("#language").val();
+        //link="sclients.do?pagesize=5&clienttype="+clienttype+"&lang="+$("#language").val();
+        link="sglients.do?clienttype="+clienttype;
 		$("#fsview").load(link);
 		$("#fsview").dialog("option", "title", 'Список компаний');
 		$("#fsview").dialog("option", "width", 1200);

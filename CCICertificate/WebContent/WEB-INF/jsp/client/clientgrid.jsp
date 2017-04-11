@@ -37,14 +37,15 @@ $(function () {
 	   	caption: "",
 	   	ondblClickRow: function(rowid, selected) {
 			if(rowid != null) {
-				link="clientedit.do?id="+rowid;
-				$("#elementview").load(link);
+				linkClient(rowid, "${clienttype}");
+				//link="clientedit.do?id="+rowid;
+				//$("#elementview").load(link);
   		    }					
 		},
 	    onSelectRow: function(rowid, selected) {
 			if(rowid != null) {
-				link="clientview.do?id="+rowid;
-				$("#elemetview").load(link);
+				//link="clientview.do?id="+rowid;
+				//$("#elemetview").load(link);
   		    }					
 		}, 
 		onSortCol : clearSelection,
@@ -62,18 +63,30 @@ $(function () {
  
 });
 
-
 function clearSelection() {
 	$("#elementview").text("");
 }
+
+function linkClient(clientid, clienttype) {
+	url = "selclient.do?id=" + clientid+"&clienttype="+clienttype+"&lang="+$("#language").val();
+	$.ajaxSetup({async:false});
+	$.get(url, function(data, status) {
+		 console.log("Clienttype: " + clienttype);
+		 if (clienttype == 'exporter') { 
+		     $("#exporter").text(data);
+		 } else if (clienttype == 'producer') {
+			 $("#producer").text(data);
+		 }
+	});	
+	$("#fsview").dialog("close");
+}
+
 </script>
 
 
 <table id="listelements"></table>
 <div id="pagerl"></div>
 <p></p>
-<div id="elementview" style="border: 1px; border-style: solid; border-radius: 5 px;" ></div>
-
 <table id="fileupload"></table>
 <div id="pagerfile"></div>
 

@@ -58,9 +58,18 @@ public class ClientController {
 	public ClientController(ClientValidator clientValidator) {
 		this.clientValidator = clientValidator;
 	}
-
 	// ---------------------------------------------------------------------------------------
-	//  Main Request - Get List of Clients for Grid Rendering
+	//  Client grid    - Get List of Clients for Grid Rendering
+	// ---------------------------------------------------------------------------------------
+	@RequestMapping(value = "sglients.do", method = RequestMethod.GET)
+	public String sglients(
+			@RequestParam(value = "clienttype", required = false) String clienttype,
+			ModelMap model) {
+		   model.addAttribute("clienttype", clienttype);
+		return "client/clientgrid";
+	}
+	// ---------------------------------------------------------------------------------------
+	//  Main Request - Get List of Clients for Grid Rendering 
 	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "clientgrid.do", method = RequestMethod.GET)
 	public void listCertsForGrid (	
@@ -124,7 +133,6 @@ public class ClientController {
 			}
 	}
 	
-
 	private String createXMLFromList(List<ViewClient> elements, int page, int pagecount, int itemscount) {
 			String xml;
 			xml = "<?xml version='1.0' encoding='utf-8'?>";
@@ -147,9 +155,7 @@ public class ClientController {
 			xml +=  "</rows>";
 			return xml;
 	}
-	
-	
-	
+		
 	// ---------------------------------------------------------------
 	// Get Clients List
 	// ---------------------------------------------------------------
