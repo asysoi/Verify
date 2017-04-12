@@ -1,6 +1,7 @@
 package cci.web.controller.staff;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -18,13 +19,17 @@ import cci.model.Department;
 import cci.model.Employee;
 import cci.model.EmployeeLocale;
 import cci.repository.SQLBuilder;
+import cci.repository.client.SQLBuilderClient;
 import cci.repository.staff.SQLBuilderEmployee;
+import cci.service.FieldType;
 import cci.service.Filter;
 import cci.service.cert.CertService;
 import cci.service.cert.XSLWriter;
+import cci.service.fscert.FSFilter;
 import cci.service.staff.EmployeeFilter;
 import cci.service.staff.EmployeeService;
 import cci.web.controller.ViewManager;
+import cci.web.controller.client.ViewClient;
 
 import java.util.HashMap;
 import java.util.List;
@@ -50,7 +55,102 @@ public class EmployeeController {
 	private CertService certService;
 	
 	Map<String, Map<String, String>> deplist = null; 
+	// ---------------------------------------------------------------------------------------
+	//  Client grid    - Get List of Clients for Grid Rendering
+	// ---------------------------------------------------------------------------------------
+	@RequestMapping(value = "sgemp.do", method = RequestMethod.GET)
+	public String sgemployees(
+		  @RequestParam(value = "employeetype", required = false) String employeetype,
+		  ModelMap model) {
+		  model.addAttribute("employeetype", employeetype);
+	  	  return "staff/empgrid";
+	}
+	// ---------------------------------------------------------------------------------------
+	//  Main Request - Get List of Employees for Grid Rendering 
+	// ---------------------------------------------------------------------------------------
+	@RequestMapping(value = "empgrid.do", method = RequestMethod.GET)
+	public void listEmployeesForGrid (	
+				@RequestParam(value = "page", required = false) int page,
+				@RequestParam(value = "rows", required = false) int rows,
+				@RequestParam(value = "sidx", defaultValue = "name", required = false) String sidx,
+				@RequestParam(value = "sord", required = false) String sord,
+				@RequestParam(value = "name", required = false) String name,
+				@RequestParam(value = "job", required = false) String job,
+				@RequestParam(value = "otd_name", required = false) String otd_name,
+				@RequestParam(value = "departmentname", required = false) String departmentname,				
+				Authentication aut,
+				HttpSession session, HttpServletResponse response, HttpServletRequest request,
+				ModelMap model) {
+			
+			LOG.info(request.getQueryString());
+			
+			Filter filter= new FSFilter();
+			if (name != null) {
+			      filter.setConditionValue("NAME", "NAME", "like", 
+			    		  name, FieldType.STRING);
+			}
+			
+			if (job != null) {
+			      filter.setConditionValue("JOB", "JOB", "like", 
+			    		  job, FieldType.STRING);
+			}
+			if (otd_name != null) {
+			      filter.setConditionValue("OTD_NAME", "OTD_NAME", "like", 
+			    		  otd_name, FieldType.STRING);
+			}
+			if (departmentname != null) {
+			      filter.setConditionValue("DEPARTMENTNAME", "DEPARTMENTNAME", "like", 
+			    		  otd_name, FieldType.STRING);
+			}
 
+			
+			SQLBuilder builder = new SQLBuilderClient();
+			builder.setFilter(filter);
+			
+			int itemscount = employeeService.getViewPageCount(builder);
+			int pagecount = itemscount/rows + (itemscount%rows > 0 ? 1 : 0);
+			
+			List<ViewEmployee> elements = employeeService.readEmployeesPage(
+					page, rows,   
+					sidx, sord, builder);
+			
+			try {
+	    	   response.setContentType("text/xml;charset=utf-8"); 
+			   response.setCharacterEncoding("UTF-8");
+		       response.getWriter().println(createXMLFromList(elements, page,pagecount ,itemscount));
+			   response.flushBuffer();
+			} catch (Exception ex) {
+			   ex.printStackTrace();
+			   model.addAttribute("error", ex.getMessage());
+			}
+	}
+	
+	private String createXMLFromList(List<ViewEmployee> elements, int page, int pagecount, int itemscount) {
+			String xml;
+			xml = "<?xml version='1.0' encoding='utf-8'?>";
+			xml +=  "<rows>";
+			xml += "<page>"+ page + "</page>";
+			xml += "<total>"+pagecount+"</total>";
+			xml += "<records>"+itemscount+"</records>";
+
+			if (elements != null) {
+				for (ViewEmployee row : elements) {
+					xml += "<row id='"+ row.getId() + "'>";            
+					xml += "<cell><![CDATA["+getValue(row.getName())+"]]></cell>";
+					xml += "<cell><![CDATA["+getValue(row.getJob())+"]]></cell>";
+					xml += "<cell><![CDATA["+getValue(row.getDepartmentname())+"]]></cell>";
+					xml += "<cell><![CDATA["+getValue(row.getOtd_name())+"]]></cell>";
+					xml += "</row>";
+				}
+			}
+			xml +=  "</rows>";
+			return xml;
+	}
+	
+	private String getValue(Object obj) {
+		return (obj == null ? "" : obj.toString());
+	}
+	
 	// ---------------------------------------------------------------
 	// Get Employee List
 	// ---------------------------------------------------------------

@@ -246,7 +246,7 @@
         });
 		
 		grid = $("#products");
-		grid.jqGrid('gridResize', {minWidth: 450, minHeight: 150});
+		grid.jqGrid('gridResize', {minWidth: 350, minHeight: 150});
 		$("#pagerproducts_left", "#pagerproducts").width(250);
 		
 		//Blank grid
@@ -368,7 +368,7 @@
         });
 		
 		grid = $("#blanks");
-		grid.jqGrid('gridResize', {minWidth: 450, minHeight: 150});
+		grid.jqGrid('gridResize', {minWidth: 350, minHeight: 100});
 		$("#pagerblanks_left", "#pagerblanks").width(250);
 		
 	});
@@ -382,12 +382,12 @@
         link="sglients.do?clienttype="+clienttype;
 		$("#fsview").load(link);
 		$("#fsview").dialog("option", "title", 'Список компаний');
-		$("#fsview").dialog("option", "width", 1200);
-		$("#fsview").dialog("option", "height", 520);
+		$("#fsview").dialog("option", "width", 1100);
+		$("#fsview").dialog("option", "height", 420);
 		$("#fsview").dialog("option", "modal", true);
 		$("#fsview").dialog("option", "resizable", true );
 		$("#fsview").dialog( "option", "position", { my: "center",  at: "center", of:window} );
-		$("#fsview").dialog("open");
+		$("#fsview").dialog("open"); 
 	}
 	
 	function reloadConfirmation() {
@@ -411,11 +411,11 @@
 	}
 	
 	function openEmployees(employeetype) {
-        link="selemployees.do?pagesize=5&employeetype="+employeetype;
+        link="sgemp.do?pagesize=5&employeetype="+employeetype;
 		$("#fsview").load(link);
 		$("#fsview").dialog("option", "title", 'Список сотрудников');
-		$("#fsview").dialog("option", "width", 1200);
-		$("#fsview").dialog("option", "height", 520);
+		$("#fsview").dialog("option", "width", 1100);
+		$("#fsview").dialog("option", "height", 420);
 		$("#fsview").dialog("option", "modal", true);
 		$("#fsview").dialog("option", "resizable", true );
 		$("#fsview").dialog( "option", "position", { my: "center",  at: "center", of:window} );

@@ -144,18 +144,21 @@ public class ClientController {
 			if (elements != null) {
 				for (ViewClient row : elements) {
 					xml += "<row id='"+ row.getId() + "'>";            
-					xml += "<cell><![CDATA["+row.getName()+"]]></cell>";
-					xml += "<cell><![CDATA["+row.getAddress()+"]]></cell>";
-					xml += "<cell><![CDATA["+row.getUnp()+"]]></cell>";
-					xml += "<cell><![CDATA["+row.getPhone()+"]]></cell>";
-					xml += "<cell><![CDATA["+row.getEmail()+"]]></cell>";
+					xml += "<cell><![CDATA["+getValue(row.getName())+"]]></cell>";
+					xml += "<cell><![CDATA["+getValue(row.getAddress())+"]]></cell>";
+					xml += "<cell><![CDATA["+getValue(row.getUnp())+"]]></cell>";
+					xml += "<cell><![CDATA["+getValue(row.getPhone())+"]]></cell>";
+					xml += "<cell><![CDATA["+getValue(row.getEmail())+"]]></cell>";
 					xml += "</row>";
 				}
 			}
 			xml +=  "</rows>";
 			return xml;
 	}
-		
+	
+	private String getValue(Object obj) {
+		return (obj == null ? "" : obj.toString());
+	}
 	// ---------------------------------------------------------------
 	// Get Clients List
 	// ---------------------------------------------------------------

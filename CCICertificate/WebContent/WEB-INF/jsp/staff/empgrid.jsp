@@ -1,4 +1,4 @@
-﻿<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
@@ -23,23 +23,22 @@ $(function () {
 	    }
 	});
 	
-    console.log("Clients Grid init...");
+    console.log("Employees Grid init...");
     
     jQuery("#listelements").jqGrid({
-		url: "clientgrid.do",
+		url: "empgrid.do",
 		// editurl: "fsgoodsupdate.do",
 	    datatype: "xml",
 	    mtype: "GET",
 		height: 250,
 		width : null,
 		shrinkToFit : false,
-	   	colNames:['Наименование','Адрес', 'УНП','Телефон', 'Email'],
+	   	colNames:['ФИО','Должность', 'Отделение','Подразделение'],
 	   	colModel:[
 	   		{name:'name',index:'name', width:200},
-	   	    {name:'address',index:'address', width:250 },
-	   	    {name:'unp',index:'unp', width:160},
-	   		{name:'phone',index:'phone', width:250},
-	   		{name:'email',index:'email', width:160}
+	   	    {name:'job',index:'job', width:300 },
+	   	    {name:'otd_name',index:'otd_name', width:200},
+	   		{name:'departmentname',index:'departmentname', width:350}
   	   	    ],
  		rowNum:10,
 	   	rowList:[5,10,20,50],
@@ -48,14 +47,13 @@ $(function () {
         sortorder: "desc",
         viewrecords: true,
         rownumbers: true, 
-        //rownumWidth: 25, 
         gridview: true,
         autoencode: true,
         sortable: true,
 	   	caption: "",
 	   	ondblClickRow: function(rowid, selected) {
 			if(rowid != null) {
-				linkGridClient(rowid, "${clienttype}");
+				linkGridEmployee(rowid, "${employeetype}");
   		    }					
 		} 
 	});
@@ -71,10 +69,10 @@ $(function () {
 	    caption: '',	
         buttonicon: 'ui-icon-plus',
         onClickButton: function() {
-        	addGridClient();      	
+        	addGridEmployee();      	
             jQuery("#listelements").trigger('reloadGrid');
         },
-        title: "Добавить нового контрагента",
+        title: "Добавить нового сотрудника",
         position: "last"
     }).navButtonAdd('#pagerl',{
 	    caption: '',	
@@ -84,14 +82,14 @@ $(function () {
     	    var id = grid.jqGrid('getGridParam','selrow');
         	
         	if (id) { 
-        		editGridClient(id);
+        		editGridEmployee(id);
         	} else { 
-  		     	$( "#dialog-message" ).dialog("option", "title", 'Выбор контрагента');
- 		     	$("#message").text("Выберете контрагента");
+  		     	$( "#dialog-message" ).dialog("option", "title", 'Редактирование сотрудника');
+ 		     	$("#message").text("Выберите сотрудника");
 				$("#dialog-message").dialog("open");
             }
         },
-        title: "Редактировать контрагента",
+        title: "Редактировать сотрудника",
         position: "last"
     });
 	
@@ -106,29 +104,28 @@ $(function () {
 		$("#elementview").text("");
 	}
 
-	function linkGridClient(clientid, clienttype) {
-		url = "selclient.do?id=" + clientid+"&clienttype="+clienttype+"&lang="+$("#language").val();
+	function linkGridEmployee(id, type) {
+		url = "selemployee.do?id=" + id+"&employeetype="+type+"&lang="+$("#language").val();
 		$.ajaxSetup({async:false});
 		$.get(url, function(data, status) {
-			 console.log("Clienttype: " + clienttype);
-			 if (clienttype == 'exporter') { 
-		    	 $("#exporter").text(data);
-		 	 } else if (clienttype == 'producer') {
-				 $("#producer").text(data);
+			 if (type == 'expert') { 
+		    	 $("#expert").text(data);
+		 	 } else if (type == 'signer') {
+				 $("#signer").text(data);
 		 	 }
 		});
   	    $("#fsview").dialog("close");
     }
 	
-	function saveGridClient() {
-		url = $("#fclient").attr("action");
+	function saveGridEmployee() {
+		url = $("#fcemployee").attr("action");
 		$.ajaxSetup({async:false});
-		$.post(url, $("#fclient").serialize());
+		$.post(url, $("#fcemployee").serialize());
 		jQuery("#listelements").trigger('reloadGrid');
 		$("#clview").dialog("close");
 	}
 	
-	function updateGridClient() {
+	function updateGridEmployee() {
         var x;
 		if (confirm("Сохранить сделанные изменения?") == true) {
 			url = $("#fclient").attr("action");
@@ -144,10 +141,10 @@ $(function () {
 	}
 	
 	
-    function addGridClient() {
-        link = "clientadd.do";
+    function addGridEmployee() {
+        link = "employeeadd.do";
 		$("#clview").load(link);        
-		$("#clview").dialog("option", "title", 'Компания');
+		$("#clview").dialog("option", "title", 'Сотрудник');
 		$("#clview").dialog("option", "width", 740);
 		$("#clview").dialog("option", "height", 300);
 		$("#clview").dialog("option", "modal", true);
@@ -161,10 +158,10 @@ $(function () {
 		$("#clview").dialog("open");
 	}
     
-    function editGridClient(id) {
-        link = "clientedit.do?id=" + id;
+    function editGridEmployee(id) {
+        link = "employeeedit.do?id=" + id;
 		$("#clview").load(link);        
-		$("#clview").dialog("option", "title", 'Компания');
+		$("#clview").dialog("option", "title", 'Сотрудник');
 		$("#clview").dialog("option", "width", 740);
 		$("#clview").dialog("option", "height", 300);
 		$("#clview").dialog("option", "modal", true);
