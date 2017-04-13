@@ -725,10 +725,7 @@ public class FSCertificateController {
 				
 					  
 					  String json = "{\"expert\":\"" + getEmployeeName(cert.getExpert(), lang) + "\","
-							  		+ "\"signer\":\"" + getEmployeeName(cert.getSigner(), lang)+ "\","
-							  		+ "\"branchname\":\"" + getBranchName(cert.getBranch(), lang)+ "\","
-							  		+ "\"branchaddress\":\"" + getBranchAddress(cert.getBranch(), lang)+ "\","
-							  		+ "\"branchcontact\":\"" + getBranchContact(cert.getBranch(), lang)
+							  		+ "\"signer\":\"" + getEmployeeName(cert.getSigner(), lang)+ "\""
 							  		+ "\"}";
 					  
 					  response.setContentType("text/html; charset=UTF-8");

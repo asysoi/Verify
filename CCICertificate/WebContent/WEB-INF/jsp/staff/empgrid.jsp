@@ -108,10 +108,11 @@ $(function () {
 		url = "selemployee.do?id=" + id+"&employeetype="+type+"&lang="+$("#language").val();
 		$.ajaxSetup({async:false});
 		$.get(url, function(data, status) {
+			 var obj = JSON.parse(data); 
 			 if (type == 'expert') { 
-		    	 $("#expert").text(data);
+		    	 $("#expert").text(obj.expert);
 		 	 } else if (type == 'signer') {
-				 $("#signer").text(data);
+				 $("#signer").text(obj.signer);
 		 	 }
 		});
   	    $("#fsview").dialog("close");
@@ -149,7 +150,7 @@ $(function () {
 		$("#clview").dialog("option", "height", 300);
 		$("#clview").dialog("option", "modal", true);
 		$("#clview").dialog("option", "resizable", false);
-		$("#clview").dialog({ buttons: [ { text: "Сохранить",  click : function() { saveGridClient(); } },  
+		$("#clview").dialog({ buttons: [ { text: "Сохранить",  click : function() { saveGridEmployee(); } },  
 		     				             { text: "Отмена", click: function() { $( this ).dialog( "close" ); } }
 		                      	                                               ] });
 		$("#clview").dialog("option", "position", {
@@ -166,7 +167,7 @@ $(function () {
 		$("#clview").dialog("option", "height", 300);
 		$("#clview").dialog("option", "modal", true);
 		$("#clview").dialog("option", "resizable", false);
-		$("#clview").dialog({ buttons: [ { text: "Сохранить",  click : function() { updateGridClient(); } },  
+		$("#clview").dialog({ buttons: [ { text: "Сохранить",  click : function() { updateGridEmployee(); } },  
 		     				               { text: "Отмена", click: function() { $( this ).dialog( "close" ); } }
 		                      	                                               ] });
 		$("#clview").dialog("option", "position", {
