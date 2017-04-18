@@ -726,7 +726,7 @@ public class FSCertificateController {
 					  
 					  String json = "{\"expert\":\"" + getEmployeeName(cert.getExpert(), lang) + "\","
 							  		+ "\"signer\":\"" + getEmployeeName(cert.getSigner(), lang)+ "\""
-							  		+ "\"}";
+							  		+ "}";
 					  
 					  response.setContentType("text/html; charset=UTF-8");
 					  response.setCharacterEncoding("UTF-8");
@@ -1440,6 +1440,7 @@ public class FSCertificateController {
 				} else {
 				    cert = fsCertService.getFSCertificateById(id.intValue());
 				}
+				
 				makepdffile(absoluteDiskPath, cert, type);
 			} catch (Exception e) {
 				e.printStackTrace();

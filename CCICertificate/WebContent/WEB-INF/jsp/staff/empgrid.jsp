@@ -1,4 +1,4 @@
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+﻿<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
@@ -23,7 +23,7 @@ $(function () {
 	    }
 	});
 	
-    console.log("Employees Grid init...");
+    console.log("Employees Grid init..."); 
     
     jQuery("#listelements").jqGrid({
 		url: "empgrid.do",
@@ -155,7 +155,6 @@ $(function () {
 		                      	                                               ] });
 		$("#clview").dialog("option", "position", {
 			my : "center", at : "center", of :  $( "#listelements" ) });
-
 		$("#clview").dialog("open");
 	}
     
@@ -169,10 +168,9 @@ $(function () {
 		$("#clview").dialog("option", "resizable", false);
 		$("#clview").dialog({ buttons: [ { text: "Сохранить",  click : function() { updateGridEmployee(); } },  
 		     				               { text: "Отмена", click: function() { $( this ).dialog( "close" ); } }
-		                      	                                               ] });
+      	                                               ] });
 		$("#clview").dialog("option", "position", {
 			my : "center", at : "center", of :  $( "#listelements" ) });
-
 		$("#clview").dialog("open");
 	}
 </script>
