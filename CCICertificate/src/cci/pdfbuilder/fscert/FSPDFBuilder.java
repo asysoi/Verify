@@ -296,7 +296,7 @@ public class FSPDFBuilder extends PDFBuilder {
         		          		Element.ALIGN_LEFT, font, 0f, 0f, 18f);
         
         String name = (cert.getSigner().getName() != null ? cert.getSigner().getName() : "");
-        String job = (cert.getSigner().getJob() != null ? cert.getSigner().getJob() : "");
+        String job = (cert.getSigner().getJob() != null ? toFirstUppercase(cert.getSigner().getJob()) : "");
         		
         if (!"RU".equals(cert.getLanguage())) {
         	EmployeeLocale locale = cert.getSigner().getLocale(cert.getLanguage());
