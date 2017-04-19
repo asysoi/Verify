@@ -1440,8 +1440,9 @@ public class FSCertificateController {
 				} else {
 				    cert = fsCertService.getFSCertificateById(id.intValue());
 				}
-				
-				makepdffile(absoluteDiskPath, cert, type);
+				if (cert != null) {
+				   makepdffile(absoluteDiskPath, cert, type);
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -1492,9 +1493,9 @@ public class FSCertificateController {
 				parent =  fsCertService.getFSCertificateByNumber(cert.getParentnumber());
 		   }
 		   if (type != null && type.equals("org")) {	
-			  builder.createPdf(fileout, cert, fileconf, fontpath, country, parent, true); 
+			  builder.createPdf(fileout, cert, fileconf, fontpath, country, parent, fsCertService, true); 
 		   } else {
-		      builder.createPdf(fileout, cert, fileconf, fontpath, country, parent, false);
+		      builder.createPdf(fileout, cert, fileconf, fontpath, country, parent, fsCertService, false);
 		   }
 		} catch(Exception ex) {
 			ex.printStackTrace();

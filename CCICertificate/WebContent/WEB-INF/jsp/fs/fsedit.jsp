@@ -446,7 +446,7 @@
 <p align="right">
 <a href="javascript:goBack();"><i class="glyphicon glyphicon-arrow-left"></i></a>
 <a href="javascript:save();"><i class="glyphicon glyphicon-save" ></i></a>
-<a href="javascript:printOriginalFSCertificate();"><i class="glyphicon glyphicon-print" ></i></a>
+<a href="javascript:printFSCertificate();"><i class="glyphicon glyphicon-print" ></i></a>
 </p>
 
 <h3 align="center"><b>СЕРТИФИКАТ СВОБОДНОЙ ПРОДАЖИ</b></h3>
@@ -457,7 +457,7 @@
 <div id="branchaddress">${fscert.branch.address}</div>
 <div id="branchcontact">телефон: ${fscert.branch.phone}, факс: ${fscert.branch.fax}, e-mail: ${fscert.branch.email}</div>
 </c:if>
-
+  
 <c:if test="${fscert.language != 'RU'}">
 <div id="branchname">${fscert.branch.getLocale(fscert.language).name}</div>
 <div id="branchaddress">${fscert.branch.getLocale(fscert.language).address}</div>

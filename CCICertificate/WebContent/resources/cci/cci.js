@@ -83,7 +83,7 @@ function printCopyFSCertificate(certid) {
 	win.focus();
 }
 
-function printOriginalFSCertificate() {
+function printFSCertificate() {
 	url = "fsprint.do";
 	$.ajaxSetup({async:false});
 	$.post(url, $("#fscert").serialize());

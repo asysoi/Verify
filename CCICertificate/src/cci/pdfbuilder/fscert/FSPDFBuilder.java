@@ -24,10 +24,13 @@ import com.itextpdf.text.pdf.PdfWriter;
 import cci.config.cert.PDFConfigReader;
 import cci.config.cert.PDFPageConfig;
 import cci.config.cert.XMLConfigReader;
+import cci.model.ClientLocale;
+import cci.model.EmployeeLocale;
 import cci.model.fscert.FSCertificate;
 import cci.model.fscert.FSProduct;
 import cci.pdfbuilder.PDFBuilder;
 import cci.pdfbuilder.PDFBuilderFactory;
+import cci.service.fscert.FSCertificateService;
 
 public class FSPDFBuilder extends PDFBuilder {
 	public static Logger LOG=Logger.getLogger(FSPDFBuilder.class);
@@ -41,7 +44,7 @@ public class FSPDFBuilder extends PDFBuilder {
 	private float maxHeightTable = 685f;
 	
 	public void createPdf(String outfilename, Object cert,
-		String configFileName, String fpath, String countryname, FSCertificate parent, boolean flagOriginal) throws IOException, DocumentException {
+		String configFileName, String fpath, String countryname, FSCertificate parent, FSCertificateService service, boolean flagOriginal) throws IOException, DocumentException {
 		fontpath = fpath;
 		// step 1
 		document = new Document(PageSize.A4, 72f, 72f, 54f, 54f);
@@ -51,21 +54,21 @@ public class FSPDFBuilder extends PDFBuilder {
 		document.open();
 		// step 4
 		xreader = XMLConfigReader.getInstance(configFileName, fontpath);
-		createContent(cert, countryname, parent, flagOriginal);
+		createContent(cert, countryname, parent, service, flagOriginal);
 		// step 5
 		document.close();
 	}
 	
-	private void createContent(Object cert, String countryname, FSCertificate parent, boolean flagOriginal) throws DocumentException, IOException {
+	private void createContent(Object cert, String countryname, FSCertificate parent, FSCertificateService service, boolean flagOriginal) throws DocumentException, IOException {
 		String pagename  = PDFBuilderFactory.PAGE_FS;; 
 	    pconfig = xreader.getPDFPageConfig(pagename);
-	    createPDFPage(writer, cert, pconfig, countryname, parent, flagOriginal);
+	    createPDFPage(writer, cert, pconfig, countryname, parent, service, flagOriginal);
 	    pagename = pconfig.getNextPage();
 
 	}
 	
 	public int createPDFPage(PdfWriter writer, Object certificate,
-					PDFPageConfig pconfig, String countryname, FSCertificate parent, boolean flagOriginal) throws DocumentException, IOException {
+					PDFPageConfig pconfig, String countryname, FSCertificate parent, FSCertificateService service, boolean flagOriginal) throws DocumentException, IOException {
 		
 		    int pagecount = 1;
 		    FSCertificate cert = (FSCertificate) certificate;
@@ -89,17 +92,23 @@ public class FSPDFBuilder extends PDFBuilder {
 	        addFSNumber(table, cert, prgFont);
 	        
 	        if (cert.getParentnumber() != null && parent != null) {
-	        	addCellToTable(table, 3, "Дубликат сертификата от " + parent.getDatecert() 
-	        	              + "  № " + parent.getCertnumber(), Element.ALIGN_LEFT, prgFont, 0f, 0f, 14f);
+	        	
+				 String template = service.getTemplate("dublicate", cert.getLanguage());
+  		         template = template.replaceAll("\\[datecert\\]", parent.getDatecert());
+  		         template = template.replaceAll("\\[certnumber\\]", parent.getCertnumber());
+
+ 	        	 addCellToTable(table, 3, template, Element.ALIGN_LEFT, prgFont, 0f, 0f, 14f);
 	        }
-	        addCellToTable(table, 3, "Выдан для предоставления в : " + countryname, Element.ALIGN_LEFT, prgFont, 0f, 0f, 15f);
+	        addCellToTable(table, 3, service.getTemplate("submission", cert.getLanguage()) + countryname, Element.ALIGN_LEFT, prgFont, 0f, 0f, 15f);
 	        
-	        addCellToTable(table, 3, "Экспортер : ", Element.ALIGN_LEFT, prgFont, 0f, 0f, 15f);
-	        addCellToTable(table, 3, cert.getExporter().getName() + ", " + cert.getExporter().getAddress(), 
-	        						Element.ALIGN_JUSTIFIED, prgFont, 0f, 0f);
+	        addCellToTable(table, 3, service.getTemplate("exporter", cert.getLanguage()), Element.ALIGN_LEFT, prgFont, 0f, 0f, 15f);
+	        ClientLocale locale = cert.getExporter().getLocale(cert.getLanguage());
+	        addCellToTable(table, 3, (locale.getName() != null ? locale.getName() : "") + ", " 
+	                                  + (locale.getAddress() != null ? locale.getAddress() : ""), 
+	        						  Element.ALIGN_JUSTIFIED, prgFont, 0f, 0f);
 	        
 	        addCellToTable(table, 3, cert.getConfirmation(), Element.ALIGN_JUSTIFIED, prgFont, 0f, 0f, 18f);
-	        addCellToTable(table, 3, "Перечень товаров: ", Element.ALIGN_LEFT, prgFont, 0f, 0f, 18f);
+	        addCellToTable(table, 3, service.getTemplate("listofproducts", cert.getLanguage()), Element.ALIGN_LEFT, prgFont, 0f, 0f, 18f);
 
 	        int rowIndexBeforeProduct = table.getLastCompletedRowIndex();
 	        // printHeightRows(table, rowIndexBeforeProduct);
@@ -108,7 +117,7 @@ public class FSPDFBuilder extends PDFBuilder {
 	        	addCellToTable(table, 3, product.getNumerator() + ". " + product.getTovar(), Element.ALIGN_LEFT, prgFont, 12f, 0f);
 	        }
 	        int rowIndexAfterProduct = table.getLastCompletedRowIndex() + 1;
-	        addFooterFirstPage(table, cert, prgFont);
+	        addFooterFirstPage(table, cert, service, prgFont);
 
 	        int nextProductIndex = 0;
 	         
@@ -139,8 +148,11 @@ public class FSPDFBuilder extends PDFBuilder {
 		        	if (table.getLastCompletedRowIndex() == (i-1)) { break;}
 		       }
    	           
-   	           addCellToTable(table, 3, "Смотри продолжение на ______ ", Element.ALIGN_LEFT, prgFont, 0f, 0f, 5f);
-   	           addFooterFirstPage(table, cert, prgFont);
+			   String template = service.getTemplate("listscount", cert.getLanguage());
+  		       template = template.replaceAll("\\[listscount\\]", ""+cert.getListscount());
+  		          	           
+   	           addCellToTable(table, 3, template, Element.ALIGN_LEFT, prgFont, 0f, 0f, 5f);
+   	           addFooterFirstPage(table, cert, service, prgFont);
             }
             
 	        document.add(table);
@@ -159,7 +171,10 @@ public class FSPDFBuilder extends PDFBuilder {
 		        addBranchInfo(table, cert, prgFont);
 		        addFSCertificateHeader(table, cert, bigFont, flagOriginal);
 		        addFSNumber(table, cert, prgFont);
-		        addCellToTable(table, 3, "Продолжение перечня товаров:", Element.ALIGN_LEFT, prgFont, 0f, 0f, 15f);
+		        
+		        
+		        
+		        addCellToTable(table, 3, service.getTemplate("annex", cert.getLanguage()) , Element.ALIGN_LEFT, prgFont, 0f, 0f, 15f);
 		        
 		        rowIndexBeforeProduct = table.getLastCompletedRowIndex();
 		        for (int i = nextProductIndex; i < cert.getProducts().size(); i++ ) {
@@ -225,12 +240,24 @@ public class FSPDFBuilder extends PDFBuilder {
 
 	private void addBranchInfo(PdfPTable table, FSCertificate cert, Font font) {
 		if (cert.getBranch() != null) {
-			String name = cert.getBranch().getName();
-			name = name.replaceFirst("услуг", "услуг\n");  		
+			String name;
+			
+			if ("RU".equals(cert.getLanguage())) {
+				ClientLocale locale =cert.getBranch().getLocale(cert.getLanguage()); 
+				name = locale.getName();
+				name = name.replaceFirst("услуг", "услуг\n");   	
+			} else {
+				ClientLocale locale =cert.getBranch().getLocale("EN");
+				name = locale.getName();
+				name = name.replaceFirst("services", "services\n");
+			}
+			  		
 			addCellToTable(table, 3, name, Element.ALIGN_CENTER, font, 20f, 20f, 8f);
 			addCellToTable(table, 3, cert.getBranch().getAddress(), Element.ALIGN_CENTER, font, 20f, 20f);
-			addCellToTable(table, 3, "телефон: "+ cert.getBranch().getPhone() +"  факс: "+ cert.getBranch().getCell() 
-        		+ "  e-mail: " + cert.getBranch().getEmail(), Element.ALIGN_CENTER, font, 30f, 30f);
+			addCellToTable(table, 3, ("RU".equals(cert.getLanguage()) ? "телефон: " : "phone: ") 
+					                  + cert.getBranch().getPhone()  
+					                  + ("RU".equals(cert.getLanguage()) ? " факс: " : "fax: ") + cert.getBranch().getCell() 
+        		                      + "  e-mail: " + cert.getBranch().getEmail(), Element.ALIGN_CENTER, font, 30f, 30f);
 		}
 	}
 	
@@ -250,13 +277,24 @@ public class FSPDFBuilder extends PDFBuilder {
         addCellToTable(table, 1, cert.getDatecert(), Element.ALIGN_RIGHT, font, 0f, 0f, 14f);
 	}
 
-	private void addFooterFirstPage(PdfPTable table, FSCertificate cert, Font font) {
+	private void addFooterFirstPage(PdfPTable table, FSCertificate cert, FSCertificateService service, Font font) {
         addCellToTable(table, 3, cert.getDeclaration(), Element.ALIGN_JUSTIFIED, font, 0f, 0f, 18f);
-        addCellToTable(table, 3, "Срок действия с " + cert.getDateissue() + " по " + cert.getDateexpiry() + "  включительно.", 
+        
+		String template = service.getTemplate("valid", cert.getLanguage());
+	    template = template.replaceAll("\\[datestart\\]", cert.getDateissue());
+	    template = template.replaceAll("\\[dateexpiry\\]", cert.getDateexpiry());
+	    
+        addCellToTable(table, 3, template, 
         		          		Element.ALIGN_LEFT, font, 0f, 0f, 18f);
-        addCellToTable(table, 1, cert.getSigner().getJob(), Element.ALIGN_LEFT, font, 0f, 0f, 30f);
+        
+        EmployeeLocale locale = cert.getSigner().getLocale(cert.getLanguage());
+        addCellToTable(table, 1, locale.getJob() != null ? toFirstUppercase(locale.getJob()) : "", Element.ALIGN_LEFT, font, 0f, 0f, 30f);
         addCellToTable(table, 1, "", Element.ALIGN_CENTER, font, 0f, 0f, 30f);
-        addCellToTable(table, 1, cert.getSigner().getName(), Element.ALIGN_RIGHT, font, 0f, 0f, 30f);
+        addCellToTable(table, 1, locale.getName() != null ? locale.getName() : "" , Element.ALIGN_RIGHT, font, 0f, 0f, 30f);
+	}
+
+	private String toFirstUppercase(String job) {
+		return job.substring(0, 1).toUpperCase() + job.substring(1); 
 	}
 
 	private void addFooterNextPage(PdfPTable table, FSCertificate cert, Font font) {
