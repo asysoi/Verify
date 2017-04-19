@@ -102,9 +102,18 @@ public class FSPDFBuilder extends PDFBuilder {
 	        addCellToTable(table, 3, service.getTemplate("submission", cert.getLanguage()) + countryname, Element.ALIGN_LEFT, prgFont, 0f, 0f, 15f);
 	        
 	        addCellToTable(table, 3, service.getTemplate("exporter", cert.getLanguage()), Element.ALIGN_LEFT, prgFont, 0f, 0f, 15f);
-	        ClientLocale locale = cert.getExporter().getLocale(cert.getLanguage());
-	        addCellToTable(table, 3, (locale.getName() != null ? locale.getName() : "") + ", " 
-	                                  + (locale.getAddress() != null ? locale.getAddress() : ""), 
+	        
+	        String name = (cert.getExporter().getName() != null ? cert.getExporter().getName() : "");
+	        String address = (cert.getExporter().getAddress() != null ? cert.getExporter().getAddress() : "");
+	        		
+	        if (!"RU".equals(cert.getLanguage())) {
+	           ClientLocale locale = cert.getExporter().getLocale(cert.getLanguage());
+	           name = (locale.getName() != null ? locale.getName() : "");
+	           address = (locale.getAddress() != null ? locale.getAddress() : "");
+	        } 
+	        
+	        addCellToTable(table, 3,  name + ", " 
+	                                  + address , 
 	        						  Element.ALIGN_JUSTIFIED, prgFont, 0f, 0f);
 	        
 	        addCellToTable(table, 3, cert.getConfirmation(), Element.ALIGN_JUSTIFIED, prgFont, 0f, 0f, 18f);
@@ -243,11 +252,10 @@ public class FSPDFBuilder extends PDFBuilder {
 			String name;
 			
 			if ("RU".equals(cert.getLanguage())) {
-				ClientLocale locale =cert.getBranch().getLocale(cert.getLanguage()); 
-				name = locale.getName();
+				name = cert.getBranch().getName();
 				name = name.replaceFirst("услуг", "услуг\n");   	
 			} else {
-				ClientLocale locale =cert.getBranch().getLocale("EN");
+				ClientLocale locale = cert.getBranch().getLocale("EN");
 				name = locale.getName();
 				name = name.replaceFirst("services", "services\n");
 			}
@@ -287,10 +295,18 @@ public class FSPDFBuilder extends PDFBuilder {
         addCellToTable(table, 3, template, 
         		          		Element.ALIGN_LEFT, font, 0f, 0f, 18f);
         
-        EmployeeLocale locale = cert.getSigner().getLocale(cert.getLanguage());
-        addCellToTable(table, 1, locale.getJob() != null ? toFirstUppercase(locale.getJob()) : "", Element.ALIGN_LEFT, font, 0f, 0f, 30f);
+        String name = (cert.getSigner().getName() != null ? cert.getSigner().getName() : "");
+        String job = (cert.getSigner().getJob() != null ? cert.getSigner().getJob() : "");
+        		
+        if (!"RU".equals(cert.getLanguage())) {
+        	EmployeeLocale locale = cert.getSigner().getLocale(cert.getLanguage());
+        	job = locale.getJob() != null ? toFirstUppercase(locale.getJob()) : "";
+        	name = locale.getName() != null ? locale.getName() : "";
+        }
+        
+        addCellToTable(table, 1, job, Element.ALIGN_LEFT, font, 0f, 0f, 30f);
         addCellToTable(table, 1, "", Element.ALIGN_CENTER, font, 0f, 0f, 30f);
-        addCellToTable(table, 1, locale.getName() != null ? locale.getName() : "" , Element.ALIGN_RIGHT, font, 0f, 0f, 30f);
+        addCellToTable(table, 1, name, Element.ALIGN_RIGHT, font, 0f, 0f, 30f);
 	}
 
 	private String toFirstUppercase(String job) {
