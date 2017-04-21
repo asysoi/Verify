@@ -426,7 +426,6 @@ public class FSCertificateController {
 	@RequestMapping(value = "fsadd.do",  method = RequestMethod.GET)
 	public String createFSCertificate( Authentication aut, ModelMap model) {
 		try {
-				 
 			     FSCertificate cert = new FSCertificate();
 			     Employee employee = (Employee) model.get("activeemployee");
 				     
@@ -450,9 +449,10 @@ public class FSCertificateController {
 			    	 Branch branch  = fsCertService.getBranchByCode(signer.getDepartment().getCode_otd());
 			    	 cert.setBranch(branch);
 			     }
+			     
 			     cert.setDatecert((new SimpleDateFormat("dd.MM.yyyy")).format(new Date()));
 				     model.addAttribute("fscert", cert);
-				     LOG.info(cert); 
+
 		} catch (Exception ex) {
 				ex.printStackTrace();
 				model.addAttribute("error", ex.getMessage());
@@ -617,7 +617,7 @@ public class FSCertificateController {
 		    	fscert.setBlanks(storedCert.getBlanks());
 		    	fscert.setProducts(storedCert.getProducts());
 		    	fscert.setDepartment(storedCert.getDepartment());
-		    	
+		    	fscert.setOtd_id(storedCert.getOtd_id());
 		    	try {
 		    		fsCertService.save(fscert);
 			    	model.addAttribute("fscert", fscert);
@@ -752,7 +752,7 @@ public class FSCertificateController {
 	}
 	
 	//---------------------------------------------------------------------------------------
-	// Get list of Cert Numbers for autocomplet
+	// Get list of Cert Numbers for autocomplete
 	//---------------------------------------------------------------------------------------
 	@RequestMapping(value = "parentlist.do",  method = RequestMethod.GET)
 	public void getListOfCertNumber(
@@ -761,16 +761,7 @@ public class FSCertificateController {
 			
 			try {
 				  FSCertificate cert = (FSCertificate)model.get("fscert");
-				  /*
-				   * String json = "[{\"id\":\"" +"1\"" + ", \"label\":\"" + "0000\"" + ", \"value\":\"" + "0000" + "\"}," 
-				                + "{\"id\":\"" +"2\"" + ", \"label\":\"" + "1111\"" + ", \"value\":\"" + "1111" + "\"},"
-				                + "{\"id\":\"" +"3\"" + ", \"label\":\"" + "2222\"" + ", \"value\":\"" + "2222" + "\"},"
-				                + "{\"id\":\"" +"4\"" + ", \"label\":\"" + "3333\"" + ", \"value\":\"" + "3333" + "\"},"
-				                + "{\"id\":\"" +"5\"" + ", \"label\":\"" + "4444\"" + ", \"value\":\"" + "4444" + "\"}"
-				                + "]";
-				                */
-				  
-				  String json = fsCertService.getListCertNumber(term);
+				  String json = fsCertService.getListCertNumber(term.toUpperCase());
 				  response.setContentType("text/html; charset=UTF-8");
 				  response.setCharacterEncoding("UTF-8");
   			      response.getWriter().println(json);
@@ -1477,7 +1468,7 @@ public class FSCertificateController {
 	// ---------------------------------------------------------------------------------------
 	//
 	// ---------------------------------------------------------------------------------------
-	private void makepdffile(String absoluteDiskPath, FSCertificate cert, String type) {
+	private int makepdffile(String absoluteDiskPath, FSCertificate cert, String type) {
 		FSPDFBuilder builder = new FSPDFBuilder();
 		String fileout = absoluteDiskPath + "/out/" + cert.getCertnumber() + ".pdf";
 		String fileconf = absoluteDiskPath + "/config/pages.xml";
@@ -1485,7 +1476,7 @@ public class FSCertificateController {
 		
 		CountryConverter.setCountrymap(certService.getCountriesList(cert.getLanguage()));
 		String country = CountryConverter.getCountryNameByCode(cert.getCodecountrytarget());
-		
+		int pages = 1;  
 		
 		try {
 		   FSCertificate parent=null;
@@ -1500,6 +1491,8 @@ public class FSCertificateController {
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
+		
+		return pages;
 	}
 
 	

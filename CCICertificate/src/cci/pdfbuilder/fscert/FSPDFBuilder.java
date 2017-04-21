@@ -103,13 +103,14 @@ public class FSPDFBuilder extends PDFBuilder {
 	        
 	        addCellToTable(table, 3, service.getTemplate("exporter", cert.getLanguage()), Element.ALIGN_LEFT, prgFont, 0f, 0f, 15f);
 	        
-	        String name = (cert.getExporter().getName() != null ? cert.getExporter().getName() : "");
-	        String address = (cert.getExporter().getAddress() != null ? cert.getExporter().getAddress() : "");
+	        String name = (cert.getExporter() != null && cert.getExporter().getName() != null ? cert.getExporter().getName() : "");
+	        String address = (cert.getExporter() != null && cert.getExporter().getAddress() != null ? cert.getExporter().getAddress() : "");
 	        		
 	        if (!"RU".equals(cert.getLanguage())) {
 	           ClientLocale locale = cert.getExporter().getLocale(cert.getLanguage());
-	           name = (locale.getName() != null ? locale.getName() : "");
-	           address = (locale.getAddress() != null ? locale.getAddress() : "");
+	           
+	           name = (locale != null && locale.getName() != null ? locale.getName() : "");
+	           address = (locale != null && locale.getAddress() != null ? locale.getAddress() : "");
 	        } 
 	        
 	        addCellToTable(table, 3,  name + ", " 
@@ -191,6 +192,7 @@ public class FSPDFBuilder extends PDFBuilder {
 		        	addCellToTable(table, 3, product.getNumerator() + ". " + product.getTovar(), Element.ALIGN_LEFT, prgFont, 12f, 0f);
 		        	LOG.info(product.getNumerator() + ". " + product.getTovar());
 		        }
+		        
 		        rowIndexAfterProduct = table.getLastCompletedRowIndex() + 1;
 		        addFooterNextPage(table, cert, prgFont);
 		        finalH = table.getTotalHeight();
@@ -239,7 +241,7 @@ public class FSPDFBuilder extends PDFBuilder {
 		if (flagOriginal) {
 			addCellToTable(table, 3, 47.78f);
 		} else {
-			if  (cert.getBlanks() != null) {
+			if  (cert.getBlanks() != null && cert.getBlanks().size() > 0) {
 			  addCellToTable(table, 3, cert.getBlanks().get(pageNumber).getBlanknumber(), Element.ALIGN_RIGHT, font, 0f, 0f);
 			}
 			addCellToTable(table, 3, "БЕЛОРУССКАЯ ТОРГОВО-ПРОМЫШЛЕННАЯ ПАЛАТА", Element.ALIGN_CENTER, font, 18f, 18f, 9f);
@@ -249,7 +251,7 @@ public class FSPDFBuilder extends PDFBuilder {
 
 	private void addBranchInfo(PdfPTable table, FSCertificate cert, Font font) {
 		if (cert.getBranch() != null) {
-			String name;
+			String name="";
 			
 			if ("RU".equals(cert.getLanguage())) {
 				name = cert.getBranch().getName();
@@ -289,19 +291,23 @@ public class FSPDFBuilder extends PDFBuilder {
         addCellToTable(table, 3, cert.getDeclaration(), Element.ALIGN_JUSTIFIED, font, 0f, 0f, 18f);
         
 		String template = service.getTemplate("valid", cert.getLanguage());
-	    template = template.replaceAll("\\[datestart\\]", cert.getDateissue());
-	    template = template.replaceAll("\\[dateexpiry\\]", cert.getDateexpiry());
+		if (cert.getDateissue() != null) {
+			template = template.replaceAll("\\[datestart\\]", cert.getDateissue());
+		}
+		if (cert.getDateexpiry() != null) {
+			template = template.replaceAll("\\[dateexpiry\\]", cert.getDateexpiry());
+		}
 	    
         addCellToTable(table, 3, template, 
         		          		Element.ALIGN_LEFT, font, 0f, 0f, 18f);
         
-        String name = (cert.getSigner().getName() != null ? cert.getSigner().getName() : "");
-        String job = (cert.getSigner().getJob() != null ? toFirstUppercase(cert.getSigner().getJob()) : "");
+        String name = (cert.getSigner() != null && cert.getSigner().getName() != null ? cert.getSigner().getName() : "");
+        String job = (cert.getSigner() != null && cert.getSigner().getJob() != null ? toFirstUppercase(cert.getSigner().getJob()) : "");
         		
         if (!"RU".equals(cert.getLanguage())) {
         	EmployeeLocale locale = cert.getSigner().getLocale(cert.getLanguage());
-        	job = locale.getJob() != null ? toFirstUppercase(locale.getJob()) : "";
-        	name = locale.getName() != null ? locale.getName() : "";
+        	job = (locale!=null && locale.getJob() != null) ? toFirstUppercase(locale.getJob()) : "";
+        	name = (locale!=null && locale.getName() != null) ? locale.getName() : "";
         }
         
         addCellToTable(table, 1, job, Element.ALIGN_LEFT, font, 0f, 0f, 30f);
@@ -366,10 +372,10 @@ public class FSPDFBuilder extends PDFBuilder {
         cell.setUseDescender(true);
         cell.addElement(pg);
         table.addCell(cell);
-     }
+    }
 
     
-     private void rrrrr() throws DocumentException, FileNotFoundException {
+    private void rrrrr() throws DocumentException, FileNotFoundException {
     	    String TARGET = "temp.pdf";
     	    Document document = new Document(PageSize.A4);
     	    PdfWriter writer = 
@@ -396,7 +402,7 @@ public class FSPDFBuilder extends PDFBuilder {
     	        0, (PageSize.A4.getHeight() - table.getTotalHeight()) / 2);
     	    document.add(img);
     	    document.close();
-     }
+    }
     
 	
 	//--------------------------------------------------------------------------------------------

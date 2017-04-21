@@ -244,6 +244,7 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 			if (cert.getDepartment()!=null && cert.getDepartment().getId() == 0 ) cert.getDepartment().setId(findOrCreateDepartmentID(cert.getDepartment()));
 			
 			LOG.info("Save FS Certificate: " + cert.getCertnumber());
+			LOG.info("Save FS Certificate: " + cert.getOtd_id());
 			
 			String sql = "insert into fs_cert(certnumber, parentnumber, dateissue, dateexpiry, confirmation, declaration, codecountrytarget, "
 					    + " datecert, listscount, language, otd_id, id_branch, id_exporter, id_producer, id_expert, id_signer, iddepartment) "
@@ -834,7 +835,7 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 		//--------------------------------------------------------------------
 		//--------------------------------------------------------------------
 		public String getListCertNumber(String term) {
-			String sql = "select id, certnumber from FS_CERT WHERE CERTNUMBER LIKE :number AND rownum < 10 ";
+			String sql = "select id, certnumber from FS_CERT WHERE UPPER(CERTNUMBER) LIKE :number AND rownum < 10 ";
 			Map<String, Object> params = new HashMap();
 			params.put("number", term +"%");
 

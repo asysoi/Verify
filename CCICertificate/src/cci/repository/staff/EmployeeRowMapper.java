@@ -42,6 +42,7 @@ public class EmployeeRowMapper<T> implements RowMapper {
 				   dep.setId_otd(rs.getLong("ID_OTD"));
 				   dep.setCode_otd(rs.getString("CODE_OTD"));
 				   employee.setDepartment(dep);	
+				   System.out.println("Otd_ID = " + dep.getCode_otd());
 				} else {
 				   employee.setDepartment(null);	
 				}

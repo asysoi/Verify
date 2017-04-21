@@ -112,7 +112,7 @@ public class FSCertificateService {
         
         template = (String)((Map) templates.get(key)).get(lang) ;
         
-		return template;
+		return (template != null ? template : "");
 	}
 
 	// ------------------------------------------------------------------------------
