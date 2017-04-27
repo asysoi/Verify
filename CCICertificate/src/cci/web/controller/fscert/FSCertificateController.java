@@ -537,28 +537,35 @@ public class FSCertificateController {
 	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "getlistcount.do",  method = RequestMethod.GET)
 	public void getListCount(
-			HttpSession session, HttpServletResponse response, ModelMap model) {
+			@RequestParam(value = "type", defaultValue="org", required = false) String type,
+			HttpSession session, HttpServletRequest request, HttpServletResponse response, ModelMap model)  {
+			
+			String relativeWebPath = "/resources";
+			String  absoluteDiskPath= request.getSession().getServletContext().getRealPath(relativeWebPath);
+			LOG.debug("Absolute path: " + absoluteDiskPath);
 				
+			FSCertificate cert = null;
+			int pagecount = 1;
+			
 			try {
-				  FSCertificate cert = (FSCertificate)model.get("fscert");
-					 
-				  response.setContentType("text/html; charset=UTF-8");
-				  response.setCharacterEncoding("UTF-8");
-			      response.getWriter().println(""+clculateListCount());
-				  response.flushBuffer();
-					  
+				cert = (FSCertificate) model.get("fscert");
+				if (cert != null) {
+					pagecount = makepdffile(absoluteDiskPath, cert, type);
+				}
+				
+	 		    response.setContentType("text/html; charset=UTF-8");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().println(pagecount);
+			    response.flushBuffer();
+
 			} catch (Exception ex) {
-	  			 ex.printStackTrace();
+				 ex.printStackTrace();
 				 LOG.info("Ошибка: " + ex.getMessage());
 				 model.addAttribute("error", ex.getMessage());
 			}
 	}
 	
 	
-	private int clculateListCount() {
-		return 1;
-	}
-
 	// ---------------------------------------------------------------------------------------
 	//   View FS Certificate as HTML page 
 	// ---------------------------------------------------------------------------------------
@@ -1484,9 +1491,9 @@ public class FSCertificateController {
 				parent =  fsCertService.getFSCertificateByNumber(cert.getParentnumber());
 		   }
 		   if (type != null && type.equals("org")) {	
-			  builder.createPdf(fileout, cert, fileconf, fontpath, country, parent, fsCertService, true); 
+			   pages = builder.genereatePdf(fileout, cert, fileconf, fontpath, country, parent, fsCertService, true); 
 		   } else {
-		      builder.createPdf(fileout, cert, fileconf, fontpath, country, parent, fsCertService, false);
+			   pages = builder.genereatePdf(fileout, cert, fileconf, fontpath, country, parent, fsCertService, false);
 		   }
 		} catch(Exception ex) {
 			ex.printStackTrace();

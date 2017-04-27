@@ -59,12 +59,33 @@ public class FSPDFBuilder extends PDFBuilder {
 		document.close();
 	}
 	
-	private void createContent(Object cert, String countryname, FSCertificate parent, FSCertificateService service, boolean flagOriginal) throws DocumentException, IOException {
+	public int genereatePdf(String outfilename, Object cert,
+			String configFileName, String fpath, String countryname, FSCertificate parent, FSCertificateService service, boolean flagOriginal) throws IOException, DocumentException {
+			fontpath = fpath;
+			int pages = 1;
+			
+			// step 1
+			document = new Document(PageSize.A4, 72f, 72f, 54f, 54f);
+			// step 2
+			writer = PdfWriter.getInstance(document, new FileOutputStream(outfilename));
+			// step 3
+			document.open();
+			// step 4
+			xreader = XMLConfigReader.getInstance(configFileName, fontpath);
+			pages = createContent(cert, countryname, parent, service, flagOriginal);
+			// step 5
+			document.close();
+			return pages;
+		}
+
+	
+	private int createContent(Object cert, String countryname, FSCertificate parent, FSCertificateService service, boolean flagOriginal) throws DocumentException, IOException {
+		int pages;
 		String pagename  = PDFBuilderFactory.PAGE_FS;; 
 	    pconfig = xreader.getPDFPageConfig(pagename);
-	    createPDFPage(writer, cert, pconfig, countryname, parent, service, flagOriginal);
+	    pages = createPDFPage(writer, cert, pconfig, countryname, parent, service, flagOriginal);
 	    pagename = pconfig.getNextPage();
-
+	    return pages;
 	}
 	
 	public int createPDFPage(PdfWriter writer, Object certificate,
@@ -230,6 +251,9 @@ public class FSPDFBuilder extends PDFBuilder {
 	        return pagecount;
 	}	
 	
+	private String notNull(String str) {
+		return str == null ? "" : str;		
+	}
 	
 	private void printHeightRows(PdfPTable table, int jjj) {
 		for (int jj = 0; jj < jjj; jj++) {
@@ -263,11 +287,17 @@ public class FSPDFBuilder extends PDFBuilder {
 			}
 			  		
 			addCellToTable(table, 3, name, Element.ALIGN_CENTER, font, 20f, 20f, 8f);
-			addCellToTable(table, 3, cert.getBranch().getAddress(), Element.ALIGN_CENTER, font, 20f, 20f);
+			if ("RU".equals(cert.getLanguage())) { 
+			    addCellToTable(table, 3, cert.getBranch().getAddress(), Element.ALIGN_CENTER, font, 20f, 20f);
+			} else {
+				ClientLocale locale = cert.getBranch().getLocale("EN");
+				addCellToTable(table, 3, locale.getAddress(), Element.ALIGN_CENTER, font, 20f, 20f);
+			}
+			
 			addCellToTable(table, 3, ("RU".equals(cert.getLanguage()) ? "телефон: " : "phone: ") 
-					                  + cert.getBranch().getPhone()  
-					                  + ("RU".equals(cert.getLanguage()) ? " факс: " : "fax: ") + cert.getBranch().getCell() 
-        		                      + "  e-mail: " + cert.getBranch().getEmail(), Element.ALIGN_CENTER, font, 30f, 30f);
+					                  + notNull(cert.getBranch().getPhone())   
+					                  + ("RU".equals(cert.getLanguage()) ? " факс: " : " fax: ") + notNull(cert.getBranch().getCell()) 
+        		                      + "  e-mail: " + notNull(cert.getBranch().getEmail()), Element.ALIGN_CENTER, font, 30f, 30f);
 		}
 	}
 	

@@ -12,7 +12,7 @@
 
 	function reloadFSNumber() {
 		url = "rldfsnumber.do?codecountry="+$("#codecountrytarget").val() ;
-			$.get(url, function(data, status) {
+		$.get(url, function(data, status) {
 	    	$("#certnumber").val(data);
 		});	
 	}
