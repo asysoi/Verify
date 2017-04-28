@@ -41,7 +41,7 @@ public class FSPDFBuilder extends PDFBuilder {
 	private PDFConfigReader xreader;
 	private PDFPageConfig pconfig;
 	private String fontpath;
-	private float maxHeightTable = 685f;
+	private float maxHeightTable = 675f;
 	
 	public void createPdf(String outfilename, Object cert,
 		String configFileName, String fpath, String countryname, FSCertificate parent, FSCertificateService service, boolean flagOriginal) throws IOException, DocumentException {
@@ -93,6 +93,7 @@ public class FSPDFBuilder extends PDFBuilder {
 		
 		    int pagecount = 1;
 		    FSCertificate cert = (FSCertificate) certificate;
+		    
 		    BaseFont bf = BaseFont.createFont(
 					fontpath + "ARIAL.ttf", 
 					BaseFont.IDENTITY_H,
@@ -113,15 +114,13 @@ public class FSPDFBuilder extends PDFBuilder {
 	        addFSNumber(table, cert, prgFont);
 	        
 	        if (cert.getParentnumber() != null && parent != null) {
-	        	
 				 String template = service.getTemplate("dublicate", cert.getLanguage());
   		         template = template.replaceAll("\\[datecert\\]", parent.getDatecert());
   		         template = template.replaceAll("\\[certnumber\\]", parent.getCertnumber());
-
  	        	 addCellToTable(table, 3, template, Element.ALIGN_LEFT, prgFont, 0f, 0f, 14f);
 	        }
-	        addCellToTable(table, 3, service.getTemplate("submission", cert.getLanguage()) + countryname, Element.ALIGN_LEFT, prgFont, 0f, 0f, 15f);
 	        
+	        addCellToTable(table, 3, service.getTemplate("submission", cert.getLanguage()) + countryname, Element.ALIGN_LEFT, prgFont, 0f, 0f, 15f);
 	        addCellToTable(table, 3, service.getTemplate("exporter", cert.getLanguage()), Element.ALIGN_LEFT, prgFont, 0f, 0f, 15f);
 	        
 	        String name = (cert.getExporter() != null && cert.getExporter().getName() != null ? cert.getExporter().getName() : "");
@@ -164,9 +163,9 @@ public class FSPDFBuilder extends PDFBuilder {
 	           height += table.getRowHeight(rowIndexAfterProduct+1);
 	           height += table.getRowHeight(rowIndexAfterProduct+2);
 	        
-	           int i = rowIndexBeforeProduct + 1;
+	           int lastIndex = rowIndexBeforeProduct + 1;
 	           while (height < (maxHeightTable - 26f)) {
-	        	   height += table.getRowHeight(i++);
+	        	   height += table.getRowHeight(lastIndex++);
 	           }
 	           
 	           for (int j = rowIndexAfterProduct+2; j > rowIndexBeforeProduct; j--) {
@@ -176,7 +175,7 @@ public class FSPDFBuilder extends PDFBuilder {
    	           for (FSProduct product : cert.getProducts() ) {
 		        	addCellToTable(table, 3, product.getNumerator() + ". " + product.getTovar(), Element.ALIGN_LEFT, prgFont, 12f, 0f);
 		        	nextProductIndex++;
-		        	if (table.getLastCompletedRowIndex() == (i-1)) { break;}
+		        	if (table.getLastCompletedRowIndex() == (lastIndex-1)) { break;}
 		       }
    	           
 			   String template = service.getTemplate("listscount", cert.getLanguage());
@@ -184,12 +183,12 @@ public class FSPDFBuilder extends PDFBuilder {
   		          	           
    	           addCellToTable(table, 3, template, Element.ALIGN_LEFT, prgFont, 0f, 0f, 5f);
    	           addFooterFirstPage(table, cert, service, prgFont);
-            }
+            } 
             
 	        document.add(table);
 	        // first page finished
 	        
-	        if (nextProductIndex > 0) {
+	        while (nextProductIndex > 0) {
 	        	
 	            document.newPage();
 	            pagecount++;
@@ -202,9 +201,7 @@ public class FSPDFBuilder extends PDFBuilder {
 		        addBranchInfo(table, cert, prgFont);
 		        addFSCertificateHeader(table, cert, bigFont, flagOriginal);
 		        addFSNumber(table, cert, prgFont);
-		        
-		        
-		        
+		        		        		        
 		        addCellToTable(table, 3, service.getTemplate("annex", cert.getLanguage()) , Element.ALIGN_LEFT, prgFont, 0f, 0f, 15f);
 		        
 		        rowIndexBeforeProduct = table.getLastCompletedRowIndex();
@@ -213,41 +210,43 @@ public class FSPDFBuilder extends PDFBuilder {
 		        	addCellToTable(table, 3, product.getNumerator() + ". " + product.getTovar(), Element.ALIGN_LEFT, prgFont, 12f, 0f);
 		        	LOG.info(product.getNumerator() + ". " + product.getTovar());
 		        }
-		        
 		        rowIndexAfterProduct = table.getLastCompletedRowIndex() + 1;
+		        
 		        addFooterNextPage(table, cert, prgFont);
 		        finalH = table.getTotalHeight();
 		        LOG.info("Next page height:" + finalH);
 		        
-	            if (finalH > maxHeightTable) {
+		        if (finalH > maxHeightTable) {
 	    	       float height = 0f;                  
 		           for (int i=1; i <=rowIndexBeforeProduct; i++) {
 		        	   height += table.getRowHeight(i);
 		           }
 		           height += table.getRowHeight(rowIndexAfterProduct);
 		        
-		           int i = rowIndexBeforeProduct + 1;
+		           int lastIndex = rowIndexBeforeProduct + 1;
 		           while (height < maxHeightTable) {
-		        	   height += table.getRowHeight(i++);
+		        	   height += table.getRowHeight(lastIndex++);
 		           }
 		           
 		           for (int j = rowIndexAfterProduct; j > rowIndexBeforeProduct; j--) {
 		        	   table.deleteRow(j);
 		           }
 		           
-		           nextProductIndex = 0;
-			       for (int j = nextProductIndex +1; j < cert.getProducts().size(); j++ ) {
+		           for (int j = nextProductIndex +1; j < cert.getProducts().size(); j++ ) {
 			        	FSProduct product = cert.getProducts().get(j); 
 			        	addCellToTable(table, 3, product.getNumerator() + ". " + product.getTovar(), Element.ALIGN_LEFT, prgFont, 12f, 0f);
 			        	nextProductIndex++;
-			        	if (table.getLastCompletedRowIndex() == (i-1)) { break;}
+			        	if (table.getLastCompletedRowIndex() == (lastIndex-1)) { break;}
 			       }
 	   	           
 	   	           addFooterNextPage(table, cert, prgFont);
+	            } else {
+	            	nextProductIndex = 0;
 	            }
 		         
 		        document.add(table);
 	        }
+	        
 	        return pagecount;
 	}	
 	
@@ -403,38 +402,7 @@ public class FSPDFBuilder extends PDFBuilder {
         cell.addElement(pg);
         table.addCell(cell);
     }
-
-    
-    private void rrrrr() throws DocumentException, FileNotFoundException {
-    	    String TARGET = "temp.pdf";
-    	    Document document = new Document(PageSize.A4);
-    	    PdfWriter writer = 
-    	        PdfWriter.getInstance(document, new FileOutputStream(TARGET));
-    	    document.open();
-    	    PdfPTable table = new PdfPTable(7);         
-    	 
-    	    for (int i = 0; i < 700; i++) {
-    	        Phrase p = new Phrase("some text");
-    	        PdfPCell cell = new PdfPCell();
-    	        cell.addElement(p);
-    	        table.addCell(cell);            
-    	    }
-    	 
-    	    table.setTotalWidth(PageSize.A4.getWidth());
-    	    table.setLockedWidth(true);
-    	    PdfContentByte canvas = writer.getDirectContent();
-    	    PdfTemplate template = canvas.createTemplate(
-    	        table.getTotalWidth(), table.getTotalHeight());
-    	    table.writeSelectedRows(0, -1, 0, table.getTotalHeight(), template);
-    	    Image img = Image.getInstance(template);
-    	    img.scaleToFit(PageSize.A4.getWidth(), PageSize.A4.getHeight());
-    	    img.setAbsolutePosition(
-    	        0, (PageSize.A4.getHeight() - table.getTotalHeight()) / 2);
-    	    document.add(img);
-    	    document.close();
-    }
-    
-	
+ 	
 	//--------------------------------------------------------------------------------------------
 	//  Utils
 	//--------------------------------------------------------------------------------------------
