@@ -1439,6 +1439,8 @@ public class FSCertificateController {
 				    cert = fsCertService.getFSCertificateById(id.intValue());
 				}
 				if (cert != null) {
+				   int pages = makepdffile(absoluteDiskPath, cert, type);
+				   cert.setListscount(pages);	
 				   makepdffile(absoluteDiskPath, cert, type);
 				}
 			} catch (Exception e) {
