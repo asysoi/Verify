@@ -18,10 +18,10 @@
 				function() {
 					$(".datepicker").datepicker("option", "dateFormat",
 							'dd.mm.yy');
-					$("#datefrom").datepicker("setDate",
-							"${viewfilter.viewcertificate.datefrom}");
-					$("#dateto").datepicker("setDate",
-							"${viewfilter.viewcertificate.dateto}");
+					//$("#datefrom").datepicker("setDate",
+					//		"${viewfilter.viewcertificate.datefrom}");
+					//$("#dateto").datepicker("setDate",
+					//		"${viewfilter.viewcertificate.dateto}");
 					$("#codestranapr")
 							.val('${viewfilter.viewcertificate.codestranapr}');
 					$("#str_otd_id")

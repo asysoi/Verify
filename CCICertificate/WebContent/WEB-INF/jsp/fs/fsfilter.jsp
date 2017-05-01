@@ -26,6 +26,8 @@
 							.val('${viewfsfilter.viewcertificate.codecountrytarget}');
 					$("#str_otd_id")
 							.val('${viewfsfilter.viewcertificate.str_otd_id}');
+					 $("#language")
+					    .val('${viewfsfilter.viewcertificate.language}');
 				});
 
 	});
@@ -62,6 +64,14 @@
 						<form:input	path="viewcertificate.datecertto" id="datecertto" class="datepicker"
 						size="8" placeholder="по" /> <a
 					href="javascript:clearelement($('.datepicker'));"> <img
+						src="resources/images/delete-16.png" alt="удл." />
+				</a></td>
+			</tr>
+			<tr>
+				<td>Язык сертификата</td>
+				<td><form:select path="viewcertificate.language" 
+				        id="language" items="${languages}"/> 
+					<a href="javascript:clearelement($('#language'));"> <img
 						src="resources/images/delete-16.png" alt="удл." />
 				</a></td>
 			</tr>

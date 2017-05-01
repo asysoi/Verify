@@ -96,7 +96,7 @@
 		$("#pview").load(link);
 		$("#pview").dialog("option", "title", 'Фильтр поиска');
 		$("#pview").dialog("option", "width", 800);
-		$("#pview").dialog("option", "height", 520);
+		$("#pview").dialog("option", "height", 535);
 		$("#pview").dialog("option", "modal", true);
 		$("#pview").dialog("option", "resizable", false );
 		$("#pview").dialog({ buttons: [ { text: "Применить",  click : function() { submit(); } },  

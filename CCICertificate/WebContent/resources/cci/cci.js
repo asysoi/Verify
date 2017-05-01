@@ -91,7 +91,44 @@ function printFSCertificate() {
 	win.focus();
 }
 
+function printFSCertificateCopy() {
+	url = "fsprint.do?type=copy";
+	$.ajaxSetup({async:false});
+	$.post(url, $("#fscert").serialize());
+	var win=window.open(url, "_blank");
+	win.focus();
+}
+
+
 function submitForm(formName) {
     document.getElementById(formName).submit();
 }
 
+function inputValidate() {
+    var el,err;
+    
+    err = 0;
+    el = $('input[name="certnumber"]');
+    if(el.val().length != 14){
+        err = 1;
+        el.addClass('error_input');
+        el.prop('title', 'Длина номера сертификата должна быть 14 символов');
+    }else{
+        el.removeClass('error_input');
+    }
+    
+    el = $('input[name="language"]');
+    if(el.val()){
+        err = 1;
+        el.addClass('error_input');
+        el.prop('title', 'Выберите язык сертификата');
+    } else {
+        el.removeClass('error_input');
+    }
+    
+    if (err == 1) {
+       $(".error_input").focus();
+    }	
+    
+    return err;
+} 

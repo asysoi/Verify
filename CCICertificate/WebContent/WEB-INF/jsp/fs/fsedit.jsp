@@ -25,6 +25,24 @@
 	}
 
 	function save() {
+	  if (inputValidate() == 0) {	
+		$.ajax({
+			  type:    "POST",
+			  url:     "fsedit.do",
+			  data:    $("#fscert").serialize(),
+			  success: function(data) {
+				 popupMessage("Cохранение сертификата", "Сертификат сохранен в базе");
+			  },
+ 		      error:  function(jqXHR, textStatus, errorThrown) {
+ 		    	 var obj = JSON.parse("" + jqXHR.responseText);
+ 		    	 popupMessage("Ошибка сохранениия сертификата", obj.error);
+			  }
+			});
+	  }
+	}
+	
+	function saveAndClose() {
+	  if (inputValidate() == 0) {
 		$.ajax({
 			  type:    "POST",
 			  url:     "fsedit.do",
@@ -33,15 +51,21 @@
 				  location.href='fscerts.do?page=${fsmanager.page}&pagesize=${fsmanager.pagesize}&orderby=${fsmanager.orderby}&order=${fsmanager.order}';
 			  },
  		      error:  function(jqXHR, textStatus, errorThrown) {
- 		    	 //var obj = JSON.parse("" + jqXHR.responseText);
  		    	 popupMessage("Ошибка сохранениия сертификата", jqXHR.responseText);
 			  }
 			});
+	  }
 	}
 	
 	function popupMessage(title, data) {
+		$("#message").text(data);
 		$( "#dialog-message" ).dialog("option", "title", title);
-  		$("#message").text(data);
+		
+  		$( "#dialog-message" ).dialog("option", "width", 350);
+  		$( "#dialog-message" ).dialog("option", "height", 220);
+  		$( "#dialog-message" ).dialog("option", "modal", true);
+  		$( "#dialog-message" ).dialog("option", "resizable", true );
+  		$( "#dialog-message" ).dialog( "option", "position", { my: "center",  at: "center", of:window} );
 		$("#dialog-message").dialog("open");
 	}
 	
@@ -443,11 +467,23 @@
 <div id="error" class="error">${error}</div>
 </c:if>  
 
-<p align="right">
-<a href="javascript:goBack();"><i class="glyphicon glyphicon-arrow-left"></i></a>
-<a href="javascript:save();"><i class="glyphicon glyphicon-save" ></i></a>
-<a href="javascript:printFSCertificate();"><i class="glyphicon glyphicon-print" ></i></a>
-</p>
+<form:form id="fscert" method="POST" modelAttribute="fscert">
+
+<div class="row">
+<div class="col-md-6" align="left"> Сертификат выдан : <form:checkbox path="locked" id="locked"/>
+</div>
+<div class="col-md-6" align="right">
+<a href="javascript:goBack();" title="Вернуться к списку сертификатов"><i class="glyphicon glyphicon-arrow-left"></i></a>
+
+<c:if test="${! fscert.locked}">
+<a href="javascript:save();" title="Сохранить сертификат в хранилище сертификатов и продолжить редактирование"><i class="glyphicon glyphicon-save" ></i></a>
+<a href="javascript:saveAndClose();" title="Сохранить сертификат и вернуться к списку сертификатов"><i class="glyphicon glyphicon-floppy-save" ></i></a>
+</c:if>
+
+<a href="javascript:printFSCertificate();" title="Вывести сертификат в формате PDF"><i class="glyphicon glyphicon-print" ></i></a>
+<a href="javascript:printFSCertificateCopy();" title="Вывести копию сертификата в формате PDF"><i class="glyphicon glyphicon-print" style="color: green"></i></a>
+</div>
+</div>
 
 <h3 align="center"><b>СЕРТИФИКАТ СВОБОДНОЙ ПРОДАЖИ</b></h3>
 <h4 align="center">
@@ -466,7 +502,6 @@
 
 </h4>
 
-<form:form id="fscert" method="POST" modelAttribute="fscert">
 <form:hidden path="id"/>
 <div class="container-fluid">
 
@@ -531,11 +566,11 @@ ${fscert.producer.getLocale(fscert.language).name}, ${fscert.producer.getLocale(
 </div>
 </div>
 
-<div class="row">
+<!-- div class="row">
 <div class="col-md-12">Количество листов сертификата <form:label path="listscount" id="listscount" class="doplist" 
 						size="8" />  <a href="javascript:getListCount()" title="Посчитать количество страниц">
      <i class="glyphicon glyphicon-refresh" align="center"></i></a></div>
-</div>
+</div -->
 
 <div class="row">
 		  <div class="col-md-1"><a href="javascript:openEmployees('expert')">Эксперт:</a></div>
@@ -605,5 +640,5 @@ ${fscert.producer.getLocale(fscert.language).name}, ${fscert.producer.getLocale(
 </div>
 
 <div id="dialog-message">
-  <label id="message"></label> 
+  <p id="message"><span class="ui-icon ui-icon-alert" style="float:left; margin:6px 6px 10px 5px;"></span></p>
 </div>

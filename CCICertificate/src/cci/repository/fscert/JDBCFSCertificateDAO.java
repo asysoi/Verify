@@ -677,14 +677,14 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 			String sql = "UPDATE fs_cert SET certnumber=:certnumber, parentnumber = :parentnumber, dateissue = TO_DATE(:dateissue,'DD.MM.YY'), "
 					    + " dateexpiry = TO_DATE(:dateexpiry,'DD.MM.YY'), confirmation = :confirmation, " 
 					    + " declaration = :declaration, codecountrytarget=:codecountrytarget, datecert=TO_DATE(:datecert,'DD.MM.YY'), "
-					    + " listscount = :listscount, language=:language, "
+					    + " listscount = :listscount, language=:language, locked=:locked, version=version+1,  "
 					    + " id_branch = " + ((cert.getBranch() != null) ?  ":branch.id, " : ":branch,")  
 					    + " id_exporter = " + ((cert.getExporter() != null) ?  ":exporter.id, " : ":exporter, ") 
 					    + " id_producer = " + ((cert.getProducer() != null) ?  ":producer.id, " : ":producer, ")
 					    + " id_expert =  " + ((cert.getExpert() != null) ?  ":expert.id, " : ":expert, ")
 					    + " id_signer = " + ((cert.getSigner() != null) ?  ":signer.id, " : ":signer, ")
 					    + " iddepartment = " + ((cert.getDepartment() != null) ?  ":department.id " : " :department ")
-					    + " WHERE id = :id "; 
+					    + " WHERE id = :id and locked = 0"; 
 
 			LOG.info(">>>>>>>>>>> Update FS Certificate: " + sql);
 			
@@ -723,7 +723,11 @@ public class JDBCFSCertificateDAO implements FSCertificateDAO {
 				insertValueIntoDenormTable(cert);
 	 
 			} else {
-				throw new RuntimeException("Не удалось изменить сертификат номер " + cert.getCertnumber() + " по неизвестной причине.");
+				if (cert.isLocked()) {
+					throw new RuntimeException("Cертификат номер " + cert.getCertnumber() + " уже выдан и не может быть изменен.");
+				} else {
+				   throw new RuntimeException("Cертификат номер " + cert.getCertnumber() + " не может быть сохранен в базе. Внутрення ошибка. Обратитесь к администратору.");
+				}
 			}
 			return cert;
 		}

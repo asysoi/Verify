@@ -285,7 +285,7 @@ public class FSCertificateController {
 				"Производитель", "Дата", "Кол. лист"});
 		vmanager.setOrdnames(new String[] { "certnumber", "exportername", "producername",
 				"datecert", "listscount"});
-		vmanager.setWidths(new int[] { 10, 35, 35, 10, 10,  });
+		vmanager.setWidths(new int[] { 10, 35, 35, 10, 10});
 		model.addAttribute("fsmanager", vmanager);
 
 		return vmanager;
@@ -427,6 +427,7 @@ public class FSCertificateController {
 	public String createFSCertificate( Authentication aut, ModelMap model) {
 		try {
 			     FSCertificate cert = new FSCertificate();
+			     cert.setLanguage("RU");
 			     Employee employee = (Employee) model.get("activeemployee");
 				     
 			     if (employee == null) {
@@ -464,7 +465,8 @@ public class FSCertificateController {
 	
 	@RequestMapping(value = "fsadd.do",  method = RequestMethod.POST)
 	public String saveNewFSCertificate(FSCertificate fscert,
-			BindingResult result, SessionStatus status, ModelMap model) {
+			BindingResult result, SessionStatus status, HttpServletRequest request, 
+			HttpServletResponse response, ModelMap model) {
 		    
 		    FSCertificate storedCert = (FSCertificate)model.get("fscert");
 		    
@@ -484,6 +486,9 @@ public class FSCertificateController {
 		    	}
 		    	
 		    	try {
+		    		String relativeWebPath = "/resources";
+		    		String  absoluteDiskPath= request.getSession().getServletContext().getRealPath(relativeWebPath);
+    				fscert.setListscount(makepdffile(absoluteDiskPath, fscert, "org"));
 		    		fsCertService.save(fscert);
 					model.remove("error");		    		
 		    	} catch (Exception ex) {
@@ -539,30 +544,34 @@ public class FSCertificateController {
 	public void getListCount(
 			@RequestParam(value = "type", defaultValue="org", required = false) String type,
 			HttpSession session, HttpServletRequest request, HttpServletResponse response, ModelMap model)  {
-			
-			String relativeWebPath = "/resources";
-			String  absoluteDiskPath= request.getSession().getServletContext().getRealPath(relativeWebPath);
-			LOG.debug("Absolute path: " + absoluteDiskPath);
-				
-			FSCertificate cert = null;
-			int pagecount = 1;
-			
-			try {
-				cert = (FSCertificate) model.get("fscert");
-				if (cert != null) {
-					pagecount = makepdffile(absoluteDiskPath, cert, type);
-				}
-				
-	 		    response.setContentType("text/html; charset=UTF-8");
-				response.setCharacterEncoding("UTF-8");
-				response.getWriter().println(pagecount);
-			    response.flushBuffer();
 
-			} catch (Exception ex) {
-				 ex.printStackTrace();
-				 LOG.info("Ошибка: " + ex.getMessage());
-				 model.addAttribute("error", ex.getMessage());
+		    FSCertificate cert = (FSCertificate) model.get("fscert");
+		    calculateListCount(cert, type, request, response, model);
+	}
+
+	private void calculateListCount(FSCertificate cert, String type, 
+			    HttpServletRequest request,	HttpServletResponse response, ModelMap model ) {
+		String relativeWebPath = "/resources";
+		String  absoluteDiskPath= request.getSession().getServletContext().getRealPath(relativeWebPath);
+				
+		int pagecount = 1;
+		
+		try {
+			if (cert != null) {
+				pagecount = makepdffile(absoluteDiskPath, cert, type);
 			}
+			
+ 		    response.setContentType("text/html; charset=UTF-8");
+			response.setCharacterEncoding("UTF-8");
+			response.getWriter().println(pagecount);
+		    response.flushBuffer();
+
+		} catch (Exception ex) {
+			 ex.printStackTrace();
+			 LOG.info("Ошибка: " + ex.getMessage());
+			 model.addAttribute("error", ex.getMessage());
+		}
+
 	}
 	
 	
@@ -607,7 +616,8 @@ public class FSCertificateController {
 	@RequestMapping(value = "fsedit.do",  method = RequestMethod.POST)
 	public void save(FSCertificate fscert,
 			BindingResult result, HttpSession session, 
-			HttpServletResponse response, SessionStatus status, ModelMap model) {
+			HttpServletResponse response, HttpServletRequest request, 
+			SessionStatus status, ModelMap model) {
 		    
 		    FSCertificate storedCert = (FSCertificate)model.get("fscert");
 		    
@@ -626,6 +636,10 @@ public class FSCertificateController {
 		    	fscert.setDepartment(storedCert.getDepartment());
 		    	fscert.setOtd_id(storedCert.getOtd_id());
 		    	try {
+		    		String relativeWebPath = "/resources";
+		    		String  absoluteDiskPath= request.getSession().getServletContext().getRealPath(relativeWebPath);
+    				fscert.setListscount(makepdffile(absoluteDiskPath, fscert, "org"));
+    				
 		    		fsCertService.save(fscert);
 			    	model.addAttribute("fscert", fscert);
 			    	storedCert = null;
@@ -1393,7 +1407,7 @@ public class FSCertificateController {
 			
 	// =======================================================================
 	@RequestMapping(value = "rldlang.do",  method = RequestMethod.GET)
-	public void reloadLanguage(
+	public void reload(
 			@RequestParam(value = "lang", required = true) String lang,
 			HttpSession session, HttpServletResponse response, ModelMap model) {
 			
@@ -1439,8 +1453,7 @@ public class FSCertificateController {
 				    cert = fsCertService.getFSCertificateById(id.intValue());
 				}
 				if (cert != null) {
-				   int pages = makepdffile(absoluteDiskPath, cert, type);
-				   cert.setListscount(pages);	
+				   cert.setListscount(makepdffile(absoluteDiskPath, cert, type));	
 				   makepdffile(absoluteDiskPath, cert, type);
 				}
 			} catch (Exception e) {
@@ -1472,7 +1485,6 @@ public class FSCertificateController {
 	    	storedCert = null;
 	    }
 	}
-	
 	
 	// ---------------------------------------------------------------------------------------
 	//

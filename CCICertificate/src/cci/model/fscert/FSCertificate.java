@@ -42,10 +42,33 @@ public class FSCertificate {
 	private List<FSProduct> products;
 	private List<FSBlank> blanks;
 	private long otd_id;
-	private String language="RU";
+	private String language;
 	private Department department;
+	private long version;
+	private boolean locked;
 	
 	
+	
+	public long getVersion() {
+		return version;
+	}
+
+	public void setVersion(long version) {
+		this.version = version;
+	}
+
+	public int getLocked() {
+		return locked ? 1 : 0;
+	}
+	
+	public boolean isLocked() {
+		return locked;
+	}
+
+	public void setLocked(boolean locked) {
+		this.locked = locked;
+	}
+
 	public void init() {
 		branch = new Branch();
 		exporter = new Exporter();

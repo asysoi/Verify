@@ -221,9 +221,14 @@ div.row {
 .ui-th-div { font-size:12px !important;}
 .ui-state-highlight { background: #d2e4ff!important; }
 
-.ui-datepicker {z-index: 999 !important;}
-.ui-dialog {z-index: 9999 !important;}
+.ui-datepicker {z-index: 102 !important;}
+.ui-dialog {z-index: 101 !important;}
 
 .ui-autocomplete-loading { 
    background: white url("/resources/images/ui-anim_basic_16x16.gif") right center no-repeat;
+}
+
+.error_input{
+    border: 2px solid;
+    border-color: red!important;  
 }
