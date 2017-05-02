@@ -282,10 +282,10 @@ public class FSCertificateController {
 	private ViewManager initViewManager(ModelMap model) {
 		ViewManager vmanager = new ViewManager();
 		vmanager.setHnames(new String[] {"Номер Сертификата",  "Экспортер", 
-				"Производитель", "Дата", "Кол. лист"});
+				"Производитель", "Дата", "Кол. лист", "Выдан"});
 		vmanager.setOrdnames(new String[] { "certnumber", "exportername", "producername",
-				"datecert", "listscount"});
-		vmanager.setWidths(new int[] { 10, 35, 35, 10, 10});
+				"datecert", "listscount", "locked" });
+		vmanager.setWidths(new int[] { 10, 35, 30, 10, 10, 5});
 		model.addAttribute("fsmanager", vmanager);
 
 		return vmanager;
@@ -1473,7 +1473,7 @@ public class FSCertificateController {
 		    model.addAttribute("error", "Информация о редактируемом сертификате потеряна. Перезегрузите сертификат.");		       	
 	    } else {
 	    	fscert.setId(storedCert.getId());
-	    	fscert.setCertnumber(storedCert.getCertnumber());
+	    	//fscert.setCertnumber(storedCert.getCertnumber());
 	    	fscert.setBranch(storedCert.getBranch());
 	    	fscert.setExporter(storedCert.getExporter());
 	    	fscert.setProducer(storedCert.getProducer());

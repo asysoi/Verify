@@ -25,51 +25,109 @@
 	}
 
 	function save() {
-	  if (inputValidate() == 0) {	
-		$.ajax({
-			  type:    "POST",
-			  url:     "fsedit.do",
-			  data:    $("#fscert").serialize(),
-			  success: function(data) {
-				 popupMessage("Cохранение сертификата", "Сертификат сохранен в базе");
-			  },
- 		      error:  function(jqXHR, textStatus, errorThrown) {
- 		    	 var obj = JSON.parse("" + jqXHR.responseText);
- 		    	 popupMessage("Ошибка сохранениия сертификата", obj.error);
-			  }
-			});
-	  }
+	  if (inputValidate() == 0) {
+            
+            if ( $('#locked').prop('checked') ) {
+    			$("#confirm").text("Сохранный сертификат с установленной пометкой о выдаче не может быть впоследствии отредатирован. Сохранять?");
+	     		$( "#dialog-confirm" ).dialog({
+ 			    	  buttons: {
+ 			        	"Сохранить": function() {
+ 							$.ajax({
+ 						  		type:    "POST",
+ 						  		url:     "fsedit.do",
+ 						  		data:    $("#fscert").serialize(),
+ 						  		success: function(data) {
+ 							 			popupMessage("Cохранение сертификата", "Сертификат сохранен в базе");
+ 						  		},
+ 			 		      		error:  function(jqXHR, textStatus, errorThrown) {
+ 			 		    	 		var obj = JSON.parse("" + jqXHR.responseText);
+ 			 		    	 		popupMessage("Ошибка сохранения сертификата", obj.error);
+ 						  		}
+ 							});
+   			          		$( this ).dialog( "close" );
+ 			            },
+ 			            "Отменить": function() {
+ 			               saveflag = false;	
+ 			          	   $( this ).dialog( "close" );
+ 			            }
+ 			           }
+ 			    });
+	     		$("#dialog-confirm").dialog( "option", "position", { my: "center",  at: "center", of:centerdiv} );
+	      		$("#dialog-confirm" ).dialog("option", "modal", true);
+	      		$("#dialog-confirm" ).dialog("option", "resizable", false );
+	     		$("#dialog-confirm").dialog( "option", "title", "Сохранить сертификат");
+ 				$("#dialog-confirm").dialog("open");
+            } else {
+   				$.ajax({
+			  		type:    "POST",
+			  		url:     "fsedit.do",
+			  		data:    $("#fscert").serialize(),
+			  		success: function(data) {
+				 			popupMessage("Cохранение сертификата", "Сертификат сохранен в базе");
+			  		},
+ 		      		error:  function(jqXHR, textStatus, errorThrown) {
+ 		    	 		var obj = JSON.parse("" + jqXHR.responseText);
+ 		    	 		popupMessage("Ошибка сохранения сертификата", obj.error);
+			  		}
+				});
+            }
+	    }
 	}
 	
 	function saveAndClose() {
 	  if (inputValidate() == 0) {
+		  
+         if ( $('#locked').prop('checked') ) {
+	   	  	  $("#confirm").text("Сохранный сертификат с установленной пометкой о выдаче не может быть впоследствии отредатирован. Сохранять?");
+   			  $( "#dialog-confirm" ).dialog({
+		    	  buttons: {
+		        	"Сохранить": function() {
+						saveCertificateAjax();
+			          	$( this ).dialog( "close" );
+		            },
+		            "Отменить": function() {
+		               saveflag = false;	
+		          	   $( this ).dialog( "close" );
+		            }
+		           }
+		     });
+   			 $("#dialog-confirm").dialog( "option", "position", { my: "center",  at: "center", of:centerdiv} );
+    		 $("#dialog-confirm" ).dialog("option", "modal", true);
+    		 $("#dialog-confirm" ).dialog("option", "resizable", false );
+   		 	 $("#dialog-confirm").dialog( "option", "title", "Сохранить сертификат");
+			 $("#dialog-confirm").dialog("open");
+      	 } else {
+      		saveCertificateAjax()
+         }
+      }
+	}
+	
+	function saveCertificateAjax() {
 		$.ajax({
-			  type:    "POST",
-			  url:     "fsedit.do",
-			  data:    $("#fscert").serialize(),
-			  success: function(data) {
-				  location.href='fscerts.do?page=${fsmanager.page}&pagesize=${fsmanager.pagesize}&orderby=${fsmanager.orderby}&order=${fsmanager.order}';
-			  },
- 		      error:  function(jqXHR, textStatus, errorThrown) {
- 		    	 popupMessage("Ошибка сохранениия сертификата", jqXHR.responseText);
-			  }
-			});
-	  }
+	  		type:    "POST",
+	  		url:     "fsedit.do",
+	  		data:    $("#fscert").serialize(),
+	  		success: function(data) {
+	  			location.href='fscerts.do?page=${fsmanager.page}&pagesize=${fsmanager.pagesize}&orderby=${fsmanager.orderby}&order=${fsmanager.order}';
+	  		},
+	      		error:  function(jqXHR, textStatus, errorThrown) {
+	    	 		var obj = JSON.parse("" + jqXHR.responseText);
+	    	 		popupMessage("Ошибка сохранения сертификата", obj.error);
+	  		}
+		});
 	}
 	
 	function popupMessage(title, data) {
 		$("#message").text(data);
 		$( "#dialog-message" ).dialog("option", "title", title);
-		
-  		$( "#dialog-message" ).dialog("option", "width", 350);
+  		$( "#dialog-message" ).dialog("option", "width", 420);
   		$( "#dialog-message" ).dialog("option", "height", 220);
   		$( "#dialog-message" ).dialog("option", "modal", true);
   		$( "#dialog-message" ).dialog("option", "resizable", true );
-  		$( "#dialog-message" ).dialog( "option", "position", { my: "center",  at: "center", of:window} );
+  		$( "#dialog-message" ).dialog( "option", "position", { my: "center",  at: "center", of:centerdiv} );
 		$("#dialog-message").dialog("open");
 	}
-	
-	
+		
 	$(function() {
 		
 		$("#parentnumber").autocomplete({
@@ -87,9 +145,19 @@
 					$("#fsview").dialog({
 						autoOpen : false
 					});
+
+					$( "#dialog-confirm" ).dialog({
+						  autoOpen : false,
+					  	  width: 420,
+						  height: "auto",
+					      modal: true,
+         			      resizable: false
+					});
+
 					
 					$( "#dialog-message" ).dialog({
 						  autoOpen : false,
+					  	  width: 420,
 						  height: "auto",
 					      modal: true,
 					      buttons: {
@@ -212,14 +280,29 @@
             	 
             	 if (recs > 0 ) {
      		     	if (id) { 
-                    	$.ajaxSetup({async:false});
-             			$.get("fsdelproduct.do?id="+id);
+     		     		$("#confirm").text("Удалить выбранный продукт?");
+     		     		$( "#dialog-confirm" ).dialog({
+             			      buttons: {
+             			        "Удалить": function() {
+                                  $.ajaxSetup({async:false});
+                         		  $.get("fsdelproduct.do?id="+id);
+                         		  grid.trigger('reloadGrid');
+               			          $( this ).dialog( "close" );
+             			        },
+             			        "Отменить": function() {
+             			          $( this ).dialog( "close" );
+             			        }
+             			      }
+             			});
+     		     		$("#dialog-confirm").dialog( "option", "position", { my: "center",  at: "center", of:centerdiv} );
+     		     		$("#dialog-confirm").dialog( "option", "title", "Удаление продукта");
+             			$( "#dialog-confirm" ).dialog("open");
      		     	} else { 
-     		     		$( "#dialog-message" ).dialog("option", "title", 'Удаление продукта');
+     		     		$("#dialog-message").dialog("option", "title", 'Удаление продукта');
+     		     		$("#dialog-message").dialog( "option", "position", { my: "center",  at: "center", of:centerdiv} );
      		     		$("#message").text("Продукт не выбран. Выберете продукт для удаления.");
  						$("#dialog-message").dialog("open");
     	            }
-        	        grid.trigger('reloadGrid');
             	 }
             },
             title: "Удалить выбранный продукт",
@@ -230,16 +313,20 @@
             onClickButton: function(event) {
             	 var grid = $("#products");
             	 var id = grid.jqGrid('getGridParam','selrow');
+                 var recs = grid.getGridParam("reccount");
             	 
-     		     if (id) { 
-                    $.ajaxSetup({async:false});
-             		$.get("fsinsertproduct.do?id="+id);
-     		     } else { 
-  		     		$( "#dialog-message" ).dialog("option", "title", 'Вставить продукт');
- 		     		$("#message").text("Продукт не выбран. Выберете продукт для добавления перед ним нового.");
-					$("#dialog-message").dialog("open");
-                 }  
-                 grid.trigger('reloadGrid');
+            	 if (recs > 0 ) {
+     		       if (id) { 
+                     $.ajaxSetup({async:false});
+             		 $.get("fsinsertproduct.do?id="+id);
+     		       } else { 
+  		     	 	 $("#dialog-message").dialog("option", "title", 'Вставить продукт');
+  		     		 $("#dialog-message").dialog( "option", "position", { my: "center",  at: "center", of:centerdiv} );
+ 		     		 $("#message").text("Продукт не выбран. Выберете продукт для добавления перед ним нового.");
+					 $("#dialog-message").dialog("open");
+                   }  
+                   grid.trigger('reloadGrid');
+            	 }
             },
             title: "Вставить продукт перед текущим",
             position: "last"
@@ -248,7 +335,7 @@
             buttonicon: 'ui-icon-script',
             onClickButton: function(event) {
             	$("#productlist").val(''); 
-            	$("#dialog-addproductlist").dialog( "option", "position", { my: "center",  at: "center", of:window} );
+            	$("#dialog-addproductlist").dialog( "option", "position", { my: "center",  at: "center", of:centerdiv} );
             	$("#dialog-addproductlist" ).dialog("open"); },
             title: "Добавить список продуктов",
             position: "last"
@@ -260,9 +347,23 @@
                 var recs = grid.getGridParam("reccount");
           	 
  	           	if (recs > 0 ) {
-	                $.ajaxSetup({async:false});
-    	    		$.get("fsdelallproducts.do");
-        	        jQuery("#products").trigger('reloadGrid');
+ 		     		$("#confirm").text("Удалить все продукты из списка продуктов?");
+ 		     		$( "#dialog-confirm" ).dialog({
+         			      buttons: {
+         			        "Удалить": function() {
+          	                  $.ajaxSetup({async:false});
+            	    		  $.get("fsdelallproducts.do");
+                	          grid.trigger('reloadGrid');
+           			          $( this ).dialog( "close" );
+         			        },
+         			        "Отменить": function() {
+         			          $( this ).dialog( "close" );
+         			        }
+         			      }
+         			});
+ 		     		$("#dialog-confirm").dialog( "option", "position", { my: "center",  at: "center", of:centerdiv} );
+ 		     		$("#dialog-confirm").dialog( "option", "title", "Удаление продуктов");
+         			$( "#dialog-confirm" ).dialog("open");
  	           	}
             },
             title: "Удалить все продукты",
@@ -334,10 +435,26 @@
               	 
   	           	if (recs > 0 ) {
 	     		     if (id) { 
-	                    $.ajaxSetup({async:false});
-    	         		$.get("fsdelblank.do?id="+id);
+     		     		$("#confirm").text("Удалить выбранный номер бланка?");
+     		     		$( "#dialog-confirm" ).dialog({
+             			      buttons: {
+             			        "Удалить": function() {
+            	                    $.ajaxSetup({async:false});
+                	         		$.get("fsdelblank.do?id="+id);
+             			        	grid.trigger('reloadGrid');
+               			           $( this ).dialog( "close" );
+             			        },
+             			        "Отменить": function() {
+             			          $( this ).dialog( "close" );
+             			        }
+             			      }
+             			});
+     		     		$("#dialog-confirm").dialog( "option", "position", { my: "center",  at: "center", of:centerdiv} );
+     		     		$("#dialog-confirm").dialog( "option", "title", "Удаление номера бланка");
+             			$( "#dialog-confirm" ).dialog("open");
      			     } else { 
-      		     		$( "#dialog-message" ).dialog("option", "title", 'Удаление бланка');
+      		     		$("#dialog-message").dialog("option", "title", 'Удаление бланка');
+      		     		$("#dialog-message").dialog( "option", "position", { my: "center",  at: "center", of:centerdiv} );
      		     		$("#message").text("Бланк не выбран. Выберете бланк для удаления.");
  						$("#dialog-message").dialog("open");
                 	 }  
@@ -352,16 +469,20 @@
             onClickButton: function(event) {
             	 var grid = $("#blanks");
             	 var id = grid.jqGrid('getGridParam','selrow');
+                 var recs = grid.getGridParam("reccount");
             	 
-     		     if (id) { 
-                    $.ajaxSetup({async:false});
-             		$.get("fsinsertblank.do?id="+id);
-     		     } else { 
-   		     		$("#dialog-message" ).dialog("option", "title", 'Добавление бланка');
- 		     		$("#message").text("Бланк не выбран. Выберете бланк для вставки перед ним нового.");
-					$("#dialog-message").dialog("open");
-                 }  
-                 grid.trigger('reloadGrid');
+            	 if (recs > 0 ) {
+		   		     if (id) { 
+        	            $.ajaxSetup({async:false});
+            	 		$.get("fsinsertblank.do?id="+id);
+     		    	 } else { 
+	   		     		$("#dialog-message" ).dialog("option", "title", 'Добавление бланка');
+   			     	    $( "#dialog-message" ).dialog( "option", "position", { my: "center",  at: "center", of:centerdiv} );
+ 			     		$("#message").text("Бланк не выбран. Выберете бланк для вставки перед ним нового.");
+						$("#dialog-message").dialog("open");
+                	 }  
+                 	grid.trigger('reloadGrid');
+            	 }
             },
             title: "Вставить бланк перед текущим",
             position: "last"
@@ -370,7 +491,7 @@
             buttonicon: 'ui-icon-script',
             onClickButton: function(event) {
             	$("#blanklist").val(''); 
-            	$("#dialog-addblanklist").dialog( "option", "position", { my: "center",  at: "center", of:window} );
+            	$("#dialog-addblanklist").dialog( "option", "position", { my: "center",  at: "center", of:centerdiv} );
             	$("#dialog-addblanklist" ).dialog("open"); },
             title: "Добавить список бланков",
             position: "last"
@@ -382,9 +503,23 @@
                 var recs = grid.getGridParam("reccount");
           	 
  	           	if (recs > 0 ) {
-	                $.ajaxSetup({async:false});
-    	    		$.get("fsdelallblanks.do");
-        	        grid.trigger('reloadGrid');
+        	        $("#confirm").text("Удалить все номера бланков из списка?");
+ 		     		$( "#dialog-confirm" ).dialog({
+         			      buttons: {
+         			        "Удалить": function() {
+          	                  $.ajaxSetup({async:false});
+              	    		  $.get("fsdelallblanks.do");
+                	          grid.trigger('reloadGrid');
+           			          $( this ).dialog( "close" );
+         			        },
+         			        "Отменить": function() {
+         			          $( this ).dialog( "close" );
+         			        }
+         			      }
+         			});
+ 		     		$("#dialog-confirm").dialog( "option", "position", { my: "center",  at: "center", of:centerdiv} );
+ 		     		$("#dialog-confirm").dialog( "option", "title", "Удаление номеров бланков");
+         			$( "#dialog-confirm" ).dialog("open");
  	           	}
             },
             title: "Удалить все бланки",
@@ -410,7 +545,7 @@
 		$("#fsview").dialog("option", "height", 420);
 		$("#fsview").dialog("option", "modal", true);
 		$("#fsview").dialog("option", "resizable", true );
-		$("#fsview").dialog( "option", "position", { my: "center",  at: "center", of:window} );
+		$("#fsview").dialog( "option", "position", { my: "center",  at: "center", of:centerdiv} );
 		$("#fsview").dialog("open"); 
 	}
 	
@@ -442,7 +577,7 @@
 		$("#fsview").dialog("option", "height", 420);
 		$("#fsview").dialog("option", "modal", true);
 		$("#fsview").dialog("option", "resizable", true );
-		$("#fsview").dialog( "option", "position", { my: "center",  at: "center", of:window} );
+		$("#fsview").dialog( "option", "position", { my: "center",  at: "center", of:centerdiv} );
 		$("#fsview").dialog("open");
 	}
 	
@@ -611,10 +746,9 @@ ${fscert.producer.getLocale(fscert.language).name}, ${fscert.producer.getLocale(
  <form:hidden path="signer.id" id="signerid" />
  
  </div>
- 
 </div>
-
 </form:form>
+
 
 <div id="fsview" name="fsview">
 </div>
@@ -640,5 +774,16 @@ ${fscert.producer.getLocale(fscert.language).name}, ${fscert.producer.getLocale(
 </div>
 
 <div id="dialog-message">
-  <p id="message"><span class="ui-icon ui-icon-alert" style="float:left; margin:6px 6px 10px 5px;"></span></p>
+  <p id="message" align="center"><span class="ui-icon ui-icon-alert" style="float:left; margin:6px 6px 10px 5px;">
+  </span></p>
 </div>
+
+<div id="dialog-confirm">
+  <p id="confirm" align="center"><span class="ui-icon ui-icon-alert" style="float:left; margin:6px 6px 10px 5px;">
+  </span></p>
+</div>
+
+
+<div id="centerdiv" style="visibility: hidden; width: 100%;  position: fixed; height: 100%; top: 0; left: 0; overflow: auto; z-index=0;"/>
+
+

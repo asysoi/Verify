@@ -110,7 +110,7 @@
 	}
 
 	function viewCertificate(certid) {
-		memo = "Воспроизведение бумажной версиисертификата. <p>" + 
+		memo = "Воспроизведение бумажной версии сертификата. <p>" + 
 		       "Результат воспроизведения может незначительно отличаться по форме и стилю отображения," +
 		       "но полностью воспроизводит содержание документа.</p>"
         $('#pdf').contents().find("body").html("<div style='color:black; text-align:center; font-size:16pt;'>" + memo + "</div> ");
@@ -268,7 +268,15 @@
 				<td>${cert.producername}. ${cert.produceraddress}</td>
 				<td>${cert.datecert}</td>
                 <td>${cert.listscount}
-                </td> 
+                </td>
+                <td>
+			    <c:if test="${cert.locked}">
+					<span class="ui-icon ui-icon-locked" style="color: red"></span>		
+				</c:if>  
+			    <c:if test="${!cert.locked}">
+					<span class="ui-icon ui-icon-unlocked" style="color: green"></span>		
+				</c:if>  
+			    </td> 
 			</tr>
 		</c:forEach>
 	</table>

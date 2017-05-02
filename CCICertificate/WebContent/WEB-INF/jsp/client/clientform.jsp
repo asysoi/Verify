@@ -112,11 +112,10 @@
 
 <div id="tabs">
   <ul>
-    <li><a href="#tabs-1">Основные данные</a></li>
-    <li><a href="#tabs-2">Контакты</a></li>
-    <li><a href="#tabs-3">Расположение</a></li>
-    <li><a href="#tabs-4">Банк</a></li>
-    <li><a href="#tabs-5">Локализация</a></li>
+    <li><a href="#tabs-1">Контакты</a></li>
+    <li><a href="#tabs-2">Расположение</a></li>
+    <li><a href="#tabs-3">Банк</a></li>
+    <li><a href="#tabs-4">Локализация</a></li>
   </ul>
   
   <div id="tabs-1">	

@@ -453,7 +453,7 @@ public abstract class PDFBuilder {
 
 		if ("exporter".equals(map)) {
 			str = 
-					renderString(certificate.getKontrp(), checkfield(certificate.getAdress()) ? ", " : " ") + 
+					renderString(certificate.getKontrs(), checkfield(certificate.getAdress()) ? ", " : " ") + 
 					renderString(certificate.getAdress(), " ") +
 					((certificate.getExpp() != null && certificate.getExpp().trim() != "" ) || 
 					(certificate.getExpadress() != null && certificate.getExpadress().trim() != "") ? "  по поручению  " : "") +
@@ -462,7 +462,7 @@ public abstract class PDFBuilder {
 					
 		} else if  ("exporterenglish".equals(map)) {
 			str = 
-					renderString(certificate.getKontrp(), checkfield(certificate.getAdress()) ? ", " : " ") + 
+					renderString(certificate.getKontrs(), checkfield(certificate.getAdress()) ? ", " : " ") + 
 					renderString(certificate.getAdress(), " ") +
 					((certificate.getExpp() != null && certificate.getExpp().trim() != "" ) || 
 					(certificate.getExpadress() != null && certificate.getExpadress().trim() != "") ? "  by order  " : "") +

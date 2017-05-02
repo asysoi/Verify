@@ -140,7 +140,7 @@ public class FSPDFBuilder extends PDFBuilder {
 	        String name = (cert.getExporter() != null && cert.getExporter().getName() != null ? cert.getExporter().getName() : "");
 	        String address = (cert.getExporter() != null && cert.getExporter().getAddress() != null ? cert.getExporter().getAddress() : "");
 	        		
-	        if (!"RU".equals(cert.getLanguage())) {
+	        if (!"RU".equals(cert.getLanguage()) && cert.getExporter() != null) {
 	           ClientLocale locale = cert.getExporter().getLocale(cert.getLanguage());
 	           
 	           name = (locale != null && locale.getName() != null ? locale.getName() : "");
