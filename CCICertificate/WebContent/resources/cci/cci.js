@@ -109,11 +109,12 @@ function inputValidate() {
     
     err = 0;
     el = $('input[name="certnumber"]');
+    
     if(el.val().length != 14){
         err = 1;
         el.addClass('error_input');
         el.prop('title', 'Длина номера сертификата должна быть 14 символов');
-    }else{
+    } else {
         el.removeClass('error_input');
     }
     
@@ -132,3 +133,11 @@ function inputValidate() {
     
     return err;
 } 
+
+function makeAddress(element) {
+	var address;
+	address = $('#cindex').val() + ', ' + $('#city').val()+ ', ' + $('#street').val()+ ', ' + $('#building').val()
+	element.val(address);	
+}
+
+

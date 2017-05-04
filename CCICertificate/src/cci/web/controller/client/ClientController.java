@@ -384,7 +384,7 @@ public class ClientController {
 		// clientValidator.validate(client, result);
 
 		// status.setComplete();
-		generateAddressString(client);
+		// generateAddressString(client);
 		clientService.saveClient(client);
 		return "client/clientform";
 	}
@@ -408,7 +408,7 @@ public class ClientController {
 			BindingResult result, SessionStatus status, ModelMap model) {
 
 		// status.setComplete();
-		generateAddressString(client);
+		// generateAddressString(client);
 		clientService.updateClient(client);
 		return "client/clientform";
 	}
@@ -553,8 +553,9 @@ public class ClientController {
 				xml += "<row id='"+ row.getId() + "'>";
 				xml += "<cell><![CDATA["+(row.getLocale() == null ? "" : getLanguage(row.getLocale()))+"]]></cell>";
 				xml += "<cell><![CDATA["+(row.getName() == null ? "" : row.getName())+"]]></cell>";
-				xml += "<cell><![CDATA["+(row.getCity() == null ? "" : row.getCity())+"]]></cell>";
-				xml += "<cell><![CDATA["+(row.getStreet() == null ? "" : row.getStreet())+"]]></cell>";
+				xml += "<cell><![CDATA["+(row.getAddress() == null ? "" : row.getAddress())+"]]></cell>";
+				//xml += "<cell><![CDATA["+(row.getCity() == null ? "" : row.getCity())+"]]></cell>";
+				//xml += "<cell><![CDATA["+(row.getStreet() == null ? "" : row.getStreet())+"]]></cell>";
 				xml += "</row>";
 			}
 		}
@@ -586,10 +587,9 @@ public class ClientController {
 			@RequestParam(value = "lname", required = false) String name,
 			@RequestParam(value = "lcity", required = false) String city,
 			@RequestParam(value = "lstreet", required = false) String street,
+			@RequestParam(value = "laddress", required = false) String address,
 			HttpSession session, HttpServletResponse response, HttpServletRequest request, ModelMap model) {
 		
-		    LOG.info("POST: " + "id: " + id + " locale: " + locale + " name: " + name);
-		    
 			try {
 				  Client item = (Client)model.get("client");
 				  
@@ -597,8 +597,9 @@ public class ClientController {
 					    if (element.getId() == Long.valueOf(id).longValue()) {
 					       element.setLocale(locale);
 					       element.setName(name);
-					       element.setCity(city);
-					       element.setStreet(street);
+					       element.setAddress(address);
+					       //element.setCity(city);
+					       //element.setStreet(street);
 						   break;
 					    }
 				   }

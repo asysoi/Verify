@@ -130,13 +130,11 @@ $(function () {
 	
 	function updateGridClient() {
         var x;
-		if (confirm("Сохранить сделанные изменения?") == true) {
-			url = $("#fclient").attr("action");
-			$.ajaxSetup({async:false});
-			$.post(url, $("#fclient").serialize());
-			jQuery("#listelements").trigger('reloadGrid');
-			$("#clview").dialog("close");
-		} 
+		url = $("#fclient").attr("action");
+		$.ajaxSetup({async:false});
+		$.post(url, $("#fclient").serialize());
+		jQuery("#listelements").trigger('reloadGrid');
+		$("#clview").dialog("close");
 	}
 	
 	function close() {
@@ -147,9 +145,9 @@ $(function () {
     function addGridClient() {
         link = "clientadd.do";
 		$("#clview").load(link);        
-		$("#clview").dialog("option", "title", 'Компания');
+		$("#clview").dialog("option", "title", 'Новый Контрагент');
 		$("#clview").dialog("option", "width", 740);
-		$("#clview").dialog("option", "height", 300);
+		$("#clview").dialog("option", "height", 560);
 		$("#clview").dialog("option", "modal", true);
 		$("#clview").dialog("option", "resizable", false);
 		$("#clview").dialog({ buttons: [ { text: "Сохранить",  click : function() { saveGridClient(); } },  
@@ -164,9 +162,9 @@ $(function () {
     function editGridClient(id) {
         link = "clientedit.do?id=" + id;
 		$("#clview").load(link);        
-		$("#clview").dialog("option", "title", 'Компания');
+		$("#clview").dialog("option", "title", 'Контрагент');
 		$("#clview").dialog("option", "width", 740);
-		$("#clview").dialog("option", "height", 300);
+		$("#clview").dialog("option", "height", 560);
 		$("#clview").dialog("option", "modal", true);
 		$("#clview").dialog("option", "resizable", false);
 		$("#clview").dialog({ buttons: [ { text: "Сохранить",  click : function() { updateGridClient(); } },  
@@ -174,7 +172,6 @@ $(function () {
 		                      	                                               ] });
 		$("#clview").dialog("option", "position", {
 			my : "center", at : "center", of :  $( "#listelements" ) });
-
 		$("#clview").dialog("open");
 	}
 </script>
@@ -192,5 +189,17 @@ $(function () {
 
 <div id="clview" name="clview">
 </div>
+
+<div id="dialog-message">
+  <p id="message" align="center"><span style="float:left; margin:6px 6px 10px 5px;">
+  </span></p>
+</div>
+
+<div id="dialog-confirm">
+  <p id="confirm" align="center"><span style="float:left; margin:6px 6px 10px 5px;">
+  </span></p>
+</div>
+
+<div id="centerdiv" style="visibility: hidden; width: 100%;  position: fixed; height: 100%; top: 0; left: 0; overflow: auto; z-index=0;"/>
 
 

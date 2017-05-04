@@ -27,7 +27,6 @@ $(function () {
     
     jQuery("#listelements").jqGrid({
 		url: "empgrid.do",
-		// editurl: "fsgoodsupdate.do",
 	    datatype: "xml",
 	    mtype: "GET",
 		height: 250,
@@ -128,13 +127,13 @@ $(function () {
 	
 	function updateGridEmployee() {
         var x;
-		if (confirm("Сохранить сделанные изменения?") == true) {
+		// if (confirm("Сохранить сделанные изменения?") == true) {
 			url = $("#fclient").attr("action");
 			$.ajaxSetup({async:false});
 			$.post(url, $("#fclient").serialize());
 			jQuery("#listelements").trigger('reloadGrid');
 			$("#clview").dialog("close");
-		} 
+		// } 
 	}
 	
 	function close() {
@@ -147,7 +146,7 @@ $(function () {
 		$("#clview").load(link);        
 		$("#clview").dialog("option", "title", 'Сотрудник');
 		$("#clview").dialog("option", "width", 740);
-		$("#clview").dialog("option", "height", 300);
+		$("#clview").dialog("option", "height", 400);
 		$("#clview").dialog("option", "modal", true);
 		$("#clview").dialog("option", "resizable", false);
 		$("#clview").dialog({ buttons: [ { text: "Сохранить",  click : function() { saveGridEmployee(); } },  
@@ -163,7 +162,7 @@ $(function () {
 		$("#clview").load(link);        
 		$("#clview").dialog("option", "title", 'Сотрудник');
 		$("#clview").dialog("option", "width", 740);
-		$("#clview").dialog("option", "height", 300);
+		$("#clview").dialog("option", "height", 400);
 		$("#clview").dialog("option", "modal", true);
 		$("#clview").dialog("option", "resizable", false);
 		$("#clview").dialog({ buttons: [ { text: "Сохранить",  click : function() { updateGridEmployee(); } },  

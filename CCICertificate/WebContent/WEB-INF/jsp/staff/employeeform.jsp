@@ -44,7 +44,7 @@ $(function() {
 		editurl: "emplocaleupdate.do",
 		datatype: "xml",
 		mtype: "GET",
-		height: '20%',
+		height: '50%',
 		width : null,
 		shrinkToFit : false,
 			colModel:[
@@ -146,17 +146,19 @@ $(function() {
 
 </script>
 
+
 <form:form id="femployee" method="POST" commandName="editemployee">
     <form:hidden path="id"/>  
     
 <div id="tabs">
   <ul>
     <li><a href="#tabs-1">Персональные данные</a></li>
-    <li><a href="#tabs-3">Структурное подразделение</a></li>
-    <li><a href="#tabs-4">Локализация</a></li>
+    <li><a href="#tabs-2">Структурное подразделение</a></li>
+    <li><a href="#tabs-3">Локализация</a></li>
   </ul>
     
   <div id="tabs-1">	  
+      
 		<table class="filter">
 			<tr>
 				<td>Фамилия</td>
@@ -171,17 +173,6 @@ $(function() {
 						size="18" /></td>
 			</tr>
 			<tr>
-				<td>Дата рождения</td>
-				<td><form:input path="bday" id="bday"
-						class="datepicker" size="12" /> <a
-					href="javascript:clearelement($('.datepicker'));"> <img
-						src="resources/images/delete-16.png" alt="удл." />
-				</a></td>
-			</tr>
-		</table>
-		
-		<table class="filter">
-			<tr>
 				<td>ФИО</td>
 				<td><form:input path="name" id="name"
 						size="25" class="required" readonly="true"/>
@@ -192,10 +183,19 @@ $(function() {
 				</td>
 			</tr>
 			<tr>
-				<td>Должность</td>
-				<td><form:input path="job" id="job"
-						size="40" /></td>
-			</tr>	
+				<td>Дата рождения</td>
+				<td><form:input path="bday" id="bday"
+						class="datepicker" size="12" /> <a
+					href="javascript:clearelement($('.datepicker'));"> <img
+						src="resources/images/delete-16.png" alt="удл." />
+				</a></td>
+			</tr>
+		</table>
+		
+		<fieldset>
+		<legend class="grp_title">Контакты</legend>        
+  
+		<table class="filter">
 			<tr>
 				<td>Телефон</td>
 				<td><form:input size="12" path="phone" id="phone" /></td>
@@ -205,14 +205,17 @@ $(function() {
 				<td><form:input size="12" path="email" id="email" /></td>
 			</tr>
 		</table>
-		
+		</fieldset>
 	</div>
 	
-	<div id="tabs-2">	
-	</div>
-
-	<div id="tabs-3">
+	<div id="tabs-2">
 		<table class="filter">
+			<tr>
+				<td>Должность</td>
+				<td><form:input path="job" id="job"
+						size="70" /></td>
+			</tr>	
+		
 			<tr>
 				<td>Отделение</td>
 				<td>
@@ -236,7 +239,7 @@ $(function() {
 		</table>
 	</div>
 	
-	<div id="tabs-4">
+	<div id="tabs-3">
 	   <table id="locales"></table>
 	   <div id="localespager"></div>
 	</div>
