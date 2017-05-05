@@ -16,7 +16,7 @@ public class ExportCertConfig implements ExportConfig {
 			"Адрес грузоотправителя", "Грузополучатель", "Адрес грузополучателя",
 			"Дата сертификата", "Номер сертификата", "Эксперт", "Номер бланка",
 			"Заявитель", "Средства транспорта", "Маршрут",
-			"Для служебных отметок", "Страна выдачи", "Страна предоставления",
+			"Для служебных отметок", "Страна выдачи", "Страна предоставления", "Код страны предоставления",
 			"Статус", "Количество доп.листов", "УНП Экспортера",
 			"Экспортер. Полное наименование",
 			"Экспортер. Сокращенное наименование",
@@ -28,7 +28,7 @@ public class ExportCertConfig implements ExportConfig {
 	private String[] fieldnames = new String[] { "FORMS", "UNN", "KONTRP",
 			"KONTRS", "ADRESS", "POLUCHAT", "ADRESSPOL", "DATACERT",
 			"NOMERCERT", "EXPERT", "NBLANKA", "RUKOVOD", "TRANSPORT",
-			"MARSHRUT", "OTMETKA", "STRANAV", "STRANAPR", "STATUS",
+			"MARSHRUT", "OTMETKA", "STRANAV", "STRANAPR",  "CODESTRANAPR", "STATUS",
 			"KOLDOPLIST", "UNNEXP", "EXPP", "EXPS", "EXPADRESS",
 			"IMPORTER", "ADRESSIMP", "FLSEZ", "SEZ", "FLSEZREZ",
 			"STRANAP", "OTD_NAME", "PARENTNUMBER", "PARENTSTATUS", "TOVAR"};
