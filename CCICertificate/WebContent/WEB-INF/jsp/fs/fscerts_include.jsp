@@ -261,7 +261,7 @@
 					<li class="cci"><a class="cci" href="javascript:editFSCertificate('${cert.id}')"><i class="glyphicon glyphicon-edit"></i></a></li>
 					<li class="cci"><a class="cci" href="javascript:openFSCertificate('${cert.id}')"><i class="glyphicon glyphicon-eye-open"></i></a></li>
 					<li class="cci"><a class="cci" href="javascript:printOriginalFSCertificate('${cert.id}')"><i class="glyphicon glyphicon-print"></i></a></li>
-					<li class="cci"><a class="cci" href="javascript:printCopyFSCertificate('${cert.id}')"><i class="glyphicon glyphicon-print"></i></a></li>
+					<li class="cci"><a class="cci" href="javascript:printCopyFSCertificate('${cert.id}')"><i style="color: green" class="glyphicon glyphicon-print"></i></a></li>
 				</ul> </div> </div>
 				</td>
 				<td>${cert.exportername}. ${cert.exporteraddress} </td>
@@ -271,12 +271,8 @@
                 </td>
                 <td>
 			    <c:if test="${cert.locked}">
-					<span class="ui-icon ui-icon-locked" style="color: red"></span>		
+					<span class="ui-icon ui-icon-check" style="color: red"></span>		
 				</c:if>  
-			    <c:if test="${!cert.locked}">
-					<span class="ui-icon ui-icon-unlocked" style="color: green"></span>		
-				</c:if>  
-			    </td> 
 			</tr>
 		</c:forEach>
 	</table>

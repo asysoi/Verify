@@ -605,7 +605,13 @@
 <form:form id="fscert" method="POST" modelAttribute="fscert">
 
 <div class="row">
-<div class="col-md-6" align="left"> Сертификат выдан : <form:checkbox path="locked" id="locked"/>
+<div class="col-md-6" align="left"> Сертификат выдан :
+<c:if test="${cert.locked}">
+	<span class="ui-icon ui-icon-check" style="color: red"></span>		
+</c:if> 
+<c:if test="${!cert.locked}">
+    <form:checkbox path="locked" id="locked"/>
+</c:if>    
 </div>
 <div class="col-md-6" align="right">
 <a href="javascript:goBack();" title="Вернуться к списку сертификатов"><i class="glyphicon glyphicon-arrow-left"></i></a>

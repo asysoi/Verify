@@ -131,6 +131,7 @@ $(function() {
  function fillindepartment(id_otd) {
 	 $('#id_department option').remove();
 	 console.log("fillindepartment");
+	 
 	 <c:forEach items="${departments}" var="deplist">
 	     if ( id_otd == ${deplist.key} ) {
 	        <c:forEach items="${deplist.value}" var="listElement" >
