@@ -130,6 +130,7 @@ $(function() {
  
  function fillindepartment(id_otd) {
 	 $('#id_department option').remove();
+	 console.log(id_otd);
 	 console.log("fillindepartment");
 	 
 	 <c:forEach items="${departments}" var="deplist">
@@ -139,7 +140,11 @@ $(function() {
 	        </c:forEach>
 	     }
 	   </c:forEach>
-	$("#id_department").width($("#id_otd").width());
+	   if ($("#id_otd").width() > 0) {
+	      $("#id_department").width($("#id_otd").width());
+	   } else {
+	      $("#id_department").width(400);
+	   } 
  }
  
  function selectBranch() {
@@ -215,7 +220,7 @@ $(function() {
 			<tr>
 				<td>Должность</td>
 				<td><form:input path="job" id="job"
-						size="70" /></td>
+						size="60" /></td>
 			</tr>	
 		
 			<tr>
