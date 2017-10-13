@@ -91,9 +91,10 @@
    
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
-        <!-- property name="url" value="jdbc:oracle:thin:@//192.168.0.46:1521/pdborcl"/-->
-        <property name="url" value="jdbc:oracle:thin:@//localhost:1521/pdborcl"/>
-        <!-- property name="url" value="jdbc:oracle:thin:@//192.168.1.28:1521/pdborcl"/ -->     
+        <!-- property name="url" value="jdbc:oracle:thin:@//192.168.0.46:1521/pdborcl"/ -->
+        <!-- property name="url" value="jdbc:oracle:thin:@//192.168.0.72:1521/pdborcl"/ -->
+        <!-- property name="url" value="jdbc:oracle:thin:@//192.168.1.28:1521/pdborcl"/ -->
+        <property name="url" value="jdbc:oracle:thin:@//192.168.0.179:1521/orclpdb"/>     
         <property name="username" value="beltpp"/>
         <property name="password" value="123456"/>
     </bean>
@@ -107,7 +108,7 @@
  
     <bean id="dataSourceOwn" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://localhost:3306/owncert_2?useServerPrepStmts=false&amp;rewriteBatchedStatements=true&amp;useUnicode=true&amp;characterEncoding=UTF-8"/>
+        <property name="url" value="jdbc:mysql://192.168.0.72:3306/owncert_2?useServerPrepStmts=false&amp;rewriteBatchedStatements=true&amp;useUnicode=true&amp;characterEncoding=UTF-8"/>
         <property name="username" value="cert"/>
         <property name="password" value="123456"/>
     </bean>
@@ -123,7 +124,7 @@
     <!-- security:intercept-url pattern="/admin**" access="hasRole('ROLE_ADMIN')" /-->
 	<security:access-denied-handler error-page="/403"/>
     <security:intercept-url pattern="/resources/**" access="permitAll" requires-channel="https"/> 
-    <security:intercept-url pattern="/certcheck.**" access="permitAll" requires-channel="https"/>
+    <security:intercept-url pattern="/check.**" access="permitAll" requires-channel="https"/>
     <security:intercept-url pattern="/login*.**" access="permitAll" requires-channel="https"/>
     <security:intercept-url pattern="/ccclient*.do" access="hasRole('ROLE_CLIENT')"/> 
     <security:intercept-url pattern="/cert*.do" access="hasAnyRole('ROLE_EXPERT','ROLE_MINSK', 'ROLE_GOMEL', 'ROLE_VITEBSK', 'ROLE_GRODNO', 'ROLE_MOGILEV', 'ROLE_BREST')"/>
