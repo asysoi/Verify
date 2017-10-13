@@ -15,6 +15,7 @@ import cci.model.cert.Certificate;
 import cci.model.cert.Product;
 import cci.model.cert.ProductIterator;
 import cci.service.CountryConverter;
+
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
@@ -33,6 +34,7 @@ import com.itextpdf.text.pdf.VerticalText;
 public abstract class PDFBuilder {
 	private static final Logger LOG=Logger.getLogger(PDFBuilder.class);
 	private static final String CHAR_PARAGRAPH = "\n";
+	private static final String EMPTY_STRING = "";
 	
 
 	public void createPDFPage(PdfWriter writer, Object certificate,
@@ -453,7 +455,7 @@ public abstract class PDFBuilder {
 
 		if ("exporter".equals(map)) {
 			str = 
-					renderString(certificate.getKontrs(), checkfield(certificate.getAdress()) ? ", " : " ") + 
+					renderString(getExporterName(certificate), checkfield(certificate.getAdress()) ? ", " : " ") + 
 					renderString(certificate.getAdress(), " ") +
 					((certificate.getExpp() != null && certificate.getExpp().trim() != "" ) || 
 					(certificate.getExpadress() != null && certificate.getExpadress().trim() != "") ? "  по поручению  " : "") +
@@ -462,7 +464,7 @@ public abstract class PDFBuilder {
 					
 		} else if  ("exporterenglish".equals(map)) {
 			str = 
-					renderString(certificate.getKontrs(), checkfield(certificate.getAdress()) ? ", " : " ") + 
+					renderString(getExporterName(certificate), checkfield(certificate.getAdress()) ? ", " : " ") + 
 					renderString(certificate.getAdress(), " ") +
 					((certificate.getExpp() != null && certificate.getExpp().trim() != "" ) || 
 					(certificate.getExpadress() != null && certificate.getExpadress().trim() != "") ? "  by order  " : "") +
@@ -535,6 +537,16 @@ public abstract class PDFBuilder {
 
 		return str;
 	}
+
+	private String getExporterName(Certificate cert) {
+		String exporter = cert.getKontrp();
+		
+        if ((exporter == null)  || (EMPTY_STRING.equals(exporter))) {
+        	exporter = cert.getKontrp() != null ? cert.getKontrp() : EMPTY_STRING;
+        }
+		return exporter;
+	}
+
 
 	protected boolean checkfield(String field) {
 		return (trim(field).length() > 0);

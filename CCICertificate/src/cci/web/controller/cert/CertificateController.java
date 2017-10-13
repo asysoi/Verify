@@ -349,9 +349,9 @@ public class CertificateController {
 
 	
 	// ---------------------------------------------------------------------------------------
-	//
+	//  Check certificate 
 	// ---------------------------------------------------------------------------------------
-	@RequestMapping(value = "certcheck.do", method = RequestMethod.GET)
+	@RequestMapping(value = "check.do", method = RequestMethod.GET)
 	public String check(ModelMap model) {
 		String retpage = "check";
 		Certificate cert = new Certificate();
@@ -361,9 +361,9 @@ public class CertificateController {
 
 	
 	// ---------------------------------------------------------------------------------------
-	//
+	//  Check certificate 
 	// ---------------------------------------------------------------------------------------
-	@RequestMapping(value = "certcheck.do", method = RequestMethod.POST)
+	@RequestMapping(value = "check.do", method = RequestMethod.POST)
 	public String check(@ModelAttribute("cert") Certificate cert,
 			BindingResult result, SessionStatus status, ModelMap model, HttpServletRequest request) {
 		String retpage = "check";
