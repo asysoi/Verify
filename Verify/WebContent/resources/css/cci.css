@@ -1,0 +1,234 @@
+ 
+
+table.purchase {
+border-collapse: collapse;
+width: 100%;
+}
+
+table.purchase td {
+border: 1px solid #d4d4d4;
+padding: 5px;
+padding-top: 7px;
+padding-bottom: 7px;
+vertical-align: top;
+}
+
+table.main {
+width: 100%;
+font-size: 100%;
+}
+
+table.main td {
+padding: 20px;
+padding-top: 25px;
+padding-bottom: 25px;
+vertical-align: center;
+text-align: center;
+font-size: 100%;
+}
+
+
+table.certificate {
+border-collapse: collapse;
+width: 100%;
+font-size: 100%;
+}
+
+table.certificate td {
+border: 1px solid #d4d4d4;
+padding: 5px;
+padding-top: 7px;
+padding-bottom: 7px;
+vertical-align: top;
+font-size: 100%;
+}
+
+table.filter {
+width: 100%;
+font-size: 90%;
+text-align: left;
+}
+
+table.filter td {
+border: 0px;
+padding: 1px;
+padding-top: 2px;
+padding-bottom: 2px;
+vertical-align: top;
+font-size: 100%;
+text-align: left;
+}
+
+table.verification {
+width: 100%;
+font-size: 100%;
+}
+
+table.verification td {
+border: 0px;
+padding: 5px;
+padding-top: 8px;
+padding-bottom: 8px;
+vertical-align: top;
+font-size: 100%;
+}
+
+.ver_message {
+  text-align: center;
+  font-size: 120%;
+  color: red;   
+}
+
+cci.container {
+    padding-top: 10px;
+    margin-left: 50px;
+    width: 700px;
+}
+
+cci.form-horizontal {
+    width: 100%;
+}
+
+input[type="text"] {
+    height: 18px;
+}
+
+
+input[type="checkbox"] {
+    height: 12px;
+    font-weight: normal;
+}
+
+label {
+	height: 11px;
+	font-weight: normal;
+}
+
+cci.navbar cci.nav > li > a {
+    color: #000000;
+}
+
+cci.form-horizontal cci.control-label {
+    text-align: left;
+}
+
+
+cci.error {
+	color: #ff0000;
+}
+ 
+cci.errorblock {
+	color: #000;
+	background-color: #ffEEEE;
+	border: 3px solid #ff0000;
+	padding: 8px;
+	margin: 16px;
+}
+
+cci.ui-menu { width: 150px; }
+
+
+cci.loginbox {
+    background-color: grey;
+    margin:auto;
+    width: 280px;
+    height: 96px;
+    border: 1px solid;
+}
+
+.ccielement 
+{margin: 4px; font-size:100%;vertical-align:middle}
+
+.body {
+  min-height: 2000px;
+}
+
+.navbar-static-top {
+  margin-bottom: 19px;
+}
+
+.grp_title {
+	font-size: 14px;
+	font-weight: bold;
+	margin-bottom: 8px;
+	text-align: left;
+}
+
+#dialog .ui-button-text {
+    font-size: 11px;
+    padding: 1px 1px 1px 1px;
+}
+
+.ui-widget { 
+	font-size:15px;
+}
+
+.navbar-inverse .navbar-nav>.open>a,
+.navbar-inverse .navbar-nav>.open>a:hover,
+.navbar-inverse .navbar-nav>.open>a:focus{
+	background-color:#36476B;
+	color:#fff
+}
+
+.ccidropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.ccidropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.2);
+    padding: 5px 15px 5px 15px;
+    z-index: 1;
+}
+
+.ccidropdown:hover .ccidropdown-content {
+    display: block;
+}
+
+.ccidropdown:hover {
+    color: #428bca;
+    cursor: pointer;
+}
+
+ul.cci {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: #f1f1f1;
+}
+
+li.cci a.cci {
+    display: block;
+    padding: 3px 3px;
+    text-decoration: none;
+}
+
+li.cci a.cci:hover {
+    background-color: #428bca;
+    color: white;
+}
+
+div.row {
+   margin: 10px;
+}
+
+.ui-jqgrid tr.jqgrow td {font-size:11px !important; }
+.ui-paging-info { font-size:11px !important;}
+.ui-paging-pager { font-size:11px !important;}
+.ui-th-div { font-size:12px !important;}
+.ui-state-highlight { background: #d2e4ff!important; }
+
+.ui-datepicker {z-index: 102 !important;}
+.ui-dialog {z-index: 101 !important;}
+
+.ui-autocomplete-loading { 
+   background: white url("/resources/images/ui-anim_basic_16x16.gif") right center no-repeat;
+}
+
+.error_input{
+    border: 2px solid;
+    border-color: red!important;  
+}

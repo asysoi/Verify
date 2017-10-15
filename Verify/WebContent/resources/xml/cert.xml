@@ -1,0 +1,42 @@
+<cert>
+	<otd_id>4</otd_id>
+	<otd_name>Гомельское отделение Белорусской торгово-промышленной палаты
+	</otd_name>
+	<forms>А</forms>
+	<kontrp>OJSC "BSW - MANAGEMENT COMPANY OF "BMC" HOLDING". 247210
+		ZHLOBIN PROMYSHLENNAYA STR.37 REPUBLIC BELARUS.</kontrp>
+	<poluchat>MAZUR-TOM
+		UL.MODRZEWIOWA 82
+		11-010, BARCZEWO WOJTOWO
+		POLAND.
+	</poluchat>
+	<datacert>14.01.2017</datacert>
+	<nomercert>BYPL7309010398</nomercert>
+	<expert>ZHLOBIN</expert>
+	<nblanka>0458190</nblanka>
+	<rukovod>ZHLOBIN</rukovod>
+	<transport>TRUCK:</transport>
+	<stranav>THE REPUBLIC OF BELARUS</stranav>
+	<codestranav>BY</codestranav>
+	<stranapr>POLAND</stranapr>
+	<codestranapr>PL</codestranapr>
+	<stranap>THE REPUBLIC OF BELARUS</stranap>
+	<status>действительный</status>
+	<koldoplist>0</koldoplist>
+	<products>
+		<row>
+			<numerator>1</numerator>
+			<vidup> 14
+				№4/14,16, 18; 7/21; 9/1,2,5; 10/1-5,7,11.
+			</vidup>
+			<tovar>14 COILS.
+				STEEL WIRE FOR NAILS 3,40mm.
+			</tovar>
+			<kriter>"W"72.17</kriter>
+			<ves>19842 kg/
+				19814 kg
+			</ves>
+			<schet>75571211 от 14.01.2017</schet>
+		</row>
+	</products>
+</cert>

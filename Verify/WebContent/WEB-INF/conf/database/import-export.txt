@@ -1,0 +1,26 @@
+Create DIRECTORY for export-import operations:
+1. CREATE or REPLACE DIRECTORY export AS '/home/oracle/dump';
+2. GRANT READ, WRITE ON DIRECTORY export TO beltpp;
+3. SELECT owner, directory_name, directory_path FROM all_directories
+
+drop 
+Import database from dump:
+0. lsnrctl start
+1. sqlplus / as sysdba 
+2. startup
+3. alter pluggable database all open
+4. alter session set container=pdborcl
+5. drop user beltpp cascade
+6. create user beltpp identified by 123456
+7. grant all privileges to beltpp  
+         grant connect to userName;
+        grant all privileges to userName;
+8. grant dba to beltpp
+9. exit from sqlplus
+10. C:\app\OracleHomeUser\product\12.1.0\dbhome_1\BIN>impdp beltpp/123456@pdborcl directory=export dumpfile=beltpp_26_01_2017.dmp logfile=import_26_01_2017_not_full.log
+
+
+Export database to dump:
+1. C:\app\OracleHomeUser\product\12.1.0\dbhome_1\BIN>expdp beltpp/123@pdborcl directory=export dumpfile=beltpp.dmp logfile=export.log
+
+it's all

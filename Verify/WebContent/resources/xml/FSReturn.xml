@@ -1,0 +1,76 @@
+<fscertificate>
+	<certnumber>BYUA3101000008</certnumber>
+	<dateissue>03.01.2017</dateissue>
+	<dateexpiry>02.28.0208</dateexpiry>
+	<confirmation>Настоящим удостоверяем, основываясь на представленных
+		сведениях, что товары, перечисленные ниже, производятся...
+	</confirmation>
+	<declaration>Данный сертификат не является явной или подразумеваемой
+		гарантией для како-=го-либо товара...</declaration>
+	<branch>
+		<name>Унитарное предприятие по оказанию услуг «Брестское отделение
+			Белорусской торгово-промышленной палаты»</name>
+		<codecountry>BY</codecountry>
+		<cindex>220113</cindex>
+		<city>Минск</city>
+		<line>Якуба Коласа</line>
+		<building>65</building>
+		<work_phone>+375 17 280 04 73</work_phone>
+		<email>tppm@tppm.by</email>
+	</branch>
+	<exporter>
+		<name>Белая Луна</name>
+		<codecountry>BY</codecountry>
+		<cindex>2201108</cindex>
+		<city>Минск</city>
+		<line>Курчатова</line>
+		<building>1</building>
+	</exporter>
+	<producer>
+		<name>Красный расвет</name>
+		<codecountry>BY</codecountry>
+		<cindex>2201108</cindex>
+		<city>Минск</city>
+		<line>Курчатова</line>
+		<building>1</building>
+	</producer>
+	<expert>
+		<name>Сидоров В.С.</name>
+		<job>эксперт</job>
+	</expert>
+	<signer>
+		<name>Сидоров В.С.</name>
+		<job>эксперт</job>
+	</signer>
+	<products>
+		<row>
+			<numerator>1</numerator>
+			<tovar>Спирометр автоматизированный многофункциональный МАС-1_А
+			</tovar>
+		</row>
+		<row>
+			<numerator>2</numerator>
+			<tovar>Спирометр автоматизированный многофункциональный МАС-1_ВГА
+			</tovar>
+		</row>
+		<row>
+			<numerator>3</numerator>
+			<tovar>Спирометр автоматизированный многофункциональный МАС-1_ПК
+			</tovar>
+		</row>
+	</products>
+	<blanks>
+		<blank>
+			<page>1</page>
+			<blanknumber>23456711</blanknumber>
+		</blank>
+		<blank>
+			<page>2</page>
+			<blanknumber>1238990</blanknumber>
+		</blank>
+		<blank>
+			<page>3</page>
+			<blanknumber>66667778</blanknumber>
+		</blank>
+	</blanks>
+</fscertificate>

@@ -1,0 +1,111 @@
+﻿<fscertificate>
+  <certnumber>BYUA31010000066767676767676767676767676767767677877733737373737373773737373737373373737373737</certnumber>
+  <parentnumber></parentnumber>
+  <dublicate></dublicate>
+  <dateissue>01.03.2017</dateissue>
+  <dateexpiry>28.02.208</dateexpiry>
+  <branch>
+     <name>Унитарное предприятие по оказанию услуг «Минское отделение Белорусской торгово-промышленной палаты»</name>
+     <cindex>220113</cindex>
+     <line>Якуба Коласа</line>
+     <office></office>
+	 <building>65</building>
+	 <work_phone>+375 17 280 04 73</work_phone>	
+	 <cell_phone></cell_phone>
+	 <email>tppm@tppm.by</email>
+	 <unp></unp>
+	 <okpo></okpo>  
+                 <city>Минск</city>
+                 <codecountry>BY</codecountry>		
+  </branch>
+  <exporter>
+    <name>Рога и копыта</name>
+	<codecountry>BY</codecountry>
+	<city>Минск</city>		
+	<line>Курчатова</line>		
+	<cindex>2201108</cindex>
+	<office></office>
+	<building>1</building>
+	<work_phone></work_phone>	
+	<cell_phone></cell_phone>
+	<email></email>
+	<unp></unp>
+	<okpo></okpo>
+	<account></account>
+	<bname></bname>
+	<bcodecountry></bcodecountry>
+	<bcity></bcity>		
+	<bline></bline>		
+	<bindex></bindex>
+	<boffice></boffice>
+	<bbuilding></bbuilding>
+	<bwork_phone></bwork_phone>	
+	<bcell_phone></bcell_phone>
+	<bemail></bemail>
+	<bunp></bunp>
+  </exporter>
+  <producer>
+    <name>Морковная страна</name>
+	<codecountry>BY</codecountry>
+	<city>Минск</city>		
+	<line>Курчатова</line>		
+	<cindex>2201108</cindex>
+	<office></office>
+	<building>1</building>
+	<work_phone></work_phone>	
+	<cell_phone></cell_phone>
+	<email></email>
+	<unp></unp>
+	<okpo></okpo>
+	<account></account>
+	<bname></bname>
+	<bcodecountry></bcodecountry>
+	<bcity></bcity>		
+	<bline></bline>		
+	<bindex></bindex>
+	<boffice></boffice>
+	<bbuilding></bbuilding>
+	<bwork_phone></bwork_phone>	
+	<bcell_phone></bcell_phone>
+	<bemail></bemail>
+	<bunp></bunp>
+  </producer>
+  <confirmation>Настоящим удостоверяем, основываясь на представленных сведениях, что товары, перечисленные ниже, производятся...  </confirmation>
+  <declaration>Данный сертификат не является явной или подразумеваемой гарантией для како-=го-либо товара...</declaration>
+  <expert>
+    <name>Сидоров В.С.</name>
+    <job>эксперт</job>
+  </expert>>
+  <signer>
+    <name>М.В.Гуринович</name>
+    <job>Начальник отдела экспертизы и сертификации №1</job>
+  </signer>
+  <products>
+	<row>
+		<numerator>1</numerator>
+		<tovar>Спирометр автоматизированный многофункциональный МАС-1_А</tovar>
+	</row>
+	<row>
+		<numerator>2</numerator>
+		<tovar>Спирометр автоматизированный многофункциональный МАС-1_ВГА</tovar>
+	</row>
+	<row>
+		<numerator>3</numerator>
+		<tovar>Спирометр автоматизированный многофункциональный МАС-1_ПК</tovar>
+	</row>	
+  </products>
+  <blanks>
+    <blank>
+     <blanknumber>23456711</blanknumber>
+     <page>1</page>
+    </blank>
+    <blank>
+     <blanknumber>1238990</blanknumber>
+     <page>2</page>
+    </blank>
+    <blank>
+     <blanknumber>66667778</blanknumber>
+     <page>3</page>
+    </blank>
+  </blanks>
+</fscertificate>
