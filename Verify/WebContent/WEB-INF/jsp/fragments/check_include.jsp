@@ -106,43 +106,47 @@
 
 <div class="main" id="checker">
 	
-
-	<div id="msg" class="ver_message"></div>
-
-        <h3 style="text-align: center; height: 46px;">Проверка сертификата происхождения</h3>
+    <div class="row placeholders" id="msg" class="ver_message">
+    
+    <h3 class="page-header">Cертификат происхождения</h3>
 
 	<form:form id="form" method="POST" commandName="cert" role="form">
 		<table class="verification">
 			<tr style="height: 46px;">
-				<td style="text-align: right; height: 30px; vertical-align: middle;">Номер сертификата&nbsp;</td>
-				<td><form:input path="nomercert" class="" placeholder="" id="nomercert" style="height: 28px;" /></td>
+				<td style="text-align: right; height: 36px; vertical-align: middle; font-size: 120%;">Номер сертификата&nbsp;</td>
+				<td><form:input path="nomercert" class="form-control" type="text" placeholder="Обязательный аттрибут" id="nomercert" style="height: 28px; width: 60%;" /></td>
 			</tr>
 			<tr style="height: 46px;">
-				<td style="text-align: right; height: 30px; vertical-align: middle;">Номер бланка&nbsp;</td>
-				<td><form:input path="nblanka" class="" placeholder="" id="nblanka" style="height: 28px;"/></td>
+				<td style="text-align: right; height: 36px; vertical-align: middle; font-size: 120%;">Номер бланка&nbsp;</td>
+				<td><form:input path="nblanka" class="form-control" type="text" placeholder="Обязательный аттрибут" id="nblanka" style="height: 28px; width: 60%;"/></td>
 			<tr style="height: 46px;">
-				<td style="text-align: right; height: 30px; vertical-align: middle;">Дата выпуска&nbsp;</td>
-				<td><form:input path="datacert" class="" placeholder="" id="datepicker" style="height: 28px;"/></td>
+				<td style="text-align: right; height: 36px; vertical-align: middle; font-size: 120%;">Дата выпуска&nbsp;</td>
+				<td><form:input path="datacert" class="form-control" placeholder="" id="datepicker" style="height: 28px; width: 60%;"/></td>
 			</tr>
 			<tr>
 				<td />
 				<td>
 					<div align="left">
-						<a href="javascript:submit()" style="height: 28px; font-size: 120%">Проверить</a>
+						<a href="javascript:submit()" style="height: 28px; font-size: 100%">
+						<div class="btn btn-lg btn-primary btn-block" style="background-color: #36478B; width: 40%;">
+						Проверить</div>
+						</a>
 					</div>
 				</td>
 			</tr>
 		</table>
 	</form:form>
-
+	
 	<div id="certview" name="certview" align="center"></div>
 
 
 	<div id="pdfview" name="pdfview" style="text-align:center;">
 	          <iframe class="pdf" id="pdf"></iframe>
-                 </div> 
+    </div> 
+    
+    </div>
+   	
 </div>
-
 
 
 
