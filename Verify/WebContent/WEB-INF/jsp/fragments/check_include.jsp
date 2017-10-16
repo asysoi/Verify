@@ -1,6 +1,7 @@
 ﻿﻿<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <spring:url value="resources/css/login.css" var="LoginCss" />
 <link href="${LoginCss}" rel="stylesheet" />
@@ -27,6 +28,14 @@
 		});
 	});
 
+    function setLanguage(lang) {
+    	
+		url = "check.do?lang=" + lang 
+				+ "&ncert=" + $("#nomercert").val()  
+				+ "&nblanka=" + $("#nblanka").val() 
+				+ "&datecert=" + $("#datepicker").val();
+  		document.location.href = url;
+    }
 	
 	function submit() {
 		var opts = {
@@ -57,11 +66,16 @@
 	        }   
 	    });
 	    
-	    if(errors > 0){
-			$("#certview").html("Все поля должны быть заполнены");
+	    if(errors > 0) {
+	    	lang = "${lang}";
+	    	if ( lang == "ru") {
+			    $("#certview").html("Все аттрибуту должны быть заполнены");
+	        } else {
+	        	$("#certview").html("All fields have to be filled");
+	        } 
 			spinner.stop();
 	    } else {
-			url = $("#form").attr("action");
+			url = "check.do";
 			var posting = $.post(url, $("#form").serialize());
              
            	posting.done(function(data) {
@@ -108,19 +122,48 @@
 	
     <div class="row placeholders" id="msg" class="ver_message">
     
-    <h3 class="page-header">Cертификат происхождения</h3>
+    <c:if test="${lang=='ru'}">
+        <h3 class="page-header">Cертификат происхождения</h3>
+    </c:if>
+    <c:if test="${lang=='eng'}">
+        <h3 class="page-header">Certificate of origin</h3>
+    </c:if>
+    
 
 	<form:form id="form" method="POST" commandName="cert" role="form">
 		<table class="verification">
 			<tr style="height: 46px;">
-				<td style="text-align: right; height: 36px; vertical-align: middle; font-size: 120%;">Номер сертификата&nbsp;</td>
-				<td><form:input path="nomercert" class="form-control" type="text" placeholder="Обязательный аттрибут" id="nomercert" style="height: 28px; width: 60%;" /></td>
+				<td style="text-align: right; height: 36px; vertical-align: middle; font-size: 120%;">
+				
+    			<c:if test="${lang=='ru'}">
+						Номер сертификата&nbsp;        
+    			</c:if>
+    			<c:if test="${lang=='eng'}">
+        				Certificate number&nbsp;
+    			</c:if>
+
+				</td>
+				<td><form:input path="nomercert" class="form-control" type="text" placeholder="" id="nomercert" style="height: 28px; width: 60%;" /></td>
 			</tr>
 			<tr style="height: 46px;">
-				<td style="text-align: right; height: 36px; vertical-align: middle; font-size: 120%;">Номер бланка&nbsp;</td>
-				<td><form:input path="nblanka" class="form-control" type="text" placeholder="Обязательный аттрибут" id="nblanka" style="height: 28px; width: 60%;"/></td>
+				<td style="text-align: right; height: 36px; vertical-align: middle; font-size: 120%;">
+				<c:if test="${lang=='ru'}">
+						Номер бланка&nbsp;        
+    			</c:if>
+    			<c:if test="${lang=='eng'}">
+        				Form number&nbsp;
+    			</c:if>
+				</td>
+				<td><form:input path="nblanka" class="form-control" type="text" placeholder="" id="nblanka" style="height: 28px; width: 60%;"/></td>
 			<tr style="height: 46px;">
-				<td style="text-align: right; height: 36px; vertical-align: middle; font-size: 120%;">Дата выпуска&nbsp;</td>
+				<td style="text-align: right; height: 36px; vertical-align: middle; font-size: 120%;">
+				<c:if test="${lang=='ru'}">
+						Дата выдачи&nbsp;        
+    			</c:if>
+    			<c:if test="${lang=='eng'}">
+        				Issue date&nbsp;
+    			</c:if>
+				</td>
 				<td><form:input path="datacert" class="form-control" placeholder="" id="datepicker" style="height: 28px; width: 60%;"/></td>
 			</tr>
 			<tr>
@@ -129,7 +172,15 @@
 					<div align="left">
 						<a href="javascript:submit()" style="height: 28px; font-size: 100%">
 						<div class="btn btn-lg btn-primary btn-block" style="background-color: #36478B; width: 40%;">
-						Проверить</div>
+						
+						<c:if test="${lang=='ru'}">
+								Проверить        
+    					</c:if>
+    					<c:if test="${lang=='eng'}">
+        						Check
+    					</c:if>
+    					
+						</div>
 						</a>
 					</div>
 				</td>

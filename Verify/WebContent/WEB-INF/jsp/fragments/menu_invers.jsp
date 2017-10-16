@@ -19,15 +19,28 @@
 					style="vertical-align: middle;" />
 				</a>
 			</div>
-			<div class="navbar-brand" style="font-size: 180%">Проверка
+			<a href="check.do">
+			<c:if test="${lang=='ru'}">
+			  <div class="navbar-brand" style="font-size: 180%">Проверка
 				выдачи сертификатов БелТПП</div>
+			</c:if>
+			<c:if test="${lang=='eng'}">
+			  <div class="navbar-brand" style="font-size: 180%">Verification of BelCCI certificate issue</div>
+			</c:if>	
+			</a>
 		</div>
 
 
 		<div class="navbar-collapse collapse">
 
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href='javascript:setlanguage("eng")'>English</a></li>
+			
+			    <c:if test="${lang=='ru'}">  
+				    <li><a href="javascript:setLanguage('eng')">English</a></li>
+				</c:if>
+				<c:if test="${lang=='eng'}">  
+				    <li><a href="javascript:setLanguage('ru')">Русский</a></li>
+				</c:if>
 			</ul>
 		</div>
 
