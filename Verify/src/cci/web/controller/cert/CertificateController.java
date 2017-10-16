@@ -56,7 +56,7 @@ public class CertificateController {
 				makepdffile(absoluteDiskPath, rcert);
 				LOG.info("Certificate check pdf making: " + (System.currentTimeMillis() - start));
 				
-				if ("eng".equals(model.get("lang"))) {
+				if ("ru".equals(model.get("lang"))) {
 
 					msg = "<p>Найден сертификат номер " + cert.getNomercert() + " на бланке с номером "
 						+ cert.getNblanka() + ", выданный " + cert.getDatacert() + ".</p> "
@@ -67,7 +67,7 @@ public class CertificateController {
 						+ "но полностью воспроизводит содержание документа.</p>";
 				} else {
 					msg = "<p>There is a certificate with number " + cert.getNomercert() + " issued " + cert.getDatacert() + ".</p> "
-							+ "<p>Reconstruction of the original certificate form <a href=\"javascript:openCertificate(\'"
+							+ "<p>Electronic copy of the original certificate <a href=\"javascript:openCertificate(\'"
 							+ "resources/out/" + rcert.getCert_id() + ".pdf" + "')\">" + rcert.getNomercert()
 							+ "</a><p style=\"width:100%\">"
 							+ "<p>The electronic copy of the certificate may have minor differences "
