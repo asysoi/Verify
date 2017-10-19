@@ -16,6 +16,21 @@
 
 
 	$(function() {
+	       $('.numeric-only').keypress(function(e) {
+		  if (e.keyCode == 8 || e.keyCode == 46 || e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 ) {
+			  return true;
+		  }
+		  
+		 if(isNaN(this.value + "" + String.fromCharCode(e.charCode)) || e.charCode == 32) {
+			  return false;
+  		    }
+                     })
+	      .on("cut copy paste",function(e){
+		e.preventDefault();
+	   });
+	});
+
+	$(function() {
 
 		$("#datepicker").datepicker({
 			changeMonth : true,
@@ -62,17 +77,14 @@
 		
 	    $("#form :input").map(function(){
 	         if( !$(this).val() ) {
-	              errors++;
-	        }   
+                              $(this).addClass('error_input');
+	             errors++;
+    	        } else {
+                             $(this).removeClass('error_input');
+                        }
 	    });
 	    
 	    if(errors > 0) {
-	    	lang = "${lang}";
-	    	if ( lang == "ru") {
-			    $("#certview").html("Все аттрибуту должны быть заполнены");
-	        } else {
-	        	$("#certview").html("All fields have to be filled");
-	        } 
 			spinner.stop();
 	    } else {
 			url = "check.do";
@@ -103,9 +115,9 @@
 			of : window
 		});
                                    
-        $('#pdf').attr('height', $("#pdfview").dialog("option", "height") - 150);
-        $('#pdf').attr('width', $("#pdfview").dialog("option", "width") - 40);
-        $('#pdf').attr('scrolling', 'yes');
+		$('#pdf').attr('height', $("#pdfview").dialog("option", "height") - 150);
+		$('#pdf').attr('width', $("#pdfview").dialog("option", "width") - 40);
+	                $('#pdf').attr('scrolling', 'yes');
 		$('#pdf').attr('src', link);
 
 		$("#pdfview").dialog("open");
@@ -121,18 +133,34 @@
 <div class="main" id="checker">
 	
     <div class="row placeholders" id="msg" class="ver_message">
-    
+
     <c:if test="${lang=='ru'}">
-        <h3 class="page-header">Cертификат происхождения</h3>
+    <div style="margin: auto; width:70%; text-align: justify; font-size: 110%;  " class="page-header">  
+    <p  style="margin: 10px 10px 10px 10px; text-align: justify; font-size: 110%;">
+Сервис проверки сертификатов о происхождении товарa позволяет удостовериться, что сертификат действительно выдан Белорусской торгово-промышленной палатой, являющейся уполномоченным органом по выдаче этих сертификатов в Республике Беларусь    </p>    
+    </div>
+    </c:if>
+
+    <c:if test="${lang=='eng'}">
+    <div style="margin: auto; width: 70%; text-align: ceneter; font-size: 110%;" class="page-header">  
+     Service of certificate verification is based on BelCCI certificates database.
+     It is intended to verify both certificate issue and content.<br>
+     The service works in the text mode. 
+    </div>
+    </c:if>
+   <h3 class="page-header"></h3>
+
+    <c:if test="${lang=='ru'}">
+        <h3 class="page-header" style="margin-top: 15;">Cертификат о происхождении товаров</h3>
     </c:if>
     <c:if test="${lang=='eng'}">
-        <h3 class="page-header">Certificate of origin</h3>
+        <h3 class="page-header" " style="margin-top: 15;">Certificate of origin</h3>
     </c:if>
     
 
 	<form:form id="form" method="POST" commandName="cert" role="form">
-		<table class="verification">
-			<tr style="height: 46px;">
+		<table class="verification" >
+			<tr style="height: 46px; ">
 				<td style="text-align: right; height: 36px; vertical-align: middle; font-size: 120%;">
 				
     			<c:if test="${lang=='ru'}">
@@ -143,7 +171,9 @@
     			</c:if>
 
 				</td>
-				<td><form:input path="nomercert" class="form-control" type="text" placeholder="" id="nomercert" style="height: 28px; width: 60%;" /></td>
+				<td><form:input path="nomercert" class="form-control" type="text" placeholder="Введите номер сертификата с учетом регистра" id="nomercert" 
+
+style="height: 28px; width: 65%;" /></td>
 			</tr>
 			<tr style="height: 46px;">
 				<td style="text-align: right; height: 36px; vertical-align: middle; font-size: 120%;">
@@ -154,7 +184,9 @@
         				Form number&nbsp;
     			</c:if>
 				</td>
-				<td><form:input path="nblanka" class="form-control" type="text" placeholder="" id="nblanka" style="height: 28px; width: 60%;"/></td>
+				<td><form:input path="nblanka" class="form-control required numeric-only"   type="text" placeholder="Номер бланка состоит только из цифр" 
+
+id="nblanka" style="height: 28px; width: 65%;"/></td>
 			<tr style="height: 46px;">
 				<td style="text-align: right; height: 36px; vertical-align: middle; font-size: 120%;">
 				<c:if test="${lang=='ru'}">
@@ -164,38 +196,40 @@
         				Issue date&nbsp;
     			</c:if>
 				</td>
-				<td><form:input path="datacert" class="form-control" placeholder="" id="datepicker" style="height: 28px; width: 60%;"/></td>
+				<td><form:input path="datacert" class="form-control" placeholder="" id="datepicker" style="height: 28px; width: 20%;"/></td>
 			</tr>
 			<tr>
 				<td />
 				<td>
 					<div align="left">
-						<a href="javascript:submit()" style="height: 28px; font-size: 100%">
-						<div class="btn btn-lg btn-primary btn-block" style="background-color: #36478B; width: 40%;">
 						
+						<a href="javascript:submit()" style="height: 28px; font-size: 100%">
+						<div class="btn btn-lg btn-primary btn-block" style="background-color: #36478B; width: 180;">
 						<c:if test="${lang=='ru'}">
 								Проверить        
     					</c:if>
     					<c:if test="${lang=='eng'}">
         						Check
-    					</c:if>
-    					
+     					</c:if>
 						</div>
 						</a>
+						
 					</div>
 				</td>
 			</tr>
+			
 		</table>
 	</form:form>
-	
-	<div id="certview" name="certview" align="center"></div>
 
+	    <br>
 
-	<div id="pdfview" name="pdfview" style="text-align:center;">
-	          <iframe class="pdf" id="pdf"></iframe>
-    </div> 
-    
-    </div>
+        <div id="certview" name="certview" align="center"></div>
+        
+        <div id="pdfview" name="pdfview" style="text-align:center;">
+	                       <iframe class="pdf" id="pdf"></iframe>
+        </div> 
+   </div>
+
    	
 </div>
 
