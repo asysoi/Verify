@@ -39,7 +39,13 @@
   <context-param>
 	<param-name>webAppRootKey</param-name>
 	<param-value>certs.cci.by</param-value>
-  </context-param>    
+  </context-param>
+  
+  <context-param>
+    <param-name>upload.location</param-name>
+    <param-value>C:/Java/tomcat8/webapps/files/in</param-value>
+ </context-param>   
+      
       
   <listener>
     <listener-class>

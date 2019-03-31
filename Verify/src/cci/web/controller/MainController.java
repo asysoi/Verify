@@ -18,8 +18,6 @@ public class MainController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String defaultpage(ModelMap model, Authentication aut) {
         LOG.info("User " + aut.getName() + " logged" ); 
-       // Certificate cert = new Certificate();
-		//model.addAttribute("cert", cert);
 		return "404";
 	}
 

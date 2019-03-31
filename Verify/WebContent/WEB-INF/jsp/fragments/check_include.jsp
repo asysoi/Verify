@@ -14,29 +14,25 @@
 		});
 	});
 
-
 	$(function() {
 	       $('.numeric-only').keypress(function(e) {
 		  if (e.keyCode == 8 || e.keyCode == 46 || e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 ) {
 			  return true;
 		  }
-		  
 		 if(isNaN(this.value + "" + String.fromCharCode(e.charCode)) || e.charCode == 32) {
 			  return false;
   		    }
-                     })
+          })
 	      .on("cut copy paste",function(e){
 		e.preventDefault();
 	   });
 	});
 
 	$(function() {
-
 		$("#datepicker").datepicker({
 			changeMonth : true,
 			changeYear : true
 		});
-
 		$("document").ready(function() {
 			$("#datepicker").datepicker("option", "dateFormat", 'dd.mm.yy');
 			$("#datepicker").datepicker("setDate", "${cert.datacert}");
@@ -44,13 +40,21 @@
 	});
 
     function setLanguage(lang) {
-    	
 		url = "check.do?lang=" + lang 
 				+ "&ncert=" + $("#nomercert").val()  
 				+ "&nblanka=" + $("#nblanka").val() 
 				+ "&datecert=" + $("#datepicker").val();
   		document.location.href = url;
     }
+    
+    function setType(type) {
+		url = "check.do?type=" + type 
+				+ "&ncert=" + $("#nomercert").val()  
+				+ "&nblanka=" + $("#nblanka").val() 
+				+ "&datecert=" + $("#datepicker").val();
+  		document.location.href = url;
+    }
+
 	
 	function submit() {
 		var opts = {
@@ -130,36 +134,59 @@
 
 </script>
 
+<div style="text-align:right; margin-top:40px;">
+	   <c:if test="${lang=='ru'}">  
+		    <a href="javascript:setType('ct1')">Сертификат происхождения </a> &nbsp|&nbsp
+		    <a href="javascript:setType('own')"> Сертификат собственного производства</a>
+	   </c:if>
+	   <c:if test="${lang=='eng'}">  
+		    <a href="javascript:setType('ct1')">Certificate of origin </a> &nbsp|&nbsp
+		    <a href="javascript:setType('own')"> Certificate of own production</a>
+	   </c:if>
+</div>
+
 <div class="main" id="checker">
+     <c:if test="${type=='ct1'}">
+    	<c:if test="${lang=='ru'}">
+	        <h3  style="margin-top: 15; text-align:center;">Cертификат о происхождении товаров</h3>
+    	</c:if>
+    	<c:if test="${lang=='eng'}">
+        	<h3 style="margin-top: 15; text-align:center;">Certificate of origin</h3>
+    	</c:if>
+    </c:if>
+    
+    <c:if test="${type=='own'}">
+    	<c:if test="${lang=='ru'}">
+	        <h3  style="margin-top: 15; text-align:center;">Cертификат собственного производства</h3>
+    	</c:if>
+    	<c:if test="${lang=='eng'}">
+        	<h3  style="margin-top: 15; text-align:center;">Certificate of own production</h3>
+    	</c:if>
+    </c:if>
 	
     <div class="row placeholders" id="msg" class="ver_message">
 
     <c:if test="${lang=='ru'}">
-    <div style="margin: auto; width:70%; text-align: justify; font-size: 110%;  " class="page-header">  
+    <div style="margin: auto; width:70%; text-align: justify; font-size: 100%;  " >  
     <p  style="margin: 10px 10px 10px 10px; text-align: justify; font-size: 110%;">
-Сервис проверки сертификатов о происхождении товарa позволяет удостовериться, что сертификат действительно выдан Белорусской торгово-промышленной палатой, являющейся уполномоченным органом по выдаче этих сертификатов в Республике Беларусь    </p>    
+        Сервис проверки сертификатов о происхождении товарa, сертификатов собственного производства 
+        позволяет удостовериться, что сертификат действительно выдан Белорусской торгово-промышленной палатой, 
+        являющейся уполномоченным органом по выдаче этих сертификатов в Республике Беларусь</p>    
     </div>
     </c:if>
 
     <c:if test="${lang=='eng'}">
-    <div style="margin: auto; width: 70%; text-align: ceneter; font-size: 110%;" class="page-header">  
-     Service of certificate verification is based on BelCCI certificates database.
-     It is intended to verify both certificate issue and content.<br>
-     The service works in the text mode. 
+    <div style="margin: auto; width:70%; text-align: justify; font-size: 100%;" >
+     <p  style="margin: 10px 10px 10px 10px; text-align: justify; font-size: 110%;"> 
+     The verification service of the certificates of origin and certificates of own production 
+     make it possible to verify that the certificate was actually issued by the Belarusian Chamber of Commerce and Industry 
+     which is authorized for issuing these certificates in the Republic of Belarus</p> 
     </div>
     </c:if>
-   <h3 class="page-header"></h3>
-
-    <c:if test="${lang=='ru'}">
-        <h3 class="page-header" style="margin-top: 15;">Cертификат о происхождении товаров</h3>
-    </c:if>
-    <c:if test="${lang=='eng'}">
-        <h3 class="page-header" " style="margin-top: 15;">Certificate of origin</h3>
-    </c:if>
-    
-
-	<form:form id="form" method="POST" commandName="cert" role="form">
-		<table class="verification" >
+   
+   
+	<form:form id="form" method="POST" commandName="cert" role="form" >
+		<table class="verification" style="margin-top: 20px;">
 			<tr style="height: 46px; ">
 				<td style="text-align: right; height: 36px; vertical-align: middle; font-size: 120%;">
 				
@@ -169,11 +196,11 @@
     			<c:if test="${lang=='eng'}">
         				Certificate number&nbsp;
     			</c:if>
-
+                 
 				</td>
-				<td><form:input path="nomercert" class="form-control" type="text" placeholder="Введите номер сертификата с учетом регистра" id="nomercert" 
-
-style="height: 28px; width: 65%;" /></td>
+				<td><form:input path="nomercert" class="form-control" type="text" 
+				placeholder="Введите номер сертификата с учетом регистра" id="nomercert"
+				style="height: 28px; width: 65%;" /></td>
 			</tr>
 			<tr style="height: 46px;">
 				<td style="text-align: right; height: 36px; vertical-align: middle; font-size: 120%;">
@@ -202,18 +229,17 @@ id="nblanka" style="height: 28px; width: 65%;"/></td>
 				<td />
 				<td>
 					<div align="left">
-						
-						<a href="javascript:submit()" style="height: 28px; font-size: 100%">
-						<div class="btn btn-lg btn-primary btn-block" style="background-color: #36478B; width: 180;">
+						<div class="btn bt1n-lg btn-primary btn-block" style="background-color: #36478B; width: 120; background: linear-gradient(to top left, #395B8D, #C1DDF1, #395B8D); color: #36478B;">
+						<a href="javascript:submit()" style="height: 24px; font-size: 110%">
 						<c:if test="${lang=='ru'}">
-								Проверить        
-    					</c:if>
-    					<c:if test="${lang=='eng'}">
+							Проверить        
+    						</c:if>
+    						<c:if test="${lang=='eng'}">
         						Check
-     					</c:if>
-						</div>
-						</a>
-						
+	     					</c:if>
+						</a>   
+  						</div>
+
 					</div>
 				</td>
 			</tr>
@@ -221,17 +247,20 @@ id="nblanka" style="height: 28px; width: 65%;"/></td>
 		</table>
 	</form:form>
 
-	    <br>
-
-        <div id="certview" name="certview" align="center"></div>
-        
-        <div id="pdfview" name="pdfview" style="text-align:center;">
-	                       <iframe class="pdf" id="pdf"></iframe>
-        </div> 
-   </div>
-
-   	
+	    
+     </div>
+     
+      <div id="certview" name="certview" align="center"></div>
+      <div id="pdfview" name="pdfview" style="text-align:center;">
+	     <iframe class="pdf" id="pdf"></iframe>
+       </div> 
+ 
+   	<div class="footer">
+     <div class="yline">
+         <p style=" padding-top: 10px; padding-left: 15px;"> <a class="brand" href="https://www.cci.by"> © Белорусская торгово-промышленная палата, 2017</a> </p>
+     </div>
+    </div>
+ 
 </div>
-
 
 

@@ -79,13 +79,27 @@
    
     <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
-        <property name="url" value="jdbc:oracle:thin:@//192.168.0.46:1521/pdborcl"/>
+        <property name="url" value="jdbc:oracle:thin:@//localhost:1521/pdborcl"/>
         <!-- property name="url" value="jdbc:oracle:thin:@//192.168.0.72:1521/pdborcl"/ -->
         <!-- property name="url" value="jdbc:oracle:thin:@//192.168.100.28:1521/pdborcl"/-->
         <!-- property name="url" value="jdbc:oracle:thin:@//192.168.0.179:1521/orclpdb"/-->     
         <property name="username" value="beltpp"/>
         <property name="password" value="123456"/>
     </bean>
+
+   <!-- Database OwnCertificates -->
+    <bean id="owncertificateDAO" class="cci.repository.owncert.JDBCOwnCertificateDAO">
+        <property name="dataSource" ref="dataSourceOwn"/>
+    </bean>
+    
+ 
+    <bean id="dataSourceOwn" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="jdbc:mysql://localhost:3306/owncert?useServerPrepStmts=false&amp;rewriteBatchedStatements=true&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;autoReconnect=true"/>
+        <property name="username" value="cert"/>
+        <property name="password" value="123456"/>
+    </bean>
+   
 
     
    
