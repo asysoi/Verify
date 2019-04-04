@@ -262,6 +262,7 @@
         						Check
 	     					</c:if>
   						</div>
+  						</a>
   						</td>
   						<td style="vertical-align: middle;">
   						   <a href="javascript:clear()">
@@ -274,7 +275,7 @@
 	     					</a>
   						</td>
   						</tr>
-  						</a>
+  						</table>
 					</div>
 				</td>
 			</tr>
