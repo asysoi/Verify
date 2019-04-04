@@ -131,17 +131,24 @@
 		var win=window.open(link,'_blank');
 		win.focus();
 	}
-
+	
+	function clear() {
+	    $("#nomercert").val(''); 
+	    $("#nblanka").val('');
+	    $("#datepicker").val('');
+	}
 </script>
 
 <div style="text-align:right; margin-top:40px;">
 	   <c:if test="${lang=='ru'}">  
-		    <a href="javascript:setType('ct1')" <c:if test="${type=='ct1'}"> style="text-decoration: underline; font-weight: bold;"</c:if>>Сертификат происхождения </a> &nbsp|&nbsp
-		    <a href="javascript:setType('own')" <c:if test="${type=='own'}"> style="text-decoration: underline; font-weight: bold;"</c:if>> Сертификат собственного производства</a>
+		    <a href="javascript:setType('ct1')" <c:if test="${type=='ct1'}"> style="text-decoration: none; font-weight: bold; color=yellow;"</c:if>>СЕРТИФИКАТ ПРОИСХОЖДЕНИЯ </a> 
+		    &nbsp|&nbsp
+		    <a href="javascript:setType('own')" <c:if test="${type=='own'}"> style="text-decoration: none; font-weight: bold; color=yellow;"</c:if>> СЕРТИФИКАТ СОБСТВЕННОГО ПРОИЗВОДСТВА</a>
 	   </c:if>
 	   <c:if test="${lang=='eng'}">  
-		    <a href="javascript:setType('ct1')" <c:if test="${type=='ct1'}"> style="text-decoration: underline; font-weight: bold;"</c:if>>Certificate of origin </a> &nbsp|&nbsp
-		    <a href="javascript:setType('own')" <c:if test="${type=='own'}"> style="text-decoration: underline; font-weight: bold;"</c:if>> Certificate of own production</a>
+		    <a href="javascript:setType('ct1')" <c:if test="${type=='ct1'}"> style="text-decoration: none; font-weight: bold; color=yellow;"</c:if>>CERTIFICATE OF ORIGIN </a> 
+		    &nbsp|&nbsp
+		    <a href="javascript:setType('own')" <c:if test="${type=='own'}"> style="text-decoration: none; font-weight: bold; color=yellow;"</c:if>> CERTIFICATE OF OWN PRODUCTION</a>
 	   </c:if>
 </div>
 
@@ -151,7 +158,7 @@
 	        <h3  style="margin-top: 15; text-align:center;">Cертификат о происхождении товаров</h3>
     	</c:if>
     	<c:if test="${lang=='eng'}">
-        	<h3 style="margin-top: 15; text-align:center;">Certificate of origin</h3>
+        	<h3 style="margin-top: 15; text-align:center;">Certificate of Origin</h3>
     	</c:if>
     </c:if>
     
@@ -160,7 +167,7 @@
 	        <h3  style="margin-top: 15; text-align:center;">Cертификат собственного производства</h3>
     	</c:if>
     	<c:if test="${lang=='eng'}">
-        	<h3  style="margin-top: 15; text-align:center;">Certificate of own production</h3>
+        	<h3  style="margin-top: 15; text-align:center;">Certificate of Own Production</h3>
     	</c:if>
     </c:if>
 	
@@ -243,17 +250,31 @@
 				<td />
 				<td>
 					<div align="left">
+					    <table>
+					    <tr>
+					    <td>
+					    <a href="javascript:submit()" style="height: 20px; font-size: 110%">
 						<div class="btn bt1n-lg btn-primary btn-block" style="background-color: #36478B; width: 120; background: linear-gradient(to top left, #395B8D, #C1DDF1, #395B8D); color: #36478B;">
-						<a href="javascript:submit()" style="height: 24px; font-size: 110%">
-						<c:if test="${lang=='ru'}">
-							Проверить        
+							<c:if test="${lang=='ru'}">
+								Проверить        
     						</c:if>
     						<c:if test="${lang=='eng'}">
         						Check
 	     					</c:if>
-						</a>   
   						</div>
-
+  						</td>
+  						<td style="vertical-align: middle;">
+  						   <a href="javascript:clear()">
+  						   <c:if test="${lang=='ru'}">
+								Очистить        
+    						</c:if>
+    						<c:if test="${lang=='eng'}">
+        						Clear
+	     					</c:if>
+	     					</a>
+  						</td>
+  						</tr>
+  						</a>
 					</div>
 				</td>
 			</tr>
