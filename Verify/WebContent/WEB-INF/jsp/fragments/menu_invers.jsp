@@ -31,11 +31,11 @@
 
 			<a  href="check.do">
 			<c:if test="${lang=='ru'}">
-			  <div class="title">Проверка сертификатов о происхождении товара</div>
+			  <div class="title">Проверка сертификатов</div>
 			  <div style="margin-left: 66px; margin-top: -22px;"> Белорусская торгово-промышленная палата </div>
 			</c:if>
 			<c:if test="${lang=='eng'}">
-			  <div class="title">Verification certificates of origin<br></div>
+			  <div class="title">Certificates verification<br></div>
 			  <div style="margin-left: 66px; margin-top: -22px;"> Belarusian Chamber of Commerce and Industry</div>
 			</c:if>	
 			</a>

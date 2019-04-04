@@ -286,11 +286,13 @@ public class CertificateController {
 				    output.close();
 				    
 				} else {
+					LOG.info("Ошибка формирования файла с изображением выданного сертификата.");
 					model.addAttribute("error", "Ошибка формирования файла с изображением выданного сертификата.");
 					request.setAttribute("error", "Ошибка формирования файла с изображением выданного сертификата.");
 					request.getRequestDispatcher(pathToJSP+"400.jsp").forward(request, response);
 				}
 			} catch (Exception ex) {
+				LOG.info(ex.getMessage());
 				model.addAttribute("error", ex.getMessage());
 				model.addAttribute("owncert", owncert);
 				request.setAttribute("error", ex.getMessage());
@@ -299,6 +301,7 @@ public class CertificateController {
 				request.getRequestDispatcher(pathToJSP+"own/ownview.jsp").forward(request, response);
 			}
 		} else if (owncert != null) {
+			LOG.info("Owncert has no PDF! Go to text.");
 			model.addAttribute("owncert", owncert);
 			ViewOwnCertificateJSPHelper viewcert = new ViewOwnCertificateJSPHelper(owncert); 
 			request.setAttribute("viewcert", viewcert);

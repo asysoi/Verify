@@ -136,12 +136,12 @@
 
 <div style="text-align:right; margin-top:40px;">
 	   <c:if test="${lang=='ru'}">  
-		    <a href="javascript:setType('ct1')">Сертификат происхождения </a> &nbsp|&nbsp
-		    <a href="javascript:setType('own')"> Сертификат собственного производства</a>
+		    <a href="javascript:setType('ct1')" <c:if test="${type=='ct1'}"> style="text-decoration: underline; font-weight: bold;"</c:if>>Сертификат происхождения </a> &nbsp|&nbsp
+		    <a href="javascript:setType('own')" <c:if test="${type=='own'}"> style="text-decoration: underline; font-weight: bold;"</c:if>> Сертификат собственного производства</a>
 	   </c:if>
 	   <c:if test="${lang=='eng'}">  
-		    <a href="javascript:setType('ct1')">Certificate of origin </a> &nbsp|&nbsp
-		    <a href="javascript:setType('own')"> Certificate of own production</a>
+		    <a href="javascript:setType('ct1')" <c:if test="${type=='ct1'}"> style="text-decoration: underline; font-weight: bold;"</c:if>>Certificate of origin </a> &nbsp|&nbsp
+		    <a href="javascript:setType('own')" <c:if test="${type=='own'}"> style="text-decoration: underline; font-weight: bold;"</c:if>> Certificate of own production</a>
 	   </c:if>
 </div>
 
@@ -169,7 +169,10 @@
     <c:if test="${lang=='ru'}">
     <div style="margin: auto; width:70%; text-align: justify; font-size: 100%;  " >  
     <p  style="margin: 10px 10px 10px 10px; text-align: justify; font-size: 110%;">
-        Сервис проверки сертификатов о происхождении товарa, сертификатов собственного производства 
+     
+        Сервис проверки 
+        <c:if test="${type=='ct1'}"> сертификатов о происхождении товарa </c:if>
+        <c:if test="${type=='own'}"> сертификатов собственного производства </c:if> 
         позволяет удостовериться, что сертификат действительно выдан Белорусской торгово-промышленной палатой, 
         являющейся уполномоченным органом по выдаче этих сертификатов в Республике Беларусь</p>    
     </div>
@@ -177,30 +180,35 @@
 
     <c:if test="${lang=='eng'}">
     <div style="margin: auto; width:70%; text-align: justify; font-size: 100%;" >
-     <p  style="margin: 10px 10px 10px 10px; text-align: justify; font-size: 110%;"> 
-     The verification service of the certificates of origin and certificates of own production 
-     make it possible to verify that the certificate was actually issued by the Belarusian Chamber of Commerce and Industry 
-     which is authorized for issuing these certificates in the Republic of Belarus</p> 
+     <p  style="margin: 10px 10px 10px 10px; text-align: justify; font-size: 110%;">
+     The 
+     <c:if test="${type=='ct1'}"> Certificate of Origin </c:if>
+     <c:if test="${type=='own'}"> Certificate of Own Production </c:if> 
+    Validation Service makes it possible to verify whether the Certificate has indeed been issued 
+    by the Belarusian Chamber of Commerce and Industry, which is the competent authority 
+    for the issuance of such certificates in the Republic of Belarus      
     </div>
     </c:if>
-   
-   
-	<form:form id="form" method="POST" commandName="cert" role="form" >
+   	<form:form id="form" method="POST" commandName="cert" role="form" >
 		<table class="verification" style="margin-top: 20px;">
 			<tr style="height: 46px; ">
 				<td style="text-align: right; height: 36px; vertical-align: middle; font-size: 120%;">
-				
-    			<c:if test="${lang=='ru'}">
+				<c:if test="${lang=='ru'}">
 						Номер сертификата&nbsp;        
     			</c:if>
     			<c:if test="${lang=='eng'}">
         				Certificate number&nbsp;
     			</c:if>
-                 
-				</td>
-				<td><form:input path="nomercert" class="form-control" type="text" 
-				placeholder="Введите номер сертификата с учетом регистра" id="nomercert"
-				style="height: 28px; width: 65%;" /></td>
+    			</td>
+				<td style="width: 55%;"> 
+				<c:if test="${lang=='ru'}">
+				   <form:input path="nomercert" class="form-control" type="text" placeholder="Введите номер сертификата с учетом регистра" id="nomercert" style="height: 28px; width: 340;"/>
+				</c:if>
+				<c:if test="${lang=='eng'}">
+  				   <form:input path="nomercert" class="form-control" type="text" placeholder="Insert the Certificate number (case sensitive)" id="nomercert" style="height: 28px; width: 340;"/> 
+				</c:if>   
+ 				
+ 				</td>
 			</tr>
 			<tr style="height: 46px;">
 				<td style="text-align: right; height: 36px; vertical-align: middle; font-size: 120%;">
@@ -211,9 +219,14 @@
         				Form number&nbsp;
     			</c:if>
 				</td>
-				<td><form:input path="nblanka" class="form-control required numeric-only"   type="text" placeholder="Номер бланка состоит только из цифр" 
-
-id="nblanka" style="height: 28px; width: 65%;"/></td>
+				<td style="width: 55%;" >
+				<c:if test="${lang=='ru'}">
+				   <form:input path="nblanka" class="form-control required numeric-only" type="text" placeholder="Номер бланка состоит только из цифр" id="nblanka" style="height: 28px; width: 360;"/>
+				</c:if>
+				<c:if test="${lang=='eng'}">
+				   <form:input path="nblanka" class="form-control required numeric-only" type="text" placeholder="The form number consists of numerical symbols only" id="nblanka" style="height: 28px; width: 360;"/>
+				</c:if>   
+			    </td>
 			<tr style="height: 46px;">
 				<td style="text-align: right; height: 36px; vertical-align: middle; font-size: 120%;">
 				<c:if test="${lang=='ru'}">
@@ -222,8 +235,9 @@ id="nblanka" style="height: 28px; width: 65%;"/></td>
     			<c:if test="${lang=='eng'}">
         				Issue date&nbsp;
     			</c:if>
-				</td>
-				<td><form:input path="datacert" class="form-control" placeholder="" id="datepicker" style="height: 28px; width: 20%;"/></td>
+				</td style="width: 55%;" >
+				<td><form:input path="datacert" class="form-control" placeholder="dd.mm.yyyy" 
+				id="datepicker" style="height: 28px; width: 210;" /></td>
 			</tr>
 			<tr>
 				<td />
