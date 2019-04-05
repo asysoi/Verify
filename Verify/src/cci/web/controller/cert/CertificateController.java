@@ -251,6 +251,7 @@ public class CertificateController {
 				
 				String templateDiskPath = request.getSession().getServletContext().getRealPath(relativeWebPath);
 				String pdfFilePath = request.getSession().getServletContext().getInitParameter("upload.location");
+				String checksize = request.getSession().getServletContext().getInitParameter("pdfimage.checksize");
 				String tempname = owncert.getBlanknumber() + ".pdf";
 
 				String pagefirst = null;
@@ -272,7 +273,7 @@ public class CertificateController {
 				String pdffile = pdfFilePath + System.getProperty("file.separator") + owncert.getFilename();
 				List<String> numbers = certificateService.splitOwnCertNumbers(owncert.getBlanknumber(),
 						owncert.getAdditionalblanks());
-				ByteArrayOutputStream output = pdfutils.mergePdf(pdffile, pagefirst, pagenext, numbers);
+				ByteArrayOutputStream output = pdfutils.mergePdf(pdffile, pagefirst, pagenext, numbers,Integer.parseInt(checksize));
 				
 				if (output != null) {
 					response.setContentType("application/pdf");

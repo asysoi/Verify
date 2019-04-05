@@ -45,6 +45,11 @@
     <param-name>upload.location</param-name>
     <param-value>C:/Java/tomcat8/webapps/files</param-value>
  </context-param>   
+   
+ <context-param>
+    <param-name>pdfimage.checksize</param-name>
+    <param-value>39000</param-value>
+  </context-param>   
       
       
   <listener>
