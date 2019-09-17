@@ -36,6 +36,9 @@ public abstract class PDFBuilder {
 	private static final String CHAR_PARAGRAPH = "\n";
 	private static final String EMPTY_STRING = "";
 	
+// =============================================================================================
+// Page builder controller 
+// =============================================================================================
 
 	public void createPDFPage(PdfWriter writer, Object certificate,
 			PDFPageConfig pconfig) throws DocumentException, IOException {
@@ -110,8 +113,10 @@ public abstract class PDFBuilder {
 
 		drawStamp(writer, stamps);
 	}
-
-
+	
+// =============================================================================================
+// Components rendering functions 
+// =============================================================================================
 	public void makeBorderedTexBoxtInAbsolutePosition(PdfWriter writer,
 			String text, BoxConfig config) throws IOException,
 			DocumentException {
@@ -295,7 +300,8 @@ public abstract class PDFBuilder {
 	protected PdfPTable makeTableInAbsolutePosition(PdfWriter writer,
 			Object cert, TableConfig tablecon) throws DocumentException,
 			IOException {
-
+		
+		LOG.info("Make table"); 
 		PdfPTable table = new PdfPTable(tablecon.getColnumber());
 		makeTableHeader(writer, table, tablecon, cert);
 		makeTableBody(table, tablecon, cert);
@@ -306,17 +312,17 @@ public abstract class PDFBuilder {
 				Utilities.millimetersToPoints(tablecon.getXl()),
 				Utilities.millimetersToPoints(tablecon.getYr()),
 				writer.getDirectContent());
+		
+		//LOG.info("Table created ");
 
-	    /*
-		 LOG.info("Table height : " + table.getTotalHeight()
+	    LOG.info("Table height : " + table.getTotalHeight()
 		 + "  Calculate height : " + getTableHeight(table));
 		 
-		 LOG.info("Table height : "
+		LOG.info("Table height : "
 		 + Utilities.pointsToMillimeters(table.getTotalHeight())
 		 + "  Calculate height : "
 		 + Utilities.pointsToMillimeters(getTableHeight(table)));
-		*/
-		 
+				 
 		return table;
 	}
 
@@ -367,10 +373,56 @@ public abstract class PDFBuilder {
 
 	}
 
+// =============================================================================================
+// Table build functions 
+// =============================================================================================
+	private void makeTableBody(PdfPTable table, TableConfig tablecon,
+			Object cert) throws IOException, DocumentException {
+        LOG.info("Make Table Body");
+        
+		List<CTCell> row = tablecon.getBodyRow();
+		table.getDefaultCell().setVerticalAlignment(Element.ALIGN_TOP);
+		float ht = 0f;
+
+		ProductIterator cursor = ((Certificate) cert).getIterator();
+
+		try {
+			while (cursor.hasNext()) {
+				Product product = cursor.next();
+				fillInRow(row, product);
+				writeRow(table, row);
+
+				ht += table.getRows().get(table.getLastCompletedRowIndex())
+							.getMaxHeights();
+                    
+				if (ht > Utilities.millimetersToPoints(tablecon
+							.getWorkHeight())) {
+					    LOG.info(product.getNumerator() + " - " + product.getTovar());
+						ht -= table.getRows()
+								.get(table.getLastCompletedRowIndex())
+								.getMaxHeights();
+						table.deleteLastRow();
+						cursor.prev();
+						
+						break;
+				}
+				
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+
+		float delta = Utilities.millimetersToPoints(tablecon.getWorkHeight())
+				- ht;
+		PdfPRow tabrow = table.getRows().get(table.getLastCompletedRowIndex());
+		tabrow.setMaxHeights(tabrow.getMaxHeights() + delta);
+	}
+	
 	protected void writeRow(PdfPTable table, List<CTCell> row)
 			throws DocumentException, IOException {
 				
 		for (int i = 0; i < row.size(); i++) {
+			
 			table.addCell(makeCell(row.get(i)));
 		}
 	}
@@ -397,46 +449,7 @@ public abstract class PDFBuilder {
 		cell.setColspan(ctCell.getColspan());
 		return cell;
 	}
-
-	private void makeTableBody(PdfPTable table, TableConfig tablecon,
-			Object cert) throws IOException, DocumentException {
-
-		List<CTCell> row = tablecon.getBodyRow();
-		table.getDefaultCell().setVerticalAlignment(Element.ALIGN_TOP);
-		float ht = 0f;
-
-		ProductIterator cursor = ((Certificate) cert).getIterator();
-
-		try {
-			while (cursor.hasNext()) {
-				Product product = cursor.next();
-				fillInRow(row, product);
-				writeRow(table, row);
-
-				ht += table.getRows().get(table.getLastCompletedRowIndex())
-							.getMaxHeights();
-                    
-				if (ht > Utilities.millimetersToPoints(tablecon
-							.getWorkHeight())) {
-						ht -= table.getRows()
-								.get(table.getLastCompletedRowIndex())
-								.getMaxHeights();
-						table.deleteLastRow();
-						cursor.prev();
-						
-						break;
-				}
-				
-			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-		}
-
-		float delta = Utilities.millimetersToPoints(tablecon.getWorkHeight())
-				- ht;
-		PdfPRow tabrow = table.getRows().get(table.getLastCompletedRowIndex());
-		tabrow.setMaxHeights(tabrow.getMaxHeights() + delta);
-	}
+	
 
 	protected void fillInRow(List<CTCell> row, Product product) {
 		// overwrite it in subclass
@@ -450,6 +463,9 @@ public abstract class PDFBuilder {
 		return height;
 	}
 	
+// =============================================================================================
+// Get content functions
+// =============================================================================================
 	protected String getCertificateTextByMap(Object object, String map) {
 
 		Certificate certificate = (Certificate) object;
@@ -548,7 +564,6 @@ public abstract class PDFBuilder {
         }
 		return exporter;
 	}
-
 
 	protected boolean checkfield(String field) {
 		return (trim(field).length() > 0);

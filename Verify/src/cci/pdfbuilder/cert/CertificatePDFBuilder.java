@@ -30,40 +30,42 @@ public class CertificatePDFBuilder {
 		CertificatePDFBuilder builder = new CertificatePDFBuilder();
 		Certificate cert = new Certificate();
 		cert.setKontrp("Exporter Address Exporter");
-		cert.setKontrp("РџРѕР»СѓС‡Р°С‚РµР»СЊ");
+		cert.setKontrp("Получатель");
 		cert.setImporter("Importer Importer Importer Importer Importer Importer Importer Importer Importer Importer Importer Importer");
-		cert.setMarshrut("РњР°СЂС€СЂСѓС‚ РґРІРёР¶РµРЅРёСЏ С‚СЂР°РЅСЃРїРѕСЂС‚Р°");
-		cert.setNomercert("1234567890");
+		cert.setMarshrut("by track");
+		cert.setNomercert("BYAZ1234567890");
 		cert.setNblanka("000678");
 		cert.setDatacert("23.12.2016");
-		cert.setStranap("РЎС‚СЂР°РЅР° РџРѕР»СѓС‡Р°С‚РµР»СЊ");
-		cert.setStranapr("РЎС‚СЂР°РЅР° РџР РѕРёР·РІРѕРґРёС‚РµР»СЊ");
-		cert.setStranav("РЎС‚СЂР°РЅР° Р’РІРѕР·Р°");
+		cert.setStranap("Азейрбаджан");
+		cert.setStranapr("Республика Беларусь");
+		cert.setStranav("Азейрбаджан");
 		cert.setEotd_name("Minsk branch of BelCCI");
 		cert.setExpert("Minsk");
 		cert.setRukovod("Minsk");
 		cert.setOtmetka("Note about textil certificate");
-		cert.setOtmetka("Р­С‚Рѕ РѕС‚РјРµС‚РєР° Рѕ СЃРµСЂС‚РёС„РёРєР°С‚Рµ РґР»СЏ Р’СЊРµС‚РЅР°РјР°. РџРѕР»СѓС‡РµРЅРёРµ СЃРµСЂС‚РёС„РёРєР°С‚Р° РІРѕ РІСЊРµС‚РЅР°Рј РЅРёС‡РµРј РЅРµ РѕС‚Р»РёС‡Р°РµС‚СЃСЏ РѕС‚ ...");
+		cert.setOtmetka("Отметка в графе 5 об особых случаях ...");
 		cert.setEotd_addr_city("Minsk");
 		cert.setCategory("Category");
 		
-		cert.setForms(PDFBuilderFactory.PAGE_TEXTILE);
+		cert.setForms(PDFBuilderFactory.PAGE_CT1);
 		
 		List<Product> products = new ArrayList<Product>();
+		String tovar = " это товар ";
+		
 		for (int i = 1; i < 30; i++) {
 				Product product = new Product();
 				product.setNumerator(i + ".");
-				product.setTovar("Tovar " + i);
+				product.setTovar("Tovar " + tovar);
 				product.setVidup("vidup " + i);
 				product.setVes("ves " + i);
 				product.setSchet("schet");
 				products.add(product);
+				tovar += " | XXXXXXXXXXXXXXXXXXXXX ";
 		}
 		cert.setProducts(products);
 		
-		
 		try {
-		   builder.createPdf("c:\\tmp\\cert\\certificate.pdf", cert, "c:\\Java\\git\\CCICertificate\\CCICertificate\\WebContent\\resources\\config\\pages.xml", "c:\\Windows\\Fonts\\");
+		   builder.createPdf("c:\\tmp\\cert\\certificate.pdf", cert, "C:\\Java\\git\\Verify\\Verify\\WebContent\\resources\\config\\pages.xml", "c:\\Windows\\Fonts\\");
 		} catch(Exception ex) {
 			ex.printStackTrace();
 		}
@@ -107,12 +109,13 @@ public class CertificatePDFBuilder {
 		cert.setCurrentlist(0);  // start from main certification list
 		
 		while (cert.getIterator().hasNext()) {
+			System.out.println("Номер листа: " + cert.getCurrentlist());
 		    pconfig = xreader.getPDFPageConfig(pagename);
 		    PDFBuilder pmaker = PDFBuilderFactory.getPADFBuilder(pagename);
 		    pmaker.createPDFPage(writer, cert, pconfig);
 		    pagename = pconfig.getNextPage();
 		    cert.setCurrentlist(cert.getCurrentlist() + 1);
-;		    document.newPage();
+		    document.newPage();
 		}
 	}
 	
