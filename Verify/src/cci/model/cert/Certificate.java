@@ -8,7 +8,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import javax.xml.bind.annotation.XmlType;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Component;
+
+import cci.pdfbuilder.PDFBuilder;
 
 @XmlRootElement(name = "cert")
 @Component
@@ -18,6 +21,8 @@ import org.springframework.stereotype.Component;
 		"category", "date_load", "products"})
 
 public class Certificate {
+	private static final Logger LOG=Logger.getLogger(Certificate.class);
+	
 	private Long cert_id;
 	private String forms;
 	private String unn;
@@ -965,7 +970,12 @@ public class Certificate {
 		public void reset() {
 			cursor = -1;
 		}
-
+		
+		public void insertProductInNextPosition(Product iproduct) {
+			LOG.info("Products size " + products.size());
+			products.add(cursor+1, iproduct);
+			LOG.info("Products size after inserting  " + products.size());
+		}
 	}
 
 }

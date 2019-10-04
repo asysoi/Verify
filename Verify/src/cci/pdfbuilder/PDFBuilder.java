@@ -303,6 +303,7 @@ public abstract class PDFBuilder {
 		
 		LOG.info("Make table"); 
 		PdfPTable table = new PdfPTable(tablecon.getColnumber());
+		
 		makeTableHeader(writer, table, tablecon, cert);
 		makeTableBody(table, tablecon, cert);
 		makeTableFooter(writer, table, tablecon, cert);
@@ -313,7 +314,7 @@ public abstract class PDFBuilder {
 				Utilities.millimetersToPoints(tablecon.getYr()),
 				writer.getDirectContent());
 		
-		//LOG.info("Table created ");
+		LOG.info("Table created ");
 
 	    LOG.info("Table height : " + table.getTotalHeight()
 		 + "  Calculate height : " + getTableHeight(table));
@@ -374,7 +375,7 @@ public abstract class PDFBuilder {
 	}
 
 // =============================================================================================
-// Table build functions 
+// Table body filling functions 
 // =============================================================================================
 	private void makeTableBody(PdfPTable table, TableConfig tablecon,
 			Object cert) throws IOException, DocumentException {
@@ -389,24 +390,44 @@ public abstract class PDFBuilder {
 		try {
 			while (cursor.hasNext()) {
 				Product product = cursor.next();
+				LOG.info(product.getNumerator() + product.getTovar());
+				
 				fillInRow(row, product);
 				writeRow(table, row);
-
 				ht += table.getRows().get(table.getLastCompletedRowIndex())
 							.getMaxHeights();
                     
 				if (ht > Utilities.millimetersToPoints(tablecon
 							.getWorkHeight())) {
-					    LOG.info(product.getNumerator() + " - " + product.getTovar());
-						ht -= table.getRows()
+					    Product bufProduct = new Product();
+					    
+					    while (ht > Utilities.millimetersToPoints(tablecon
+								.getWorkHeight())) {
+					    	PdfPCell[] cells = table.getRows().get(table.getLastCompletedRowIndex()).getCells();
+					    	int ind = 0, i = 0;
+					    	float cellMaxHeight = 0.0f;
+					    
+					    	for (PdfPCell cell : cells) {
+					    		if (cell.getHeight() > cellMaxHeight) {
+					    			cellMaxHeight = cell.getHeight();
+					        	ind = i;				        	
+					    		}
+					    		i++;
+					    	}
+					    
+					    	truncateProductField(product, bufProduct, ind);
+					    	ht -= table.getRows()
 								.get(table.getLastCompletedRowIndex())
 								.getMaxHeights();
-						table.deleteLastRow();
-						cursor.prev();
-						
-						break;
+					    	table.deleteLastRow();
+					    	fillInRow(row, product);						
+					    	writeRow(table, row);
+					    	ht += table.getRows().get(table.getLastCompletedRowIndex())
+									.getMaxHeights();
+					    }
+					    cursor.insertProductInNextPosition(bufProduct); 
+					    break;
 				}
-				
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
@@ -420,9 +441,8 @@ public abstract class PDFBuilder {
 	
 	protected void writeRow(PdfPTable table, List<CTCell> row)
 			throws DocumentException, IOException {
-				
+		
 		for (int i = 0; i < row.size(); i++) {
-			
 			table.addCell(makeCell(row.get(i)));
 		}
 	}
@@ -452,6 +472,10 @@ public abstract class PDFBuilder {
 	
 
 	protected void fillInRow(List<CTCell> row, Product product) {
+		// overwrite it in subclass
+	}
+	
+	protected void truncateProductField(Product product, Product bProduct, int ind) {
 		// overwrite it in subclass
 	}
 

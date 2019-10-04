@@ -52,7 +52,7 @@ public class CertificatePDFBuilder {
 		List<Product> products = new ArrayList<Product>();
 		String tovar = " это товар ";
 		
-		for (int i = 1; i < 30; i++) {
+		for (int i = 1; i < 50; i++) {
 				Product product = new Product();
 				product.setNumerator(i + ".");
 				product.setTovar("Tovar " + tovar);
