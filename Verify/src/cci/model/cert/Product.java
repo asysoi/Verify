@@ -11,13 +11,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class Product {
 	private Long product_id;
-	private String numerator;
-	private String tovar;
-	private String vidup;
-	private String kriter;
-	private String ves;
-	private String schet;
-	private String fobvalue;
+	private String numerator = "";
+	private String tovar = "";
+	private String vidup = "";
+	private String kriter = "";
+	private String ves = "";
+	private String schet = "";
+	private String fobvalue = "";
 	
 	@XmlTransient
 	public Long getProduct_id() {
@@ -68,4 +68,25 @@ public class Product {
 	public void setFobvalue(String fobvalue) {
 		this.fobvalue = fobvalue;
 	}
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Product [numerator=");
+		builder.append(numerator);
+		builder.append(", tovar=");
+		builder.append(tovar);
+		builder.append(", vidup=");
+		builder.append(vidup);
+		builder.append(", kriter=");
+		builder.append(kriter);
+		builder.append(", ves=");
+		builder.append(ves);
+		builder.append(", schet=");
+		builder.append(schet);
+		builder.append(", fobvalue=");
+		builder.append(fobvalue);
+		builder.append("]");
+		return builder.toString();
+	}
+	
 }

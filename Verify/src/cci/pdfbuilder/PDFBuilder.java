@@ -301,7 +301,7 @@ public abstract class PDFBuilder {
 			Object cert, TableConfig tablecon) throws DocumentException,
 			IOException {
 		
-		LOG.info("Make table"); 
+		// LOG.info("Make table"); 
 		PdfPTable table = new PdfPTable(tablecon.getColnumber());
 		
 		makeTableHeader(writer, table, tablecon, cert);
@@ -314,15 +314,15 @@ public abstract class PDFBuilder {
 				Utilities.millimetersToPoints(tablecon.getYr()),
 				writer.getDirectContent());
 		
-		LOG.info("Table created ");
+		//LOG.info("Table created ");
 
-	    LOG.info("Table height : " + table.getTotalHeight()
-		 + "  Calculate height : " + getTableHeight(table));
+	    //LOG.info("Table height : " + table.getTotalHeight()
+		// + "  Calculate height : " + getTableHeight(table));
 		 
-		LOG.info("Table height : "
-		 + Utilities.pointsToMillimeters(table.getTotalHeight())
-		 + "  Calculate height : "
-		 + Utilities.pointsToMillimeters(getTableHeight(table)));
+		//LOG.info("Table height : "
+		// + Utilities.pointsToMillimeters(table.getTotalHeight())
+		// + "  Calculate height : "
+		// + Utilities.pointsToMillimeters(getTableHeight(table)));
 				 
 		return table;
 	}
@@ -379,19 +379,17 @@ public abstract class PDFBuilder {
 // =============================================================================================
 	private void makeTableBody(PdfPTable table, TableConfig tablecon,
 			Object cert) throws IOException, DocumentException {
-        LOG.info("Make Table Body");
+        // LOG.info("Make Table Body");
         
 		List<CTCell> row = tablecon.getBodyRow();
 		table.getDefaultCell().setVerticalAlignment(Element.ALIGN_TOP);
 		float ht = 0f;
-
+        boolean nextpage = false;
 		ProductIterator cursor = ((Certificate) cert).getIterator();
-
+         
 		try {
-			while (cursor.hasNext()) {
+			while (!nextpage && cursor.hasNext() ) {
 				Product product = cursor.next();
-				LOG.info(product.getNumerator() + product.getTovar());
-				
 				fillInRow(row, product);
 				writeRow(table, row);
 				ht += table.getRows().get(table.getLastCompletedRowIndex())
@@ -400,32 +398,37 @@ public abstract class PDFBuilder {
 				if (ht > Utilities.millimetersToPoints(tablecon
 							.getWorkHeight())) {
 					    Product bufProduct = new Product();
+					    float tableLimit = Utilities.millimetersToPoints(tablecon.getWorkHeight());
 					    
-					    while (ht > Utilities.millimetersToPoints(tablecon
-								.getWorkHeight())) {
+					    while (ht > tableLimit) {
 					    	PdfPCell[] cells = table.getRows().get(table.getLastCompletedRowIndex()).getCells();
 					    	int ind = 0, i = 0;
 					    	float cellMaxHeight = 0.0f;
-					    
 					    	for (PdfPCell cell : cells) {
 					    		if (cell.getHeight() > cellMaxHeight) {
 					    			cellMaxHeight = cell.getHeight();
-					        	ind = i;				        	
+					        	    ind = i;				        	
 					    		}
 					    		i++;
 					    	}
-					    
-					    	truncateProductField(product, bufProduct, ind);
-					    	ht -= table.getRows()
-								.get(table.getLastCompletedRowIndex())
-								.getMaxHeights();
+					    	
+					    	ht -= table.getRows().get(table.getLastCompletedRowIndex())
+				        			.getMaxHeights();
 					    	table.deleteLastRow();
-					    	fillInRow(row, product);						
-					    	writeRow(table, row);
-					    	ht += table.getRows().get(table.getLastCompletedRowIndex())
+				    	
+					        if (truncateProductField(product, bufProduct, ind)) {
+					        	fillInRow(row, product);						
+					        	writeRow(table, row);
+					        	ht += table.getRows().get(table.getLastCompletedRowIndex())
 									.getMaxHeights();
+					        } else {
+					        	if (ht + cellMaxHeight > tableLimit) {
+					        		mergeProducts(product, bufProduct);
+					        	}
+					        }
 					    }
-					    cursor.insertProductInNextPosition(bufProduct); 
+					    cursor.insertProductInNextPosition(bufProduct);
+					    nextpage = true;
 					    break;
 				}
 			}
@@ -439,6 +442,20 @@ public abstract class PDFBuilder {
 		tabrow.setMaxHeights(tabrow.getMaxHeights() + delta);
 	}
 	
+	private void mergeProducts(Product product, Product bufProduct) {
+	    bufProduct.setNumerator(ifNULL(product.getNumerator()) + ifNULL(bufProduct.getNumerator()));
+	    bufProduct.setTovar(ifNULL(product.getTovar()) + ifNULL(bufProduct.getTovar()));
+	    bufProduct.setFobvalue(ifNULL(product.getFobvalue()) + ifNULL(bufProduct.getFobvalue()));
+	    bufProduct.setKriter(ifNULL(product.getKriter()) + ifNULL(bufProduct.getKriter()));
+	    bufProduct.setSchet(ifNULL(product.getSchet()) + ifNULL(bufProduct.getSchet()));
+	    bufProduct.setVes(ifNULL(product.getVes()) + ifNULL(bufProduct.getVes()));
+	    bufProduct.setVidup(ifNULL(product.getVidup()) + ifNULL(bufProduct.getVidup()));
+    }
+
+	private String ifNULL(String str) {
+		return str == null ? "" : str;
+	}
+
 	protected void writeRow(PdfPTable table, List<CTCell> row)
 			throws DocumentException, IOException {
 		
@@ -475,8 +492,57 @@ public abstract class PDFBuilder {
 		// overwrite it in subclass
 	}
 	
-	protected void truncateProductField(Product product, Product bProduct, int ind) {
-		// overwrite it in subclass
+	protected boolean truncateProductField(Product product, Product bproduct, int ind) {
+		String bstr = null;
+		boolean ret = false;
+		
+		switch(ind) {
+		   case 0:
+			  bstr = product.getNumerator();  break;
+		   case 1:
+			  bstr = product.getVidup();  break; 
+		   case 2:
+			  bstr = product.getTovar();  break;
+		   case 3:
+			  bstr = product.getKriter();  break;
+		   case 4:
+			  bstr = product.getVes();  break;
+		   case 5:
+			  bstr = product.getSchet();  break;
+		}
+		
+		int pos = bstr.lastIndexOf(" ");
+		
+		if (pos > 0) {
+			ret = true;
+			switch(ind) {
+			   case 0:
+				  bproduct.setNumerator(bstr.substring(pos) + bproduct.getNumerator());
+				  product.setNumerator(bstr.substring(0, pos));
+				  break;
+			   case 1:
+				  bproduct.setVidup(bstr.substring(pos) + bproduct.getVidup());
+				  product.setVidup(bstr.substring(0, pos));
+				  break; 
+			   case 2:
+				  bproduct.setTovar(bstr.substring(pos) + bproduct.getTovar());
+				  product.setTovar(bstr.substring(0, pos));
+				  bstr = product.getTovar();  break;
+			   case 3:
+				  bproduct.setKriter(bstr.substring(pos) + bproduct.getKriter());
+				  product.setKriter(bstr.substring(0, pos));
+				  bstr = product.getKriter();  break;
+			   case 4:
+ 				  bproduct.setVes(bstr.substring(pos) + bproduct.getVes());
+				  product.setVes(bstr.substring(0, pos));
+				  bstr = product.getVes();  break;
+			   case 5:
+				  bproduct.setSchet(bstr.substring(pos) + bproduct.getSchet());
+				  product.setSchet(bstr.substring(0, pos));
+				  bstr = product.getSchet();  break;
+			}
+		}
+		return ret;
 	}
 
 	private float getTableHeight(PdfPTable table) {

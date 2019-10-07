@@ -972,9 +972,9 @@ public class Certificate {
 		}
 		
 		public void insertProductInNextPosition(Product iproduct) {
-			LOG.info("Products size " + products.size());
+			//LOG.info("Products size " + products.size());
 			products.add(cursor+1, iproduct);
-			LOG.info("Products size after inserting  " + products.size());
+			//LOG.info("Products size after inserting  " + products.size());
 		}
 	}
 
