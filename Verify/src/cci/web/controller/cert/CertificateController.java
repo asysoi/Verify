@@ -65,8 +65,11 @@ public class CertificateController {
 			cert.setNblanka(cert.getNblanka().trim());
 			cert.setDatacert(cert.getDatacert().trim());
 			
-			LOG.info("type = " + model.get("type"));
-			String msg; 
+			LOG.info("Check CofO : [" + cert.getNomercert().trim() 
+					+ "] on blank [" + cert.getNblanka().trim()  
+					+ "] by [" + cert.getDatacert().trim() 
+					+ "] form [" + model.get("type") + "]");
+			String msg = "start execution"; 
 			if ("ct1".equals(model.get("type"))) {
 
 				Certificate rcert = certificateService.checkCertificate(cert);
@@ -79,7 +82,7 @@ public class CertificateController {
 					makepdffile(absoluteDiskPath, rcert);
 
 					if ("ru".equals(model.get("lang"))) {
-						msg = "<p>Найден сертификат номер " + cert.getNomercert() + " на бланке с номером "
+						msg = "<p>Найден " + (rcert.getStatus() != null && rcert.getStatus().indexOf("Аннулирован") >= 0 ? "АННУЛИРОВАННЫЙ " : "" ) + "сертификат номер " + cert.getNomercert() + " на бланке с номером "
 								+ cert.getNblanka() + ", выданный " + cert.getDatacert() + ".</p> "
 								+ "<p>Воспроизведение бумажной версии сертификата <a href=\"javascript:openCertificate(\'"
 								+ "resources/out/" + rcert.getCert_id() + ".pdf" + "')\">" + rcert.getNomercert()
@@ -87,7 +90,7 @@ public class CertificateController {
 								+ "<p>Результат воспроизведения может незначительно отличаться по форме и стилю отображения,"
 								+ "но полностью воспроизводит содержание документа.</p>";
 					} else {
-						msg = "<p>There is a certificate with number " + cert.getNomercert() + " issued "
+						msg = "<p>There is a " + (rcert.getStatus() != null && rcert.getStatus().indexOf("Аннулирован") >= 0 ? "INVALID " : "" ) + "certificate with number " + cert.getNomercert() + " issued "
 								+ cert.getDatacert() + ".</p> "
 								+ "<p>Electronic copy of the original certificate <a href=\"javascript:openCertificate(\'"
 								+ "resources/out/" + rcert.getCert_id() + ".pdf" + "')\">" + rcert.getNomercert()
@@ -151,8 +154,8 @@ public class CertificateController {
 					model.addAttribute("msg", msg);
 					retpage = "fragments/message";
 				}
-				
 			}
+			LOG.info("Check result: [" + msg + "]");			
 		}
 		return retpage;
 	}
@@ -162,7 +165,7 @@ public class CertificateController {
 	// Set page language 
 	// ---------------------------------------------------------------------------------------
 	@RequestMapping(value = "check.do", method = RequestMethod.GET)
-	public String check(
+	public String check (
 			HttpServletRequest request,
 			@RequestParam(value = "type", required = false) String type,
 			@RequestParam(value = "lang", required = false) String lang,
@@ -190,8 +193,7 @@ public class CertificateController {
 	        cert.setNomercert(ncert);
 	        cert.setDatacert(datecert);
 			model.addAttribute("cert", cert);
-			LOG.info("type = " + model.get("type"));
-  		    return retpage;
+		    return retpage;
 	}
 
 	// ---------------------------------------------------------------------------------------
@@ -229,6 +231,11 @@ public class CertificateController {
 		String pathToJSP = "/WEB-INF/jsp/";
 		
 		OwnCertificate owncert = null;
+		
+		LOG.info("Check OwnC : [" + ncert 
+				+ "] on blank [" +  nblanka 
+				+ "] by [" + datecert 
+				+ "]");
 		
 		try {
 	        Certificate filter= new Certificate();
@@ -330,7 +337,6 @@ public class CertificateController {
 		}
 		
 	}
-
 		
 	/* -----------------------------
 	 * Exception handling 

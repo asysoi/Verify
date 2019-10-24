@@ -20,7 +20,8 @@ public class LogInterceptor implements HandlerInterceptor {
 		long startTime = System.currentTimeMillis();
 		request.setAttribute("startTime", startTime);
 		String action = request.getRequestURI().substring(request.getContextPath().length()+1);
-		LOG.info("Action: [" + action + "] by [" + aut.getName() + "]");
+		// Add UID action ?
+		LOG.info("Action: [" + action + "] by [" + request.getRemoteHost() + "]");
 		return true;
 	}
 
@@ -36,8 +37,7 @@ public class LogInterceptor implements HandlerInterceptor {
 	public void afterCompletion(HttpServletRequest request,
 			HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
-		
-		// super.afterCompletion(request, response, handler, ex);
+			// super.afterCompletion(request, response, handler, ex);
 	}
 
 }

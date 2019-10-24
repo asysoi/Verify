@@ -1,6 +1,7 @@
 ﻿package cci.pdfbuilder;
  
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -15,6 +16,7 @@ import cci.model.cert.Certificate;
 import cci.model.cert.Product;
 import cci.model.cert.ProductIterator;
 import cci.service.CountryConverter;
+import cci.service.utils.CCIUtil;
 
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -25,9 +27,11 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.Utilities;
 import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
+import com.itextpdf.text.pdf.PdfGState;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPRow;
 import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfStamper;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.VerticalText;
 
@@ -49,7 +53,7 @@ public abstract class PDFBuilder {
 		List<BoxConfig> boxes = pconfig.getBoxes();
 		List<BoxConfig> outputs = pconfig.getOutputs();
 		List<ImageBox> images = pconfig.getImages();
-
+		
 		if (boxes != null) {
 			for (int i = 0; i < boxes.size(); i++) {
 				BoxConfig box = boxes.get(i);
@@ -112,6 +116,7 @@ public abstract class PDFBuilder {
 		}
 
 		drawStamp(writer, stamps);
+        
 	}
 	
 // =============================================================================================
@@ -235,7 +240,7 @@ public abstract class PDFBuilder {
 	public void makeRotatedTextBoxtInAbsolutePosition(PdfWriter writer,
 			String text, BoxConfig config) throws IOException,
 			DocumentException {
-		//System.out.println("makeRotatedTextBoxtInAbsolutePosition");
+		// LOG.info("makeRotatedTextBoxtInAbsolutePosition");
 		PdfContentByte canvas = writer.getDirectContent();
 		canvas.saveState();
 		canvas.beginText();
@@ -372,6 +377,18 @@ public abstract class PDFBuilder {
 							i)));
 		}
 
+	}
+		
+	public void drawWatermark(PdfWriter writer, String text, BoxConfig config) throws IOException, DocumentException {
+		PdfContentByte canvas = writer.getDirectContentUnder();
+		
+		Phrase ptext = new Phrase(text, new Font(config.getBf(),
+				config.getFontSize()));
+		
+		ColumnText.showTextAligned(canvas, Element.ALIGN_CENTER, ptext,
+				Utilities.millimetersToPoints(config.getXl()),
+				Utilities.millimetersToPoints(config.getYl()),
+				config.getRotation());
 	}
 
 // =============================================================================================
@@ -603,14 +620,15 @@ public abstract class PDFBuilder {
 		} else if ("certnumber".equals(map)) {
 			str = certificate.getNomercert();
 		} else if ("blanknumber".equals(map)) {
-			str = certificate.getNblanka();
+			str = getBlankNumberByPageNumber(certificate.getNblanka(), certificate.getCurrentlist());
 		} else if ("subcountry".equals(map)) {
 			str = CountryConverter.getCountryNameByCode(certificate.getStranapr());
 		} else if ("sourcecountry".equals(map)) {
 			str = CountryConverter.getCountryNameByCode(certificate.getStranav());
-		}else if ("note".equals(map)) {
+		} else if ("note".equals(map)) {
 			str = certificate.getOtmetka() == null ? "" : certificate.getOtmetka();
-		} else if ("department".equals(map)) {
+		} else if ("status".equals(map)) {
+			str = certificate.getStatus() == null ? "ДЕЙСТВИТЕЛЬНЫЙ" : certificate.getStatus();	
 			str = "Унитарное предприятие по оказанию услуг \""
 					+ certificate.getOtd_name() + "\", "
 					+ certificate.getOtd_addr_index() + ", "
@@ -644,6 +662,32 @@ public abstract class PDFBuilder {
 		}
 
 		return str;
+	}
+
+	private String getBlankNumberByPageNumber(String blanks, int currentlist) {
+		String blank = "";
+
+		if (blanks.indexOf(",") > -1 || blanks.indexOf("-") > -1) {
+			List<String> numbers = new ArrayList<String>();
+			
+			if (blanks != null && !blanks.trim().isEmpty()) {
+				blanks = blanks.trim().replaceAll("\\s*-\\s*", "-");
+				String[] lst = blanks.split(",");
+				
+				for (String str : lst) {
+					numbers.addAll(CCIUtil.getSequenceNumbers(str));
+				}
+			}
+
+			try {
+				blank = numbers.get(currentlist);
+			} catch (Exception ex) {
+				LOG.info(ex.getMessage());
+			}
+		} else {
+			blank = blanks;
+		}
+		return blank;	
 	}
 
 	private String getExporterName(Certificate cert) {

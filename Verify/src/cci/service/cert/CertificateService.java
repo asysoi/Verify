@@ -12,6 +12,7 @@ import cci.model.cert.Certificate;
 import cci.model.owncert.OwnCertificate;
 import cci.repository.cert.CertificateDAO;
 import cci.repository.owncert.OwnCertificateDAO;
+import cci.service.utils.CCIUtil;
 
 
 @Service
@@ -89,39 +90,10 @@ public class CertificateService {
 			String[] lst = addblanks.split(";");
 
 			for (String str : lst) {
-				ret.addAll(getSequenceNumbers(str));
+				ret.addAll(CCIUtil.getSequenceNumbers(str));
 			}
 		}
 		return ret;
 	}
-
 	
-	/* ----------------------------------------------- 
-	 * Convert certificate's
-	 * numbers range into List of separated numbers to write into certificate
-	 * blanks 
-	 * ---------------------------------------------- */
-	private Collection<String> getSequenceNumbers(String addblanks) {
-		List<String> numbers = new ArrayList<String>();
-		int pos = addblanks.indexOf("-");
-		
-		if (pos > 0) {
-			int firstnumber = Integer.parseInt((addblanks.substring(0, pos)));
-			int lastnumber = Integer.parseInt(addblanks.substring(pos + 1));
-			
-			for (int i = firstnumber; i <= lastnumber; i++) {
-				numbers.add(addnull(i + ""));
-			}
-		} else if (!addblanks.trim().isEmpty())
-			numbers.add(addblanks);
-		return numbers;
-	}
-	
-	private String addnull(String number) {
-		if (number.length() < 7) {
-			number = addnull("0"+number);
-		}
-		return number;
-	}
-
 }

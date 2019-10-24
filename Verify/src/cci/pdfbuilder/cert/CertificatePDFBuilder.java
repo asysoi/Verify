@@ -4,10 +4,17 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import javax.sql.DataSource;
 
@@ -34,7 +41,15 @@ import cci.web.controller.cert.exception.NotFoundCertificateException;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.BaseFont;
+import com.itextpdf.text.pdf.ColumnText;
+import com.itextpdf.text.pdf.GrayColor;
+import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfWriter;
 
 public class CertificatePDFBuilder {
@@ -67,7 +82,7 @@ public class CertificatePDFBuilder {
 //        	for (Certificate certificate : certs) {
 //        		Certificate cert = getCertificate(Integer.valueOf(certificate.getCert_id()+""));
         
-                Certificate cert = getCertificate(Integer.valueOf(1342498));
+                Certificate cert = getCertificate(Integer.valueOf(1662125));
         		if (cert != null) {
         			try {
         				builder.createPdf("c:\\tmp\\cert\\certificate_" + cert.getCert_id() +".pdf", cert, "C:\\Java\\git\\Verify\\Verify\\WebContent\\resources\\config\\pages.xml", "c:\\Windows\\Fonts\\");
@@ -86,29 +101,37 @@ public class CertificatePDFBuilder {
 
 	public void createPdf(String outfilename, Certificate cert,
 			String configFileName, String fpath) throws IOException, DocumentException {
-		
 		fontpath = fpath;
 		
 		// step 1
 		document = new Document(PageSize.A4, 0, 0, 0, 0);
-
+		// add header and footer
+		
 		// step 2
 		writer = PdfWriter.getInstance(document,
 				new FileOutputStream(outfilename));
+		
+		BaseFont bf = BaseFont.createFont(
+				fontpath + "ARIAL" + ".ttf",
+				BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+		Font font = new Font(bf, 64, Font.BOLD, new GrayColor(0.93f));
+		
+		writer.setPageEvent(new WatermarkPageEvent(cert, font));
+
 		// step 3
 		document.open();
-
+		
 		// step 4
 		xreader = XMLConfigReader.getInstance(configFileName, fontpath);
-		createMain(cert);
-
+		fillOutPDFPages(cert);
+		
 		// step 5
 		document.close();
 	}
 	
 	
 
-	private void createMain(Certificate cert) throws DocumentException, IOException {
+	private void fillOutPDFPages(Certificate cert) throws DocumentException, IOException {
 		String pagename; 
 		
 		if (cert.getForms() != null) {
@@ -122,7 +145,7 @@ public class CertificatePDFBuilder {
 		cert.setCurrentlist(0);  // start from main certification list
 		
 		while (cert.getIterator().hasNext()) {
-			// System.out.println("ÕÓÏÂ ÎËÒÚ‡: " + cert.getCurrentlist());
+			LOG.info("ÕÓÏÂ ÎËÒÚ‡: " + cert.getCurrentlist());
 		    pconfig = xreader.getPDFPageConfig(pagename);
 		    PDFBuilder pmaker = PDFBuilderFactory.getPADFBuilder(pagename);
 		    pmaker.createPDFPage(writer, cert, pconfig);
@@ -187,6 +210,27 @@ public class CertificatePDFBuilder {
 		return rcert;
 	}
 	
-	
+		
+	public class WatermarkPageEvent extends PdfPageEventHelper {
+	    Font font = null;
+	    Certificate cert;
+	    
+	    public WatermarkPageEvent(Certificate cert, Font font) {
+	    	this.font = font;
+	    	this.cert = cert;
+	    }
+	    
+	    public void onEndPage(PdfWriter writer, Document document) {
+            String text = cert.getStatus().toUpperCase();
+             
+            if ("¿ÕÕ”À»–Œ¬¿Õ".equals(text) || "«¿Ã≈Õ≈Õ".equals(text)) { 
+	           ColumnText.showTextAligned(writer.getDirectContentUnder(),
+	                  Element.ALIGN_CENTER, new Phrase("Õ≈ƒ≈…—“¬»“≈À≈Õ", font),
+	                  document.getPageSize().getWidth()/2 + 20, 
+	                  document.getPageSize().getHeight()/2, 
+	                  55f);
+            }
+	    }
+	}
 	
 }
