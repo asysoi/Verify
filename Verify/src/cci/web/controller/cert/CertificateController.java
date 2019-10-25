@@ -2,6 +2,9 @@
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -129,7 +132,7 @@ public class CertificateController {
 								+ "<p>Результат воспроизведения может незначительно отличаться по форме и стилю отображения,"
 								+ "но полностью воспроизводит содержание документа.</p>";
 					} else {
-						msg = "<p>There is a certificate ща щцт зкщвгсешщт with number " + cert.getNomercert() + " issued "
+						msg = "<p>There is a certificate of own production with number " + cert.getNomercert() + " issued "
 								+ cert.getDatacert() + ".</p> "
 								+ "<p>Electronic copy of the original certificate <a href=\"javascript:openCertificate(\'owncert.do?ncert="
 								+ rcert.getNumber() + "&nblanka=" + rcert.getBlanknumber() + "&datecert=" + rcert.getDatecert() 
@@ -263,20 +266,28 @@ public class CertificateController {
 
 				String pagefirst = null;
 				String pagenext = null;
+				String suf = "";
 
+				if  (isRequeredNewCertificateBlank(owncert.getDatecert())) {
+					suf = "new";
+				}
+				
 				if ("с/п".equals(owncert.getType())) {
-					pagefirst = templateDiskPath + System.getProperty("file.separator") + "ownproductfirst.pdf";
-					pagenext = templateDiskPath + System.getProperty("file.separator") + "ownproductnext.pdf";
+					pagefirst = templateDiskPath + System.getProperty("file.separator") + "ownproductfirst"+ suf +".pdf";
+					pagenext = templateDiskPath + System.getProperty("file.separator") + "ownproductnext"+ suf +".pdf";
 				} else if ("р/у".equals(owncert.getType())) {
-					pagefirst = templateDiskPath + System.getProperty("file.separator") + "ownservicefirst.pdf";
-					pagenext = templateDiskPath + System.getProperty("file.separator") + "ownservicenext.pdf";
+					pagefirst = templateDiskPath + System.getProperty("file.separator") + "ownservicefirst"+ suf +".pdf";
+					pagenext = templateDiskPath + System.getProperty("file.separator") + "ownservicenext"+ suf +".pdf";
 				} else if ("б/у".equals(owncert.getType())) {
-					pagefirst = templateDiskPath + System.getProperty("file.separator") + "ownbankfirst.pdf";
-					pagenext = templateDiskPath + System.getProperty("file.separator") + "ownbanknext.pdf";
+					pagefirst = templateDiskPath + System.getProperty("file.separator") + "ownbankfirst"+ suf +".pdf";
+					pagenext = templateDiskPath + System.getProperty("file.separator") + "ownbanknext"+ suf +".pdf";
 				} else {
 					throw new NotFoundCertificateException("Для данного типа сертификата не определены формы бланков.");
 				}
-
+				
+				LOG.info("PageFirst: " + pagefirst);
+				LOG.info("PageNext: " + pagenext);
+				
 				String pdffile = pdfFilePath + System.getProperty("file.separator") + owncert.getFilename();
 				List<String> numbers = certificateService.splitOwnCertNumbers(owncert.getBlanknumber(),
 						owncert.getAdditionalblanks());
@@ -317,6 +328,26 @@ public class CertificateController {
 		}
 	}
 	
+	private boolean isRequeredNewCertificateBlank(String dateowncert) {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+		
+	    Date datecert;
+	    Date datenew;
+	     
+		try {
+			datecert = sdf.parse(dateowncert);
+			datenew = sdf.parse("01.04.2019");
+			
+   	        if (datecert.compareTo(datenew) > 0 || datecert.compareTo(datenew) == 0) {
+	              return true;
+	        }
+		} catch (ParseException e) {
+			LOG.info("Date parsing error:" + e.getMessage());
+		}
+		return false;
+	}
+
+
 	/* -----------------------------
 	 * Get certificate by number & blanknumber
 	 * ----------------------------- */
