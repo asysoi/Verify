@@ -629,6 +629,7 @@ public abstract class PDFBuilder {
 			str = certificate.getOtmetka() == null ? "" : certificate.getOtmetka();
 		} else if ("status".equals(map)) {
 			str = certificate.getStatus() == null ? "ДЕЙСТВИТЕЛЬНЫЙ" : certificate.getStatus();	
+		} else if ("department".equals(map)) {	
 			str = "Унитарное предприятие по оказанию услуг \""
 					+ certificate.getOtd_name() + "\", "
 					+ certificate.getOtd_addr_index() + ", "

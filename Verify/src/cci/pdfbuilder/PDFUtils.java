@@ -119,10 +119,10 @@ public class PDFUtils {
 			   // LOG.info(po.toString() + " | " + type.toString() + " | " + pst.getLength());
 			   
 			   if (type!=null && type.toString().equals(PdfName.IMAGE.toString()) && pst.getLength() > checksize ) {
-				 LOG.info("Image in pdf file is found ! " + pst.getLength());
+				 LOG.info("Image has been found in pdf file! " + pst.getLength());
 	             return true;  		      	   
 			   } else {
-				 LOG.info("Image in pdf file is NOT found ! " + pst.getLength());  
+				 LOG.info("Image NOT found ! " + pst.getLength());  
 			   }
 			}
 		} catch (Exception ex) {

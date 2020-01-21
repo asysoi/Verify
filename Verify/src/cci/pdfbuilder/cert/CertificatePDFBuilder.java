@@ -39,6 +39,7 @@ import cci.repository.cert.JDBCCertificateDAO;
 import cci.web.controller.cert.exception.CertificateGetException;
 import cci.web.controller.cert.exception.NotFoundCertificateException;
 
+import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
@@ -46,11 +47,17 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.GrayColor;
 import com.itextpdf.text.pdf.PdfPageEventHelper;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.parser.ImageRenderInfo;
+import com.itextpdf.text.pdf.parser.PdfReaderContentParser;
+import com.itextpdf.text.pdf.parser.RenderListener;
+import com.itextpdf.text.pdf.parser.TextRenderInfo;
+import com.itextpdf.text.pdf.PdfReader;
 
 public class CertificatePDFBuilder {
 	private static final Logger LOG = Logger.getLogger(CertificatePDFBuilder.class);	
@@ -64,6 +71,15 @@ public class CertificatePDFBuilder {
 	
 	public static void main(String[] arg) {
 		CertificatePDFBuilder builder = new CertificatePDFBuilder();
+		try {
+			builder.recognisePDFImage();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	
+	private void testPDFBuilder() {
         DataSource datasource = getDataSource();
         template = new NamedParameterJdbcTemplate(datasource);
         
@@ -85,7 +101,7 @@ public class CertificatePDFBuilder {
                 Certificate cert = getCertificate(Integer.valueOf(1662125));
         		if (cert != null) {
         			try {
-        				builder.createPdf("c:\\tmp\\cert\\certificate_" + cert.getCert_id() +".pdf", cert, "C:\\Java\\git\\Verify\\Verify\\WebContent\\resources\\config\\pages.xml", "c:\\Windows\\Fonts\\");
+        				createPdf("c:\\tmp\\cert\\certificate_" + cert.getCert_id() +".pdf", cert, "C:\\Java\\git\\Verify\\Verify\\WebContent\\resources\\config\\pages.xml", "c:\\Windows\\Fonts\\");
         				// 	System.out.println(" сертификат воспроизведен ");            		
         			} catch(Exception ex) {
         				System.out.println(" ID = " + cert.getCert_id() + " : ошибка формирования сертификата -  " + ex.getMessage());
@@ -98,7 +114,7 @@ public class CertificatePDFBuilder {
 //    		start = System.currentTimeMillis();
 //        }
 	}
-
+	
 	public void createPdf(String outfilename, Certificate cert,
 			String configFileName, String fpath) throws IOException, DocumentException {
 		fontpath = fpath;
@@ -221,7 +237,7 @@ public class CertificatePDFBuilder {
 	    }
 	    
 	    public void onEndPage(PdfWriter writer, Document document) {
-            String text = cert.getStatus().toUpperCase();
+            String text = cert.getStatus() == null ? "" : cert.getStatus().toUpperCase();
              
             if ("АННУЛИРОВАН".equals(text) || "ЗАМЕНЕН".equals(text)) { 
 	           ColumnText.showTextAligned(writer.getDirectContentUnder(),
@@ -231,6 +247,58 @@ public class CertificatePDFBuilder {
 	                  55f);
             }
 	    }
+	}
+	
+	
+	public void recognisePDFImage() throws IOException {
+		PdfReader reader = new 	PdfReader("C:\\tmp\\5.pdf");
+		PdfReaderContentParser parser = new PdfReaderContentParser(reader);
+		
+		for (int pageNum = 1; pageNum<100; pageNum++) {
+		   System.out.println("Страница " + pageNum + ": ");	
+		   RenderListener renderListener =
+			  	parser.processContent(pageNum, new 	MyRenderListener());
+		   
+		}
+		
+		//highlight(renderListener.items, reader, pageNum,
+		//		"c:\\temp\\0063023out.pdf");
+		reader.close();
+	}
+	
+	BaseColor getColor(Item item) {
+		 if (item instanceof ImageItem)
+			 return BaseColor.RED;
+		 if (item instanceof TextItem)
+			 return BaseColor.BLUE;
+		 return null;
+	}
+	
+	class MyRenderListener implements RenderListener {
+		 public List<Item> items = new ArrayList<Item>();
+		 
+		 public void beginTextBlock() {}
+		 
+		 public void renderText(TextRenderInfo textRenderInfo) {
+			 // items.add(createItem(textRenderInfo));
+			 System.out.println("Найден текстовый блок - " + textRenderInfo.getText());
+		 }
+		 public void endTextBlock() {}
+		
+		 public void renderImage(ImageRenderInfo imgRenderInfo) {
+			 // items.add(createItem(imgRenderInfo));
+			 System.out.println("Найден графический блок - " + imgRenderInfo.getArea());
+		 }
+	}
+	
+	class Item {
+		 public Rectangle rectangle;
+	}
+	class ImageItem extends Item {
+	}
+	class TextItem extends Item {
+		 public String fontName;
+		 public float fontSize;
 	}
 	
 }
