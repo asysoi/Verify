@@ -77,7 +77,6 @@ public abstract class PDFBuilder {
 							box.getText(), box);
 				} else {
 					makeTexBoxtInAbsolutePosition(writer, box.getText(), box);
-					//makeBorderedTexBoxtInAbsolutePosition(writer, box.getText(), box);
 				}
 			}
 		}
@@ -157,9 +156,8 @@ public abstract class PDFBuilder {
 
 	public void makeTexBoxtInAbsolutePosition(PdfWriter writer, String text,
 			BoxConfig config) throws IOException, DocumentException {
-		//System.out.println("makeTexBoxtInAbsolutePosition");
-		//System.out.println(config);
 		PdfContentByte canvas = writer.getDirectContent();
+		text = text.replaceAll("\\s+", " ");
 		canvas.saveState();
 		canvas.beginText();
 		canvas.setTextRenderingMode(PdfContentByte.TEXT_RENDER_MODE_FILL_STROKE);
@@ -168,13 +166,20 @@ public abstract class PDFBuilder {
 				.getXl()), Utilities.millimetersToPoints(config.getYl()),
 				Utilities.millimetersToPoints(config.getXr()),
 				Utilities.millimetersToPoints(config.getYr()));
-
-		Phrase ptext = new Phrase(text, new Font(config.getBf(),
-				config.getFontSize()));
-
+		Font fnt = new Font(config.getBf(),	config.getFontSize());
 		ColumnText column = new ColumnText(canvas);
+		
+		float fntSize = column.fitText(fnt, text, rect, config.getFontSize(), column.getRunDirection());
+		float leading = config.getLeading();
+		
+		if (fntSize < config.getFontSize()) {
+			System.out.println("Set font size: " + fntSize);
+			fnt.setSize(fntSize);
+		    leading = fntSize;	
+		}
+		Phrase ptext = new Phrase(text, fnt);
 		column.setSimpleColumn(ptext, rect.getLeft(), rect.getBottom(),
-				rect.getRight(), rect.getTop(), config.getLeading(),
+				rect.getRight(), rect.getTop(), leading,
 				config.getgAlign());
 		column.go();
 		canvas.endText();
