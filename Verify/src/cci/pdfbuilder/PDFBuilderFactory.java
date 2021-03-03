@@ -27,8 +27,8 @@ public class PDFBuilderFactory {
 	  public static final String PAGE_FS = "FS";
 	  public static final String PAGE_FS_b = "FS_b";
 	  public static final String PAGE_CTUZ = "СТ-1 Узбекистан";
-	  public static final String PAGE_CT3 = "CT-3";
-	  public static final String PAGE_CT3_b = "CT-3b";
+	  public static final String PAGE_CT3 = "СТ-3";
+	  public static final String PAGE_CT3_b = "СТ-3b";
  
 	  	  
       public static PDFBuilder getPADFBuilder(String pagename) {

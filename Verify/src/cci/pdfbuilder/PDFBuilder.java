@@ -157,7 +157,9 @@ public abstract class PDFBuilder {
 	public void makeTexBoxtInAbsolutePosition(PdfWriter writer, String text,
 			BoxConfig config) throws IOException, DocumentException {
 		PdfContentByte canvas = writer.getDirectContent();
-		text = text.replaceAll("\\s+", " ");
+		if (text != null) { 
+		   text = text.replaceAll("\\s+", " ");
+		}
 		canvas.saveState();
 		canvas.beginText();
 		canvas.setTextRenderingMode(PdfContentByte.TEXT_RENDER_MODE_FILL_STROKE);
@@ -174,8 +176,8 @@ public abstract class PDFBuilder {
 		
 		if (fntSize < config.getFontSize()) {
 			System.out.println("Set font size: " + fntSize);
-			fnt.setSize(fntSize);
-		    leading = fntSize;	
+			fnt.setSize(fntSize - 0.1f);
+		    leading = fntSize - 0.1f;	
 		}
 		Phrase ptext = new Phrase(text, fnt);
 		column.setSimpleColumn(ptext, rect.getLeft(), rect.getBottom(),

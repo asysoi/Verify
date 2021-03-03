@@ -161,9 +161,10 @@ public class CertificatePDFBuilder {
 		cert.setCurrentlist(0);  // start from main certification list
 		
 		while (cert.getIterator().hasNext()) {
-			LOG.info("Номер листа: " + cert.getCurrentlist());
+			LOG.info("Page number: " + cert.getCurrentlist());
 		    pconfig = xreader.getPDFPageConfig(pagename);
 		    PDFBuilder pmaker = PDFBuilderFactory.getPADFBuilder(pagename);
+		    LOG.info("Page maker: " + pmaker);		    
 		    pmaker.createPDFPage(writer, cert, pconfig);
 		    pagename = pconfig.getNextPage();
 		    cert.setCurrentlist(cert.getCurrentlist() + 1);
