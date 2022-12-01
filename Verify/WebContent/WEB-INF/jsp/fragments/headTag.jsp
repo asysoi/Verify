@@ -101,7 +101,7 @@
 
 .yline {
 	height: 4;
-	background-color: #E9C92E;
+	background-color: grey;
 	width: 100%;
 	margin-top: 0px;
 	margin-bottom: 0px;

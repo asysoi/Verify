@@ -19,7 +19,7 @@
 
 </style>
 
-<div class="navbar navbar-inverse navbar-fixed-top" role="navigation"  style="border-color: #E9C92E; border-width: 0 0 3px; background: linear-gradient(to top left, #395B8D, #C1DDF1, #395B8D);">
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation"  style="border-color: grey; border-width: 0 0 3px; background: linear-gradient(to top left, #395B8D, #C1DDF1, #395B8D);">
 
 	<div class="container-fluid">
 
@@ -45,10 +45,10 @@
 		<div class="navbar-collapse collapse">
 			<ul class="nav navbar-nav navbar-right " >
 			    <c:if test="${lang=='ru'}">  
-				    <li><a href="javascript:setLanguage('eng')">English</a></li>
+				    <li><a href="javascript:setLanguage('eng')" style="color:white;">English</a></li>
 				</c:if>
 				<c:if test="${lang=='eng'}">  
-				    <li><a href="javascript:setLanguage('ru')">Русский</a></li>
+				    <li><a href="javascript:setLanguage('ru')" style="color:white;">Русский</a></li>
 				</c:if>
 			</ul>
 		</div>
